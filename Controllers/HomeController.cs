@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using IndividualAuthentication.Models;
 
+using Microsoft.AspNetCore.Authorization;
+
 namespace IndividualAuthentication.Controllers
 {
     public class HomeController : Controller
@@ -14,7 +16,8 @@ namespace IndividualAuthentication.Controllers
         {
             return View();
         }
-
+        
+        [Authorize]
         public IActionResult Privacy()
         {
             return View();
