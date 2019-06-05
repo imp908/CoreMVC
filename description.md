@@ -238,21 +238,22 @@ npx webpack
 //Workflow  StackShema,TODO,BACKLOG,DONE
 StackShema:[
     DDD 
-    sql(ms,postgre),nosql(mongo,neo4j),amqp(rabbit+netservicebus,masstransit),
-    cashing(reddis)
+        sql(ms,postgre),nosql(mongo,neo4j),amqp(rabbit+netservicebus,masstransit),
+        cashing(reddis)
     
     front
-    PWA progressive web app
-    (angular,react,vue)
-    (graphql vs REST,?mongoose)
-    (?rendering,?testing)
+        PWA progressive web app
+        (angular,react,vue)
+        (graphql vs REST,?mongoose)
+        (?rendering,?testing)
 ]
 
 TODO:[
     
-    -> docker
+    -> move auth
     -> Smaple chat react front
-    -> Login and authenticate    
+    -> entities to DB
+    -> docker
     
 ]
 
@@ -310,5 +311,5 @@ DONE:[
 
     <- done 04.06.2019 5h -> react boardGame checker
     <- done 04.09.2019 23:53 05.09.2019 2:40 2h50m -> SignalR chat checker
-
+    <- done 2h30m -> Login and authenticate template
 ]
