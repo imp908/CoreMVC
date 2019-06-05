@@ -14,6 +14,8 @@ using IndividualAuthentication.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
+using Microsoft.AspNetCore.Mvc.Razor;
+
 namespace IndividualAuthentication
 {
     public class Startup
@@ -35,8 +37,30 @@ namespace IndividualAuthentication
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+              /** Register route to move Areas default MVC folder to custom location */
+            services.Configure<RazorViewEngineOptions>(options =>
+            {
+                options.AreaViewLocationFormats.Clear();
+                options.AreaViewLocationFormats.Add("/API/Areas/{2}/Views/{1}/{0}.cshtml");
+                options.AreaViewLocationFormats.Add("/API/Areas/{2}/Views/Shared/{0}.cshtml");
+                options.AreaViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
+            });   
+
             ConfigureAuthentication(services);
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            
+            services.AddMvc()
+            .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+            .AddRazorPagesOptions(options =>
+            {
+                options.AllowAreas = true;
+               
+            });
+
+            /** Renames all defalt Views including Areas/Area/Views folders to custom name */
+            services.Configure<RazorViewEngineOptions>(
+                options => options.ViewLocationExpanders.Add(
+            new CustomViewLocation()));
+            
         }
 
         public void ConfigureAuthentication(IServiceCollection services)
@@ -44,6 +68,7 @@ namespace IndividualAuthentication
             services.AddDbContext<ApplicationDbContext>(options =>
                          options.UseSqlServer(
                              Configuration.GetConnectionString("LocalAuthConnection")));
+
             services.AddDefaultIdentity<IdentityUser>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
