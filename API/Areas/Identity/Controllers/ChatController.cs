@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace chat.API.Controllers
 {
+    [Area("Identity")]
     public class ChatController : Controller
     {      
         public ChatController()

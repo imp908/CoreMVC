@@ -55,8 +55,8 @@ namespace mvccoresb
             services.Configure<RazorViewEngineOptions>(options =>
             {
                 options.AreaViewLocationFormats.Clear();
-                options.AreaViewLocationFormats.Add("/API/Areas/{2}/Views/{1}/{0}.cshtml");
-                options.AreaViewLocationFormats.Add("/API/Areas/{2}/Views/Shared/{0}.cshtml");
+                options.AreaViewLocationFormats.Add("API/Areas/{2}/Views/{1}/{0}.cshtml");
+                options.AreaViewLocationFormats.Add("API/Areas/{2}/Views/Shared/{0}.cshtml");
                 options.AreaViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
             });        
 
@@ -183,9 +183,9 @@ namespace mvccoresb
 
                 /**mapping for default scaffolded area */
                 routes.MapRoute(
-                    name:"areas",
-                    template:"{area}/{controller}/{action}"
-                );
+                    name: "defaultWithArea",
+                    template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
 
                 /** mapping for custom testarea */
                 routes.MapAreaRoute(

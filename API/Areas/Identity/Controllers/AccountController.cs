@@ -11,6 +11,7 @@ using chat.Domain.APImodels;
 
 namespace chat.API.Controllers
 {
+    [Area("Identity")]
     public class AccountController : Controller
     {
 
@@ -47,10 +48,9 @@ namespace chat.API.Controllers
                 // добавляем пользователя
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
-                {
-                    // установка куки
-                    await _signInManager.SignInAsync(user, false);
-                    return RedirectToAction("Chat","Room", new{area="API/Areas/Identity"});
+                {                   
+                    var url = Url.Action("RoomP","Chat",new {area="Identity"});
+                    return Redirect(url);
                 }
                 else
                 {
