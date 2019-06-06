@@ -199,6 +199,10 @@ gulpfile.js
 dotnet ef migrations add InitialCreate
 dotnet ef database update
 
+//Identity DB migrations
+dotnet ef migrations add CreateIdentitySchema --context IdentityContext
+dotnet ef database update --context IdentityContext
+
 //////////////
 //npm
 npx webpack
@@ -312,4 +316,6 @@ DONE:[
     <- done 04.06.2019 5h -> react boardGame checker
     <- done 04.09.2019 23:53 05.09.2019 2:40 2h50m -> SignalR chat checker
     <- done 2h30m -> Login and authenticate template
+    <- done 06.06.2019 7h22m -> Identity on MVC views with Identity DB mogrations
+    
 ]
