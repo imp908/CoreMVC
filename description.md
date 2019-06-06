@@ -199,6 +199,10 @@ gulpfile.js
 dotnet ef migrations add InitialCreate
 dotnet ef database update
 
+//Identity DB migrations
+dotnet ef migrations add CreateIdentitySchema --context IdentityContext
+dotnet ef database update --context IdentityContext
+
 //////////////
 //npm
 npx webpack

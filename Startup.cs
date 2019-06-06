@@ -23,9 +23,12 @@ namespace mvccoresb
 {
     using mvccoresb.Domain.Interfaces;
     using mvccoresb.Domain.TestModels;
+    using chat.Domain.Models;
 
     using mvccoresb.Infrastructure.EF;
     using Microsoft.EntityFrameworkCore;
+    
+    using Microsoft.AspNetCore.Identity;
 
     public class Startup
     {
@@ -64,9 +67,15 @@ namespace mvccoresb
                 options => options.ViewLocationExpanders.Add(
             new CustomViewLocation()));
 
-            //var connectionStringSQL = "Server=HP-HP000114\\SQLEXPRESS02;Database=EFdb;Trusted_Connection=True;";
-            var connectionStringSQL = "Server=AAAPC;Database=testdb;User Id=tl;Password=QwErT123;";
-            services.AddDbContext<TestContext>(o => o.UseSqlServer(connectionStringSQL));
+            services.AddDbContext<TestContext>(o => 
+                o.UseSqlServer(Configuration.GetConnectionString("LocalDbConnection")));
+            
+            /*Authentication provider */
+            services.AddDbContext<IdentityContext>(o => 
+                o.UseSqlServer(Configuration.GetConnectionString("LocalAuthConnection")));
+            services.AddIdentity<UserAuth,IdentityRole>()
+            //services.AddDefaultIdentity<IdentityUser>()
+                .AddEntityFrameworkStores<IdentityContext>();
 
             /*SignalR registration*/
             services.AddSignalR();
@@ -78,21 +87,7 @@ namespace mvccoresb
 
             /*Automapper Register */
             services.AddAutoMapper(typeof(Startup));
-                   
-            //AutoMapperStaticConfiguration.Configure();
-            /*Mapper initialize with Static initialization*/
-            // Mapper.Initialize(cfg =>
-            // {
-            //     cfg.CreateMap<BlogEF, BlogBLL>(MemberList.None);
-            //     cfg.CreateMap<PostEF, PostBLL>(MemberList.None);                
-            // });
-            // try{  
-            //     Mapper.AssertConfigurationIsValid();
-            // }catch(Exception e)
-            // {
-
-            // }
-
+ 
             /*Mapper initialize with Instance API initialization */
             var config = ConfigureAutoMapper();
             IMapper mapper = new Mapper(config);                      
@@ -174,6 +169,7 @@ namespace mvccoresb
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+            app.UseAuthentication();
 
             app.UseSignalR(routes =>{
                 routes.MapHub<SignalRhub>("/rHub");
@@ -198,6 +194,11 @@ namespace mvccoresb
                     template: "TestArea/{controller=Home}/{action=Index}"
                 );
 
+                 routes.MapAreaRoute(
+                    name: "IdentityArea",
+                    areaName: "Identity",
+                    template: "Identity/{controller=Home}/{action=Index}"
+                );
             });
         }
     }
