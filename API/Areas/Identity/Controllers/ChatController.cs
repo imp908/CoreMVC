@@ -10,13 +10,12 @@ using mvccoresb.Domain.TestModels;
 
 using Newtonsoft.Json;
 
+using Microsoft.AspNetCore.Authorization;
+
 namespace chat.API.Controllers
 {
-
     public class ChatController : Controller
-    {
-      
-
+    {      
         public ChatController()
         {
             
@@ -25,8 +24,14 @@ namespace chat.API.Controllers
         [HttpGet]
         public IActionResult Room()
         {
-
-            return View();
+            return View("../Chat/RoomPublic");
+        }
+        
+        [Authorize]
+        [HttpGet]
+        public IActionResult RoomP()
+        {
+            return View("../Chat/RoomPrivate");
         }
     }
 }
