@@ -65,13 +65,19 @@ namespace mvccoresb
             /*Authentication provider */
             services.AddDbContext<IdentityContext>(o => 
                 o.UseSqlServer(Configuration.GetConnectionString("LocalAuthConnection")));
-            
-            // установка конфигурации подключения
+
+            services.AddIdentityCore<UserAuth>()
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<IdentityContext>()
+                .AddSignInManager()
+                .AddDefaultTokenProviders();
+
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options => //CookieAuthenticationOptions
                 {
                     options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Identity/Account/Register");
                 });
+
 
             services.AddMvc();
 
