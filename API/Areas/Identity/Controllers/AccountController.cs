@@ -63,5 +63,33 @@ namespace chat.API.Controllers
             }
             return View(model);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> SignIn(LoginUserAPI model)
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> LogIn(LoginUserAPI model)
+        {
+            if(ModelState.IsValid)
+            {
+                UserAuth user = new UserAuth {UserName  = model.Email, Email = model.Email};
+                var userExists = await _userManager.FindByNameAsync(model.Email);
+
+                if(userExists != null){
+                     var url = Url.Action("RoomP","Chat",new {area="Identity"});
+                    return Redirect(url);
+                }
+            }
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> LogOut()
+        {
+            return View("../Account/LogIn");
+        }
     }
 }

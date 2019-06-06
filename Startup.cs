@@ -19,6 +19,8 @@ using AutoMapper;
 
 using fileshare.Infrastructure.SignalR;
 
+using Microsoft.AspNetCore.Authentication.Cookies;
+
 namespace mvccoresb
 {
     using mvccoresb.Domain.Interfaces;
@@ -58,9 +60,33 @@ namespace mvccoresb
                 options.AreaViewLocationFormats.Add("API/Areas/{2}/Views/{1}/{0}.cshtml");
                 options.AreaViewLocationFormats.Add("API/Areas/{2}/Views/Shared/{0}.cshtml");
                 options.AreaViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
-            });        
+            });
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            /*Authentication provider */
+            services.AddDbContext<IdentityContext>(o => 
+                o.UseSqlServer(Configuration.GetConnectionString("LocalAuthConnection")));
+            // services.AddIdentity<UserAuth,IdentityRole>(o => {
+            //     o.User.RequireUniqueEmail = true;
+            //     o.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyz1234567890";
+            // })
+            // //services.AddDefaultIdentity<IdentityUser>()
+            // .AddEntityFrameworkStores<IdentityContext>();
+
+            services.AddIdentityCore<UserAuth>()
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<IdentityContext>()
+                .AddSignInManager()
+                .AddDefaultTokenProviders();
+
+            services.AddAuthentication(o =>
+            {
+                o.DefaultScheme = IdentityConstants.ApplicationScheme;
+                o.DefaultSignInScheme = IdentityConstants.ExternalScheme;
+            })
+            .AddIdentityCookies(o => { });
+
+
+            services.AddMvc();
 
             /** Renames all defalt Views including Areas/Area/Views folders to custom name */
             services.Configure<RazorViewEngineOptions>(
@@ -69,13 +95,7 @@ namespace mvccoresb
 
             services.AddDbContext<TestContext>(o => 
                 o.UseSqlServer(Configuration.GetConnectionString("LocalDbConnection")));
-            
-            /*Authentication provider */
-            services.AddDbContext<IdentityContext>(o => 
-                o.UseSqlServer(Configuration.GetConnectionString("LocalAuthConnection")));
-            services.AddIdentity<UserAuth,IdentityRole>()
-            //services.AddDefaultIdentity<IdentityUser>()
-                .AddEntityFrameworkStores<IdentityContext>();
+                  
 
             /*SignalR registration*/
             services.AddSignalR();
