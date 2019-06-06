@@ -16,7 +16,7 @@ namespace chat.API.Controllers
 {
   
     [Area("Identity")]
-      [Authorize]
+    
     public class ChatController : Controller
     {      
         public ChatController()
@@ -32,7 +32,7 @@ namespace chat.API.Controllers
         
       
         [HttpGet]
-      
+        [Authorize]
         public IActionResult RoomP()
         {
             return View("../Chat/RoomPrivate");

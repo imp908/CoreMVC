@@ -65,26 +65,13 @@ namespace mvccoresb
             /*Authentication provider */
             services.AddDbContext<IdentityContext>(o => 
                 o.UseSqlServer(Configuration.GetConnectionString("LocalAuthConnection")));
-            // services.AddIdentity<UserAuth,IdentityRole>(o => {
-            //     o.User.RequireUniqueEmail = true;
-            //     o.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyz1234567890";
-            // })
-            // //services.AddDefaultIdentity<IdentityUser>()
-            // .AddEntityFrameworkStores<IdentityContext>();
-
-            services.AddIdentityCore<UserAuth>()
-                .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<IdentityContext>()
-                .AddSignInManager()
-                .AddDefaultTokenProviders();
-
-            services.AddAuthentication(o =>
-            {
-                o.DefaultScheme = IdentityConstants.ApplicationScheme;
-                o.DefaultSignInScheme = IdentityConstants.ExternalScheme;
-            })
-            .AddIdentityCookies(o => { });
-
+            
+            // установка конфигурации подключения
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options => //CookieAuthenticationOptions
+                {
+                    options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Identity/Account/Register");
+                });
 
             services.AddMvc();
 
@@ -188,7 +175,7 @@ namespace mvccoresb
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseCookiePolicy();
+ 
             app.UseAuthentication();
 
             app.UseSignalR(routes =>{
