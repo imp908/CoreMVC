@@ -19,6 +19,8 @@ using AutoMapper;
 
 using fileshare.Infrastructure.SignalR;
 
+using Microsoft.AspNetCore.Authentication.Cookies;
+
 namespace mvccoresb
 {
     using mvccoresb.Domain.Interfaces;
@@ -55,12 +57,29 @@ namespace mvccoresb
             services.Configure<RazorViewEngineOptions>(options =>
             {
                 options.AreaViewLocationFormats.Clear();
-                options.AreaViewLocationFormats.Add("/API/Areas/{2}/Views/{1}/{0}.cshtml");
-                options.AreaViewLocationFormats.Add("/API/Areas/{2}/Views/Shared/{0}.cshtml");
+                options.AreaViewLocationFormats.Add("API/Areas/{2}/Views/{1}/{0}.cshtml");
+                options.AreaViewLocationFormats.Add("API/Areas/{2}/Views/Shared/{0}.cshtml");
                 options.AreaViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
-            });        
+            });
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            /*Authentication provider */
+            services.AddDbContext<IdentityContext>(o => 
+                o.UseSqlServer(Configuration.GetConnectionString("LocalAuthConnection")));
+
+            services.AddIdentityCore<UserAuth>()
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<IdentityContext>()
+                .AddSignInManager()
+                .AddDefaultTokenProviders();
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options => //CookieAuthenticationOptions
+                {
+                    options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Identity/Account/Register");
+                });
+
+
+            services.AddMvc();
 
             /** Renames all defalt Views including Areas/Area/Views folders to custom name */
             services.Configure<RazorViewEngineOptions>(
@@ -69,13 +88,7 @@ namespace mvccoresb
 
             services.AddDbContext<TestContext>(o => 
                 o.UseSqlServer(Configuration.GetConnectionString("LocalDbConnection")));
-            
-            /*Authentication provider */
-            services.AddDbContext<IdentityContext>(o => 
-                o.UseSqlServer(Configuration.GetConnectionString("LocalAuthConnection")));
-            services.AddIdentity<UserAuth,IdentityRole>()
-            //services.AddDefaultIdentity<IdentityUser>()
-                .AddEntityFrameworkStores<IdentityContext>();
+                  
 
             /*SignalR registration*/
             services.AddSignalR();
@@ -168,7 +181,7 @@ namespace mvccoresb
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseCookiePolicy();
+ 
             app.UseAuthentication();
 
             app.UseSignalR(routes =>{
@@ -183,9 +196,9 @@ namespace mvccoresb
 
                 /**mapping for default scaffolded area */
                 routes.MapRoute(
-                    name:"areas",
-                    template:"{area}/{controller}/{action}"
-                );
+                    name: "defaultWithArea",
+                    template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
 
                 /** mapping for custom testarea */
                 routes.MapAreaRoute(

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 using mvccoresb.Domain.Interfaces;
 
@@ -10,13 +11,14 @@ using mvccoresb.Domain.TestModels;
 
 using Newtonsoft.Json;
 
+
 namespace chat.API.Controllers
 {
-
+  
+    [Area("Identity")]
+    
     public class ChatController : Controller
-    {
-      
-
+    {      
         public ChatController()
         {
             
@@ -25,8 +27,15 @@ namespace chat.API.Controllers
         [HttpGet]
         public IActionResult Room()
         {
-
-            return View();
+            return View("../Chat/RoomPublic");
+        }
+        
+      
+        [HttpGet]
+        [Authorize]
+        public IActionResult RoomP()
+        {
+            return View("../Chat/RoomPrivate");
         }
     }
 }

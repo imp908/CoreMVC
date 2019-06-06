@@ -11,6 +11,7 @@ using chat.Domain.APImodels;
 
 namespace chat.API.Controllers
 {
+    [Area("Identity")]
     public class AccountController : Controller
     {
 
@@ -37,13 +38,19 @@ namespace chat.API.Controllers
             if(ModelState.IsValid)
             {
                 UserAuth user = new UserAuth {UserName  = model.Email, Email = model.Email};
+                
+                var userExists = await _userManager.FindByNameAsync(model.Email);
+
+                if(userExists != null){
+                    return View("../Account/Register");
+                }
+                        
                 // добавляем пользователя
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
-                {
-                    // установка куки
-                    await _signInManager.SignInAsync(user, false);
-                    return RedirectToAction("Room", "Chat");
+                {                   
+                    var url = Url.Action("RoomP","Chat",new {area="Identity"});
+                    return Redirect(url);
                 }
                 else
                 {
@@ -52,8 +59,37 @@ namespace chat.API.Controllers
                         ModelState.AddModelError(string.Empty, error.Description);
                     }
                 }
+                
             }
             return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> SignIn(LoginUserAPI model)
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> LogIn(LoginUserAPI model)
+        {
+            if(ModelState.IsValid)
+            {
+                UserAuth user = new UserAuth {UserName  = model.Email, Email = model.Email};
+                var userExists = await _userManager.FindByNameAsync(model.Email);
+
+                if(userExists != null){
+                     var url = Url.Action("RoomP","Chat",new {area="Identity"});
+                    return Redirect(url);
+                }
+            }
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> LogOut()
+        {
+            return View("../Account/LogIn");
         }
     }
 }
