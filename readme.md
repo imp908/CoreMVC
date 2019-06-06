@@ -1,0 +1,1 @@
+Core Razor Authentication template progect

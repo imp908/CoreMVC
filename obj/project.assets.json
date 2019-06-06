@@ -12428,11 +12428,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "G:\\disk\\Files\\git\\Core\\MVC\\mvc_new\\IndividualAuthentication\\IndividualAuthentication.csproj",
+      "projectUniqueName": "G:\\disk\\Files\\git\\Core\\razorauth\\IndividualAuthentication.csproj",
       "projectName": "IndividualAuthentication",
-      "projectPath": "G:\\disk\\Files\\git\\Core\\MVC\\mvc_new\\IndividualAuthentication\\IndividualAuthentication.csproj",
+      "projectPath": "G:\\disk\\Files\\git\\Core\\razorauth\\IndividualAuthentication.csproj",
       "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-      "outputPath": "G:\\disk\\Files\\git\\Core\\MVC\\mvc_new\\IndividualAuthentication\\obj\\",
+      "outputPath": "G:\\disk\\Files\\git\\Core\\razorauth\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
