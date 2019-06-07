@@ -9,6 +9,12 @@ using Microsoft.AspNetCore.Identity;
 using chat.Domain.Models;
 using chat.Domain.APImodels;
 
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+
+using System.Security.Claims;
+
 namespace chat.API.Controllers
 {
     [Area("Identity")]
@@ -48,9 +54,12 @@ namespace chat.API.Controllers
                 // добавляем пользователя
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
-                {                   
-                    var url = Url.Action("RoomP","Chat",new {area="Identity"});
+                {
+                    var url = Url.Action("LogIn", "Identity/Account")
+                       .Replace("%2F", "/");
                     return Redirect(url);
+
+                    //return RedirectToAction("LogIn");
                 }
                 else
                 {
@@ -65,7 +74,7 @@ namespace chat.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> SignIn(LoginUserAPI model)
+        public IActionResult LogIn()
         {
             return View();
         }
@@ -78,18 +87,50 @@ namespace chat.API.Controllers
                 UserAuth user = new UserAuth {UserName  = model.Email, Email = model.Email};
                 var userExists = await _userManager.FindByNameAsync(model.Email);
 
-                if(userExists != null){
-                     var url = Url.Action("RoomP","Chat",new {area="Identity"});
+                if (userExists == null)
+                {
+                    var url = Url.Action("Register", "Identity/Account")
+                        .Replace("%2F","/");
                     return Redirect(url);
+                    //return RedirectToAction("Register", "Identity/Account");
+                }
+
+                if(userExists != null){
+                 
+                    await Authenticate(model.Email);
+                    var url = Url.Action("roomP", "Identity/Chat")
+                        .Replace("%2F", "/");
+                    return Redirect(url);
+                    //return RedirectToAction("RoomP", "Chat", new { Area = "Identity" });
                 }
             }
-            return View();
+            return View(model);
+        }
+
+        private async Task Authenticate(string userName)
+        {
+            // создаем один claim
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimsIdentity.DefaultNameClaimType, userName)
+            };
+            // создаем объект ClaimsIdentity
+            ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
+            // установка аутентификационных куки
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
         }
 
         [HttpGet]
-        public async Task<IActionResult> LogOut()
+        public async Task<IActionResult> Logout()
         {
-            return View("../Account/LogIn");
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Login", "Account");
         }
+
+        // [HttpGet]
+        // public async Task<IActionResult> LogOut()
+        // {
+        //     return View("../Account/LogIn");
+        // }
     }
 }

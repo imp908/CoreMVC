@@ -112,7 +112,16 @@ Routes:
         (copypast to several browser windows to test)
             http://localhost:5000/TestArea/SignalR/hub
 
-API:
+        AccountController
+            http://localhost:5000/Identity/Account/Register
+        
+        ChatController
+            //public room
+                http://localhost:5000/Identity/Chat/room
+            //private room
+                http://localhost:5000/Identity/Chat/roomP
+
+ API:[
     http://localhost:5000/api/blog/AddPost -> returns Ok(result)
     http://localhost:5000/api/blog/AddPostJSON -> retorns Json(result)
     
@@ -122,6 +131,42 @@ API:
 	    "BlogId":"1",	
 		"Title":"PostTitle","Content":"PostContent"
     }
+
+    PersonAddsPost
+        http://localhost:5000/api/blog/AddPostJSON
+        {"PersonId":"81A130D2-502F-4CF1-A376-63EDEB000E9F",
+        "BlogId":"1",	
+        "Title":"PostTitle","Content":"PostContent"}
+
+    get posts by person
+        personId -> List<Posts>
+        http://localhost:5000/api/blog/GetPostsByPerson
+        {"PersonId":"81A130D2-502F-4CF1-A376-63EDEB000E9F"}
+        
+    get posts by blog
+        personId -> List<blogs>		
+        http://localhost:5000/api/blog/GetPostsByBlog
+        {"BlogId":"1"}
+        
+    get blogs by person
+        blogId -> List<Posts>
+        http://localhost:5000/api/blog/GetBlogsByPerson
+        {"PersonId":"81A130D2-502F-4CF1-A376-63EDEB000E9F"}
+    
+    person removes post
+        http://localhost:5000/api/blog/UpdatePost
+        {
+            "PersonId":"81A130D2-502F-4CF1-A376-63EDEB000E9F"
+            ,"Post":{"PostId":"1","Title":"UpdatedTitle","Content":"UpdatedContent"}
+        }
+    
+    person updates post
+        http://localhost:5000/api/blog/DeletePost
+        {
+            "PersonId":"81A130D2-502F-4CF1-A376-63EDEB000E9F"
+            ,"PostId":"1"
+        }
+]
 
 //////////////
 attribute vs named area routing
@@ -165,7 +210,7 @@ CustomViewLocations.cs
 //////////////
 //startup.cs
 custom default MVC Area location folder in API/Areas
-in startup.cs rerouted through  RazorViewEngineOptions
+in startup.cs rerouted through RazorViewEngineOptions
 
 Autofac container registration added
 
@@ -178,6 +223,13 @@ AutoFact to Automapper registration added
 AutofacServiceProvider returned from ConfigureServices
 
 SignalR use and hub routing added
+
+Authentication registration:
+Authentication EF db context 
+Identity core for user managment
+Added authentication with cookies
+
+ app.UseCookiePolicy(); removed 
 
 //////////////
 //Program.cs 
@@ -211,8 +263,8 @@ npx webpack
 //////////////
 //DDD decomposition->
     API:
-        MVC, WebApi, Controllers
-        Uses View Models
+        MVC (authentication), WebApi, Controllers, SignalRHub
+        
     Infrastructure:
         ORMs contexts : [EF];
         Repo and UOW realizations;
@@ -262,6 +314,7 @@ TODO:[
 ]
 
 BACKLOG:[
+    
     -> add flattering to automapper, 
         mapping API command property payload to whole EF object
             API{"P":{class}} -> EF{class}
@@ -271,51 +324,25 @@ BACKLOG:[
     -> put,delete commands with url aprameters
     -> controller status response and human readable responses
     -> use interface as controller parameter
-        ?is it worth 
+        ?is it worth
     
 ]
 
 DONE:[
-    API:[
-        <- done 02.06.2019 01:53 -> PersonAddsPost								
-            http://localhost:5000/api/blog/AddPostJSON
-            {"PersonId":"81A130D2-502F-4CF1-A376-63EDEB000E9F",
-            "BlogId":"1",	
-            "Title":"PostTitle","Content":"PostContent"}
 
-        <- done 02.06.2019 14:40-14:50 10m -> get posts by person
-            personId -> List<Posts>
-            http://localhost:5000/api/blog/GetPostsByPerson
-            {"PersonId":"81A130D2-502F-4CF1-A376-63EDEB000E9F"}
-            
-        <- done 02.06.2019 12:14-14:40 2h30m-> get posts by blog
-            personId -> List<blogs>		
-            http://localhost:5000/api/blog/GetPostsByBlog
-            {"BlogId":"1"}
-            
-        <- done 02.06.2019 12:14-14:50 2h30m-> get blogs by person
-            blogId -> List<Posts>
-            http://localhost:5000/api/blog/GetBlogsByPerson
-            {"PersonId":"81A130D2-502F-4CF1-A376-63EDEB000E9F"}
-        
-        <- done 02.06.201 15:13-15:53 40m -> person removes post
-            http://localhost:5000/api/blog/UpdatePost
-            {
-                "PersonId":"81A130D2-502F-4CF1-A376-63EDEB000E9F"
-                ,"Post":{"PostId":"1","Title":"UpdatedTitle","Content":"UpdatedContent"}
-            }
-        
-        <- done 02.06.201 15:53-16:03 10m -> person updates post
-            http://localhost:5000/api/blog/DeletePost
-            {
-                "PersonId":"81A130D2-502F-4CF1-A376-63EDEB000E9F"
-                ,"PostId":"1"
-            }
-    ]
+    <- done 02.06.2019 01:53 2h -> PersonAddsPost	
+    <- done 02.06.2019 14:40-14:50 10m -> get posts by person
+    <- done 02.06.2019 12:14-14:40 2h30m-> get posts by blog
+    <- done 02.06.2019 12:14-14:50 2h30m-> get blogs by person
+    <- done 02.06.201 15:13-15:53 40m -> person removes post
+    <- done 02.06.201 15:53-16:03 10m -> person updates post
 
     <- done 04.06.2019 5h -> react boardGame checker
     <- done 04.09.2019 23:53 05.09.2019 2:40 2h50m -> SignalR chat checker
     <- done 2h30m -> Login and authenticate template
-    <- done 06.06.2019 7h22m -> Identity on MVC views with Identity DB mogrations
+    <- done 06.06.2019 7h22m -> Identity on MVC views with Identity DB migrations
+    <- done 07.06.2019 5h3m -> authorization token and cookie redirect on mvc startup setup
     
+    ~27h in 5d
+
 ]

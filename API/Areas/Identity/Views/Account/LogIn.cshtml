@@ -1,13 +1,13 @@
-@model chat.Domain.APImodels.RegisterUserAPI
+@model chat.Domain.APImodels.LoginUserAPI
 
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "LogIn";
     Layout = "_Layout";
 }
 
-<h1>Register</h1>
+<h1>LogIn</h1>
 
-<h4>RegisterUserAPI</h4>
+<h4>LogIn</h4>
 <hr />
 
 <div class="row">
@@ -15,13 +15,13 @@
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                @Html.EditorFor(m => m.Email);
+                @Html.EditorFor(m => m.Email)
             </div>
             <div class="form-group">
-                @Html.EditorFor(m => m.Password);
+                @Html.EditorFor(m => m.Password)
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="LogIn" class="btn btn-primary" />
             </div>
         </form>
     </div>
