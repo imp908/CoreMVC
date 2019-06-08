@@ -69,11 +69,11 @@ namespace mvccoresb
                 o.UseSqlServer(Configuration.GetConnectionString("LocalAuthConnection")));
 
             /* Genned auth provider config*/
-            services.AddDefaultIdentity<UserAuth>()
+            services.AddDefaultIdentity<IdentityUser>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<IdentityContext>();
 
-            /* custom mvc ligin pages cunfig violates default scafolded */
+            /* custom mvc signin pages cunfig violates default scafolded */
             //Issues:
             //No sign-out authentication handlers are registered
             //No authenticationScheme was specified, and there was no DefaultChallengeScheme found.
@@ -213,15 +213,12 @@ namespace mvccoresb
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
-               name: "areas",
-               template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
-               );
-
+                    name: "areas",
+                    template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
-
             });
         }
     }
