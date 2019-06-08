@@ -15,18 +15,20 @@ using Microsoft.AspNetCore.Authorization;
 
 using System.Security.Claims;
 
+using Newtonsoft.Json;
+
 namespace chat.API.Controllers
 {
     [Area("Identity")]
     public class CustomAccountController : Controller
     {
 
-        private readonly UserManager<UserAuth> _userManager;
-        private readonly SignInManager<UserAuth> _signInManager;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
 
         public CustomAccountController(
-            UserManager<UserAuth> userManager,
-            SignInManager<UserAuth> signInManager){
+            UserManager<IdentityUser> userManager,
+            SignInManager<IdentityUser> signInManager){
                 _userManager = userManager;
                 _signInManager = signInManager;
         }
@@ -43,7 +45,7 @@ namespace chat.API.Controllers
         {
             if(ModelState.IsValid)
             {
-                UserAuth user = new UserAuth {UserName  = model.Email, Email = model.Email};
+                IdentityUser user = new IdentityUser {UserName  = model.Email, Email = model.Email};
                 
                 var userExists = await _userManager.FindByNameAsync(model.Email);
 
@@ -84,7 +86,7 @@ namespace chat.API.Controllers
         {
             if(ModelState.IsValid)
             {
-                UserAuth user = new UserAuth {UserName  = model.Email, Email = model.Email};
+                IdentityUser user = new IdentityUser {UserName  = model.Email, Email = model.Email};
                 var userExists = await _userManager.FindByNameAsync(model.Email);
 
                 if (userExists == null)
@@ -128,6 +130,16 @@ namespace chat.API.Controllers
             .SignOutAsync(IdentityConstants.ApplicationScheme);
             return RedirectToAction("Login", "Account");
         }
+
+        
+        [HttpGet]
+        [Authorize]
+        public async Task<JsonResult> GetCurrentUser()
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            return Json(new { UserName=user.UserName});
+        }
+        
 
         // [HttpGet]
         // public async Task<IActionResult> LogOut()
