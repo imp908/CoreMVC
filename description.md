@@ -164,6 +164,19 @@ Routes:
             "PersonId":"81A130D2-502F-4CF1-A376-63EDEB000E9F"
             ,"PostId":"1"
         }
+
+    //add order
+    http://localhost:5002/api/Order/AddOrder
+    {
+        "AdressFrom":"Some address one"
+        ,"AdressTo":"Some address two"
+        ,"DelivertyItemName":"Item1"
+        ,"Dimensions":[
+            {"Description":"","Name":"kg"}
+            ,{"Description":"","Name":"sm"}
+        ]
+    }
+    
 ]
 
 //////////////
@@ -377,6 +390,14 @@ DONE:[
     <- done 10.06.2019 01:24 1h31m -> signalR work queued,started,finished moque
 	<- done 10.06.2019 22:52 1h12m -> signalR work queue and front edited
 	
-    ~41h in 9d
+    <- done 12.06.2019 3h30m -> react timer sliders 
+    <- done 12.06.2019 2h -> react todo 
+
+    <- done 13.06.2019 5h -> Ef core Orders model, migration and seed Many-to-many
+    <- done 14.06.2019 1h20m -> cqrs add and multiple context Autofac resolve
+    <- done 14.06.2019 40m -> order created
+    <- done 14.06.2019 30m -> props changed
+
+    ~54h in 12d
 
 ]

@@ -9,7 +9,6 @@ namespace InfrastructureCheckers
     using System.Collections.Generic;
 
     using mvccoresb.Domain.TestModels;
-    using mvccoresb.Domain.GeoModel;
 
     using AutoMapper;
 

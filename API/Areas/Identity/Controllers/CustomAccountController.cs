@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 
 using chat.Domain.Models;
 using chat.Domain.APImodels;
+using chat.Domain;
 
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
