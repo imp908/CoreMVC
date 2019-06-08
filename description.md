@@ -304,8 +304,7 @@ StackShema:[
 ]
 
 TODO:[
-    
-    -> move auth
+        
     -> Smaple chat react front
     -> entities to DB
     -> docker
@@ -364,8 +363,17 @@ DONE:[
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
 		]
+
+        => dont include in startup.cs
+        it conflict with scafoldede razor pages sigin
+
+            services.AddAuthentication
+                0 ?CookieAuthenticationDefaults
+
+
 	}
+    < done 08.06.2019 4h -> move auth
 	
-    ~29h in 7d
+    ~33h in 7d
 
 ]
