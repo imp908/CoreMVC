@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -66,22 +68,39 @@ namespace mvccoresb
             services.AddDbContext<IdentityContext>(o => 
                 o.UseSqlServer(Configuration.GetConnectionString("LocalAuthConnection")));
 
-            services.AddIdentityCore<UserAuth>()
-                .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<IdentityContext>()
-                .AddSignInManager()
-                .AddDefaultTokenProviders();
+            /* Genned auth provider config*/
+            services.AddDefaultIdentity<UserAuth>()
+                .AddDefaultUI(UIFramework.Bootstrap4)
+                .AddEntityFrameworkStores<IdentityContext>();
 
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options => //CookieAuthenticationOptions
-                {
-                    options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Identity/Account/LogIn");
-                });
+            /* custom mvc ligin pages cunfig violates default scafolded */
+            //Issues:
+            //No sign-out authentication handlers are registered
+            //No authenticationScheme was specified, and there was no DefaultChallengeScheme found.
+
+            // services.AddIdentityCore<UserAuth>()
+            //     .AddRoles<IdentityRole>()
+            //     .AddDefaultUI(UIFramework.Bootstrap4)
+            //     .AddEntityFrameworkStores<IdentityContext>()
+            //     .AddSignInManager()
+            //     .AddDefaultTokenProviders()
+            //     ;
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            });
+
+            services
+            .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(options => //CookieAuthenticationOptions
+            {
+                options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Identity/Account/LogIn");
+            });
 
             services.AddMvc();
-            // services.AddMvc(o =>{
-            //     o.EnableEndpointRouting = false;
-            // });
+            //causes razor tag helpers ignore asp-area attribute
             //.SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             /** Renames all defalt Views including Areas/Area/Views folders to custom name */

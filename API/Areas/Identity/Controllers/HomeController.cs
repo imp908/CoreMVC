@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
+using System.Diagnostics;
 
 using chat.Domain.Models;
 using chat.Domain.APImodels;
@@ -15,18 +16,27 @@ using Microsoft.AspNetCore.Authorization;
 
 using System.Security.Claims;
 
+using mvccoresb.Domain.Models;
+
 namespace chat.API.Controllers
 {
-    [Area("Identity")]
     public class HomeController : Controller
     {
-     
-        // GET: api/Account
-        [HttpGet]
         public IActionResult Index()
         {
             return View();
         }
 
+        [Authorize]
+        public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
     }
 }

@@ -18,13 +18,13 @@ using System.Security.Claims;
 namespace chat.API.Controllers
 {
     [Area("Identity")]
-    public class AccountController : Controller
+    public class CustomAccountController : Controller
     {
 
         private readonly UserManager<UserAuth> _userManager;
         private readonly SignInManager<UserAuth> _signInManager;
 
-        public AccountController(
+        public CustomAccountController(
             UserManager<UserAuth> userManager,
             SignInManager<UserAuth> signInManager){
                 _userManager = userManager;
@@ -123,7 +123,9 @@ namespace chat.API.Controllers
         [HttpGet]
         public async Task<IActionResult> Logout()
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext
+            //.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            .SignOutAsync(IdentityConstants.ApplicationScheme);
             return RedirectToAction("Login", "Account");
         }
 

@@ -345,17 +345,17 @@ DONE:[
     <- done 08.06.2019 2h15m -> core mvc with auth and defailt ui mvc           rounig with API/areas for view and controller
 	{
 	
-		-o gen mvc 
-		dotnet new mvc -o {folder} -au individual
-		-o add areas 
+		=> gen mvc 
+		    dotnet new mvc -o {folder} -au individual
+		=> add areas 
 			options.AreaViewLocationFormats.Add("API/Areas/{2}/Views/{1}/{0}.cshtml");
-		-o remove compatibility 
+		=> remove compatibility 
 			//.SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-		-o move folders
-		-o include 
+		=> move MVC v,c folders
+		=> include 
 			@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 			from _viewimport on every layout
-		leave basic routing in startup [
+		=> leave basic routing in startup.cs [
 		  routes.MapRoute(
                name: "areas",
                template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
