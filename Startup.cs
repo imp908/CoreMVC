@@ -78,11 +78,11 @@ namespace mvccoresb
                     options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Identity/Account/LogIn");
                 });
 
-
-            services.AddMvc(o =>{
-                o.EnableEndpointRouting = false;
-            })
-            .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc();
+            // services.AddMvc(o =>{
+            //     o.EnableEndpointRouting = false;
+            // });
+            //.SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             /** Renames all defalt Views including Areas/Area/Views folders to custom name */
             services.Configure<RazorViewEngineOptions>(
@@ -193,33 +193,16 @@ namespace mvccoresb
 
             app.UseMvc(routes =>
             {
-                    routes.MapRoute(
-                name: "areas",
-                template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
-                );
+                routes.MapRoute(
+               name: "areas",
+               template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+               );
+
 
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
 
-                /**mapping for default scaffolded area */
-                routes.MapRoute(
-                    name: "defaultWithArea",
-                    template: "{area:exists}/{controller}/{action}",
-                    defaults: new { controller = "Home", action = "Index" });
-
-                /** mapping for custom testarea */
-                routes.MapAreaRoute(
-                    name: "TestArea",
-                    areaName: "TestArea",
-                    template: "TestArea/{controller=Home}/{action=Index}"
-                );
-
-                 routes.MapAreaRoute(
-                    name: "IdentityArea",
-                    areaName: "Identity",
-                    template: "Identity/{controller=Home}/{action=Index}"
-                );
             });
         }
     }

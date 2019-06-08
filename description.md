@@ -342,7 +342,31 @@ DONE:[
     <- done 2h30m -> Login and authenticate template
     <- done 06.06.2019 7h22m -> Identity on MVC views with Identity DB migrations
     <- done 07.06.2019 5h3m -> authorization token and cookie redirect on mvc startup setup
-    
-    ~27h in 5d
+    <- done 08.06.2019 2h15m -> core mvc with auth and defailt ui mvc           rounig with API/areas for view and controller
+	{
+	
+		-o gen mvc 
+		dotnet new mvc -o {folder} -au individual
+		-o add areas 
+			options.AreaViewLocationFormats.Add("API/Areas/{2}/Views/{1}/{0}.cshtml");
+		-o remove compatibility 
+			//.SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+		-o move folders
+		-o include 
+			@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+			from _viewimport on every layout
+		leave basic routing in startup [
+		  routes.MapRoute(
+               name: "areas",
+               template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+               );
+               
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
+		]
+	}
+	
+    ~29h in 7d
 
 ]
