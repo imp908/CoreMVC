@@ -15,7 +15,7 @@
     npm install --save-dev @babel/core @babel/cli @babel/plugin-proposal-class-properties @babel/preset-env @babel/preset-react @babel/plugin-transform-arrow-functions @babel/plugin-transform-classes @babel/plugin-proposal-function-bind
 
 //////////////
-//MVC WebApi Fodlers, routing and URLs:
+//MVC WebApi Folders, routing and URLs:
 Folders:
     //scaffolded vews for MVC and WebApi
         Areas/Scaffolded
@@ -229,7 +229,6 @@ Authentication EF db context
 Identity core for user managment
 Added authentication with cookies
 
- app.UseCookiePolicy(); removed 
 
 //////////////
 //Program.cs 

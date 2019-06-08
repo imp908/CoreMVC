@@ -9,30 +9,33 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using mvccoresb.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
+using Microsoft.AspNetCore.Authentication.Cookies;
+
 using Microsoft.AspNetCore.Mvc.Razor;
 
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
-
-using AutoMapper;
-
-using fileshare.Infrastructure.SignalR;
-
-using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace mvccoresb
 {
+
+    using Autofac;
+    using Autofac.Extensions.DependencyInjection;
+
+    using AutoMapper;
+
+    using mvccoresb.Infrastructure.SignalR;
+
+
     using mvccoresb.Domain.Interfaces;
     using mvccoresb.Domain.TestModels;
     using chat.Domain.Models;
 
     using mvccoresb.Infrastructure.EF;
     using Microsoft.EntityFrameworkCore;
-    
-    using Microsoft.AspNetCore.Identity;
 
     public class Startup
     {
@@ -40,6 +43,7 @@ namespace mvccoresb
         {
             Configuration = configuration;
         }
+
         public IContainer ApplicationContainer { get; private set; }
 
         public IConfiguration Configuration { get; }
@@ -47,12 +51,11 @@ namespace mvccoresb
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
                 options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;                
+                options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
             /** Register route to move Areas default MVC folder to custom location */
@@ -64,84 +67,73 @@ namespace mvccoresb
                 options.AreaViewLocationFormats.Add("/Views/Shared/{0}.cshtml");                
             });
 
-            /*Authentication provider */
-            services.AddDbContext<IdentityContext>(o => 
-                o.UseSqlServer(Configuration.GetConnectionString("LocalAuthConnection")));
-
-            /* Genned auth provider config*/
+            /*Authentication authorization provider */
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("LocalAuthConnection")));
             services.AddDefaultIdentity<IdentityUser>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
-                .AddEntityFrameworkStores<IdentityContext>();
+                .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            /* custom mvc signin pages cunfig violates default scafolded */
-            //Issues:
-            //No sign-out authentication handlers are registered
-            //No authenticationScheme was specified, and there was no DefaultChallengeScheme found.
+            /*conflict with redirect to greeting page after login */
+            // services.AddAuthentication(options =>
+            // {
+            //     options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            //     options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            // });
 
-            // services.AddIdentityCore<UserAuth>()
-            //     .AddRoles<IdentityRole>()
-            //     .AddDefaultUI(UIFramework.Bootstrap4)
-            //     .AddEntityFrameworkStores<IdentityContext>()
-            //     .AddSignInManager()
-            //     .AddDefaultTokenProviders()
-            //     ;
+            // services
+            // .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            // .AddCookie(options =>
+            // {
+            //     options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Identity/Account/LogIn");
+            // });
 
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            });
-
-            services
-            .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            .AddCookie(options => //CookieAuthenticationOptions
-            {
-                options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Identity/Account/LogIn");
-            });
-
-            services.AddMvc();
+            services.AddMvc()
             //causes razor tag helpers ignore asp-area attribute
-            //.SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            //.SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+            ;
 
             /** Renames all defalt Views including Areas/Area/Views folders to custom name */
             services.Configure<RazorViewEngineOptions>(
                 options => options.ViewLocationExpanders.Add(
             new CustomViewLocation()));
 
-            services.AddDbContext<TestContext>(o => 
-                o.UseSqlServer(Configuration.GetConnectionString("LocalDbConnection")));
-                  
+            /*Test db context */
+            services.AddDbContext<TestContext>(o =>
+               o.UseSqlServer(
+                   Configuration.GetConnectionString("LocalDbConnection")));
 
             /*SignalR registration*/
             services.AddSignalR();
 
             /*Autofac autofacContainer */
             var autofacContainer = new ContainerBuilder();
-           
-         
+
 
             /*Automapper Register */
             services.AddAutoMapper(typeof(Startup));
- 
+
             /*Mapper initialize with Instance API initialization */
             var config = ConfigureAutoMapper();
-            IMapper mapper = new Mapper(config);                      
-  
+            IMapper mapper = new Mapper(config);
+
 
             /*Autofac registrations */
-            autofacContainer.Populate(services);        
-            ConfigureAutofac(services,autofacContainer);
+            autofacContainer.Populate(services);
+            ConfigureAutofac(services, autofacContainer);
 
             /*Registration of automapper with autofac Instance API */
-            autofacContainer.RegisterInstance(mapper).As<IMapper>();    
+            autofacContainer.RegisterInstance(mapper).As<IMapper>();
 
             this.ApplicationContainer = autofacContainer.Build();
             return new AutofacServiceProvider(this.ApplicationContainer);
         }
 
-        public ContainerBuilder ConfigureAutofac(IServiceCollection services,ContainerBuilder autofacContainer)
-        {            
-          
+
+        public ContainerBuilder ConfigureAutofac(IServiceCollection services, ContainerBuilder autofacContainer)
+        {
+
             /**EF,repo and UOW reg */
             autofacContainer.RegisterType<TestContext>().As<DbContext>()
                 .InstancePerLifetimeScope();
@@ -165,8 +157,10 @@ namespace mvccoresb
             return autofacContainer;
         }
 
-        public MapperConfiguration ConfigureAutoMapper(){
-            return new MapperConfiguration(cfg => {
+        public MapperConfiguration ConfigureAutoMapper()
+        {
+            return new MapperConfiguration(cfg =>
+            {
                 //cfg.AddProfiles(typeof(BlogEF), typeof(BlogBLL));
                 cfg.CreateMap<BlogEF, BlogBLL>()
                     .ForMember(dest => dest.Id, m => m.MapFrom(src => src.BlogId))
@@ -187,12 +181,14 @@ namespace mvccoresb
             });
         }
 
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseDatabaseErrorPage();
             }
             else
             {
@@ -203,35 +199,64 @@ namespace mvccoresb
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
- 
+            app.UseCookiePolicy();
+
             app.UseAuthentication();
-
-            app.UseSignalR(routes =>{
-                routes.MapHub<SignalRhub>("/rHub");
-            });
-
+            
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
-                    name: "areas",
-                    template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+                   name: "areas",
+                   template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+
+            });
+
+            /* must be added after use mvc */
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<SignalRhub>("/rHub");
             });
         }
     }
 
     public static class AutoMapperStaticConfiguration
     {
-        public static void Configure(){
+        public static void Configure()
+        {
             /*Mapper initialize with Static initialization*/
             Mapper.Initialize(cfg =>
             {
                 cfg.CreateMap<BlogEF, BlogBLL>();
-                cfg.CreateMap<PostEF, PostBLL>();                
+                cfg.CreateMap<PostEF, PostBLL>();
             });
+        }
+    }
+
+    public class CustomViewLocation : IViewLocationExpander
+    {
+        string ValueKey = "Views";
+        public IEnumerable<string> ExpandViewLocations(
+            ViewLocationExpanderContext context,
+            IEnumerable<string> viewLocations)
+        {
+
+            return ExpandViewLocationsCore(viewLocations);
+        }
+
+        private IEnumerable<string> ExpandViewLocationsCore(IEnumerable<string> viewLocations)
+        {
+            viewLocations = viewLocations.Select(s => s.Replace("Views", ValueKey));
+
+            return viewLocations;
+        }
+
+        public void PopulateValues(ViewLocationExpanderContext context)
+        {
+            context.Values[ValueKey] = context.ActionContext.RouteData.Values[ValueKey]?.ToString();
         }
     }
 }

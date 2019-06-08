@@ -29,5 +29,4 @@ namespace mvccoresb
             .UseUrls("http://localhost:5002")
                 .UseStartup<Startup>();
     }
-    
 }
