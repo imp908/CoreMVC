@@ -1,6 +1,6 @@
 using System;
 
-namespace IndividualAuthentication.Models
+namespace mvccoresb.Models
 {
     public class ErrorViewModel
     {

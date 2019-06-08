@@ -8,18 +8,24 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace IndividualAuthentication
+using NetPlatformCheckers;
+using InfrastructureCheckers;
+
+namespace mvccoresb
 {
     public class Program
     {
         public static void Main(string[] args)
         {
+            RepoAndUOWCheck.GO();
+            Check.GO();
+            
             CreateWebHostBuilder(args).Build().Run();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseUrls("http://localhost:5002")
+            .UseUrls("http://localhost:5000")
                 .UseStartup<Startup>();
     }
 }

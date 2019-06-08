@@ -60,3 +60,11 @@ g:\disk\Files\git\Core\razorauth\obj\Debug\netcoreapp2.2\IndividualAuthenticatio
 g:\disk\Files\git\Core\razorauth\obj\Debug\netcoreapp2.2\IndividualAuthentication.Views.pdb
 g:\disk\Files\git\Core\razorauth\obj\Debug\netcoreapp2.2\IndividualAuthentication.dll
 g:\disk\Files\git\Core\razorauth\obj\Debug\netcoreapp2.2\IndividualAuthentication.pdb
+g:\disk\Files\git\Core\chat\obj\Debug\netcoreapp2.2\IndividualAuthentication.csprojAssemblyReference.cache
+g:\disk\Files\git\Core\chat\obj\Debug\netcoreapp2.2\IndividualAuthentication.csproj.CoreCompileInputs.cache
+g:\disk\Files\git\Core\chat\obj\Debug\netcoreapp2.2\IndividualAuthentication.RazorAssemblyInfo.cache
+g:\disk\Files\git\Core\chat\obj\Debug\netcoreapp2.2\IndividualAuthentication.RazorAssemblyInfo.cs
+g:\disk\Files\git\Core\chat\obj\Debug\netcoreapp2.2\IndividualAuthentication.AssemblyInfoInputs.cache
+g:\disk\Files\git\Core\chat\obj\Debug\netcoreapp2.2\IndividualAuthentication.AssemblyInfo.cs
+g:\disk\Files\git\Core\chat\obj\Debug\netcoreapp2.2\IndividualAuthentication.dll
+g:\disk\Files\git\Core\chat\obj\Debug\netcoreapp2.2\IndividualAuthentication.pdb

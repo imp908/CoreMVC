@@ -4,11 +4,11 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using IndividualAuthentication.Models;
+using mvccoresb.Models;
 
 using Microsoft.AspNetCore.Authorization;
 
-namespace IndividualAuthentication.Controllers
+namespace mvccoresb.Controllers
 {
     public class HomeController : Controller
     {
@@ -16,7 +16,7 @@ namespace IndividualAuthentication.Controllers
         {
             return View();
         }
-        
+
         [Authorize]
         public IActionResult Privacy()
         {

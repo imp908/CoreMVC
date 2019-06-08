@@ -10,14 +10,33 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using IndividualAuthentication.Data;
+using mvccoresb.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
+using Microsoft.AspNetCore.Authentication.Cookies;
+
 using Microsoft.AspNetCore.Mvc.Razor;
 
-namespace IndividualAuthentication
+
+namespace mvccoresb
 {
+
+    using Autofac;
+    using Autofac.Extensions.DependencyInjection;
+
+    using AutoMapper;
+
+    using mvccoresb.Infrastructure.SignalR;
+
+
+    using mvccoresb.Domain.Interfaces;
+    using mvccoresb.Domain.TestModels;
+    using chat.Domain.Models;
+
+    using mvccoresb.Infrastructure.EF;
+    using Microsoft.EntityFrameworkCore;
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -25,10 +44,12 @@ namespace IndividualAuthentication
             Configuration = configuration;
         }
 
+        public IContainer ApplicationContainer { get; private set; }
+
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -37,75 +58,129 @@ namespace IndividualAuthentication
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-              /** Register route to move Areas default MVC folder to custom location */
+            /** Register route to move Areas default MVC folder to custom location */
             services.Configure<RazorViewEngineOptions>(options =>
             {
                 options.AreaViewLocationFormats.Clear();
-                options.AreaViewLocationFormats.Add("/API/Areas/{2}/Views/{1}/{0}.cshtml");
-                options.AreaViewLocationFormats.Add("/API/Areas/{2}/Views/Shared/{0}.cshtml");
-                options.AreaViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
-            });   
-
-            ConfigureAuthentication(services);
-            
-            services.AddMvc()
-            .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-            .AddRazorPagesOptions(options =>
-            {
-                options.AllowAreas = true;
-               
+                options.AreaViewLocationFormats.Add("API/Areas/{2}/Views/{1}/{0}.cshtml");
+                options.AreaViewLocationFormats.Add("API/Areas/{2}/Views/Shared/{0}.cshtml");
+                options.AreaViewLocationFormats.Add("/Views/Shared/{0}.cshtml");                
             });
+
+            /*Authentication authorization provider */
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("LocalAuthConnection")));
+            services.AddDefaultIdentity<IdentityUser>()
+                .AddDefaultUI(UIFramework.Bootstrap4)
+                .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            /*conflict with redirect to greeting page after login */
+            // services.AddAuthentication(options =>
+            // {
+            //     options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            //     options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            // });
+
+            // services
+            // .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            // .AddCookie(options =>
+            // {
+            //     options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Identity/Account/LogIn");
+            // });
+
+            services.AddMvc()
+            //causes razor tag helpers ignore asp-area attribute
+            //.SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+            ;
 
             /** Renames all defalt Views including Areas/Area/Views folders to custom name */
             services.Configure<RazorViewEngineOptions>(
                 options => options.ViewLocationExpanders.Add(
             new CustomViewLocation()));
-            
+
+            /*Test db context */
+            services.AddDbContext<TestContext>(o =>
+               o.UseSqlServer(
+                   Configuration.GetConnectionString("LocalDbConnection")));
+
+            /*SignalR registration*/
+            services.AddSignalR();
+
+            /*Autofac autofacContainer */
+            var autofacContainer = new ContainerBuilder();
+
+
+            /*Automapper Register */
+            services.AddAutoMapper(typeof(Startup));
+
+            /*Mapper initialize with Instance API initialization */
+            var config = ConfigureAutoMapper();
+            IMapper mapper = new Mapper(config);
+
+
+            /*Autofac registrations */
+            autofacContainer.Populate(services);
+            ConfigureAutofac(services, autofacContainer);
+
+            /*Registration of automapper with autofac Instance API */
+            autofacContainer.RegisterInstance(mapper).As<IMapper>();
+
+            this.ApplicationContainer = autofacContainer.Build();
+            return new AutofacServiceProvider(this.ApplicationContainer);
         }
 
-        public void ConfigureAuthentication(IServiceCollection services)
+
+        public ContainerBuilder ConfigureAutofac(IServiceCollection services, ContainerBuilder autofacContainer)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                         options.UseSqlServer(
-                             Configuration.GetConnectionString("LocalAuthConnection")));
 
-            services.AddDefaultIdentity<IdentityUser>()
-                .AddDefaultUI(UIFramework.Bootstrap4)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            /**EF,repo and UOW reg */
+            autofacContainer.RegisterType<TestContext>().As<DbContext>()
+                .InstancePerLifetimeScope();
 
-            /* Configure login password settings*/
-            services.Configure<IdentityOptions>(options =>
+            autofacContainer.RegisterType<RepositoryEF>()
+                .As<IRepository>().InstancePerLifetimeScope();
+
+            autofacContainer.RegisterType<CQRSBloggingWrite>()
+                .As<ICQRSBloggingWrite>().InstancePerLifetimeScope();
+            autofacContainer.RegisterType<CQRSBloggingRead>()
+                .As<ICQRSBloggingRead>().InstancePerLifetimeScope();
+
+            //*DAL->BLL reg */
+            autofacContainer.RegisterType<BlogEF>()
+                .As<IBlogEF>().InstancePerLifetimeScope();
+            autofacContainer.RegisterType<BlogBLL>()
+                .As<IBlogBLL>().InstancePerLifetimeScope();
+            autofacContainer.RegisterType<PostBLL>()
+                .As<IPostBLL>().InstancePerLifetimeScope();
+
+            return autofacContainer;
+        }
+
+        public MapperConfiguration ConfigureAutoMapper()
+        {
+            return new MapperConfiguration(cfg =>
             {
-                // Password settings.
-                options.Password.RequireDigit = true;
-                options.Password.RequireLowercase = true;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireUppercase = false;
-                options.Password.RequiredLength = 4;
-                options.Password.RequiredUniqueChars = 1;
+                //cfg.AddProfiles(typeof(BlogEF), typeof(BlogBLL));
+                cfg.CreateMap<BlogEF, BlogBLL>()
+                    .ForMember(dest => dest.Id, m => m.MapFrom(src => src.BlogId))
+                    .ForMember(dest => dest.Posts, m => m.Ignore());
 
-                // Lockout settings.
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-                options.Lockout.MaxFailedAccessAttempts = 5;
-                options.Lockout.AllowedForNewUsers = true;
+                cfg.CreateMap<PostEF, PostBLL>(MemberList.None).ReverseMap();
 
-                // User settings.
-                options.User.AllowedUserNameCharacters =
-                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-                options.User.RequireUniqueEmail = false;
-            });
+                cfg.CreateMap<PersonAdsPostCommand, PostEF>()
+                    .ForMember(dest => dest.AuthorId, m => m.MapFrom(src => src.PersonId));
 
-            services.ConfigureApplicationCookie(options =>
-            {
-                // Cookie settings
-                options.Cookie.HttpOnly = true;
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+                cfg.CreateMap<AddPostAPI, PostEF>()
+                    .ForMember(dest => dest.AuthorId, m => m.MapFrom(src => src.PersonId))
+                    .ForMember(dest => dest.BlogId, m => m.MapFrom(src => src.BlogId));
 
-                options.LoginPath = "/Identity/Account/Login";
-                options.AccessDeniedPath = "/Identity/Account/AccessDenied";
-                options.SlidingExpiration = true;
+                cfg.CreateMap<PersonEF, PersonAPI>();
+                cfg.CreateMap<BlogEF, BlogAPI>();
+                cfg.CreateMap<PostEF, PostAPI>().ReverseMap();
             });
         }
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -127,13 +202,61 @@ namespace IndividualAuthentication
             app.UseCookiePolicy();
 
             app.UseAuthentication();
-
+            
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
+                   name: "areas",
+                   template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+                routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+
             });
+
+            /* must be added after use mvc */
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<SignalRhub>("/rHub");
+            });
+        }
+    }
+
+    public static class AutoMapperStaticConfiguration
+    {
+        public static void Configure()
+        {
+            /*Mapper initialize with Static initialization*/
+            Mapper.Initialize(cfg =>
+            {
+                cfg.CreateMap<BlogEF, BlogBLL>();
+                cfg.CreateMap<PostEF, PostBLL>();
+            });
+        }
+    }
+
+    public class CustomViewLocation : IViewLocationExpander
+    {
+        string ValueKey = "Views";
+        public IEnumerable<string> ExpandViewLocations(
+            ViewLocationExpanderContext context,
+            IEnumerable<string> viewLocations)
+        {
+
+            return ExpandViewLocationsCore(viewLocations);
+        }
+
+        private IEnumerable<string> ExpandViewLocationsCore(IEnumerable<string> viewLocations)
+        {
+            viewLocations = viewLocations.Select(s => s.Replace("Views", ValueKey));
+
+            return viewLocations;
+        }
+
+        public void PopulateValues(ViewLocationExpanderContext context)
+        {
+            context.Values[ValueKey] = context.ActionContext.RouteData.Values[ValueKey]?.ToString();
         }
     }
 }
