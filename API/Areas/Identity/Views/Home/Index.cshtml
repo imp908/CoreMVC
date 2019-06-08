@@ -1,0 +1,13 @@
+
+@{
+    ViewData["Title"] = "ChatHome";
+    Layout = "_Layout";
+}
+
+<h1>ChatHome</h1>
+@Html.ActionLink("Link", "Action", "Controller");
+<a href="@Url.Action("Index", "Story", new { area = "Bio" })" ></a>
+<li><a asp-area="Admin" asp-controller="AdminPanel" asp-action="Index">Admin Panel</a></li>
+<div>
+    @Html.ActionLink("Link", "LogIn", "Account")
+</div>

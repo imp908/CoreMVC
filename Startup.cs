@@ -59,7 +59,7 @@ namespace mvccoresb
                 options.AreaViewLocationFormats.Clear();
                 options.AreaViewLocationFormats.Add("API/Areas/{2}/Views/{1}/{0}.cshtml");
                 options.AreaViewLocationFormats.Add("API/Areas/{2}/Views/Shared/{0}.cshtml");
-                options.AreaViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
+                options.AreaViewLocationFormats.Add("/Views/Shared/{0}.cshtml");                
             });
 
             /*Authentication provider */
@@ -79,7 +79,10 @@ namespace mvccoresb
                 });
 
 
-            services.AddMvc();
+            services.AddMvc(o =>{
+                o.EnableEndpointRouting = false;
+            })
+            .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             /** Renames all defalt Views including Areas/Area/Views folders to custom name */
             services.Configure<RazorViewEngineOptions>(
@@ -190,6 +193,11 @@ namespace mvccoresb
 
             app.UseMvc(routes =>
             {
+                    routes.MapRoute(
+                name: "areas",
+                template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                );
+
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
@@ -197,8 +205,8 @@ namespace mvccoresb
                 /**mapping for default scaffolded area */
                 routes.MapRoute(
                     name: "defaultWithArea",
-                    template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
-
+                    template: "{area:exists}/{controller}/{action}",
+                    defaults: new { controller = "Home", action = "Index" });
 
                 /** mapping for custom testarea */
                 routes.MapAreaRoute(
