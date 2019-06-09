@@ -17,8 +17,8 @@ namespace mvccoresb
     {
         public static void Main(string[] args)
         {
-            RepoAndUOWCheck.GO();
-            Check.GO();
+            //Check.GO();
+            //RepoAndUOWCheck.GO();
             
             CreateWebHostBuilder(args).Build().Run();
         }
@@ -26,8 +26,7 @@ namespace mvccoresb
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
             //http host for Fidler http test
-            .UseUrls("http://localhost:5000")
+            .UseUrls("http://localhost:5002")
                 .UseStartup<Startup>();
     }
-    
 }

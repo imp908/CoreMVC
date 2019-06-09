@@ -1,6 +1,4 @@
 
-
-//////////////
 //pckages
     dotnet add package Newtonsoft.Json --version 12.0.2
     dotnet add package Autofac.Extensions.DependencyInjection --version 4.4.0
@@ -15,7 +13,7 @@
     npm install --save-dev @babel/core @babel/cli @babel/plugin-proposal-class-properties @babel/preset-env @babel/preset-react @babel/plugin-transform-arrow-functions @babel/plugin-transform-classes @babel/plugin-proposal-function-bind
 
 //////////////
-//MVC WebApi Fodlers, routing and URLs:
+//MVC WebApi Folders, routing and URLs:
 Folders:
     //scaffolded vews for MVC and WebApi
         Areas/Scaffolded
@@ -112,7 +110,16 @@ Routes:
         (copypast to several browser windows to test)
             http://localhost:5000/TestArea/SignalR/hub
 
-API:
+        AccountController
+            http://localhost:5000/Identity/Account/Register
+        
+        ChatController
+            //public room
+                http://localhost:5000/Identity/Chat/room
+            //private room
+                http://localhost:5000/Identity/Chat/roomP
+
+ API:[
     http://localhost:5000/api/blog/AddPost -> returns Ok(result)
     http://localhost:5000/api/blog/AddPostJSON -> retorns Json(result)
     
@@ -122,6 +129,42 @@ API:
 	    "BlogId":"1",	
 		"Title":"PostTitle","Content":"PostContent"
     }
+
+    PersonAddsPost
+        http://localhost:5000/api/blog/AddPostJSON
+        {"PersonId":"81A130D2-502F-4CF1-A376-63EDEB000E9F",
+        "BlogId":"1",	
+        "Title":"PostTitle","Content":"PostContent"}
+
+    get posts by person
+        personId -> List<Posts>
+        http://localhost:5000/api/blog/GetPostsByPerson
+        {"PersonId":"81A130D2-502F-4CF1-A376-63EDEB000E9F"}
+        
+    get posts by blog
+        personId -> List<blogs>		
+        http://localhost:5000/api/blog/GetPostsByBlog
+        {"BlogId":"1"}
+        
+    get blogs by person
+        blogId -> List<Posts>
+        http://localhost:5000/api/blog/GetBlogsByPerson
+        {"PersonId":"81A130D2-502F-4CF1-A376-63EDEB000E9F"}
+    
+    person removes post
+        http://localhost:5000/api/blog/UpdatePost
+        {
+            "PersonId":"81A130D2-502F-4CF1-A376-63EDEB000E9F"
+            ,"Post":{"PostId":"1","Title":"UpdatedTitle","Content":"UpdatedContent"}
+        }
+    
+    person updates post
+        http://localhost:5000/api/blog/DeletePost
+        {
+            "PersonId":"81A130D2-502F-4CF1-A376-63EDEB000E9F"
+            ,"PostId":"1"
+        }
+]
 
 //////////////
 attribute vs named area routing
@@ -165,7 +208,7 @@ CustomViewLocations.cs
 //////////////
 //startup.cs
 custom default MVC Area location folder in API/Areas
-in startup.cs rerouted through  RazorViewEngineOptions
+in startup.cs rerouted through RazorViewEngineOptions
 
 Autofac container registration added
 
@@ -178,6 +221,12 @@ AutoFact to Automapper registration added
 AutofacServiceProvider returned from ConfigureServices
 
 SignalR use and hub routing added
+
+Authentication registration:
+Authentication EF db context 
+Identity core for user managment
+Added authentication with cookies
+
 
 //////////////
 //Program.cs 
@@ -199,6 +248,10 @@ gulpfile.js
 dotnet ef migrations add InitialCreate
 dotnet ef database update
 
+//Identity DB migrations
+dotnet ef migrations add CreateIdentitySchema --context IdentityContext
+dotnet ef database update --context IdentityContext
+
 //////////////
 //npm
 npx webpack
@@ -207,8 +260,8 @@ npx webpack
 //////////////
 //DDD decomposition->
     API:
-        MVC, WebApi, Controllers
-        Uses View Models
+        MVC (authentication), WebApi, Controllers, SignalRHub
+        
     Infrastructure:
         ORMs contexts : [EF];
         Repo and UOW realizations;
@@ -238,25 +291,24 @@ npx webpack
 //Workflow  StackShema,TODO,BACKLOG,DONE
 StackShema:[
     DDD 
-    sql(ms,postgre),nosql(mongo,neo4j),amqp(rabbit+netservicebus,masstransit),
-    cashing(reddis)
+        sql(ms,postgre),nosql(mongo,neo4j),amqp(rabbit+netservicebus,masstransit),
+        cashing(reddis)
     
     front
-    PWA progressive web app
-    (angular,react,vue)
-    (graphql vs REST,?mongoose)
-    (?rendering,?testing)
+        PWA progressive web app
+        (angular,react,vue)
+        (graphql vs REST,?mongoose)
+        (?rendering,?testing)
 ]
 
 TODO:[
-    
-    -> docker
-    -> Smaple chat react front
-    -> Login and authenticate    
+
+    09.06.2019 4h20m  -> dockerize
     
 ]
 
 BACKLOG:[
+    
     -> add flattering to automapper, 
         mapping API command property payload to whole EF object
             API{"P":{class}} -> EF{class}
@@ -266,49 +318,62 @@ BACKLOG:[
     -> put,delete commands with url aprameters
     -> controller status response and human readable responses
     -> use interface as controller parameter
-        ?is it worth 
+        ?is it worth
     
 ]
 
 DONE:[
-    API:[
-        <- done 02.06.2019 01:53 -> PersonAddsPost								
-            http://localhost:5000/api/blog/AddPostJSON
-            {"PersonId":"81A130D2-502F-4CF1-A376-63EDEB000E9F",
-            "BlogId":"1",	
-            "Title":"PostTitle","Content":"PostContent"}
 
-        <- done 02.06.2019 14:40-14:50 10m -> get posts by person
-            personId -> List<Posts>
-            http://localhost:5000/api/blog/GetPostsByPerson
-            {"PersonId":"81A130D2-502F-4CF1-A376-63EDEB000E9F"}
-            
-        <- done 02.06.2019 12:14-14:40 2h30m-> get posts by blog
-            personId -> List<blogs>		
-            http://localhost:5000/api/blog/GetPostsByBlog
-            {"BlogId":"1"}
-            
-        <- done 02.06.2019 12:14-14:50 2h30m-> get blogs by person
-            blogId -> List<Posts>
-            http://localhost:5000/api/blog/GetBlogsByPerson
-            {"PersonId":"81A130D2-502F-4CF1-A376-63EDEB000E9F"}
-        
-        <- done 02.06.201 15:13-15:53 40m -> person removes post
-            http://localhost:5000/api/blog/UpdatePost
-            {
-                "PersonId":"81A130D2-502F-4CF1-A376-63EDEB000E9F"
-                ,"Post":{"PostId":"1","Title":"UpdatedTitle","Content":"UpdatedContent"}
-            }
-        
-        <- done 02.06.201 15:53-16:03 10m -> person updates post
-            http://localhost:5000/api/blog/DeletePost
-            {
-                "PersonId":"81A130D2-502F-4CF1-A376-63EDEB000E9F"
-                ,"PostId":"1"
-            }
-    ]
+    <- done 02.06.2019 01:53 2h -> PersonAddsPost	
+    <- done 02.06.2019 14:40-14:50 10m -> get posts by person
+    <- done 02.06.2019 12:14-14:40 2h30m -> get posts by blog
+    <- done 02.06.2019 12:14-14:50 2h30m -> get blogs by person
+    <- done 02.06.2019 15:13-15:53 40m -> person removes post
+    <- done 02.06.2019 15:53-16:03 10m -> person updates post
 
     <- done 04.06.2019 5h -> react boardGame checker
+
     <- done 04.09.2019 23:53 05.09.2019 2:40 2h50m -> SignalR chat checker
+
+    <- done 05.06.2019 2h30m -> Login and authenticate template    
+    <- done 06.06.2019 7h22m -> Identity on MVC views with Identity DB migrations
+    <- done 07.06.2019 5h3m -> authorization token and cookie redirect on mvc startup setup
+    <- done 08.06.2019 2h15m -> core mvc with auth and defailt ui mvc           rounig with API/areas for view and controller
+	{
+	
+		=> gen mvc 
+		    dotnet new mvc -o {folder} -au individual
+		=> add areas 
+			options.AreaViewLocationFormats.Add("API/Areas/{2}/Views/{1}/{0}.cshtml");
+		=> remove compatibility 
+			//.SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+		=> move MVC v,c folders
+		=> include 
+			@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+			from _viewimport on every layout
+		=> leave basic routing in startup.cs [
+		  routes.MapRoute(
+               name: "areas",
+               template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+               );
+               
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
+		]
+
+        => dont include in startup.cs
+        it conflict with scafoldede razor pages sigin
+
+            services.AddAuthentication
+                o => CookieAuthenticationDefaults
+
+
+	}
+    <- done 08.06.2019 4h -> move auth
+
+	<- done 09.06.2019 1h45m -> signalR and auth user and messages binded
+
+    ~34h in 8d
 
 ]

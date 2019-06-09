@@ -19,7 +19,6 @@ namespace mvccoresb.Infrastructure.EF
     using Microsoft.EntityFrameworkCore.ChangeTracking;
 
     using mvccoresb.Domain.Interfaces;    
-    using mvccoresb.Domain.TestModels;
 
     using Newtonsoft;
 
