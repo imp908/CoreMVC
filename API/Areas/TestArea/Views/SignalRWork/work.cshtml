@@ -1,0 +1,17 @@
+﻿<script src="~/dist/sb/signalRwork.bundle.js"></script>
+
+<h1>Hub</h1>
+
+<div id="root"></div>
+
+<div> 
+    <button id="sendButton">Send</button>
+</div>
+<div>
+    <ul id="messagesList"></ul>
+</div>
+
+<script>
+    var r = new signalRwork.SignalRwork();
+    r.Init();
+</script>

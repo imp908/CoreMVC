@@ -17,8 +17,8 @@ namespace mvccoresb
     {
         public static void Main(string[] args)
         {
-            RepoAndUOWCheck.GO();
-            Check.GO();
+            //Check.GO();
+            //RepoAndUOWCheck.GO();
             
             CreateWebHostBuilder(args).Build().Run();
         }

@@ -91,7 +91,8 @@ namespace NetPlatformCheckers
         
     using System.Net;
     using System.Net.Sockets;
-    
+
+    using System.Threading;
     using System.Threading.Tasks;
 
     using System.IO;
@@ -103,8 +104,11 @@ namespace NetPlatformCheckers
 
     public static class Check
     {
+      
         public static void GO()
         {
+            //TasksToFuckupCPU.GO();
+
             EqualIsCheck.GO();
             OverrideCheck.GO();
             GenericSwapCheck.GO();
@@ -1082,6 +1086,17 @@ namespace NetPlatformCheckers
     /*--------------------------------------------- */
     //ADD new
     
+    public class TasksToFuckupCPU{
+        public static void GO(){
+            for(int i=0;i<2000;i++){
+                new Thread(o=>{Thread.Sleep(100);}).Start();
+            }
+        }
+        public async Task FakeLongRunningTask()
+        {
+            await Task.Factory.StartNew(() => Thread.Sleep(5000));
+        }
+    }
 
 
     /*Reflections */
