@@ -1,6 +1,4 @@
 
-
-//////////////
 //pckages
     dotnet add package Newtonsoft.Json --version 12.0.2
     dotnet add package Autofac.Extensions.DependencyInjection --version 4.4.0
@@ -304,10 +302,8 @@ StackShema:[
 ]
 
 TODO:[
-        
-    -> Smaple chat react front
-    -> entities to DB
-    -> docker
+
+    09.06.2019 4h20m  -> dockerize
     
 ]
 
@@ -339,7 +335,7 @@ DONE:[
 
     <- done 04.09.2019 23:53 05.09.2019 2:40 2h50m -> SignalR chat checker
 
-    <- done 2h30m -> Login and authenticate template    
+    <- done 05.06.2019 2h30m -> Login and authenticate template    
     <- done 06.06.2019 7h22m -> Identity on MVC views with Identity DB migrations
     <- done 07.06.2019 5h3m -> authorization token and cookie redirect on mvc startup setup
     <- done 08.06.2019 2h15m -> core mvc with auth and defailt ui mvc           rounig with API/areas for view and controller
