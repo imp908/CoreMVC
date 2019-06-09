@@ -64,7 +64,7 @@ namespace mvccoresb
                 options.AreaViewLocationFormats.Clear();
                 options.AreaViewLocationFormats.Add("API/Areas/{2}/Views/{1}/{0}.cshtml");
                 options.AreaViewLocationFormats.Add("API/Areas/{2}/Views/Shared/{0}.cshtml");
-                options.AreaViewLocationFormats.Add("/Views/Shared/{0}.cshtml");                
+                options.AreaViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
             });
 
             /*Authentication authorization provider */
@@ -219,7 +219,6 @@ namespace mvccoresb
             app.UseSignalR(routes =>
             {
                 routes.MapHub<SignalRhub>("/rHub");
-                routes.MapHub<SignalRWorks>("/rWork");
             });
         }
     }
