@@ -2839,6 +2839,11 @@
       "FileKind": "mvc"
     },
     {
+      "FilePath": "API\\Areas\\TestArea\\Views\\SignalRWork\\work.cshtml",
+      "TargetPath": "API\\Areas\\TestArea\\Views\\SignalRWork\\work.cshtml",
+      "FileKind": "mvc"
+    },
+    {
       "FilePath": "API\\Areas\\TestArea\\Views\\JScheck\\CheckAppOne.cshtml",
       "TargetPath": "API\\Areas\\TestArea\\Views\\JScheck\\CheckAppOne.cshtml",
       "FileKind": "mvc"
