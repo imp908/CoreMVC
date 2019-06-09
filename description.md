@@ -1,6 +1,4 @@
 
-
-//////////////
 //pckages
     dotnet add package Newtonsoft.Json --version 12.0.2
     dotnet add package Autofac.Extensions.DependencyInjection --version 4.4.0
@@ -304,11 +302,8 @@ StackShema:[
 ]
 
 TODO:[
-    
-    -> move auth
-    -> Smaple chat react front
-    -> entities to DB
-    -> docker
+
+    09.06.2019 4h20m  -> dockerize
     
 ]
 
@@ -331,14 +326,16 @@ DONE:[
 
     <- done 02.06.2019 01:53 2h -> PersonAddsPost	
     <- done 02.06.2019 14:40-14:50 10m -> get posts by person
-    <- done 02.06.2019 12:14-14:40 2h30m-> get posts by blog
-    <- done 02.06.2019 12:14-14:50 2h30m-> get blogs by person
-    <- done 02.06.201 15:13-15:53 40m -> person removes post
-    <- done 02.06.201 15:53-16:03 10m -> person updates post
+    <- done 02.06.2019 12:14-14:40 2h30m -> get posts by blog
+    <- done 02.06.2019 12:14-14:50 2h30m -> get blogs by person
+    <- done 02.06.2019 15:13-15:53 40m -> person removes post
+    <- done 02.06.2019 15:53-16:03 10m -> person updates post
 
     <- done 04.06.2019 5h -> react boardGame checker
+
     <- done 04.09.2019 23:53 05.09.2019 2:40 2h50m -> SignalR chat checker
-    <- done 2h30m -> Login and authenticate template
+
+    <- done 05.06.2019 2h30m -> Login and authenticate template    
     <- done 06.06.2019 7h22m -> Identity on MVC views with Identity DB migrations
     <- done 07.06.2019 5h3m -> authorization token and cookie redirect on mvc startup setup
     <- done 08.06.2019 2h15m -> core mvc with auth and defailt ui mvc           rounig with API/areas for view and controller
@@ -364,8 +361,19 @@ DONE:[
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
 		]
+
+        => dont include in startup.cs
+        it conflict with scafoldede razor pages sigin
+
+            services.AddAuthentication
+                o => CookieAuthenticationDefaults
+
+
 	}
-	
-    ~29h in 7d
+    <- done 08.06.2019 4h -> move auth
+
+	<- done 09.06.2019 1h45m -> signalR and auth user and messages binded
+
+    ~34h in 8d
 
 ]
