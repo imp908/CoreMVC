@@ -108,7 +108,7 @@ namespace NetPlatformCheckers
         public static void GO()
         {
             //TasksToFuckupCPU.GO();
-
+            InheritanceCastPolimorphismCheck.GO();
             EqualIsCheck.GO();
             OverrideCheck.GO();
             GenericSwapCheck.GO();
@@ -186,6 +186,60 @@ namespace NetPlatformCheckers
            System.Diagnostics.Trace.WriteLine($"parentAsChild1IsParent: {parentAsChild1IsParent}");
            System.Diagnostics.Trace.WriteLine($"parentAsChild1IsChild1: {parentAsChild1IsChild1}");
            System.Diagnostics.Trace.WriteLine($"childIsParent: {childIsParent}");
+        }
+    }
+
+
+
+
+    /* Inheritance polymorphism instantiations*/
+    interface A { }
+    interface B : A { }
+
+    class X : A { }
+    class Y : X, B { }
+    class Z : X { }
+
+    public static class InheritanceCastPolimorphismCheck
+    {
+        public static void GO(){
+
+try{variantA(); }catch(Exception e){
+
+}
+try {variantB(); } catch (Exception e) {
+
+ }
+try { variantC(); } catch (Exception e) {
+
+ }
+try { variantD(); } catch (Exception e) { 
+
+}
+
+        }
+
+        private static void variantA(){
+            var o = new Y();var oY = (A)o;
+            var a = new Z();var aZ = a as B;
+            var x = new X();var xB = x as B;
+        }
+        private static void variantB()
+        {
+            A alpha = new X();
+            var x = new X();var bX=(B)x; 
+            var y = new Y();var yB = y as B;
+        }
+        private static void variantC(){
+            var x = new X();var xB = x as B; 
+            var z = new Z(); var zB = z as B;
+            A alpha = new X();
+        }
+        private static void variantD()
+        {
+            var z = new Z(); var zB = (B)z; 
+            var y = new Y(); var yB = y as B; 
+            var y2 = new Y(); var yA = (A)y2;
         }
     }
 

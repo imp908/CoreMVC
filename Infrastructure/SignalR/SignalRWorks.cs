@@ -22,11 +22,17 @@ namespace mvccoresb.Infrastructure.SignalR
             );            
         }
     }
+    
     public class BackGroundWork
-    {
+    {       
         public static async Task FakeLongRunningTask()
         {
             await Task.Factory.StartNew(() => Thread.Sleep(5000));
+        }
+
+        public static async Task FakeLongRunningTask(int ms)
+        {
+            await Task.Factory.StartNew(() => Thread.Sleep(ms));
         }
     }
 
