@@ -40,40 +40,14 @@ class SignalRhub
 
     SendMessages = () =>{
         
-        this.FetchURL({ url:"/Identity/CustomAccount/GetCurrentUser",method:"GET",params:null})
-        .then(r=>{
-            if (r && r.userName){
-                var message = document.getElementById("messageInput").value;
-                this.connection.invoke("SendMessage", r.userName, message)
-                    .catch((err) => {
-                        return console.error(err.toString());
-                    });
-            }
-        })
-
-    }
-
-    //option:{ url, method, params}
-    FetchURL = ( option ) => {
-
-        let _url;
-
-        _url = (option.params) ? `${option.url}?${option.params}`
-            : `${option.url}`;
-
-        let _request = new Request(_url,
-            { method: option.method, credentials: 'include', mode: 'no-cors' });
-
-        return fetch(_request)
-            .then((response)=>{
-                return response.json()
-            })
-            .then((json) => {
-                return json;
+        var message = document.getElementById("messageInput").value;
+        this.connection.invoke("SendMessage", "userName", message)
+            .catch((err) => {
+                return console.error(err.toString());
             });
 
     }
-
+   
 
 }
 

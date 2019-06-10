@@ -6,7 +6,6 @@ namespace mvccoresb.Infrastructure.EF
     using System.Collections.Generic;
 
     using mvccoresb.Domain.TestModels;
-    using mvccoresb.Domain.GeoModel;
 
     using System;
     
