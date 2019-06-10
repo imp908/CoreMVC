@@ -12549,11 +12549,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "G:\\disk\\Files\\git\\Core\\chat\\mvccoresb.csproj",
+      "projectUniqueName": "G:\\disk\\Files\\git\\Core\\crmvcsb\\mvccoresb.csproj",
       "projectName": "mvccoresb",
-      "projectPath": "G:\\disk\\Files\\git\\Core\\chat\\mvccoresb.csproj",
+      "projectPath": "G:\\disk\\Files\\git\\Core\\crmvcsb\\mvccoresb.csproj",
       "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-      "outputPath": "G:\\disk\\Files\\git\\Core\\chat\\obj\\",
+      "outputPath": "G:\\disk\\Files\\git\\Core\\crmvcsb\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
