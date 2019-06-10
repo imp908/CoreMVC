@@ -8,17 +8,14 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-using NetPlatformCheckers;
-using InfrastructureCheckers;
+
 
 namespace mvccoresb
 {
     public class Program
     {
         public static void Main(string[] args)
-        {
-            //Check.GO();
-            //RepoAndUOWCheck.GO();
+        {      
             
             CreateWebHostBuilder(args).Build().Run();
         }

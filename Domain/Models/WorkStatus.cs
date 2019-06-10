@@ -1,18 +1,30 @@
 namespace chat.Domain.APImodels{
+
+    using System;
+    public interface IWork
+    {
+        DateTime EventDate {get;}
+    }
+
     public interface IWorkStatus
     {
         string Status {get;}
     }
 
-    public class WorkQueued : IWorkStatus
+    public class BaseWork : IWork
+    {
+        public DateTime EventDate {get;} = DateTime.Now;
+    }
+
+    public class WorkQueued : BaseWork, IWorkStatus
     {
         public string Status { get; } = "Queued";
     }    
-    public class WorkStarted : IWorkStatus
+    public class WorkStarted : BaseWork, IWorkStatus
     {
         public string Status {get;} = "Started";
     } 
-    public class WorkFinished : IWorkStatus
+    public class WorkFinished : BaseWork, IWorkStatus
     {
         public string Status { get; } = "Finished";
     }  
