@@ -1,12 +1,12 @@
-Worker test progect
+## Worker test progect
 
 to test:
 -------------------------------------------------------
-> add dotnet packages
-> install npm pakets
-> npx webpack to build JS
-> build net core
-> run
+- add dotnet packages
+- install npm pakets
+- npx webpack to build JS
+- build net core
+- run
 
 test url after start:
 -------------------------------------------------------
