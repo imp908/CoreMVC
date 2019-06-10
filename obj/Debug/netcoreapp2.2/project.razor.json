@@ -2764,28 +2764,8 @@
       "FileKind": "mvc"
     },
     {
-      "FilePath": "Views\\Shared\\Error.cshtml",
-      "TargetPath": "Views\\Shared\\Error.cshtml",
-      "FileKind": "mvc"
-    },
-    {
-      "FilePath": "Views\\Home\\Index.cshtml",
-      "TargetPath": "Views\\Home\\Index.cshtml",
-      "FileKind": "mvc"
-    },
-    {
       "FilePath": "API\\Areas\\Scaffolded\\Views\\Shared\\_Layout.cshtml",
       "TargetPath": "API\\Areas\\Scaffolded\\Views\\Shared\\_Layout.cshtml",
-      "FileKind": "mvc"
-    },
-    {
-      "FilePath": "Views\\Home\\Privacy.cshtml",
-      "TargetPath": "Views\\Home\\Privacy.cshtml",
-      "FileKind": "mvc"
-    },
-    {
-      "FilePath": "Views\\_ViewImports.cshtml",
-      "TargetPath": "Views\\_ViewImports.cshtml",
       "FileKind": "mvc"
     },
     {
@@ -2799,11 +2779,6 @@
       "FileKind": "mvc"
     },
     {
-      "FilePath": "Views\\Shared\\_CookieConsentPartial.cshtml",
-      "TargetPath": "Views\\Shared\\_CookieConsentPartial.cshtml",
-      "FileKind": "mvc"
-    },
-    {
       "FilePath": "API\\Areas\\Scaffolded\\Views\\Home\\Privacy.cshtml",
       "TargetPath": "API\\Areas\\Scaffolded\\Views\\Home\\Privacy.cshtml",
       "FileKind": "mvc"
@@ -2811,16 +2786,6 @@
     {
       "FilePath": "API\\Areas\\TestArea\\Views\\ReactCheck\\ReactCheck.cshtml",
       "TargetPath": "API\\Areas\\TestArea\\Views\\ReactCheck\\ReactCheck.cshtml",
-      "FileKind": "mvc"
-    },
-    {
-      "FilePath": "Views\\Shared\\_Layout.cshtml",
-      "TargetPath": "Views\\Shared\\_Layout.cshtml",
-      "FileKind": "mvc"
-    },
-    {
-      "FilePath": "Views\\_ViewStart.cshtml",
-      "TargetPath": "Views\\_ViewStart.cshtml",
       "FileKind": "mvc"
     },
     {
@@ -2849,11 +2814,6 @@
       "FileKind": "mvc"
     },
     {
-      "FilePath": "Views\\Shared\\_LoginPartial.cshtml",
-      "TargetPath": "Views\\Shared\\_LoginPartial.cshtml",
-      "FileKind": "mvc"
-    },
-    {
       "FilePath": "API\\Areas\\TestArea\\Views\\SignalR\\hub.cshtml",
       "TargetPath": "API\\Areas\\TestArea\\Views\\SignalR\\hub.cshtml",
       "FileKind": "mvc"
@@ -2861,11 +2821,6 @@
     {
       "FilePath": "API\\Areas\\TestArea\\Views\\Home\\Index.cshtml",
       "TargetPath": "API\\Areas\\TestArea\\Views\\Home\\Index.cshtml",
-      "FileKind": "mvc"
-    },
-    {
-      "FilePath": "Views\\Shared\\_ValidationScriptsPartial.cshtml",
-      "TargetPath": "Views\\Shared\\_ValidationScriptsPartial.cshtml",
       "FileKind": "mvc"
     },
     {
