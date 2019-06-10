@@ -373,9 +373,10 @@ DONE:[
 	}
     <- done 08.06.2019 4h -> move auth
 
-	<- done 09.06.2019 1h45m -> signalR and auth user and messages binded
+    <- done 09.06.2019 1h45m -> signalR and auth user and messages binded
     <- done 10.06.2019 01:24 1h31m -> signalR work queued,started,finished moque
-
-    ~36h in 9d
+	<- done 10.06.2019 22:52 1h12m -> signalR work queue and front edited
+	
+    ~41h in 9d
 
 ]
