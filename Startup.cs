@@ -71,33 +71,8 @@ namespace mvccoresb
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("LocalAuthConnection")));
-            services.AddDefaultIdentity<IdentityUser>()
-                .AddDefaultUI(UIFramework.Bootstrap4)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
-
-            /*conflict with redirect to greeting page after login */
-            // services.AddAuthentication(options =>
-            // {
-            //     options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            //     options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            // });
-
-            // services
-            // .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            // .AddCookie(options =>
-            // {
-            //     options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Identity/Account/LogIn");
-            // });
-
-            services.AddMvc()
-            //causes razor tag helpers ignore asp-area attribute
-            //.SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-            ;
-
-            /** Renames all defalt Views including Areas/Area/Views folders to custom name */
-            services.Configure<RazorViewEngineOptions>(
-                options => options.ViewLocationExpanders.Add(
-            new CustomViewLocation()));
+           
+            services.AddMvc();
 
             /*Test db context */
             services.AddDbContext<TestContext>(o =>
@@ -201,8 +176,6 @@ namespace mvccoresb
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
-            app.UseAuthentication();
-            
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
