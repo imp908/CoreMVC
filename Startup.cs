@@ -35,6 +35,7 @@ namespace mvccoresb
     using chat.Domain.Models;
 
     using mvccoresb.Infrastructure.EF;
+    using order.Infrastructure.EF;
     using Microsoft.EntityFrameworkCore;
 
     public class Startup
@@ -78,6 +79,10 @@ namespace mvccoresb
             services.AddDbContext<TestContext>(o =>
                o.UseSqlServer(
                    Configuration.GetConnectionString("LocalDbConnection")));
+
+            services.AddDbContext<OrderContext>(o =>
+                          o.UseSqlServer(
+                              Configuration.GetConnectionString("LocalOrderConnection")));
 
             /*SignalR registration*/
             services.AddSignalR();
