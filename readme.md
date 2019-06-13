@@ -1,30 +1,4 @@
-## Worker test progect
-
-to test:
--------------------------------------------------------
-- add dotnet packages
-- install npm pakets
-- npx webpack to build JS
-- build net core
-- run
-
-test url after start:
--------------------------------------------------------
-> http://localhost:5002/TestArea/SignalRwork/work
-
-
-Related files:
--------------------------------------------------------
-> view
-- API\Areas\TestArea\Views\SignalRWork\work.cshtml
-> controller
-- API\Areas\TestArea\FolderControllers\SignalRWorkController.cs
-> JS
-- wwwroot\js\Libs\signalR\signalRwork.js
-> model for payload on back
-- Domain\Models\WorkStatus.cs
-> back C# code
-- Infrastructure\SignalR\SignalRWorks.cs
+## CORE mvc template test progect
 
 
 Pckages to build core:
@@ -60,7 +34,7 @@ AutoFact to Automapper registration added
 AutofacServiceProvider returned from ConfigureServices
 
 
-Program.cschanges
+Program.cs changes
 -------------------------------------------------------
 Added http instead of https routing for Fiddler test to:
     .UseUrls("http://localhost:5002")

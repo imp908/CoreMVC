@@ -1,11 +1,12 @@
+using System;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+
 namespace mvccoresb.Domain.Interfaces
 {
-    using System;
-    using System.Threading.Tasks;
-    using Microsoft.EntityFrameworkCore;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Linq.Expressions;
     
     using mvccoresb.Domain.TestModels;
     
@@ -63,4 +64,32 @@ namespace mvccoresb.Domain.Interfaces
         IList<BlogAPI> Get(GetBlogsByPerson command);
     }
     
+}
+
+
+namespace order.Domain.Interfaces
+{
+
+    public class IOrderCreateAPI
+    {
+        public string AdressFrom { get; set; }
+        public string AdressTo { get; set; }
+        public string DelivertyItemName { get; set; }
+
+        public IList<IDimensionalUnitAPI> Dimensions { get; set; }
+    }
+    public interface IDimensionalUnitAPI
+    {
+        string Name { get; set; }
+        string Description { get; set; }
+    }
+    public interface IOrderItemAPI
+    {
+        float DeliveryPrice { get; set; }
+        float DaysToDelivery { get; set; }
+    }
+    public interface IOrdersManagerWrite
+    {
+        IOrderItemAPI AddOrder(IOrderCreateAPI query);
+    }
 }

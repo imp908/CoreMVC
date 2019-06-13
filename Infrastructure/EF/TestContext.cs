@@ -6,7 +6,6 @@ namespace mvccoresb.Infrastructure.EF
     using System.Collections.Generic;
 
     using mvccoresb.Domain.TestModels;
-    using mvccoresb.Domain.GeoModel;
 
     using mvccoresb.Domain.Interfaces;
 
@@ -27,14 +26,6 @@ namespace mvccoresb.Infrastructure.EF
 
         public DbSet<BlogEF> Blogs { get; set; }
         public DbSet<PostEF> Posts { get; set; }
-
-
-        public DbSet<GeoCategory> GeoCategory { get; set; }
-        public DbSet<GeoFacility> GeoFacility { get; set; }
-        public DbSet<GeoLayout> GeoLayout { get; set; }
-
-
-        public DbSet<ServiceType> ServiceTypes { get; set; }
 
         
         public DbSet<PersonEF> Persons { get; set; }
@@ -57,7 +48,8 @@ namespace mvccoresb.Infrastructure.EF
 
             modelBuilder.Entity<PostEF>()
             .HasOne(p => p.Blog)
-            .WithMany(p => p.Posts).OnDelete(DeleteBehavior.Cascade);
+            .WithMany(p => p.Posts)
+            .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<PostEF>()
             .Property(s => s.BlogId )
