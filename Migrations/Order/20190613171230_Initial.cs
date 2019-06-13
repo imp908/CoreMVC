@@ -76,12 +76,12 @@ namespace mvccoresb.Migrations.Order
                         principalTable: "DeliveryItem",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                    // table.ForeignKey(
-                    //     name: "FK_DeliveryItemDimensionUnitDAL_DimensionalUnit_Id",
-                    //     column: x => x.Id,
-                    //     principalTable: "DimensionalUnit",
-                    //     principalColumn: "Id",
-                    //     onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_DeliveryItemDimensionUnitDAL_DimensionalUnit_DimensionalItemId",
+                        column: x => x.DimensionalItemId,
+                        principalTable: "DimensionalUnit",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -229,9 +229,9 @@ namespace mvccoresb.Migrations.Order
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_DeliveryItemDimensionUnitDAL_Id",
+                name: "IX_DeliveryItemDimensionUnitDAL_DimensionalItemId",
                 table: "DeliveryItemDimensionUnitDAL",
-                column: "Id");
+                column: "DimensionalItemId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrdersAdresses_AddressToId",

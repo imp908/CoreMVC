@@ -33,30 +33,7 @@ namespace order.Infrastructure.EF
             .WithOne(s => s.Delivery)
             .OnDelete(DeleteBehavior.Restrict);     
 
-            // model.Entity<DeliveryItemDAL>()
-            // .HasOne(s => s.LenghtDimension)
-            // .WithOne()
-            // .HasForeignKey<DeliveryItemDAL>(k => k.LenghtDimensionId)
-            // .OnDelete(DeleteBehavior.Restrict);
 
-            // model.Entity<DeliveryItemDAL>()
-            // .HasOne(s => s.WeightDimension)
-            // .WithOne()
-            // .HasForeignKey<DeliveryItemDAL>(k => k.WeightDimensionId)
-
-            // .OnDelete(DeleteBehavior.Restrict);
-
-            // model.Entity<DeliveryItemDAL>()
-            // .HasOne(s => s.HeightDimension)
-            // .WithOne()
-            // .HasForeignKey<DeliveryItemDAL>(k => k.HeightDimensionId)
-            // .OnDelete(DeleteBehavior.Restrict);
-
-            // model.Entity<DeliveryItemDAL>()
-            // .HasOne(s => s.DepthDimension)
-            // .WithOne()
-            // .HasForeignKey<DeliveryItemDAL>(k => k.DepthDimensionId)
-            // .OnDelete(DeleteBehavior.Restrict);
 
             model.Entity<OrderItemDAL>()
             .HasMany(s => s.DeliveryItems )
@@ -89,6 +66,12 @@ namespace order.Infrastructure.EF
             .WithMany(c => c.Parameters)
             .HasForeignKey(k => k.DeliveryItemId)
             .OnDelete(DeleteBehavior.Restrict);
+            
+            model.Entity<DeliveryItemDimensionUnitDAL>()
+            .HasOne(s => s.Unit)
+            .WithMany(c => c.DeliveryItems)
+            .HasForeignKey(k => k.DimensionalItemId)
+            .OnDelete(DeleteBehavior.Restrict);
     
             
             model.Entity<OrdersAdresses>()
@@ -99,11 +82,7 @@ namespace order.Infrastructure.EF
             .WithMany(c => c.Orders)
             .HasForeignKey(k => k.AddressFromId)
             .OnDelete(DeleteBehavior.Restrict);
-            // model.Entity<OrdersAdresses>()
-            // .HasOne(s => s.AddressTo)
-            // .WithMany(c => c.Orders)
-            // .HasForeignKey(k => k.AddressToId)
-            // .OnDelete(DeleteBehavior.Restrict);
+     
 
 
 

@@ -10,7 +10,7 @@ using order.Infrastructure.EF;
 namespace mvccoresb.Migrations.Order
 {
     [DbContext(typeof(OrderContext))]
-    [Migration("20190613165613_Initial")]
+    [Migration("20190613171230_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -81,7 +81,7 @@ namespace mvccoresb.Migrations.Order
 
                     b.HasKey("DeliveryItemId", "DimensionalItemId");
 
-                    b.HasIndex("Id");
+                    b.HasIndex("DimensionalItemId");
 
                     b.ToTable("DeliveryItemDimensionUnitDAL");
 
@@ -262,8 +262,8 @@ namespace mvccoresb.Migrations.Order
 
                     b.HasOne("order.Domain.Models.Ordering.DimensionalUnitDAL", "Unit")
                         .WithMany("DeliveryItems")
-                        .HasForeignKey("Id")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("DimensionalItemId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("order.Domain.Models.Ordering.OrdersAdresses", b =>
