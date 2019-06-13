@@ -91,24 +91,38 @@ namespace order.Domain.Models.Ordering
         public float Lenght { get; set; }
         public float Height { get; set; }
         public float Depth { get; set; }
-        
 
-        public MaterialUnitDAL WeightUnit {get;set;}
-        public MaterialUnitDAL GeometryUnit { get; set; }
 
+        public DimensionalUnitDAL WeightDimension {get;set;}
+        public Guid WeightDimensionId {get;set;}
+
+        public DimensionalUnitDAL LenghtDimension { get; set; }
+        public Guid LenghtDimensionId { get; set; }
+
+        public DimensionalUnitDAL HeightDimension { get; set; }
+        public Guid HeightDimensionId { get; set; }
+
+        public DimensionalUnitDAL DepthDimension { get; set; }
+        public Guid DepthDimensionId { get; set; }
 
     }
 
-    public class MaterialUnitDAL
+    public class DimensionalUnitDAL
     : BaseEntity, IGuidEntity
     , INamedEntity
     {
         public string Name {get;set;}
+        public string Description { get; set; }
+        
+        public List<DeliveryItemParameterDAL> DeliveryItems {get;set;}
+        public List<UnitsConvertionDAL> Convertions {get;set;}
     }
     public class UnitsConvertionDAL : BaseEntity, IGuidEntity
     {
-        public MaterialUnitDAL From {get;set;}
-        public MaterialUnitDAL To { get; set; }
+        public DimensionalUnitDAL From {get;set;}
+        public Guid FromId {get;set;}
+        public DimensionalUnitDAL To { get; set; }
+        public Guid ToId { get; set; }
         public float ConvertionRate {get;set;}
     }
     

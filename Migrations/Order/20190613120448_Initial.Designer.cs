@@ -10,7 +10,7 @@ using order.Infrastructure.EF;
 namespace mvccoresb.Migrations.Order
 {
     [DbContext(typeof(OrderContext))]
-    [Migration("20190612235134_Initial")]
+    [Migration("20190613120448_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -56,35 +56,75 @@ namespace mvccoresb.Migrations.Order
 
                     b.Property<float>("Depth");
 
-                    b.Property<Guid?>("GeometryUnitId");
-
                     b.Property<float>("Height");
 
                     b.Property<float>("Lenght");
 
+                    b.Property<Guid>("LenghtDimensionId");
+
                     b.Property<float>("Weight");
 
-                    b.Property<Guid?>("WeightUnitId");
+                    b.Property<Guid>("WeightDimensionId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GeometryUnitId");
+                    b.HasIndex("LenghtDimensionId");
 
-                    b.HasIndex("WeightUnitId");
+                    b.HasIndex("WeightDimensionId");
 
                     b.ToTable("DeliveryItemParameters");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("30000000-0000-0000-0000-000000000000"),
+                            Depth = 0f,
+                            Height = 0f,
+                            Lenght = 5f,
+                            LenghtDimensionId = new Guid("00000000-0000-0000-0000-000000000003"),
+                            Weight = 10f,
+                            WeightDimensionId = new Guid("00000000-0000-0000-0000-000000000001")
+                        });
                 });
 
-            modelBuilder.Entity("order.Domain.Models.Ordering.MaterialUnitDAL", b =>
+            modelBuilder.Entity("order.Domain.Models.Ordering.DimensionalUnitDAL", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
 
                     b.Property<string>("Name");
 
                     b.HasKey("Id");
 
-                    b.ToTable("MaterialUnit");
+                    b.ToTable("DimensionalUnit");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000001"),
+                            Description = "wight in kg",
+                            Name = "kg"
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000002"),
+                            Description = "wight in pounds",
+                            Name = "lbs"
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000003"),
+                            Description = "lenght in sm",
+                            Name = "sm"
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000004"),
+                            Description = "lenght in inches",
+                            Name = "inch"
+                        });
                 });
 
             modelBuilder.Entity("order.Domain.Models.Ordering.OrderItemDAL", b =>
@@ -122,9 +162,9 @@ namespace mvccoresb.Migrations.Order
 
                     b.Property<float>("ConvertionRate");
 
-                    b.Property<Guid?>("FromId");
+                    b.Property<Guid>("FromId");
 
-                    b.Property<Guid?>("ToId");
+                    b.Property<Guid>("ToId");
 
                     b.HasKey("Id");
 
@@ -133,6 +173,22 @@ namespace mvccoresb.Migrations.Order
                     b.HasIndex("ToId");
 
                     b.ToTable("UnitsConvertion");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("10000000-0000-0000-0000-000000000000"),
+                            ConvertionRate = 2.20462f,
+                            FromId = new Guid("00000000-0000-0000-0000-000000000001"),
+                            ToId = new Guid("00000000-0000-0000-0000-000000000002")
+                        },
+                        new
+                        {
+                            Id = new Guid("20000000-0000-0000-0000-000000000000"),
+                            ConvertionRate = 0.220462f,
+                            FromId = new Guid("00000000-0000-0000-0000-000000000002"),
+                            ToId = new Guid("00000000-0000-0000-0000-000000000001")
+                        });
                 });
 
             modelBuilder.Entity("order.Domain.Models.Ordering.DeliveryItemDAL", b =>
@@ -144,13 +200,15 @@ namespace mvccoresb.Migrations.Order
 
             modelBuilder.Entity("order.Domain.Models.Ordering.DeliveryItemParameterDAL", b =>
                 {
-                    b.HasOne("order.Domain.Models.Ordering.MaterialUnitDAL", "GeometryUnit")
+                    b.HasOne("order.Domain.Models.Ordering.DimensionalUnitDAL", "LenghtDimension")
                         .WithMany()
-                        .HasForeignKey("GeometryUnitId");
+                        .HasForeignKey("LenghtDimensionId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("order.Domain.Models.Ordering.MaterialUnitDAL", "WeightUnit")
-                        .WithMany()
-                        .HasForeignKey("WeightUnitId");
+                    b.HasOne("order.Domain.Models.Ordering.DimensionalUnitDAL", "WeightDimension")
+                        .WithMany("DeliveryItems")
+                        .HasForeignKey("WeightDimensionId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("order.Domain.Models.Ordering.OrderItemDAL", b =>
@@ -170,13 +228,15 @@ namespace mvccoresb.Migrations.Order
 
             modelBuilder.Entity("order.Domain.Models.Ordering.UnitsConvertionDAL", b =>
                 {
-                    b.HasOne("order.Domain.Models.Ordering.MaterialUnitDAL", "From")
+                    b.HasOne("order.Domain.Models.Ordering.DimensionalUnitDAL", "From")
                         .WithMany()
-                        .HasForeignKey("FromId");
+                        .HasForeignKey("FromId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("order.Domain.Models.Ordering.MaterialUnitDAL", "To")
-                        .WithMany()
-                        .HasForeignKey("ToId");
+                    b.HasOne("order.Domain.Models.Ordering.DimensionalUnitDAL", "To")
+                        .WithMany("Convertions")
+                        .HasForeignKey("ToId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 #pragma warning restore 612, 618
         }
