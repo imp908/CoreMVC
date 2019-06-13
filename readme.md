@@ -41,7 +41,6 @@ AutoFact to Automapper registration added
 AutofacServiceProvider returned from ConfigureServices
 
 
-Program.cs changes
 -------------------------------------------------------
 Added http instead of https routing for Fiddler test to:
     .UseUrls("http://localhost:5002")
