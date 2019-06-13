@@ -39,7 +39,10 @@ namespace order.Infrastructure.EF
             .HasMany(s => s.DeliveryItems )
             .WithOne(c => c.Order)
             .OnDelete(DeleteBehavior.Restrict);
-            
+
+            model.Entity<OrderItemDAL>()
+            .Property(s => s.Id)
+            .ValueGeneratedOnAdd();
             
             model.Entity<OrdersDeliveryItemsDAL>()
             .HasKey(t => new {t.OrderId, t.DeliveryId});

@@ -193,6 +193,8 @@ namespace mvccoresb
                     .ForMember(dest => dest.DeliveryPrice, m => m.MapFrom(src => src.DeliveryPrice))
                 ;
 
+                cfg.CreateMap<OrderItemDAL, OrderItemUpdateDAL>();
+                
             });
         }
 

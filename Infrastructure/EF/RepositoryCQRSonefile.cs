@@ -369,7 +369,7 @@ public class OrdersManagerWrite : OrdersManager, IOrdersManagerWrite
             query = queryIn as OrderCreateAPI;
         }
 
-        if (           
+        if(
             query == null
             || string.IsNullOrEmpty(query.AdressFrom)
             || string.IsNullOrEmpty(query.AdressTo)
@@ -399,18 +399,19 @@ public class OrdersManagerWrite : OrdersManager, IOrdersManagerWrite
                     exist = new DimensionalUnitDAL() { Name = d.Name, Description = d.Description };
                     this._repository.Add<DimensionalUnitDAL>(exist);
                     this._repository.Save();
+
+                        var dimUnit = new DeliveryItemDimensionUnitDAL() { DeliveryItemId = itemToAdd.Id, DimensionalItemId = exist.Id };
+                        this._repository.Add<DeliveryItemDimensionUnitDAL>(dimUnit);
+                        this._repository.Save();
+                        if (dimUnit == null) { throw new NullReferenceException(); }
                 }
                 if (exist == null) { throw new NullReferenceException(); }
-
-                var dimUnit = new DeliveryItemDimensionUnitDAL() { DeliveryItemId = itemToAdd.Id, DimensionalItemId = exist.Id };
-                this._repository.Add<DeliveryItemDimensionUnitDAL>(dimUnit);
-                this._repository.Save();
-                if (dimUnit == null) { throw new NullReferenceException(); }
+               
             }
 
             var order = new OrderItemDAL() { Name = "New order" };
             this._repository.Add<OrderItemDAL>(order);
-            this._repository.Save();
+            this._repository.Save();            
             if (order == null) { throw new NullReferenceException(); }
 
             var orderDelivery = new OrdersDeliveryItemsDAL() { OrderId = order.Id, DeliveryId = itemToAdd.Id };
@@ -433,15 +434,15 @@ public class OrdersManagerWrite : OrdersManager, IOrdersManagerWrite
             this._repository.Save();
             if (orderAdress == null) { throw new NullReferenceException(); }
 
-
+            order = this._repository.GetAll<OrderItemDAL>(s => s.Id == order.Id).FirstOrDefault();
             order.DaysToDelivery = 10F;
             order.DeliveryPrice = 10F;
-            this._repository.Add<OrderItemDAL>(order);
+            var orderToUpdate = this._mapper.Map<OrderItemDAL, OrderItemUpdateDAL>(order);
+            this._repository.Update<OrderItemDAL>(order);
             this._repository.Save();
 
             result = this._mapper.Map<OrderItemDAL, OrderItemAPI>(order);
             if (result == null) { throw new NullReferenceException(); }
-
 
         }
         catch (Exception e)
@@ -449,6 +450,26 @@ public class OrdersManagerWrite : OrdersManager, IOrdersManagerWrite
 
         }
         return result;
+    }
+
+    //accounter
+    private IOrderItemAPI CountDeliveryOne(IOrderItemAPI order)
+    {
+        return null;
+    }
+    private IOrderItemAPI CountDeliveryTwo(IOrderItemAPI order)
+    {
+        return null;
+    }
+
+    //dater
+    private int? Days()
+    {
+        return null;
+    }
+    private DateTime? DeliveryDate()
+    {
+        return null;
     }
 
 
