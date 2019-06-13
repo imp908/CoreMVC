@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using order.Infrastructure.EF;
 
 namespace mvccoresb.Migrations.Order
 {
     [DbContext(typeof(OrderContext))]
-    partial class OrderContextModelSnapshot : ModelSnapshot
+    [Migration("20190613222532_CountPropsAdd")]
+    partial class CountPropsAdd
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -73,9 +75,9 @@ namespace mvccoresb.Migrations.Order
 
                     b.Property<Guid>("DimensionalItemId");
 
-                    b.Property<Guid>("Id");
+                    b.Property<float>("Amount");
 
-                    b.Property<float>("UnitAmount");
+                    b.Property<Guid>("Id");
 
                     b.HasKey("DeliveryItemId", "DimensionalItemId");
 
@@ -88,8 +90,8 @@ namespace mvccoresb.Migrations.Order
                         {
                             DeliveryItemId = new Guid("20000000-0000-0000-0000-000000000000"),
                             DimensionalItemId = new Guid("00000000-0000-0000-0000-000000000001"),
-                            Id = new Guid("40000000-0000-0000-0000-000000000000"),
-                            UnitAmount = 0f
+                            Amount = 0f,
+                            Id = new Guid("40000000-0000-0000-0000-000000000000")
                         });
                 });
 
@@ -138,9 +140,11 @@ namespace mvccoresb.Migrations.Order
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<float?>("DaysToDelivery");
+                    b.Property<float>("DaysToDelivery");
 
-                    b.Property<float?>("DeliveryPrice");
+                    b.Property<float>("DeliveryPrice");
+
+                    b.Property<int>("ItemsOrderedAmount");
 
                     b.Property<string>("Name");
 
@@ -152,11 +156,17 @@ namespace mvccoresb.Migrations.Order
                         new
                         {
                             Id = new Guid("50000000-0000-0000-0000-000000000000"),
+                            DaysToDelivery = 0f,
+                            DeliveryPrice = 0f,
+                            ItemsOrderedAmount = 0,
                             Name = "Order one"
                         },
                         new
                         {
                             Id = new Guid("50000000-0000-0000-0000-000000000001"),
+                            DaysToDelivery = 0f,
+                            DeliveryPrice = 0f,
+                            ItemsOrderedAmount = 0,
                             Name = "Order two"
                         });
                 });
@@ -168,6 +178,8 @@ namespace mvccoresb.Migrations.Order
                     b.Property<Guid>("AddressToId");
 
                     b.Property<Guid>("OrderId");
+
+                    b.Property<DateTime>("DaysToDeliver");
 
                     b.Property<Guid>("Id");
 
@@ -185,6 +197,7 @@ namespace mvccoresb.Migrations.Order
                             AddressFromId = new Guid("30000000-0000-0000-0000-000000000000"),
                             AddressToId = new Guid("30000000-0000-0000-0000-000000000001"),
                             OrderId = new Guid("50000000-0000-0000-0000-000000000000"),
+                            DaysToDeliver = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Id = new Guid("60000000-0000-0000-0000-000000000000")
                         },
                         new
@@ -192,6 +205,7 @@ namespace mvccoresb.Migrations.Order
                             AddressFromId = new Guid("30000000-0000-0000-0000-000000000000"),
                             AddressToId = new Guid("30000000-0000-0000-0000-000000000001"),
                             OrderId = new Guid("50000000-0000-0000-0000-000000000001"),
+                            DaysToDeliver = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Id = new Guid("60000000-0000-0000-0000-000000000001")
                         });
                 });

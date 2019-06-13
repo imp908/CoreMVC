@@ -75,10 +75,9 @@ namespace order.Domain.Models.Ordering
     {
         public string Name { get; set; }              
 
-
-        public int ItemsOrderedAmount { get; set; }
-        public float DeliveryPrice { get; set; }
-        public float DaysToDelivery { get; set; }
+        public float? DaysToDelivery {get;set;}
+        
+        public float? DeliveryPrice { get; set; }
 
 
         public List<OrdersDeliveryItemsDAL> DeliveryItems { get; set; }
@@ -93,8 +92,7 @@ namespace order.Domain.Models.Ordering
         public Guid AddressToId { get; set; }
         public OrderItemDAL Order {get;set;}
         public Guid OrderId {get;set;}
-
-        public DateTime DaysToDeliver{get;set;}
+        
     }
 
     public class DeliveryItemDAL : BaseEntity, IGuidEntity
@@ -138,7 +136,7 @@ namespace order.Domain.Models.Ordering
         public DimensionalUnitDAL Unit {get;set;}
         public Guid DimensionalItemId {get;set;}
 
-        public float Amount {get;set;}
+        public float UnitAmount {get;set;}
     }
 
 
