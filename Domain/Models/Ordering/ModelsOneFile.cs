@@ -2,35 +2,30 @@ namespace order.Domain.Models.Ordering
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
+    using order.Domain.Interfaces;
 
-    public interface IWeightUnit
+    /*Api layer */
+    public class OrderCreateAPI : IOrderCreateAPI
     {
-        string Name {get;}
+        public string AdressFrom { get; set; }
+        public string AdressTo { get; set; }    
+        public string DelivertyItemName { get; set; }
+
+        public List<DimensionalUnitAPI> Dimensions { get; set; }
     }
-    public interface IDeliveryItem{
-        float Weight { get; set; }
-        IWeightUnit WeightUnit { get; set; }
+    public class DimensionalUnitAPI : IDimensionalUnitAPI
+    {
+        public string Name {get;set;}
+        public string Description { get; set; }
     }
 
 
-    public class DeliveryItem : IDeliveryItem
+    public class OrderItemAPI : IOrderItemAPI
     {
-        public float Weight {get;set;}
-        public IWeightUnit WeightUnit { get; set; }
+        public float DeliveryPrice { get; set; }
+        public float DaysToDelivery { get; set; }
     }
 
-    public class Kg : IWeightUnit
-    {
-        public static string name => nameof(Kg);
-        public string Name => Kg.name;
-    }
-    public class Pound : IWeightUnit
-    {
-        public static string name => nameof(Pound);
-        public string Name => Pound.name;
-    }
-  
 
 
 
@@ -71,6 +66,7 @@ namespace order.Domain.Models.Ordering
 
         public int ItemsOrderedAmount { get; set; }
         public float DeliveryPrice { get; set; }
+        public float DaysToDelivery { get; set; }
 
 
         public List<OrdersDeliveryItemsDAL> DeliveryItems { get; set; }
