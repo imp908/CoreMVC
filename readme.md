@@ -1,5 +1,12 @@
 ## CORE mvc template test progect
 
+to test:
+-------------------------------------------------------
+- add dotnet packages
+- install npm pakets
+- npx webpack to build JS
+- build net core
+- run
 
 Pckages to build core:
 -------------------------------------------------------
