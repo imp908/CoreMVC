@@ -60,51 +60,51 @@ namespace order.Domain.Models.Ordering
     {
         public string Name { get; set; }
 
+        public List<OrdersAdresses> Orders {get;set;}
     }
     public class OrderItemDAL
         : BaseEntity, IGuidEntity
         , INamedEntity
     {
-        public string Name { get; set; }
+        public string Name { get; set; }              
 
-        public DeliveryItemDAL Itme {get;set;}
 
-        public AdressDAL From { get; set; }
-        public AdressDAL To { get; set; }
-
-        public int Amount {get;set;}
+        public int ItemsOrderedAmount { get; set; }
         public float DeliveryPrice { get; set; }
+
+
+        public List<OrdersDeliveryItemsDAL> DeliveryItems { get; set; }
+        public List<OrdersAdresses> Directions {get;set;}
     }
 
-    public class DeliveryItemDAL 
-    : BaseEntity, IGuidEntity
-    , INamedEntity
+    public class OrdersAdresses : BaseEntity, IGuidEntity
     {
-        public string Name {get;set;}
-
-        public DeliveryItemParameterDAL Parameters {get;set;}
+        public AdressDAL AddressFrom { get; set; }
+        public Guid AddressFromId { get; set; }
+        public AdressDAL AddressTo { get; set; }
+        public Guid AddressToId { get; set; }
+        public OrderItemDAL Order {get;set;}
+        public Guid OrderId {get;set;}
     }
 
-    public class DeliveryItemParameterDAL : BaseEntity, IGuidEntity
+    public class DeliveryItemDAL : BaseEntity, IGuidEntity
     {
-        public float Weight {get;set;}
-        public float Lenght { get; set; }
-        public float Height { get; set; }
-        public float Depth { get; set; }
+        public string Name { get; set; }
+        
+        
+        public List<DeliveryItemDimensionUnitDAL> Parameters {get;set;}
+        
+        public List<OrdersDeliveryItemsDAL> Orders {get;set;}
 
+    }
 
-        public DimensionalUnitDAL WeightDimension {get;set;}
-        public Guid WeightDimensionId {get;set;}
-
-        public DimensionalUnitDAL LenghtDimension { get; set; }
-        public Guid LenghtDimensionId { get; set; }
-
-        public DimensionalUnitDAL HeightDimension { get; set; }
-        public Guid HeightDimensionId { get; set; }
-
-        public DimensionalUnitDAL DepthDimension { get; set; }
-        public Guid DepthDimensionId { get; set; }
-
+    public class OrdersDeliveryItemsDAL
+        : BaseEntity, IGuidEntity
+    {
+        public OrderItemDAL Order { get; set; }
+        public Guid OrderId {get;set;}
+        public DeliveryItemDAL Delivery { get; set; }
+        public Guid DeliveryId {get;set;}
     }
 
     public class DimensionalUnitDAL
@@ -113,16 +113,32 @@ namespace order.Domain.Models.Ordering
     {
         public string Name {get;set;}
         public string Description { get; set; }
+
         
-        public List<DeliveryItemParameterDAL> DeliveryItems {get;set;}
+        public List<DeliveryItemDimensionUnitDAL> DeliveryItems {get;set;}
+
         public List<UnitsConvertionDAL> Convertions {get;set;}
     }
+    
+    public class DeliveryItemDimensionUnitDAL
+        : BaseEntity, IGuidEntity
+    {
+        public DeliveryItemDAL DelivertyItem {get;set;}
+        public Guid DeliveryItemId { get; set; }
+        public DimensionalUnitDAL Unit {get;set;}
+        public Guid DimensionalItemId {get;set;}
+
+        public float Amount {get;set;}
+    }
+
+
     public class UnitsConvertionDAL : BaseEntity, IGuidEntity
     {
         public DimensionalUnitDAL From {get;set;}
         public Guid FromId {get;set;}
         public DimensionalUnitDAL To { get; set; }
         public Guid ToId { get; set; }
+        
         public float ConvertionRate {get;set;}
     }
     
