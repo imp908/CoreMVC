@@ -234,6 +234,7 @@ namespace mvccoresb
             app.UseSignalR(routes =>
             {
                 routes.MapHub<SignalRhub>("/rHub");
+                routes.MapHub<SignalRWorks>("/rWork");
             });
         }
     }
