@@ -8,6 +8,25 @@ to test:
 - build net core
 - run
 
+test url after start:
+-------------------------------------------------------
+> http://localhost:5002/TestArea/SignalRwork/work
+
+
+Related files:
+-------------------------------------------------------
+> view
+- API\Areas\TestArea\Views\SignalRWork\work.cshtml
+> controller
+- API\Areas\TestArea\FolderControllers\SignalRWorkController.cs
+> JS
+- wwwroot\js\Libs\signalR\signalRwork.js
+> model for payload on back
+- Domain\Models\WorkStatus.cs
+> back C# code
+- Infrastructure\SignalR\SignalRWorks.cs
+
+
 Pckages to build core:
 -------------------------------------------------------
     dotnet add package Newtonsoft.Json --version 12.0.2
