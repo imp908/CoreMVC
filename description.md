@@ -51,7 +51,7 @@ npx webpack
 
 TODO:[
 
-    15.06.2019 -> mapping 
+    
 
 ]
 
@@ -68,7 +68,8 @@ DONE:[
     <- done 15.06.2019 1h10m -> order new API, BLL interfaces
     <- done 15.06.2019 1h5m -> order deliverer, clenup
     <- done 15.06.2019 1h10m -> order mapping
+    <- done 15.06.2019 1h-> mapping changed
 
-    ~10h in 3d
+    ~11h in 3d
 
 ]
