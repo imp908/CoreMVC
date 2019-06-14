@@ -1,4 +1,4 @@
-## CORE mvc template test progect
+## CORE mvc ordering test progect
 
 
 Pckages to build core:
@@ -15,6 +15,24 @@ Pckages to build js:
     npm install --save-dev gulp gulp-babela
     npm install --save-dev webpack webpack-dev-server webpack-cli webpack-stream html-webpack-plugin clean-webpack-plugin
     npm install --save-dev @babel/core @babel/cli @babel/plugin-proposal-class-properties @babel/preset-env @babel/preset-react @babel/plugin-transform-arrow-functions @babel/plugin-transform-classes @babel/plugin-proposal-function-bind
+
+
+
+API (for fiddler test)
+-------------------------------------------------------
+POST
+http://localhost:5002/api/Order/AddOrder
+Content-Type: application/json; charset=utf-8
+{
+	"AdressFrom":"Some address one"
+	,"AdressTo":"Some address two"
+	,"DelivertyItemName":"Item1"
+	,"Dimensions":[
+		{"Description":"","Name":"kg"}
+		,{"Description":"","Name":"sm"}
+	]
+}
+
 
 
 
@@ -38,6 +56,5 @@ Program.cs changes
 -------------------------------------------------------
 Added http instead of https routing for Fiddler test to:
     .UseUrls("http://localhost:5002")
-
 
 
