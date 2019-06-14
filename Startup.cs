@@ -60,8 +60,8 @@ namespace mvccoresb
 
 
             services.AddDbContext<OrderContext>(o =>
-                          o.UseSqlServer(
-                              Configuration.GetConnectionString("LocalOrderConnection")));
+            o.UseSqlServer(
+                Configuration.GetConnectionString("LocalOrderConnection")));
 
             /*SignalR registration*/
             services.AddSignalR();

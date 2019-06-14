@@ -1,4 +1,4 @@
-namespace crmvcsb.Domain.Services.Order
+namespace order.Domain.Services
 {
     using order.Domain.Models.Ordering;
     using order.Domain.Interfaces;
