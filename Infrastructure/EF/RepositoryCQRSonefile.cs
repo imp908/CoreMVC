@@ -451,27 +451,7 @@ public class OrdersManagerWrite : OrdersManager, IOrdersManagerWrite
         }
         return result;
     }
-
-    //accounter
-    private IOrderItemAPI CountDeliveryOne(IOrderItemAPI order)
-    {
-        return null;
-    }
-    private IOrderItemAPI CountDeliveryTwo(IOrderItemAPI order)
-    {
-        return null;
-    }
-
-    //dater
-    private int? Days()
-    {
-        return null;
-    }
-    private DateTime? DeliveryDate()
-    {
-        return null;
-    }
-
+  
 
 }
 

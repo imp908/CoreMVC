@@ -70,6 +70,7 @@ namespace mvccoresb.Domain.Interfaces
 namespace order.Domain.Interfaces
 {
 
+
     public class IOrderCreateAPI
     {
         public string AdressFrom { get; set; }
@@ -83,13 +84,61 @@ namespace order.Domain.Interfaces
         string Name { get; set; }
         string Description { get; set; }
     }
+
+
+    
+    /*Model for accounter module do counting delivery price and time for delivery with addresses from to*/
+    public interface IAdressAPI
+    {
+        string Name { get; set; }
+    }
+    public interface IOrderAPI
+    {
+        string Name { get; set; }
+
+
+        int ItemsOrderedAmount { get; set; }
+        float DeliveryPrice { get; set; }
+        float DaysToDelivery { get; set; }
+    }
+
+
+
+    /* Results of order creation*/
     public interface IOrderItemAPI
     {
         float DeliveryPrice { get; set; }
         float DaysToDelivery { get; set; }
     }
+    
+    /*Results of order delivery accounting */
+    public interface IOrderDeliveryBirdAPI
+    {
+        float DeliveryPrice { get; set; }
+        float DaysToDelivery { get; set; }
+    }
+    public interface IOrderDeliveryTortiseAPI
+    {
+        float DeliveryPriceKoefficient { get; set; }
+        DateTime DeliveryDate { get; set; }
+    }
+
+
+
+    /*SQRS wrapper above EF dbContext */
     public interface IOrdersManagerWrite
     {
         IOrderItemAPI AddOrder(IOrderCreateAPI query);
     }
+
+    /* Accounter of price and delivery */    
+    public interface IBirdAccounter
+    {
+        IOrderDeliveryBirdAPI Count(IAdressAPI addressFrom, IAdressAPI addressto, IAdressAPI Order);
+    }
+    public interface ITortiseAccounter
+    {
+        IOrderDeliveryTortiseAPI Count(IAdressAPI addressFrom, IAdressAPI addressto, IAdressAPI Order);
+    }
+  
 }

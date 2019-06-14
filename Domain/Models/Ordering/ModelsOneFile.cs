@@ -26,11 +26,38 @@ namespace order.Domain.Models.Ordering
         public float DaysToDelivery { get; set; }
     }
 
+    public class OrderDeliveryBirdAPI : IOrderDeliveryBirdAPI
+    {
+        public float DeliveryPrice { get; set; }
+        public float DaysToDelivery { get; set; }
+    }
+
+    public class OrderDeliveryTortiseAPI : IOrderDeliveryTortiseAPI 
+    {
+        public float DeliveryPriceKoefficient { get; set; }
+        public DateTime DeliveryDate { get; set; }
+    }
+
+    public class AdressAPI : IAdressAPI
+    {
+        public string Name { get; set; }     
+    }
+    public class OrderAPI : IOrderAPI
+    {  
+        public string Name { get; set; }
+
+
+        public int ItemsOrderedAmount { get; set; }
+        public float DeliveryPrice { get; set; }
+        public float DaysToDelivery { get; set; }
+    }
+
 
 
 
     /*EF level */
-    public interface IGuidEntity{
+    public interface IGuidEntity
+    {
          Guid Id {get;set;}
     }
     public interface INamedEntity

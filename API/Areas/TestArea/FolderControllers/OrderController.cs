@@ -31,6 +31,7 @@ namespace mvccoresb.Default.Controllers
         public JsonResult AddOrder([FromBody] OrderCreateAPI query)
         {
             var result = _writeManager.AddOrder(query);
+            
             return Json(result);
         }
        
