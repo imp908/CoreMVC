@@ -87,7 +87,7 @@ namespace mvccoresb
             autofacContainer.RegisterInstance(mapper).As<IMapper>();
 
             try{
-            this.ApplicationContainer = autofacContainer.Build();
+                this.ApplicationContainer = autofacContainer.Build();
             }catch(Exception e)
             {
 
