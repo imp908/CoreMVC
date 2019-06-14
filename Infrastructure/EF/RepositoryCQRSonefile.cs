@@ -11,19 +11,17 @@ using System.Linq.Expressions;
 
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-using Newtonsoft;
 
 using AutoMapper;
 
 
-namespace mvccoresb.Infrastructure.EF
+namespace order.Infrastructure.EF
 {
 
 
-    using mvccoresb.Domain.TestModels;    
+    using order.Domain.Models.Ordering;
 
-    using mvccoresb.Domain.Interfaces;    
-
+    using order.Domain.Interfaces;
 
 
     public class RepositoryEF : IRepository
@@ -125,12 +123,17 @@ namespace mvccoresb.Infrastructure.EF
         }
     }
 
-    public class CQRSEFBlogging 
+
+    public class OrdersManager
     {
         internal IRepository _repository;
         internal IMapper _mapper;
-        
-        public CQRSEFBlogging(IRepository repository,IMapper mapper)
+
+        public OrdersManager(){
+
+        }
+
+        public OrdersManager(IRepository repository, IMapper mapper)
         {
             this._repository = repository;
             this._mapper = mapper;
@@ -138,330 +141,129 @@ namespace mvccoresb.Infrastructure.EF
 
     }
 
-    public class CQRSBloggingWrite : CQRSEFBlogging, ICQRSBloggingWrite
+    public class OrdersManagerWrite : OrdersManager, IOrdersManagerWrite
     {
-
-        public CQRSBloggingWrite(IRepository repository, IMapper mapper) 
-            : base(repository,mapper){}
-
-        /*Adding object drom command, mapping and command->EF returning EF -> API*/
-        public PostAPI PersonAdsPostToBlog(PersonAdsPostCommand command)
+        public OrdersManagerWrite():base(){}
+        public OrdersManagerWrite(IRepository repository, IMapper mapper)
+            : base(repository, mapper)
         {
-            PostAPI postReturn = new PostAPI();
 
-            if (this._mapper == null || command == null)
-            {
-                return null;
-            }
-
-            try
-            {
-                var postToAdd = this._mapper.Map(command, command.GetType(), typeof(PostEF)) as PostEF;
-                this._repository.Add<PostEF>(postToAdd);
-                this._repository.Save();
-
-                var postAdded = this._repository.QueryByFilter<PostEF>(s => s.PostId == postToAdd.PostId)
-                .Include(x => x.Blog).Include(x => x.Author)
-                .FirstOrDefault();
-
-                postReturn = this._mapper.Map(postAdded, postAdded.GetType(), typeof(PostAPI)) as PostAPI;
-                return postReturn;
-            }
-            catch (Exception e)
-            {
-
-            }
-
-            return postReturn;
         }
 
-        public PostAPI PersonUpdatesPost(PersonUpdatesBlog command)
+        public IOrderBLL AddOrder(IOrderCreateAPI queryIn)
         {
-          
-            PostAPI updatedItem = new PostAPI();
-            if (command == null || command?.Post == null || this._mapper == null) { return updatedItem; }
+            IOrderBLL result = new OrderBLL();
+            OrderCreateAPI query = new OrderCreateAPI();
+
+            if(queryIn is OrderCreateAPI){
+                query = queryIn as OrderCreateAPI;
+            }
+
+            if(
+                query == null
+                || string.IsNullOrEmpty(query.AdressFrom)
+                || string.IsNullOrEmpty(query.AdressTo)
+                || string.IsNullOrEmpty(query.DelivertyItemName)
+                || (query.Dimensions?.Any() != true)
+            ) { throw new NullReferenceException(); }
+
             try
             {
-                PostEF itemToUpdate = this._repository.GetAll<PostEF>(s => s.PostId == command.Post.PostId).FirstOrDefault();
-                //itemToUpdate = this._mapper.Map<PostAPI,PostEF>(command.Post);
-                
-                itemToUpdate.Title = command.Post.Title;
-                itemToUpdate.Content = command.Post.Content;
 
-                this._repository.Update<PostEF>(itemToUpdate);
-                this._repository.Save();
+                var itemToAdd = new DeliveryItemDAL();
+                itemToAdd = this._repository.GetAll<DeliveryItemDAL>(s => s.Name == query.DelivertyItemName).FirstOrDefault();
 
-                var itemExists = this._repository.GetAll<PostEF>(s => s.PostId == command.Post.PostId)
-                .Include(s => s.Blog)
-                .Include(s => s.Author)
-                .FirstOrDefault();
-
-                if (itemExists !=null)
-                {
-                    updatedItem = this._mapper.Map<PostEF,PostAPI>(itemExists);
-                }
-
-                return updatedItem;
-            }
-            catch (Exception e)
-            {
-
-                return null;
-            }
-
-            return updatedItem;
-        }
-
-        public bool PersonDeletesPostFromBlog(PersonDeletesPost command)
-        {
-            if (command == null)
-            {
-                return false;
-            }
-            try
-            {
-                var itemToDelete = this._repository.GetAll<PostEF>(s => s.PostId == command.PostId).FirstOrDefault();
-
-                if (itemToDelete != null)
-                {
-                    this._repository.Delete<PostEF>(itemToDelete);
+                if( itemToAdd == null){
+                    itemToAdd= new DeliveryItemDAL(){Name = query.DelivertyItemName };
+                    this._repository.Add<DeliveryItemDAL>(itemToAdd);
                     this._repository.Save();
                 }
+                
+                if (itemToAdd == null) { throw new NullReferenceException(); }
 
-                return true;
-            }
-            catch (Exception e)
-            {
-
-                return false;
-            }
-            return true;
-        }
-
-    }
-
-    public class CQRSBloggingRead : CQRSEFBlogging, ICQRSBloggingRead
-    {
-
-        public CQRSBloggingRead(IRepository repository, IMapper mapper)
-            : base(repository, mapper) { }
-
-
-        public IList<PostAPI> Get(GetPostsByPerson command)
-        {
-            IList<PostAPI> itemsReturn = new List<PostAPI>();
-            try
-            {
-                var itemsExist = this._repository.GetAll<PostEF>()
-                .Where(s => s.AuthorId == command.PersonId)
-                .ToList();
-
-                if (itemsExist.Any())
+                foreach (DimensionalUnitAPI d in query.Dimensions)
                 {
-                    itemsReturn = this._mapper.Map<IList<PostEF>, IList<PostAPI>>(itemsExist);
+                    DimensionalUnitDAL exist = this._repository.GetAll<DimensionalUnitDAL>(s => s.Name == d.Name).FirstOrDefault();
+                    if (exist == null)
+                    {
+                        exist = new DimensionalUnitDAL() { Name = d.Name, Description = d.Description };
+                        this._repository.Add<DimensionalUnitDAL>(exist);
+                        this._repository.Save();
+
+                            var dimUnit = new DeliveryItemDimensionUnitDAL() { DeliveryItemId = itemToAdd.Id, DimensionalItemId = exist.Id };
+                            this._repository.Add<DeliveryItemDimensionUnitDAL>(dimUnit);
+                            this._repository.Save();
+                            if (dimUnit == null) { throw new NullReferenceException(); }
+                    }
+                    if (exist == null) { throw new NullReferenceException(); }
+                
                 }
+
+                var order = new OrderItemDAL() { Name = "New order" };
+                this._repository.Add<OrderItemDAL>(order);
+                this._repository.Save();            
+                if (order == null) { throw new NullReferenceException(); }
+
+                var orderDelivery = new OrdersDeliveryItemsDAL() { OrderId = order.Id, DeliveryId = itemToAdd.Id };
+                this._repository.Add<OrdersDeliveryItemsDAL>(orderDelivery);
+                this._repository.Save();
+                if (orderDelivery == null) { throw new NullReferenceException(); }
+
+                var adressFrom = this._repository.GetAll<AddressDAL>(s => s.Name == query.AdressFrom)
+                    .FirstOrDefault();
+                var adressTo = this._repository.GetAll<AddressDAL>(s => s.Name == query.AdressTo)
+                    .FirstOrDefault();
+
+                var orderAdress = new OrdersAddressesDAL()
+                {
+                    AddressFromId = adressFrom.Id,
+                    AddressToId = adressTo.Id,
+                    OrderId = order.Id
+                };
+                this._repository.Add<OrdersAddressesDAL>(orderAdress);
+                this._repository.Save();
+                if (orderAdress == null) { throw new NullReferenceException(); }
+
+                order = this._repository.GetAll<OrderItemDAL>(s => s.Id == order.Id).FirstOrDefault();      
+                var orderToUpdate = this._mapper.Map<OrderItemDAL, OrderItemUpdateDAL>(order);
+                this._repository.Update<OrderItemDAL>(order);
+                this._repository.Save();
+
+                result = this._mapper.Map<OrderItemDAL, OrderBLL>(order);
+                if (result == null) { throw new NullReferenceException(); }
+
             }
             catch (Exception e)
             {
 
             }
-
-            return itemsReturn;
-
+            return result;
         }
         
-        public IList<PostAPI> Get(GetPostsByBlog command)
+        public IOrderBLL UpdateOrder (IOrderUpdateBLL order)
         {
-            IList<PostAPI> postsReturn = new List<PostAPI>();
-            try
-            {
-                var postsExist = this._repository.GetAll<PostEF>()
-                .Include(s => s.Blog)
-                .Where(s => s.BlogId == command.BlogId)
-                .ToList();
+            IOrderBLL result = new OrderBLL();
 
-                if(postsExist.Any())
-                {
-                    postsReturn = this._mapper.Map<IList<PostEF>,IList<PostAPI>>(postsExist);
-                }
-            }
-            catch (Exception e)
-            {
-
-            }
-
-            return postsReturn;
-        }
-        public IList<BlogAPI> Get(GetBlogsByPerson command)
-        {
-            IList<BlogAPI> itemsReturn = new List<BlogAPI>();
-            try
-            {
-                var itemsExist = this._repository.GetAll<PostEF>()
-                .Include(s => s.Author)
-                .Include(s => s.Blog)
-                .Where(s => s.Author.Id == command.PersonId)
-                .Select(s => s.Blog)
-                .ToList();
-
-                if (itemsExist.Any())
-                {
-                    itemsReturn = this._mapper.Map<IList<BlogEF>, IList<BlogAPI>>(itemsExist);
-                }
-            }
-            catch (Exception e)
-            {
-
-            }
-
-            return itemsReturn;
-        }
-    
-    }
-
-   
-}
-
-namespace order.Infrastructure.EF
-{
-
-    using order.Domain.Models.Ordering;
-
-
-    using mvccoresb.Domain.TestModels;
-
-    using mvccoresb.Domain.Interfaces;
-    using order.Domain.Interfaces;
-    
-
-public class OrdersManager
-{
-    internal IRepository _repository;
-    internal IMapper _mapper;
-
-    public OrdersManager(){
-
-    }
-
-    public OrdersManager(IRepository repository, IMapper mapper)
-    {
-        this._repository = repository;
-        this._mapper = mapper;
-    }
-
-}
-
-public class OrdersManagerWrite : OrdersManager, IOrdersManagerWrite
-{
-    public OrdersManagerWrite():base(){}
-    public OrdersManagerWrite(IRepository repository, IMapper mapper)
-        : base(repository, mapper)
-    {
-
-    }
-
-    public IOrderItemAPI AddOrder(IOrderCreateAPI queryIn)
-    {
-        IOrderItemAPI result = new OrderItemAPI();
-        OrderCreateAPI query = new OrderCreateAPI();
-
-        if(queryIn is OrderCreateAPI){
-            query = queryIn as OrderCreateAPI;
-        }
-
-        if(
-            query == null
-            || string.IsNullOrEmpty(query.AdressFrom)
-            || string.IsNullOrEmpty(query.AdressTo)
-            || string.IsNullOrEmpty(query.DelivertyItemName)
-            || (query.Dimensions?.Any() != true)
-        ) { throw new NullReferenceException(); }
-
-        try
-        {
-
-            var itemToAdd = new DeliveryItemDAL();
-            itemToAdd = this._repository.GetAll<DeliveryItemDAL>(s => s.Name == query.DelivertyItemName).FirstOrDefault();
-
-            if( itemToAdd == null){
-                itemToAdd= new DeliveryItemDAL(){Name = query.DelivertyItemName };
-                this._repository.Add<DeliveryItemDAL>(itemToAdd);
-                this._repository.Save();
-            }
-            
-            if (itemToAdd == null) { throw new NullReferenceException(); }
-
-            foreach (DimensionalUnitAPI d in query.Dimensions)
-            {
-                DimensionalUnitDAL exist = this._repository.GetAll<DimensionalUnitDAL>(s => s.Name == d.Name).FirstOrDefault();
-                if (exist == null)
-                {
-                    exist = new DimensionalUnitDAL() { Name = d.Name, Description = d.Description };
-                    this._repository.Add<DimensionalUnitDAL>(exist);
-                    this._repository.Save();
-
-                        var dimUnit = new DeliveryItemDimensionUnitDAL() { DeliveryItemId = itemToAdd.Id, DimensionalItemId = exist.Id };
-                        this._repository.Add<DeliveryItemDimensionUnitDAL>(dimUnit);
-                        this._repository.Save();
-                        if (dimUnit == null) { throw new NullReferenceException(); }
-                }
-                if (exist == null) { throw new NullReferenceException(); }
-               
-            }
-
-            var order = new OrderItemDAL() { Name = "New order" };
-            this._repository.Add<OrderItemDAL>(order);
-            this._repository.Save();            
-            if (order == null) { throw new NullReferenceException(); }
-
-            var orderDelivery = new OrdersDeliveryItemsDAL() { OrderId = order.Id, DeliveryId = itemToAdd.Id };
-            this._repository.Add<OrdersDeliveryItemsDAL>(orderDelivery);
-            this._repository.Save();
-            if (orderDelivery == null) { throw new NullReferenceException(); }
-
-            var adressFrom = this._repository.GetAll<AdressDAL>(s => s.Name == query.AdressFrom)
+            OrderItemDAL orderToUpdate = this._repository.GetAll<OrderItemDAL>(s => s.Id == order.OrderId)
                 .FirstOrDefault();
-            var adressTo = this._repository.GetAll<AdressDAL>(s => s.Name == query.AdressTo)
-                .FirstOrDefault();
-
-            var orderAdress = new OrdersAdresses()
-            {
-                AddressFromId = adressFrom.Id,
-                AddressToId = adressTo.Id,
-                OrderId = order.Id
-            };
-            this._repository.Add<OrdersAdresses>(orderAdress);
+            orderToUpdate = this._mapper.Map<OrderBLL, OrderItemDAL>((OrderBLL)order,orderToUpdate);
             this._repository.Save();
-            if (orderAdress == null) { throw new NullReferenceException(); }
+            if (orderToUpdate == null) { throw new NullReferenceException(); }
 
-            order = this._repository.GetAll<OrderItemDAL>(s => s.Id == order.Id).FirstOrDefault();
-            order.DaysToDelivery = 10F;
-            order.DeliveryPrice = 10F;
-            var orderToUpdate = this._mapper.Map<OrderItemDAL, OrderItemUpdateDAL>(order);
-            this._repository.Update<OrderItemDAL>(order);
-            this._repository.Save();
-
-            result = this._mapper.Map<OrderItemDAL, OrderItemAPI>(order);
-            if (result == null) { throw new NullReferenceException(); }
+            return result = this._mapper.Map < OrderItemDAL,OrderBLL>(orderToUpdate);
 
         }
-        catch (Exception e)
+
+    }
+
+    public class OrdersManagerRead : OrdersManager
+    {
+        public OrdersManagerRead(IRepository repository, IMapper mapper)
+            : base(repository, mapper)
         {
 
         }
-        return result;
-    }
-  
-
-}
-
-public class OrdersManagerRead : OrdersManager
-{
-    public OrdersManagerRead(IRepository repository, IMapper mapper)
-        : base(repository, mapper)
-    {
 
     }
 
-}
 }

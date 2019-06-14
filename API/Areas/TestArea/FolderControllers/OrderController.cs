@@ -1,37 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿
 using Microsoft.AspNetCore.Mvc;
 
-using mvccoresb.Domain.Interfaces;
 using order.Domain.Models.Ordering;
-using mvccoresb.Domain.TestModels;
 using order.Domain.Interfaces;
 
 using Newtonsoft.Json;
 
-namespace mvccoresb.Default.Controllers
+namespace orders.Default.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class OrderController : Controller
     {
-        IRepository _repo;
-        IOrdersManagerWrite _writeManager;
-        
 
-        public OrderController(IOrdersManagerWrite writeManager)
+        private readonly IDeliverer _deliverer;
+
+        public OrderController( IDeliverer deliverer)
         {
-            _writeManager=writeManager;
+            _deliverer = deliverer;
         }
 
 
         [HttpPost("AddOrder")]
         public JsonResult AddOrder([FromBody] OrderCreateAPI query)
         {
-            var result = _writeManager.AddOrder(query);
-            
+            JsonResult result=new JsonResult(string.Empty);
+
+            if(query.ServiceType == "Bird"){
+                return Json(_deliverer.AddOrderBirdService(query));
+            }
+            if (query.ServiceType == "Tortise")
+            {
+                return Json(_deliverer.AddOrderBirdService(query));
+            }
+
             return Json(result);
         }
        

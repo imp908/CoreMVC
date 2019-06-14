@@ -1,36 +1,25 @@
 using System;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace mvccoresb.Domain.Interfaces
+
+namespace order.Domain.Interfaces
 {
-    
-    using mvccoresb.Domain.TestModels;
-    
-    public interface IEntityIntId
-    {
-        int Id{get;set;}
-    }
-    public interface IEntityGuidId
-    {
-        Guid Id { get; set; }
-    }
+
 
     public interface IRepository
     {
         IQueryable<T> GetAll<T>(Expression<Func<T, bool>> expression = null)
             where T : class;
-   
+
         void Add<T>(T item) where T : class;
         void AddRange<T>(IList<T> items) where T : class;
         void Delete<T>(T item) where T : class;
         void DeleteRange<T>(IList<T> items) where T : class;
         void Update<T>(T item) where T : class;
         void UpdateRange<T>(IList<T> items) where T : class;
-        IQueryable<T> SkipTake<T>(int skip,int take)
+        IQueryable<T> SkipTake<T>(int skip, int take)
             where T : class;
         IQueryable<T> QueryByFilter<T>(Expression<Func<T, bool>> expression)
             where T : class;
@@ -39,45 +28,14 @@ namespace mvccoresb.Domain.Interfaces
         void SaveIdentity(string command);
     }
 
-    public interface ICQRScrud
+
+    public interface IOrderCreateAPI
     {
-        T Add<T>(T item) where T : class;
-        void AddRange<T>(IList<T> items) where T : class;
-        void Delete<T>(T item) where T : class;
-        void DeleteRange<T>(IList<T> items) where T : class;
-        T Update<T>(T item) where T : class;
-        void UpdateRange<T>(IList<T> items) where T : class;
-        IQueryable<T> QueryByFilter<T>(Expression<Func<T, bool>> expression)
-            where T : class;
-    }
+        string AdressFrom { get; set; }
+        string AdressTo { get; set; }
+        string DelivertyItemName { get; set; }
 
-    public interface ICQRSBloggingWrite
-    {
-        PostAPI PersonAdsPostToBlog(PersonAdsPostCommand command);
-        bool PersonDeletesPostFromBlog(PersonDeletesPost command);
-        PostAPI PersonUpdatesPost(PersonUpdatesBlog command);
-    }
-    public interface ICQRSBloggingRead
-    {
-        IList<PostAPI> Get(GetPostsByPerson command);
-        IList<PostAPI> Get(GetPostsByBlog command);
-        IList<BlogAPI> Get(GetBlogsByPerson command);
-    }
-    
-}
-
-
-namespace order.Domain.Interfaces
-{
-
-
-    public class IOrderCreateAPI
-    {
-        public string AdressFrom { get; set; }
-        public string AdressTo { get; set; }
-        public string DelivertyItemName { get; set; }
-
-        public IList<IDimensionalUnitAPI> Dimensions { get; set; }
+        IList<IDimensionalUnitAPI> Dimensions { get; set; }
     }
     public interface IDimensionalUnitAPI
     {
@@ -110,8 +68,13 @@ namespace order.Domain.Interfaces
         float DeliveryPrice { get; set; }
         float DaysToDelivery { get; set; }
     }
-    
-    /*Results of order delivery accounting */
+
+    public interface IOrderAccountingBLL
+    {
+        float DeliveryPrice { get; set; }
+        float DaysToDelivery { get; set; }
+    }
+
     public interface IOrderDeliveryBirdAPI
     {
         float DeliveryPrice { get; set; }
@@ -120,25 +83,69 @@ namespace order.Domain.Interfaces
     public interface IOrderDeliveryTortiseAPI
     {
         float DeliveryPriceKoefficient { get; set; }
-        DateTime DeliveryDate { get; set; }
+        DateTime DaysToDelivery { get; set; }
+
+    }
+
+
+    /*Results of order delivery accounting */
+    public interface IOrderDeliveryBirdBLL
+    {
+        float DeliveryPrice { get; set; }
+        float DaysToDelivery { get; set; }
+    }
+    public interface IOrderDeliveryTortiseBLL : IOrderDeliveryBirdBLL
+    {
+        float DeliveryPriceKoefficient { get; set; }
     }
 
 
 
+    public interface IOrderBLL
+    {
+        Guid OrderId {get;set;}
+        string Name { get; set; }
+
+        float DeliveryPrice { get; set; }
+        float DaysToDelivery { get; set; }
+
+        IAddressBLL AddressFrom { get; set; }
+        IAddressBLL AddressTo { get; set; }
+    }
+    public interface IOrderUpdateBLL
+    {
+        Guid OrderId { get; set; }
+        float DeliveryPrice { get; set; }
+        float DaysToDelivery { get; set; }
+    }
+
+    public interface IAddressBLL
+    {
+        string Name {get;set;}
+    }
+
     /*SQRS wrapper above EF dbContext */
     public interface IOrdersManagerWrite
     {
-        IOrderItemAPI AddOrder(IOrderCreateAPI query);
+        IOrderBLL AddOrder(IOrderCreateAPI query);
+        IOrderBLL UpdateOrder(IOrderUpdateBLL order);
+    }
+
+
+    public interface IDeliverer
+    {
+        IOrderDeliveryBirdAPI AddOrderBirdService(IOrderCreateAPI order);
+        IOrderDeliveryTortiseAPI AddOrderTortiseService(IOrderCreateAPI order);
     }
 
     /* Accounter of price and delivery */    
     public interface IBirdAccounter
     {
-        IOrderDeliveryBirdAPI Count(IAdressAPI addressFrom, IAdressAPI addressto, IAdressAPI Order);
+        IOrderDeliveryBirdBLL Count(IOrderBLL Order);
     }
     public interface ITortiseAccounter
     {
-        IOrderDeliveryTortiseAPI Count(IAdressAPI addressFrom, IAdressAPI addressto, IAdressAPI Order);
+        IOrderDeliveryTortiseBLL Count(IOrderBLL Order);
     }
   
 }

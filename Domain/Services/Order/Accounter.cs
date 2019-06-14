@@ -1,8 +1,6 @@
 namespace crmvcsb.Domain.Services.Order
 {
 
-    using System;
-
     using order.Domain.Models.Ordering;
     using order.Domain.Interfaces;
 
@@ -10,9 +8,9 @@ namespace crmvcsb.Domain.Services.Order
     /* Hardcoded delivery accounting services */
     public class BirdAccounter : IBirdAccounter
     {
-        public IOrderDeliveryBirdAPI Count(IAdressAPI addressFrom, IAdressAPI addressto, IAdressAPI Order)
+        public IOrderDeliveryBirdBLL Count(IOrderBLL Order)
         {
-            OrderDeliveryBirdAPI result = new OrderDeliveryBirdAPI(){DeliveryPrice = 10F, DaysToDelivery = 5F};
+            OrderDeliveryBirdBLL result = new OrderDeliveryBirdBLL(){DeliveryPrice = 10F, DaysToDelivery = 5F};
 
             return result;
         }
@@ -20,9 +18,9 @@ namespace crmvcsb.Domain.Services.Order
 
     public class TortiseAccounter : ITortiseAccounter
     {
-        public IOrderDeliveryTortiseAPI Count(IAdressAPI addressFrom, IAdressAPI addressto, IAdressAPI Order)
+        public IOrderDeliveryTortiseBLL Count(IOrderBLL Order)
         {
-            IOrderDeliveryTortiseAPI result = new OrderDeliveryTortiseAPI(){DeliveryPriceKoefficient=15F, DeliveryDate = DateTime.Now.AddDays(5)};
+            OrderDeliveryTortiseBLL result = new OrderDeliveryTortiseBLL(){DeliveryPriceKoefficient=15F,DeliveryPrice = 10F, DaysToDelivery = 5F };
 
             return result;
         }

@@ -7,11 +7,14 @@ namespace order.Domain.Models.Ordering
     /*Api layer */
     public class OrderCreateAPI : IOrderCreateAPI
     {
+
+        public string ServiceType { get; set; } 
+
         public string AdressFrom { get; set; }
         public string AdressTo { get; set; }    
         public string DelivertyItemName { get; set; }
 
-        public List<DimensionalUnitAPI> Dimensions { get; set; }
+        public IList<IDimensionalUnitAPI> Dimensions { get; set; }
     }
     public class DimensionalUnitAPI : IDimensionalUnitAPI
     {
@@ -20,22 +23,54 @@ namespace order.Domain.Models.Ordering
     }
 
 
-    public class OrderItemAPI : IOrderItemAPI
+    public class OrderUpdateBLL : IOrderUpdateBLL
     {
+        public Guid OrderId { get; set; }
         public float DeliveryPrice { get; set; }
         public float DaysToDelivery { get; set; }
     }
+    public class AddressBLL : IAddressBLL
+    {
+        public string Name {get;set;}
+    }
+    public class OrderBLL : IOrderBLL
+    {
+        public Guid OrderId { get; set; }
+        public string Name { get; set; }
+
+        public float DeliveryPrice { get; set; }
+        public float DaysToDelivery { get; set; }
+
+
+        public IAddressBLL AddressFrom {get;set;}
+        public IAddressBLL AddressTo { get; set; }
+
+    }
+
+
 
     public class OrderDeliveryBirdAPI : IOrderDeliveryBirdAPI
     {
         public float DeliveryPrice { get; set; }
         public float DaysToDelivery { get; set; }
     }
-
-    public class OrderDeliveryTortiseAPI : IOrderDeliveryTortiseAPI 
+    public class OrderDeliveryTortiseAPI : IOrderDeliveryTortiseAPI
     {
         public float DeliveryPriceKoefficient { get; set; }
-        public DateTime DeliveryDate { get; set; }
+        public DateTime DaysToDelivery { get; set; }
+
+    }
+
+
+    public class OrderDeliveryBirdBLL : IOrderDeliveryBirdBLL
+    {
+        public float DeliveryPrice { get; set; }
+        public float DaysToDelivery { get; set; }
+    }
+
+    public class OrderDeliveryTortiseBLL : OrderDeliveryBirdBLL, IOrderDeliveryTortiseBLL
+    {
+        public float DeliveryPriceKoefficient { get; set; }        
     }
 
     public class AdressAPI : IAdressAPI
@@ -76,13 +111,13 @@ namespace order.Domain.Models.Ordering
 
 
     
-    public class AdressDAL 
+    public class AddressDAL 
     : BaseEntity, IGuidEntity
         , INamedEntity
     {
         public string Name { get; set; }
 
-        public List<OrdersAdresses> Orders {get;set;}
+        public List<OrdersAddressesDAL> Orders {get;set;}
     }
 
     public class OrderItemUpdateDAL{
@@ -94,7 +129,7 @@ namespace order.Domain.Models.Ordering
         public float DaysToDelivery { get; set; }
 
         public List<OrdersDeliveryItemsDAL> DeliveryItems { get; set; }
-        public List<OrdersAdresses> Directions { get; set; }
+        public List<OrdersAddressesDAL> Directions { get; set; }
     }
     public class OrderItemDAL
         : BaseEntity, IGuidEntity
@@ -108,14 +143,14 @@ namespace order.Domain.Models.Ordering
 
 
         public List<OrdersDeliveryItemsDAL> DeliveryItems { get; set; }
-        public List<OrdersAdresses> Directions {get;set;}
+        public List<OrdersAddressesDAL> Directions {get;set;}
     }
 
-    public class OrdersAdresses : BaseEntity, IGuidEntity
+    public class OrdersAddressesDAL : BaseEntity, IGuidEntity
     {
-        public AdressDAL AddressFrom { get; set; }
+        public AddressDAL AddressFrom { get; set; }
         public Guid AddressFromId { get; set; }
-        public AdressDAL AddressTo { get; set; }
+        public AddressDAL AddressTo { get; set; }
         public Guid AddressToId { get; set; }
         public OrderItemDAL Order {get;set;}
         public Guid OrderId {get;set;}

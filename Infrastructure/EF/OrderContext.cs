@@ -1,6 +1,5 @@
 namespace order.Infrastructure.EF
 {
-    using System;
 
     using Microsoft.EntityFrameworkCore;
     using order.Domain.Models.Ordering;
@@ -13,7 +12,7 @@ namespace order.Infrastructure.EF
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         { }
 
-        public DbSet<AdressDAL> Address {get;set;}
+        public DbSet<AddressDAL> Address {get;set;}
         public DbSet<OrderItemDAL> Order { get; set; }
         public DbSet<DeliveryItemDAL> DeliveryItem{get;set;}
         public DbSet<DimensionalUnitDAL> DimensionalUnit { get; set; }
@@ -77,10 +76,10 @@ namespace order.Infrastructure.EF
             .OnDelete(DeleteBehavior.Restrict);
     
             
-            model.Entity<OrdersAdresses>()
+            model.Entity<OrdersAddressesDAL>()
             .HasKey(s => new {s.AddressFromId, s.AddressToId, s.OrderId});
              
-            model.Entity<OrdersAdresses>()
+            model.Entity<OrdersAddressesDAL>()
             .HasOne(s => s.AddressFrom)
             .WithMany(c => c.Orders)
             .HasForeignKey(k => k.AddressFromId)
@@ -133,11 +132,11 @@ namespace order.Infrastructure.EF
             );
 
 
-            model.Entity<AdressDAL>().HasData(
-                new AdressDAL(){
+            model.Entity<AddressDAL>().HasData(
+                new AddressDAL(){
                     Id = new System.Guid("30000000-0000-0000-0000-000000000000"), Name = "Some address one"
                 },
-                new AdressDAL(){
+                new AddressDAL(){
                     Id = new System.Guid("30000000-0000-0000-0000-000000000001"), Name = "Some address two"
                 }
             );
@@ -157,15 +156,15 @@ namespace order.Infrastructure.EF
                 }
             );
 
-            model.Entity<OrdersAdresses>().HasData(
-                new OrdersAdresses(){
+            model.Entity<OrdersAddressesDAL>().HasData(
+                new OrdersAddressesDAL(){
                     Id = new System.Guid("60000000-0000-0000-0000-000000000000") ,
                     OrderId = new System.Guid("50000000-0000-0000-0000-000000000000"),
                     AddressFromId = new System.Guid("30000000-0000-0000-0000-000000000000"),
                     AddressToId = new System.Guid("30000000-0000-0000-0000-000000000001") 
                 }
                 ,
-                new OrdersAdresses()
+                new OrdersAddressesDAL()
                 {
                     Id = new System.Guid("60000000-0000-0000-0000-000000000001") ,
                     OrderId = new System.Guid("50000000-0000-0000-0000-000000000001"),
