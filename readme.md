@@ -40,10 +40,13 @@ EF cqrs layer
 
 
 ### API (for fiddler test method,url,attribute,body)
+
 -------------------------------------------------------
-POST
-http://localhost:5002/api/Order/AddOrder
-Content-Type: application/json; charset=utf-8
+> POST
+> http://localhost:5002/api/Order/AddOrder
+> Content-Type: application/json; charset=utf-8
+
+-------------------------------------------------------
 {
     "ServiceType":"Bird",
 	"AdressFrom":"Some address one"
@@ -55,9 +58,13 @@ Content-Type: application/json; charset=utf-8
 	]
 }
 
-POST
-http://localhost:5002/api/Order/AddOrder
-Content-Type: application/json; charset=utf-8
+
+-------------------------------------------------------
+> POST
+> http://localhost:5002/api/Order/AddOrder
+> Content-Type: application/json; charset=utf-8
+
+-------------------------------------------------------
 {
     "ServiceType":"Tortise",
 	"AdressFrom":"Some address one"
