@@ -1,6 +1,6 @@
 namespace order.Domain.Services
 {
-    using order.Domain.Models.Ordering;
+    using order.Domain.Models;
     using order.Domain.Interfaces;
     using AutoMapper;
 
@@ -11,7 +11,8 @@ namespace order.Domain.Services
         ITortiseAccounter _tortiseAccounter;
         IMapper _mapper;
 
-        public Deliverer( IMapper mapper, IOrdersManagerWrite orderManager,IBirdAccounter birdAccounter,ITortiseAccounter tortiseAccounter){
+        public Deliverer( IMapper mapper, IOrdersManagerWrite orderManager,IBirdAccounter birdAccounter,ITortiseAccounter tortiseAccounter)
+        {
             _orderManager = orderManager;
             _birdAccounter = birdAccounter;
             _tortiseAccounter = tortiseAccounter;
@@ -19,21 +20,31 @@ namespace order.Domain.Services
         }
 
         public IOrderDeliveryBirdAPI AddOrderBirdService(IOrderCreateAPI order){
-            IOrderBLL orderCreated = this._orderManager.AddOrder(order);
+            OrderItemDAL orderCreated = this._orderManager.AddOrder(order);
+            
+            var orderToCount = this._mapper.Map<OrderItemDAL, OrderBLL>(orderCreated);           
+            OrderDeliveryBirdBLL accountedDelivery = _birdAccounter.Count(orderToCount) as OrderDeliveryBirdBLL;
 
-            OrderDeliveryBirdBLL accountedDelivery = _birdAccounter.Count(orderCreated) as OrderDeliveryBirdBLL;
-            var result = _mapper.Map<OrderDeliveryBirdBLL,OrderDeliveryBirdAPI>(accountedDelivery);
+            var orderToUpdate = _mapper.Map<OrderDeliveryBirdBLL, OrderUpdateBLL>(accountedDelivery);
+            OrderItemDAL updatedOrder = this._orderManager.UpdateOrder(orderToUpdate);
 
+            var result = _mapper.Map<OrderItemDAL,OrderDeliveryBirdAPI>(updatedOrder);            
+            
             return result;
         }
         public IOrderDeliveryTortiseAPI AddOrderTortiseService(IOrderCreateAPI order)
         {
-            IOrderBLL orderCreated = this._orderManager.AddOrder(order);
+            OrderItemDAL orderCreated = this._orderManager.AddOrder(order);
 
-            OrderDeliveryTortiseBLL accountedDelivery = _tortiseAccounter.Count(orderCreated) as OrderDeliveryTortiseBLL;
+            var orderToCount = this._mapper.Map<OrderItemDAL, OrderBLL>(orderCreated);
+            OrderDeliveryTortiseBLL accountedDelivery = _tortiseAccounter.Count(orderToCount) as OrderDeliveryTortiseBLL;
+
+            var orderToUpdate = _mapper.Map<OrderDeliveryTortiseBLL, OrderUpdateBLL>(accountedDelivery);
+            OrderItemDAL updatedOrder = this._orderManager.UpdateOrder(orderToUpdate);
 
             var result = _mapper.Map<OrderDeliveryTortiseBLL, OrderDeliveryTortiseAPI>(accountedDelivery);
 
+            result.DaysToDelivery = System.DateTime.Now.AddDays(accountedDelivery.DaysToDelivery);
             return result;
         }
         

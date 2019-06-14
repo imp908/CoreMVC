@@ -1,7 +1,7 @@
 namespace order.Domain.Services
 {
 
-    using order.Domain.Models.Ordering;
+    using order.Domain.Models;
     using order.Domain.Interfaces;
 
 

@@ -7,7 +7,8 @@ using System.Linq.Expressions;
 namespace order.Domain.Interfaces
 {
 
-
+    using order.Domain.Models;
+    
     public interface IRepository
     {
         IQueryable<T> GetAll<T>(Expression<Func<T, bool>> expression = null)
@@ -127,8 +128,8 @@ namespace order.Domain.Interfaces
     /*SQRS wrapper above EF dbContext */
     public interface IOrdersManagerWrite
     {
-        IOrderBLL AddOrder(IOrderCreateAPI query);
-        IOrderBLL UpdateOrder(IOrderUpdateBLL order);
+        OrderItemDAL AddOrder(IOrderCreateAPI query);
+        OrderItemDAL UpdateOrder(IOrderUpdateBLL order);
     }
 
 

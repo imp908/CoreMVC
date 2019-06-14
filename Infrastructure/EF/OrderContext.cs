@@ -2,7 +2,7 @@ namespace order.Infrastructure.EF
 {
 
     using Microsoft.EntityFrameworkCore;
-    using order.Domain.Models.Ordering;
+    using order.Domain.Models;
 
     public class OrderContext : DbContext
     {
@@ -21,6 +21,13 @@ namespace order.Infrastructure.EF
 
         protected override void OnModelCreating(ModelBuilder model)
         {
+
+            model.Entity<DimensionalUnitDAL>().ToTable("DimensionalUnit");
+            model.Entity<DeliveryItemDimensionUnitDAL>().ToTable("DeliveryItemDimensionUnit");
+            model.Entity<OrdersAddressesDAL>().ToTable("OrdersAddresses");
+            model.Entity<OrdersDeliveryItemsDAL>().ToTable("OrdersDeliveryItems");
+
+
 
             model.Entity<DimensionalUnitDAL>()
             .HasMany(s => s.Convertions)
@@ -43,6 +50,8 @@ namespace order.Infrastructure.EF
             .Property(s => s.Id)
             .ValueGeneratedOnAdd();
             
+
+
             model.Entity<OrdersDeliveryItemsDAL>()
             .HasKey(t => new {t.OrderId, t.DeliveryId});
 
@@ -76,6 +85,7 @@ namespace order.Infrastructure.EF
             .OnDelete(DeleteBehavior.Restrict);
     
             
+            
             model.Entity<OrdersAddressesDAL>()
             .HasKey(s => new {s.AddressFromId, s.AddressToId, s.OrderId});
              
@@ -85,7 +95,6 @@ namespace order.Infrastructure.EF
             .HasForeignKey(k => k.AddressFromId)
             .OnDelete(DeleteBehavior.Restrict);
      
-
 
 
             model.Entity<DimensionalUnitDAL>().HasData( 

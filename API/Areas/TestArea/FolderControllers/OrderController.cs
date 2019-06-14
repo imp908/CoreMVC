@@ -1,7 +1,7 @@
 ﻿
 using Microsoft.AspNetCore.Mvc;
 
-using order.Domain.Models.Ordering;
+using order.Domain.Models;
 using order.Domain.Interfaces;
 
 using Newtonsoft.Json;
@@ -31,7 +31,7 @@ namespace orders.Default.Controllers
             }
             if (query.ServiceType == "Tortise")
             {
-                return Json(_deliverer.AddOrderBirdService(query));
+                return Json(_deliverer.AddOrderTortiseService(query));
             }
 
             return Json(result);

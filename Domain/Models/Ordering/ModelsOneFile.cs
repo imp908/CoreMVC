@@ -1,4 +1,4 @@
-namespace order.Domain.Models.Ordering
+namespace order.Domain.Models
 {
     using System;
     using System.Collections.Generic;
@@ -143,7 +143,7 @@ namespace order.Domain.Models.Ordering
 
 
         public List<OrdersDeliveryItemsDAL> DeliveryItems { get; set; }
-        public List<OrdersAddressesDAL> Directions {get;set;}
+        public OrdersAddressesDAL Direction {get;set;}
     }
 
     public class OrdersAddressesDAL : BaseEntity, IGuidEntity

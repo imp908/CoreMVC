@@ -19,7 +19,7 @@ namespace order.Infrastructure.EF
 {
 
 
-    using order.Domain.Models.Ordering;
+    using order.Domain.Models;
 
     using order.Domain.Interfaces;
 
@@ -150,9 +150,9 @@ namespace order.Infrastructure.EF
 
         }
 
-        public IOrderBLL AddOrder(IOrderCreateAPI queryIn)
+        public OrderItemDAL AddOrder(IOrderCreateAPI queryIn)
         {
-            IOrderBLL result = new OrderBLL();
+            OrderItemDAL order = new OrderItemDAL();
             OrderCreateAPI query = new OrderCreateAPI();
 
             if(queryIn is OrderCreateAPI){
@@ -199,7 +199,7 @@ namespace order.Infrastructure.EF
                 
                 }
 
-                var order = new OrderItemDAL() { Name = "New order" };
+                order = new OrderItemDAL() { Name = "New order" };
                 this._repository.Add<OrderItemDAL>(order);
                 this._repository.Save();            
                 if (order == null) { throw new NullReferenceException(); }
@@ -228,21 +228,19 @@ namespace order.Infrastructure.EF
                 var orderToUpdate = this._mapper.Map<OrderItemDAL, OrderItemUpdateDAL>(order);
                 this._repository.Update<OrderItemDAL>(order);
                 this._repository.Save();
-
-                result = this._mapper.Map<OrderItemDAL, OrderBLL>(order);
-                if (result == null) { throw new NullReferenceException(); }
+               
 
             }
             catch (Exception e)
             {
 
             }
-            return result;
+            return order;
         }
         
-        public IOrderBLL UpdateOrder (IOrderUpdateBLL order)
+        public OrderItemDAL UpdateOrder (IOrderUpdateBLL order)
         {
-            IOrderBLL result = new OrderBLL();
+            OrderItemDAL result = new OrderItemDAL();
 
             OrderItemDAL orderToUpdate = this._repository.GetAll<OrderItemDAL>(s => s.Id == order.OrderId)
                 .FirstOrDefault();
@@ -250,7 +248,7 @@ namespace order.Infrastructure.EF
             this._repository.Save();
             if (orderToUpdate == null) { throw new NullReferenceException(); }
 
-            return result = this._mapper.Map < OrderItemDAL,OrderBLL>(orderToUpdate);
+            return orderToUpdate;            
 
         }
 

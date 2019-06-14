@@ -51,11 +51,11 @@ npx webpack
 
 TODO:[
 
-    
+    15.06.2019 -> mapping 
+
 ]
 
-BACKLOG:[
-      
+BACKLOG/MILESTONES:[
     
 ]
 
@@ -68,6 +68,6 @@ DONE:[
     <- done 15.06.2019 1h10m -> order new API, BLL interfaces
     <- done 15.06.2019 1h5m -> order deliverer, clenup
 
-    ~36h in 9d
+    ~9h in 3d
 
 ]

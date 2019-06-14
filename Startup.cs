@@ -24,7 +24,8 @@ namespace mvccoresb
 
     using Microsoft.EntityFrameworkCore;
 
-    using order.Domain.Models.Ordering;
+    using order.Domain.Services;
+    using order.Domain.Models;
     using order.Domain.Interfaces;
     using order.Infrastructure.EF;
 
@@ -98,34 +99,53 @@ namespace mvccoresb
         public ContainerBuilder ConfigureAutofac(IServiceCollection services, ContainerBuilder autofacContainer)
         {
 
-            /**EF,repo reg */       
-            autofacContainer.RegisterType<OrderContext>().As<DbContext>().WithMetadata("Name", "OrderRepo")
+            /**EF context , and repo registration */       
+            autofacContainer.RegisterType<OrderContext>()
+                .As<DbContext>().WithMetadata("Name", "OrderRepo")
                 .InstancePerLifetimeScope();
 
             autofacContainer.RegisterType<RepositoryEF>()
                 .As<IRepository>()                
                 .InstancePerLifetimeScope();
 
-
-            autofacContainer.RegisterType<OrdersManagerWrite>()
-                .As<IOrdersManagerWrite>().InstancePerLifetimeScope();           
       
+            /*Orders registration */
+            autofacContainer.RegisterType<Deliverer>()
+                .As<IDeliverer>().InstancePerLifetimeScope();
 
-            /*Orders mapping */
-            autofacContainer.RegisterType<DimensionalUnitAPI>()
-                .As<IDimensionalUnitAPI>().InstancePerLifetimeScope();
-            autofacContainer.RegisterType<OrderCreateAPI>()
-                .As<IOrderCreateAPI>().InstancePerLifetimeScope();           
-         
             autofacContainer.RegisterType<OrdersManagerWrite>()
                 .As<IOrdersManagerWrite>()
                 .WithParameter(new TypedParameter(typeof(RepositoryEF),
                     new RepositoryEF(
                         new OrderContext(new DbContextOptionsBuilder<OrderContext>()
                             .UseSqlServer(Configuration.GetConnectionString("LocalOrderConnection")).Options)
-                    )                        
+                    )
                 ))
                 .InstancePerLifetimeScope();
+
+            autofacContainer.RegisterType<BirdAccounter>()
+                .As<IBirdAccounter>().InstancePerLifetimeScope();
+            autofacContainer.RegisterType<TortiseAccounter>()
+                .As<ITortiseAccounter>().InstancePerLifetimeScope();
+
+            
+            autofacContainer.RegisterType<OrderDeliveryBirdBLL>()
+                .As<IOrderDeliveryBirdBLL>().InstancePerLifetimeScope();
+            autofacContainer.RegisterType<OrderBLL>()
+                .As<IOrderBLL>().InstancePerLifetimeScope();
+            autofacContainer.RegisterType<OrderDeliveryTortiseBLL>()
+                .As<IOrderDeliveryTortiseBLL>().InstancePerLifetimeScope();
+            
+            autofacContainer.RegisterType<OrderDeliveryBirdAPI>()
+                .As<IOrderDeliveryBirdAPI>().InstancePerLifetimeScope();
+            autofacContainer.RegisterType<OrderCreateAPI>()
+                .As<IOrderCreateAPI>().InstancePerLifetimeScope();
+            autofacContainer.RegisterType<OrderDeliveryTortiseAPI>()
+                .As<IOrderDeliveryTortiseAPI>().InstancePerLifetimeScope();       
+
+            autofacContainer.RegisterType<DimensionalUnitAPI>()
+                .As<IDimensionalUnitAPI>().InstancePerLifetimeScope();
+        
 
             return autofacContainer;
         }
@@ -136,6 +156,11 @@ namespace mvccoresb
             {                                             
                 cfg.CreateMap<OrderItemDAL, OrderItemUpdateDAL>();
                 
+                cfg.CreateMap<OrderItemDAL, OrderBLL>().ForMember(dest => dest.AddressFrom,m => m.MapFrom(src => src.Direction.AddressFrom)).ReverseMap();
+                cfg.CreateMap<OrderItemDAL, OrderBLL>().ForMember(dest => dest.AddressTo, m => m.MapFrom(src => src.Direction.AddressTo)).ReverseMap();
+
+                cfg.CreateMap<OrderDeliveryBirdBLL, OrderDeliveryBirdAPI>();
+                cfg.CreateMap<OrderDeliveryTortiseBLL, OrderDeliveryTortiseAPI>();
             });
         }
 
