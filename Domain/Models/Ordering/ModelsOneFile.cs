@@ -14,7 +14,7 @@ namespace order.Domain.Models
         public string AdressTo { get; set; }    
         public string DelivertyItemName { get; set; }
 
-        public IList<IDimensionalUnitAPI> Dimensions { get; set; }
+        public IList<DimensionalUnitAPI> Dimensions { get; set; }
     }
     public class DimensionalUnitAPI : IDimensionalUnitAPI
     {
@@ -56,8 +56,9 @@ namespace order.Domain.Models
     }
     public class OrderDeliveryTortiseAPI : IOrderDeliveryTortiseAPI
     {
+        
         public float DeliveryPriceKoefficient { get; set; }
-        public DateTime DaysToDelivery { get; set; }
+        public DateTime DeliveryDate { get; set; }
 
     }
 
@@ -68,9 +69,16 @@ namespace order.Domain.Models
         public float DaysToDelivery { get; set; }
     }
 
-    public class OrderDeliveryTortiseBLL : OrderDeliveryBirdBLL, IOrderDeliveryTortiseBLL
+    public class OrderDeliveryTortiseBLL :  IOrderDeliveryTortiseBLL
     {
-        public float DeliveryPriceKoefficient { get; set; }        
+        public float DeliveryBasePrice { get; set; } = 150;
+        public float DeliveryPriceKoefficient { get; set; }    
+        public float DaysToDelivery { get; set; }
+        public float DeliveryPrice => 
+            this.DeliveryPriceKoefficient!=0 
+                ? this.DeliveryBasePrice * this.DeliveryPriceKoefficient 
+                : this.DeliveryBasePrice;
+        
     }
 
     public class AdressAPI : IAdressAPI

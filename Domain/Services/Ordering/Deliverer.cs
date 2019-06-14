@@ -26,6 +26,7 @@ namespace order.Domain.Services
             OrderDeliveryBirdBLL accountedDelivery = _birdAccounter.Count(orderToCount) as OrderDeliveryBirdBLL;
 
             var orderToUpdate = _mapper.Map<OrderDeliveryBirdBLL, OrderUpdateBLL>(accountedDelivery);
+            orderToUpdate.OrderId=orderToCount.OrderId;
             OrderItemDAL updatedOrder = this._orderManager.UpdateOrder(orderToUpdate);
 
             var result = _mapper.Map<OrderItemDAL,OrderDeliveryBirdAPI>(updatedOrder);            
@@ -40,11 +41,14 @@ namespace order.Domain.Services
             OrderDeliveryTortiseBLL accountedDelivery = _tortiseAccounter.Count(orderToCount) as OrderDeliveryTortiseBLL;
 
             var orderToUpdate = _mapper.Map<OrderDeliveryTortiseBLL, OrderUpdateBLL>(accountedDelivery);
+            orderToUpdate.OrderId = orderToCount.OrderId;
             OrderItemDAL updatedOrder = this._orderManager.UpdateOrder(orderToUpdate);
 
-            var result = _mapper.Map<OrderDeliveryTortiseBLL, OrderDeliveryTortiseAPI>(accountedDelivery);
+            var result = _mapper.Map<OrderItemDAL, OrderDeliveryTortiseAPI>(updatedOrder);
 
-            result.DaysToDelivery = System.DateTime.Now.AddDays(accountedDelivery.DaysToDelivery);
+            //Tortize specific behaviour
+            result.DeliveryDate = System.DateTime.Now.AddDays(accountedDelivery.DaysToDelivery);
+            result.DeliveryPriceKoefficient = 0.25F;
             return result;
         }
         

@@ -20,7 +20,7 @@ namespace order.Domain.Services
     {
         public IOrderDeliveryTortiseBLL Count(IOrderBLL Order)
         {
-            OrderDeliveryTortiseBLL result = new OrderDeliveryTortiseBLL(){DeliveryPriceKoefficient=15F,DeliveryPrice = 10F, DaysToDelivery = 5F };
+            OrderDeliveryTortiseBLL result = new OrderDeliveryTortiseBLL(){DeliveryPriceKoefficient=15F, DaysToDelivery = 5F };
 
             return result;
         }

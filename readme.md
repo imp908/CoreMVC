@@ -18,12 +18,27 @@ Pckages to build js:
 
 
 
-API (for fiddler test)
+API (for fiddler test method,url,attribute,body)
 -------------------------------------------------------
 POST
 http://localhost:5002/api/Order/AddOrder
 Content-Type: application/json; charset=utf-8
 {
+    "ServiceType":"Bird",
+	"AdressFrom":"Some address one"
+	,"AdressTo":"Some address two"
+	,"DelivertyItemName":"Item1"
+	,"Dimensions":[
+		{"Description":"","Name":"kg"}
+		,{"Description":"","Name":"sm"}
+	]
+}
+
+POST
+http://localhost:5002/api/Order/AddOrder
+Content-Type: application/json; charset=utf-8
+{
+    "ServiceType":"Tortise",
 	"AdressFrom":"Some address one"
 	,"AdressTo":"Some address two"
 	,"DelivertyItemName":"Item1"

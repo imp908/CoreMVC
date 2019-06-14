@@ -36,7 +36,7 @@ namespace order.Domain.Interfaces
         string AdressTo { get; set; }
         string DelivertyItemName { get; set; }
 
-        IList<IDimensionalUnitAPI> Dimensions { get; set; }
+        IList<DimensionalUnitAPI> Dimensions { get; set; }
     }
     public interface IDimensionalUnitAPI
     {
@@ -84,7 +84,7 @@ namespace order.Domain.Interfaces
     public interface IOrderDeliveryTortiseAPI
     {
         float DeliveryPriceKoefficient { get; set; }
-        DateTime DaysToDelivery { get; set; }
+        DateTime DeliveryDate { get; set; }
 
     }
 
@@ -95,8 +95,9 @@ namespace order.Domain.Interfaces
         float DeliveryPrice { get; set; }
         float DaysToDelivery { get; set; }
     }
-    public interface IOrderDeliveryTortiseBLL : IOrderDeliveryBirdBLL
+    public interface IOrderDeliveryTortiseBLL 
     {
+        float DeliveryBasePrice { get; set; }
         float DeliveryPriceKoefficient { get; set; }
     }
 

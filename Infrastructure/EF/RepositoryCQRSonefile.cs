@@ -244,7 +244,7 @@ namespace order.Infrastructure.EF
 
             OrderItemDAL orderToUpdate = this._repository.GetAll<OrderItemDAL>(s => s.Id == order.OrderId)
                 .FirstOrDefault();
-            orderToUpdate = this._mapper.Map<OrderBLL, OrderItemDAL>((OrderBLL)order,orderToUpdate);
+            orderToUpdate = this._mapper.Map<OrderUpdateBLL, OrderItemDAL>((OrderUpdateBLL)order,orderToUpdate);
             this._repository.Save();
             if (orderToUpdate == null) { throw new NullReferenceException(); }
 

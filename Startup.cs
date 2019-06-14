@@ -64,6 +64,8 @@ namespace mvccoresb
             o.UseSqlServer(
                 Configuration.GetConnectionString("LocalOrderConnection")));
 
+            services.AddMvc();
+
             /*SignalR registration*/
             services.AddSignalR();
 
@@ -158,6 +160,15 @@ namespace mvccoresb
                 
                 cfg.CreateMap<OrderItemDAL, OrderBLL>().ForMember(dest => dest.AddressFrom,m => m.MapFrom(src => src.Direction.AddressFrom)).ReverseMap();
                 cfg.CreateMap<OrderItemDAL, OrderBLL>().ForMember(dest => dest.AddressTo, m => m.MapFrom(src => src.Direction.AddressTo)).ReverseMap();
+                cfg.CreateMap<OrderItemDAL, OrderBLL>().ForMember(dest => dest.OrderId, m => m.MapFrom(src => src.Id)).ReverseMap();
+                
+                cfg.CreateMap<OrderDeliveryBirdBLL, OrderUpdateBLL>();
+                cfg.CreateMap<OrderUpdateBLL, OrderItemDAL>();
+
+                cfg.CreateMap<OrderDeliveryTortiseBLL, OrderUpdateBLL>();
+                cfg.CreateMap<OrderItemDAL, OrderDeliveryTortiseAPI>().ForMember(dest => dest.DeliveryDate, m => m.MapFrom(
+                    src => (System.DateTime.Now.AddDays(src.DaysToDelivery!=null ? (double)src.DaysToDelivery : 0)
+                )));
 
                 cfg.CreateMap<OrderDeliveryBirdBLL, OrderDeliveryBirdAPI>();
                 cfg.CreateMap<OrderDeliveryTortiseBLL, OrderDeliveryTortiseAPI>();
@@ -184,6 +195,9 @@ namespace mvccoresb
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
+            try
+            {
+          
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -195,6 +209,11 @@ namespace mvccoresb
                     template: "{controller=Home}/{action=Index}/{id?}");
 
             });
+            }
+            catch (Exception e)
+            {
+
+            }
 
             /* must be added after use mvc */
             app.UseSignalR(routes =>
