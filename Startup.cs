@@ -18,19 +18,15 @@ namespace mvccoresb
     using Autofac;
     using Autofac.Extensions.DependencyInjection;
 
-    using AutoMapper;
-
-    using mvccoresb.Infrastructure.SignalR;
+    using AutoMapper;    
 
     using Microsoft.EntityFrameworkCore;
 
+    using mvccoresb.Infrastructure.SignalR;
+
     using mvccoresb.Infrastructure.EF;
     using mvccoresb.Domain.TestModels;
-
-    using order.Domain.Services;
-    using order.Domain.Models;
-    using order.Domain.Interfaces;
-    using order.Infrastructure.EF;
+    using mvccoresb.Domain.Interfaces;
 
     public class Startup
     {
@@ -63,9 +59,9 @@ namespace mvccoresb
             });
 
 
-            services.AddDbContext<OrderContext>(o =>
+            services.AddDbContext<TestContext>(o =>
             o.UseSqlServer(
-                Configuration.GetConnectionString("LocalOrderConnection")));
+                Configuration.GetConnectionString("LocalDbConnection")));
 
             services.AddMvc();
 
@@ -105,63 +101,22 @@ namespace mvccoresb
         {
 
             /**EF,repo and UOW reg */
-            autofacContainer.RegisterType<TestContext>().As<DbContext>().WithMetadata("Name", "TestRepo")
+            autofacContainer.RegisterType<TestContext>()
+                .As<DbContext>().WithMetadata("Name", "TestRepo")
                 .InstancePerLifetimeScope();
-     
-            /**EF context , and repo registration */       
-            autofacContainer.RegisterType<OrderContext>()
-                .As<DbContext>().WithMetadata("Name", "OrderRepo")
-                .InstancePerLifetimeScope();
-
+         
             autofacContainer.RegisterType<RepositoryEF>()
                 .As<IRepository>()                
                 .InstancePerLifetimeScope();
 
-      
-            /*Orders registration */
-            autofacContainer.RegisterType<Deliverer>()
-                .As<IDeliverer>().InstancePerLifetimeScope();
-
+               
             //*DAL->BLL reg */
             autofacContainer.RegisterType<BlogEF>()
                 .As<IBlogEF>().InstancePerLifetimeScope();
             autofacContainer.RegisterType<BlogBLL>()
                 .As<IBlogBLL>().InstancePerLifetimeScope();
             autofacContainer.RegisterType<PostBLL>()
-                .As<IPostBLL>().InstancePerLifetimeScope();          
-            autofacContainer.RegisterType<OrdersManagerWrite>()
-                .As<IOrdersManagerWrite>()
-                .WithParameter(new TypedParameter(typeof(RepositoryEF),
-                    new RepositoryEF(
-                        new OrderContext(new DbContextOptionsBuilder<OrderContext>()
-                            .UseSqlServer(Configuration.GetConnectionString("LocalOrderConnection")).Options)
-                    )
-                ))
-                .InstancePerLifetimeScope();
-
-            autofacContainer.RegisterType<BirdAccounter>()
-                .As<IBirdAccounter>().InstancePerLifetimeScope();
-            autofacContainer.RegisterType<TortiseAccounter>()
-                .As<ITortiseAccounter>().InstancePerLifetimeScope();
-
-            
-            autofacContainer.RegisterType<OrderDeliveryBirdBLL>()
-                .As<IOrderDeliveryBirdBLL>().InstancePerLifetimeScope();
-            autofacContainer.RegisterType<OrderBLL>()
-                .As<IOrderBLL>().InstancePerLifetimeScope();
-            autofacContainer.RegisterType<OrderDeliveryTortiseBLL>()
-                .As<IOrderDeliveryTortiseBLL>().InstancePerLifetimeScope();
-            
-            autofacContainer.RegisterType<OrderDeliveryBirdAPI>()
-                .As<IOrderDeliveryBirdAPI>().InstancePerLifetimeScope();
-            autofacContainer.RegisterType<OrderCreateAPI>()
-                .As<IOrderCreateAPI>().InstancePerLifetimeScope();
-            autofacContainer.RegisterType<OrderDeliveryTortiseAPI>()
-                .As<IOrderDeliveryTortiseAPI>().InstancePerLifetimeScope();       
-
-            autofacContainer.RegisterType<DimensionalUnitAPI>()
-                .As<IDimensionalUnitAPI>().InstancePerLifetimeScope();
-        
+                .As<IPostBLL>().InstancePerLifetimeScope();
 
             return autofacContainer;
         }
@@ -187,24 +142,7 @@ namespace mvccoresb
                 cfg.CreateMap<PersonEF, PersonAPI>();
                 cfg.CreateMap<BlogEF, BlogAPI>();
                 cfg.CreateMap<PostEF, PostAPI>().ReverseMap();
-
-                                                       
-                cfg.CreateMap<OrderItemDAL, OrderItemUpdateDAL>();
-                
-                cfg.CreateMap<OrderItemDAL, OrderBLL>().ForMember(dest => dest.AddressFrom,m => m.MapFrom(src => src.Direction.AddressFrom)).ReverseMap();
-                cfg.CreateMap<OrderItemDAL, OrderBLL>().ForMember(dest => dest.AddressTo, m => m.MapFrom(src => src.Direction.AddressTo)).ReverseMap();
-                cfg.CreateMap<OrderItemDAL, OrderBLL>().ForMember(dest => dest.OrderId, m => m.MapFrom(src => src.Id)).ReverseMap();
-                
-                cfg.CreateMap<OrderDeliveryBirdBLL, OrderUpdateBLL>();
-                cfg.CreateMap<OrderUpdateBLL, OrderItemDAL>();
-
-                cfg.CreateMap<OrderDeliveryTortiseBLL, OrderUpdateBLL>();
-                cfg.CreateMap<OrderItemDAL, OrderDeliveryTortiseAPI>().ForMember(dest => dest.DeliveryDate, m => m.MapFrom(
-                    src => (System.DateTime.Now.AddDays(src.DaysToDelivery!=null ? (double)src.DaysToDelivery : 0)
-                )));
-
-                cfg.CreateMap<OrderDeliveryBirdBLL, OrderDeliveryBirdAPI>();
-                cfg.CreateMap<OrderDeliveryTortiseBLL, OrderDeliveryTortiseAPI>();
+            
             });
         }
 
@@ -252,7 +190,6 @@ namespace mvccoresb
             app.UseSignalR(routes =>
             {
                 routes.MapHub<SignalRhub>("/rHub");
-                routes.MapHub<SignalRWorks>("/rWork");
             });
         }
     }
