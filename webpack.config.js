@@ -25,6 +25,7 @@ module.exports = {
       , reactApp: './js/Libs/React/index.js'
 
       , signalRapp:'./js/Libs/signalR/signalr.js'
+      , signalRwork: './js/Libs/signalR/signalRwork.js'
     },
 
     //output js

@@ -7,4 +7,5 @@ namespace chat.Domain.Models
         public string Id { get; set; }
         public int Year { get; set; }
     }
+    
 }

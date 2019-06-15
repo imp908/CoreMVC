@@ -1,11 +1,12 @@
+using System;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+
 namespace mvccoresb.Domain.Interfaces
 {
-    using System;
-    using System.Threading.Tasks;
-    using Microsoft.EntityFrameworkCore;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Linq.Expressions;
     
     using mvccoresb.Domain.TestModels;
     

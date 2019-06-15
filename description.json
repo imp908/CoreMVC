@@ -1,17 +1,4 @@
 
-//pckages
-    dotnet add package Newtonsoft.Json --version 12.0.2
-    dotnet add package Autofac.Extensions.DependencyInjection --version 4.4.0
-    dotnet add package AutoMapper --version 8.1.0
-    dotnet add package AutoMapper.Extensions.Microsoft.DependencyInjection --version 6.1.0
-    dotnet add package Microsoft.AspNetCore.SignalR
-
-//js packages
-    npm install --save-dev react react-dom
-    npm install --save-dev gulp gulp-babela
-    npm install --save-dev webpack webpack-dev-server webpack-cli webpack-stream html-webpack-plugin clean-webpack-plugin
-    npm install --save-dev @babel/core @babel/cli @babel/plugin-proposal-class-properties @babel/preset-env @babel/preset-react @babel/plugin-transform-arrow-functions @babel/plugin-transform-classes @babel/plugin-proposal-function-bind
-
 //////////////
 //MVC WebApi Folders, routing and URLs:
 Folders:
@@ -164,6 +151,19 @@ Routes:
             "PersonId":"81A130D2-502F-4CF1-A376-63EDEB000E9F"
             ,"PostId":"1"
         }
+
+    //add order
+    http://localhost:5002/api/Order/AddOrder
+    {
+        "AdressFrom":"Some address one"
+        ,"AdressTo":"Some address two"
+        ,"DelivertyItemName":"Item1"
+        ,"Dimensions":[
+            {"Description":"","Name":"kg"}
+            ,{"Description":"","Name":"sm"}
+        ]
+    }
+    
 ]
 
 //////////////
@@ -244,13 +244,9 @@ gulpfile.js
 
 
 //////////////
-//EF initial migration cmds
-dotnet ef migrations add InitialCreate
-dotnet ef database update
-
-//Identity DB migrations
-dotnet ef migrations add CreateIdentitySchema --context IdentityContext
-dotnet ef database update --context IdentityContext
+//OrderContext DB migrations
+dotnet ef migrations add CreateIdentitySchema --context OrderContext
+dotnet ef database update --context OrderContext
 
 
 //////////////
@@ -261,7 +257,7 @@ npx webpack
 //////////////
 //DDD decomposition->
     API:
-        MVC (authentication), WebApi, Controllers, SignalRHub
+        WebApi, Controllers
         
     Infrastructure:
         ORMs contexts : [EF];
@@ -288,94 +284,99 @@ npx webpack
     Infrastructure->Domain
 
 
-//////////////
-//Workflow  StackShema,TODO,BACKLOG,DONE
-StackShema:[
-    DDD 
-        sql(ms,postgre),nosql(mongo,neo4j),amqp(rabbit+netservicebus,masstransit),
-        cashing(reddis)
-    
-    front
-        PWA progressive web app
-        (angular,react,vue)
-        (graphql vs REST,?mongoose)
-        (?rendering,?testing)
-]
-
 TODO:[
 
-    09.06.2019 4h20m  -> dockerize
     
+
 ]
 
-BACKLOG:[
-    
-    -> add flattering to automapper, 
-        mapping API command property payload to whole EF object
-            API{"P":{class}} -> EF{class}
-        
-    -> partial update of null web api content properties
-    -> logging
-    -> put,delete commands with url aprameters
-    -> controller status response and human readable responses
-    -> use interface as controller parameter
-        ?is it worth
+BACKLOG/MILESTONES:[
     
 ]
 
 DONE:[
 
-    <- done 02.06.2019 01:53 2h -> PersonAddsPost	
-    <- done 02.06.2019 14:40-14:50 10m -> get posts by person
-    <- done 02.06.2019 12:14-14:40 2h30m -> get posts by blog
-    <- done 02.06.2019 12:14-14:50 2h30m -> get blogs by person
-    <- done 02.06.2019 15:13-15:53 40m -> person removes post
-    <- done 02.06.2019 15:53-16:03 10m -> person updates post
+    chat: [
+        <- done 09.06.2019 1h45m -> signalR and auth user and messages binded
+    ] ~1h45m in 1d
+    
+    worker: [
+        <- done 10.06.2019 01: 24 1h31m -> signalR work queued,started,finished moque
+        <- done 10.06.2019 22: 52 1h12m -> signalR work queue and front edited
+    ] ~2h 40m in 1d
 
-    <- done 04.06.2019 5h -> react boardGame checker
+    orders: [
+        <- done 13.06.2019 5h -> Ef core Orders model, migration and seed Many-to-many
+        <- done 14.06.2019 1h20m -> cqrs add and multiple context Autofac resolve
+        <- done 14.06.2019 40m -> order created
+        <- done 14.06.2019 30m -> props changed
+        <- done 13.06.2019 5h06m -> Ef core Orders model, migration and seed Many-to-many 
+        <- done 14.06.2019 1h20m -> cqrs add and multiple context Autofac resolve
+        <- done 14.06.2019 40m -> order created
+        <- done 15.06.2019 40m -> order accounter interfaces
+        <- done 15.06.2019 1h10m -> order new API, BLL interfaces
+        <- done 15.06.2019 1h5m -> order deliverer, clenup
+        <- done 15.06.2019 1h10m -> order mapping
+        <- done 15.06.2019 1h-> mapping changed
 
-    <- done 04.09.2019 23:53 05.09.2019 2:40 2h50m -> SignalR chat checker
+      
+    ] ~11h in 3d
 
-    <- done 05.06.2019 2h30m -> Login and authenticate template    
-    <- done 06.06.2019 7h22m -> Identity on MVC views with Identity DB migrations
-    <- done 07.06.2019 5h3m -> authorization token and cookie redirect on mvc startup setup
-    <- done 08.06.2019 2h15m -> core mvc with auth and defailt ui mvc           rounig with API/areas for view and controller
-	{
-	
-		=> gen mvc 
-		    dotnet new mvc -o {folder} -au individual
-		=> add areas 
-			options.AreaViewLocationFormats.Add("API/Areas/{2}/Views/{1}/{0}.cshtml");
-		=> remove compatibility 
-			//.SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-		=> move MVC v,c folders
-		=> include 
-			@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-			from _viewimport on every layout
-		=> leave basic routing in startup.cs [
-		  routes.MapRoute(
-               name: "areas",
-               template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
-               );
-               
+    crmvcsb: [
+
+        <- done 02.06.2019 01:53 2h -> PersonAddsPost	
+        <- done 02.06.2019 14:40-14:50 10m -> get posts by person
+        <- done 02.06.2019 12:14-14:40 2h30m -> get posts by blog
+        <- done 02.06.2019 12:14-14:50 2h30m -> get blogs by person
+        <- done 02.06.2019 15:13-15:53 40m -> person removes post
+        <- done 02.06.2019 15:53-16:03 10m -> person updates post
+
+        <- done 04.06.2019 5h -> react boardGame checker
+
+        <- done 04.09.2019 23:53 05.09.2019 2:40 2h50m -> SignalR chat checker
+        <- done 05.06.2019 2h30m -> Login and authenticate template
+        <- done 06.06.2019 7h22m -> Identity on MVC views with Identity DB migrations
+        <- done 07.06.2019 5h3m -> authorization token and cookie redirect on mvc startup setup        
+        <- done 08.06.2019 2h15m -> core mvc with auth and defailt ui mvc 
+            rounig with API/areas for view and controller
+            {            
+                => gen mvc 
+                    dotnet new mvc -o {folder} -au individual
+                => add areas 
+                    options.AreaViewLocationFormats.Add("API/Areas/{2}/Views/{1}/{0}.cshtml");
+                => remove compatibility 
+                    //.SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+                => move MVC v,c folders
+                => include 
+                    @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+                    from _viewimport on every layout
+                => leave basic routing in startup.cs [
                 routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-		]
+                    name: "areas",
+                    template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                    );
+                    
+                        routes.MapRoute(
+                            name: "default",
+                            template: "{controller=Home}/{action=Index}/{id?}");
+                ]
 
-        => dont include in startup.cs
-        it conflict with scafoldede razor pages sigin
+                => dont include in startup.cs
+                it conflict with scafoldede razor pages sigin
 
-            services.AddAuthentication
-                o => CookieAuthenticationDefaults
+                    services.AddAuthentication
+                        o => CookieAuthenticationDefaults
 
+            }
+        <- done 08.06.2019 4h -> move auth
+        <- done 09.06.2019 1h45m -> signalR and auth user and messages binded
+   
+        
+        <- done 12.06.2019 3h30m -> react timer sliders 
+        <- done 12.06.2019 2h -> react todo 
+        
+    ] ~37h 15m in 7d
 
-	}
-    <- done 08.06.2019 4h -> move auth
-
-	<- done 09.06.2019 1h45m -> signalR and auth user and messages binded
-    <- done 10.06.2019 01:24 1h31m -> signalR work queued,started,finished moque
-
-    ~36h in 9d
+    ~51h 50m in 12d
 
 ]

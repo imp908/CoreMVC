@@ -48,7 +48,8 @@ namespace mvccoresb.Infrastructure.EF
 
             modelBuilder.Entity<PostEF>()
             .HasOne(p => p.Blog)
-            .WithMany(p => p.Posts).OnDelete(DeleteBehavior.Cascade);
+            .WithMany(p => p.Posts)
+            .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<PostEF>()
             .Property(s => s.BlogId )
