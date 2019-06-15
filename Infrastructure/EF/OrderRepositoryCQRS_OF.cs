@@ -28,23 +28,24 @@ namespace order.Infrastructure.EF
     {
         DbContext _context;
 
-        public RepositoryEF(DbContext context){
-            _context=context;
+        public RepositoryEF(DbContext context)
+        {
+            _context = context;
         }
-        
-        public IQueryable<T> GetAll<T>(Expression<Func<T,bool>> expression=null) 
+
+        public IQueryable<T> GetAll<T>(Expression<Func<T, bool>> expression = null)
             where T : class
         {
             return (expression == null)
                 ? this._context.Set<T>()
                 : this._context.Set<T>().Where(expression);
 
-        }     
+        }
 
-        public void Add<T> (T item)
+        public void Add<T>(T item)
             where T : class
         {
-            this._context.Set<T>().Add(item);            
+            this._context.Set<T>().Add(item);
         }
 
         public Task<EntityEntry<T>> AddAsync<T>(T item)
@@ -88,20 +89,21 @@ namespace order.Infrastructure.EF
         {
             this._context.Set<T>().UpdateRange(items);
         }
-    
-        public IQueryable<T> QueryByFilter<T>(Expression<Func<T,bool>> expression) 
+
+        public IQueryable<T> QueryByFilter<T>(Expression<Func<T, bool>> expression)
             where T : class
-        {            
+        {
             return this._context.Set<T>().Where(expression);
         }
 
-        public IQueryable<T> SkipTake<T>(int skip=0,int take=10)
+        public IQueryable<T> SkipTake<T>(int skip = 0, int take = 10)
             where T : class
         {
             return this._context.Set<T>().Skip(skip).Take(take);
         }
 
-        public void Save(){
+        public void Save()
+        {
             this._context.SaveChanges();
         }
 
@@ -109,7 +111,7 @@ namespace order.Infrastructure.EF
         {
             return this._context.SaveChangesAsync();
         }
-        
+
         /*Provides identity column manual insert while testing */
         public void SaveIdentity(string tableFullName)
         {
@@ -129,7 +131,8 @@ namespace order.Infrastructure.EF
         internal IRepository _repository;
         internal IMapper _mapper;
 
-        public OrdersManager(){
+        public OrdersManager()
+        {
 
         }
 
@@ -143,7 +146,7 @@ namespace order.Infrastructure.EF
 
     public class OrdersManagerWrite : OrdersManager, IOrdersManagerWrite
     {
-        public OrdersManagerWrite():base(){}
+        public OrdersManagerWrite() : base() { }
         public OrdersManagerWrite(IRepository repository, IMapper mapper)
             : base(repository, mapper)
         {
@@ -155,11 +158,12 @@ namespace order.Infrastructure.EF
             OrderItemDAL order = new OrderItemDAL();
             OrderCreateAPI query = new OrderCreateAPI();
 
-            if(queryIn is OrderCreateAPI){
+            if (queryIn is OrderCreateAPI)
+            {
                 query = queryIn as OrderCreateAPI;
             }
 
-            if(
+            if (
                 query == null
                 || string.IsNullOrEmpty(query.AdressFrom)
                 || string.IsNullOrEmpty(query.AdressTo)
@@ -173,12 +177,13 @@ namespace order.Infrastructure.EF
                 var itemToAdd = new DeliveryItemDAL();
                 itemToAdd = this._repository.GetAll<DeliveryItemDAL>(s => s.Name == query.DelivertyItemName).FirstOrDefault();
 
-                if( itemToAdd == null){
-                    itemToAdd= new DeliveryItemDAL(){Name = query.DelivertyItemName };
+                if (itemToAdd == null)
+                {
+                    itemToAdd = new DeliveryItemDAL() { Name = query.DelivertyItemName };
                     this._repository.Add<DeliveryItemDAL>(itemToAdd);
                     this._repository.Save();
                 }
-                
+
                 if (itemToAdd == null) { throw new NullReferenceException(); }
 
                 foreach (DimensionalUnitAPI d in query.Dimensions)
@@ -190,18 +195,18 @@ namespace order.Infrastructure.EF
                         this._repository.Add<DimensionalUnitDAL>(exist);
                         this._repository.Save();
 
-                            var dimUnit = new DeliveryItemDimensionUnitDAL() { DeliveryItemId = itemToAdd.Id, DimensionalItemId = exist.Id };
-                            this._repository.Add<DeliveryItemDimensionUnitDAL>(dimUnit);
-                            this._repository.Save();
-                            if (dimUnit == null) { throw new NullReferenceException(); }
+                        var dimUnit = new DeliveryItemDimensionUnitDAL() { DeliveryItemId = itemToAdd.Id, DimensionalItemId = exist.Id };
+                        this._repository.Add<DeliveryItemDimensionUnitDAL>(dimUnit);
+                        this._repository.Save();
+                        if (dimUnit == null) { throw new NullReferenceException(); }
                     }
                     if (exist == null) { throw new NullReferenceException(); }
-                
+
                 }
 
                 order = new OrderItemDAL() { Name = "New order" };
                 this._repository.Add<OrderItemDAL>(order);
-                this._repository.Save();            
+                this._repository.Save();
                 if (order == null) { throw new NullReferenceException(); }
 
                 var orderDelivery = new OrdersDeliveryItemsDAL() { OrderId = order.Id, DeliveryId = itemToAdd.Id };
@@ -224,11 +229,11 @@ namespace order.Infrastructure.EF
                 this._repository.Save();
                 if (orderAdress == null) { throw new NullReferenceException(); }
 
-                order = this._repository.GetAll<OrderItemDAL>(s => s.Id == order.Id).FirstOrDefault();      
+                order = this._repository.GetAll<OrderItemDAL>(s => s.Id == order.Id).FirstOrDefault();
                 var orderToUpdate = this._mapper.Map<OrderItemDAL, OrderItemUpdateDAL>(order);
                 this._repository.Update<OrderItemDAL>(order);
                 this._repository.Save();
-               
+
 
             }
             catch (Exception e)
@@ -237,18 +242,18 @@ namespace order.Infrastructure.EF
             }
             return order;
         }
-        
-        public OrderItemDAL UpdateOrder (IOrderUpdateBLL order)
+
+        public OrderItemDAL UpdateOrder(IOrderUpdateBLL order)
         {
             OrderItemDAL result = new OrderItemDAL();
 
             OrderItemDAL orderToUpdate = this._repository.GetAll<OrderItemDAL>(s => s.Id == order.OrderId)
                 .FirstOrDefault();
-            orderToUpdate = this._mapper.Map<OrderUpdateBLL, OrderItemDAL>((OrderUpdateBLL)order,orderToUpdate);
+            orderToUpdate = this._mapper.Map<OrderUpdateBLL, OrderItemDAL>((OrderUpdateBLL)order, orderToUpdate);
             this._repository.Save();
             if (orderToUpdate == null) { throw new NullReferenceException(); }
 
-            return orderToUpdate;            
+            return orderToUpdate;
 
         }
 

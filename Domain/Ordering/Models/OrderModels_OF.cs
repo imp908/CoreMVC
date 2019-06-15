@@ -8,17 +8,17 @@ namespace order.Domain.Models
     public class OrderCreateAPI : IOrderCreateAPI
     {
 
-        public string ServiceType { get; set; } 
+        public string ServiceType { get; set; }
 
         public string AdressFrom { get; set; }
-        public string AdressTo { get; set; }    
+        public string AdressTo { get; set; }
         public string DelivertyItemName { get; set; }
 
         public IList<DimensionalUnitAPI> Dimensions { get; set; }
     }
     public class DimensionalUnitAPI : IDimensionalUnitAPI
     {
-        public string Name {get;set;}
+        public string Name { get; set; }
         public string Description { get; set; }
     }
 
@@ -31,7 +31,7 @@ namespace order.Domain.Models
     }
     public class AddressBLL : IAddressBLL
     {
-        public string Name {get;set;}
+        public string Name { get; set; }
     }
     public class OrderBLL : IOrderBLL
     {
@@ -42,7 +42,7 @@ namespace order.Domain.Models
         public float DaysToDelivery { get; set; }
 
 
-        public IAddressBLL AddressFrom {get;set;}
+        public IAddressBLL AddressFrom { get; set; }
         public IAddressBLL AddressTo { get; set; }
 
     }
@@ -56,7 +56,7 @@ namespace order.Domain.Models
     }
     public class OrderDeliveryTortiseAPI : IOrderDeliveryTortiseAPI
     {
-        
+
         public float DeliveryPriceKoefficient { get; set; }
         public DateTime DeliveryDate { get; set; }
 
@@ -69,24 +69,24 @@ namespace order.Domain.Models
         public float DaysToDelivery { get; set; }
     }
 
-    public class OrderDeliveryTortiseBLL :  IOrderDeliveryTortiseBLL
+    public class OrderDeliveryTortiseBLL : IOrderDeliveryTortiseBLL
     {
         public float DeliveryBasePrice { get; set; } = 150;
-        public float DeliveryPriceKoefficient { get; set; }    
+        public float DeliveryPriceKoefficient { get; set; }
         public float DaysToDelivery { get; set; }
-        public float DeliveryPrice => 
-            this.DeliveryPriceKoefficient!=0 
-                ? this.DeliveryBasePrice * this.DeliveryPriceKoefficient 
+        public float DeliveryPrice =>
+            this.DeliveryPriceKoefficient != 0
+                ? this.DeliveryBasePrice * this.DeliveryPriceKoefficient
                 : this.DeliveryBasePrice;
-        
+
     }
 
     public class AdressAPI : IAdressAPI
     {
-        public string Name { get; set; }     
+        public string Name { get; set; }
     }
     public class OrderAPI : IOrderAPI
-    {  
+    {
         public string Name { get; set; }
 
 
@@ -101,7 +101,7 @@ namespace order.Domain.Models
     /*EF level */
     public interface IGuidEntity
     {
-         Guid Id {get;set;}
+        Guid Id { get; set; }
     }
     public interface INamedEntity
     {
@@ -118,17 +118,18 @@ namespace order.Domain.Models
 
 
 
-    
-    public class AddressDAL 
+
+    public class AddressDAL
     : BaseEntity, IGuidEntity
         , INamedEntity
     {
         public string Name { get; set; }
 
-        public List<OrdersAddressesDAL> Orders {get;set;}
+        public List<OrdersAddressesDAL> Orders { get; set; }
     }
 
-    public class OrderItemUpdateDAL{
+    public class OrderItemUpdateDAL
+    {
         public string Name { get; set; }
 
 
@@ -143,15 +144,15 @@ namespace order.Domain.Models
         : BaseEntity, IGuidEntity
         , INamedEntity
     {
-        public string Name { get; set; }              
+        public string Name { get; set; }
 
-        public float? DaysToDelivery {get;set;}
-        
+        public float? DaysToDelivery { get; set; }
+
         public float? DeliveryPrice { get; set; }
 
 
         public List<OrdersDeliveryItemsDAL> DeliveryItems { get; set; }
-        public OrdersAddressesDAL Direction {get;set;}
+        public OrdersAddressesDAL Direction { get; set; }
     }
 
     public class OrdersAddressesDAL : BaseEntity, IGuidEntity
@@ -160,19 +161,19 @@ namespace order.Domain.Models
         public Guid AddressFromId { get; set; }
         public AddressDAL AddressTo { get; set; }
         public Guid AddressToId { get; set; }
-        public OrderItemDAL Order {get;set;}
-        public Guid OrderId {get;set;}
-        
+        public OrderItemDAL Order { get; set; }
+        public Guid OrderId { get; set; }
+
     }
 
     public class DeliveryItemDAL : BaseEntity, IGuidEntity
     {
         public string Name { get; set; }
-        
-        
-        public List<DeliveryItemDimensionUnitDAL> Parameters {get;set;}
-        
-        public List<OrdersDeliveryItemsDAL> Orders {get;set;}
+
+
+        public List<DeliveryItemDimensionUnitDAL> Parameters { get; set; }
+
+        public List<OrdersDeliveryItemsDAL> Orders { get; set; }
 
     }
 
@@ -180,45 +181,45 @@ namespace order.Domain.Models
         : BaseEntity, IGuidEntity
     {
         public OrderItemDAL Order { get; set; }
-        public Guid OrderId {get;set;}
+        public Guid OrderId { get; set; }
         public DeliveryItemDAL Delivery { get; set; }
-        public Guid DeliveryId {get;set;}
+        public Guid DeliveryId { get; set; }
     }
 
     public class DimensionalUnitDAL
     : BaseEntity, IGuidEntity
     , INamedEntity
     {
-        public string Name {get;set;}
+        public string Name { get; set; }
         public string Description { get; set; }
 
-        
-        public List<DeliveryItemDimensionUnitDAL> DeliveryItems {get;set;}
 
-        public List<UnitsConvertionDAL> Convertions {get;set;}
+        public List<DeliveryItemDimensionUnitDAL> DeliveryItems { get; set; }
+
+        public List<UnitsConvertionDAL> Convertions { get; set; }
     }
-    
+
     public class DeliveryItemDimensionUnitDAL
         : BaseEntity, IGuidEntity
     {
-        public DeliveryItemDAL DelivertyItem {get;set;}
+        public DeliveryItemDAL DelivertyItem { get; set; }
         public Guid DeliveryItemId { get; set; }
-        public DimensionalUnitDAL Unit {get;set;}
-        public Guid DimensionalItemId {get;set;}
+        public DimensionalUnitDAL Unit { get; set; }
+        public Guid DimensionalItemId { get; set; }
 
-        public float UnitAmount {get;set;}
+        public float UnitAmount { get; set; }
     }
 
 
     public class UnitsConvertionDAL : BaseEntity, IGuidEntity
     {
-        public DimensionalUnitDAL From {get;set;}
-        public Guid FromId {get;set;}
+        public DimensionalUnitDAL From { get; set; }
+        public Guid FromId { get; set; }
         public DimensionalUnitDAL To { get; set; }
         public Guid ToId { get; set; }
-        
-        public float ConvertionRate {get;set;}
+
+        public float ConvertionRate { get; set; }
     }
-    
+
 
 }

@@ -8,7 +8,7 @@ namespace order.Domain.Interfaces
 {
 
     using order.Domain.Models;
-    
+
     public interface IRepository
     {
         IQueryable<T> GetAll<T>(Expression<Func<T, bool>> expression = null)
@@ -45,7 +45,7 @@ namespace order.Domain.Interfaces
     }
 
 
-    
+
     /*Model for accounter module do counting delivery price and time for delivery with addresses from to*/
     public interface IAdressAPI
     {
@@ -95,7 +95,7 @@ namespace order.Domain.Interfaces
         float DeliveryPrice { get; set; }
         float DaysToDelivery { get; set; }
     }
-    public interface IOrderDeliveryTortiseBLL 
+    public interface IOrderDeliveryTortiseBLL
     {
         float DeliveryBasePrice { get; set; }
         float DeliveryPriceKoefficient { get; set; }
@@ -105,7 +105,7 @@ namespace order.Domain.Interfaces
 
     public interface IOrderBLL
     {
-        Guid OrderId {get;set;}
+        Guid OrderId { get; set; }
         string Name { get; set; }
 
         float DeliveryPrice { get; set; }
@@ -123,7 +123,7 @@ namespace order.Domain.Interfaces
 
     public interface IAddressBLL
     {
-        string Name {get;set;}
+        string Name { get; set; }
     }
 
     /*SQRS wrapper above EF dbContext */
@@ -140,7 +140,7 @@ namespace order.Domain.Interfaces
         IOrderDeliveryTortiseAPI AddOrderTortiseService(IOrderCreateAPI order);
     }
 
-    /* Accounter of price and delivery */    
+    /* Accounter of price and delivery */
     public interface IBirdAccounter
     {
         IOrderDeliveryBirdBLL Count(IOrderBLL Order);
@@ -149,5 +149,5 @@ namespace order.Domain.Interfaces
     {
         IOrderDeliveryTortiseBLL Count(IOrderBLL Order);
     }
-  
+
 }
