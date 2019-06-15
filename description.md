@@ -1,17 +1,4 @@
 
-//pckages
-    dotnet add package Newtonsoft.Json --version 12.0.2
-    dotnet add package Autofac.Extensions.DependencyInjection --version 4.4.0
-    dotnet add package AutoMapper --version 8.1.0
-    dotnet add package AutoMapper.Extensions.Microsoft.DependencyInjection --version 6.1.0
-    dotnet add package Microsoft.AspNetCore.SignalR
-
-//js packages
-    npm install --save-dev react react-dom
-    npm install --save-dev gulp gulp-babela
-    npm install --save-dev webpack webpack-dev-server webpack-cli webpack-stream html-webpack-plugin clean-webpack-plugin
-    npm install --save-dev @babel/core @babel/cli @babel/plugin-proposal-class-properties @babel/preset-env @babel/preset-react @babel/plugin-transform-arrow-functions @babel/plugin-transform-classes @babel/plugin-proposal-function-bind
-
 //////////////
 //MVC WebApi Folders, routing and URLs:
 Folders:
@@ -257,13 +244,9 @@ gulpfile.js
 
 
 //////////////
-//EF initial migration cmds
-dotnet ef migrations add InitialCreate
-dotnet ef database update
-
-//Identity DB migrations
-dotnet ef migrations add CreateIdentitySchema --context IdentityContext
-dotnet ef database update --context IdentityContext
+//OrderContext DB migrations
+dotnet ef migrations add CreateIdentitySchema --context OrderContext
+dotnet ef database update --context OrderContext
 
 
 //////////////
@@ -274,7 +257,7 @@ npx webpack
 //////////////
 //DDD decomposition->
     API:
-        MVC (authentication), WebApi, Controllers, SignalRHub
+        WebApi, Controllers
         
     Infrastructure:
         ORMs contexts : [EF];
@@ -301,51 +284,28 @@ npx webpack
     Infrastructure->Domain
 
 
-//////////////
-//Workflow  StackShema,TODO,BACKLOG,DONE
-StackShema:[
-    DDD 
-        sql(ms,postgre),nosql(mongo,neo4j),amqp(rabbit+netservicebus,masstransit),
-        cashing(reddis)
-    
-    front
-        PWA progressive web app
-        (angular,react,vue)
-        (graphql vs REST,?mongoose)
-        (?rendering,?testing)
-]
-
 TODO:[
 
-    09.06.2019 4h20m  -> dockerize
     
+
 ]
 
-BACKLOG:[
-    
-    -> add flattering to automapper, 
-        mapping API command property payload to whole EF object
-            API{"P":{class}} -> EF{class}
-        
-    -> partial update of null web api content properties
-    -> logging
-    -> put,delete commands with url aprameters
-    -> controller status response and human readable responses
-    -> use interface as controller parameter
-        ?is it worth
+BACKLOG/MILESTONES:[
     
 ]
 
 DONE:[
 
-    <- done 02.06.2019 01:53 2h -> PersonAddsPost	
-    <- done 02.06.2019 14:40-14:50 10m -> get posts by person
-    <- done 02.06.2019 12:14-14:40 2h30m -> get posts by blog
-    <- done 02.06.2019 12:14-14:50 2h30m -> get blogs by person
-    <- done 02.06.2019 15:13-15:53 40m -> person removes post
-    <- done 02.06.2019 15:53-16:03 10m -> person updates post
+    <- done 13.06.2019 5h06m -> Ef core Orders model, migration and seed Many-to-many 
+    <- done 14.06.2019 1h20m -> cqrs add and multiple context Autofac resolve
+    <- done 14.06.2019 40m -> order created
+    <- done 15.06.2019 40m -> order accounter interfaces
+    <- done 15.06.2019 1h10m -> order new API, BLL interfaces
+    <- done 15.06.2019 1h5m -> order deliverer, clenup
+    <- done 15.06.2019 1h10m -> order mapping
+    <- done 15.06.2019 1h-> mapping changed
 
-    <- done 04.06.2019 5h -> react boardGame checker
+    ~11h in 3d
 
     <- done 04.09.2019 23:53 05.09.2019 2:40 2h50m -> SignalR chat checker
 

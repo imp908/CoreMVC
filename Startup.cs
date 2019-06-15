@@ -1,20 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
+
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using mvccoresb.Data;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-
-using Microsoft.AspNetCore.Authentication.Cookies;
 
 using Microsoft.AspNetCore.Mvc.Razor;
 
@@ -29,14 +22,15 @@ namespace mvccoresb
 
     using mvccoresb.Infrastructure.SignalR;
 
-
-    using mvccoresb.Domain.Interfaces;
-    using mvccoresb.Domain.TestModels;
-    using chat.Domain.Models;
-    using mvccoresb.Infrastructure.EF;    
-
     using Microsoft.EntityFrameworkCore;
 
+<<<<<<< HEAD
+=======
+    using order.Domain.Services;
+    using order.Domain.Models;
+    using order.Domain.Interfaces;
+    using order.Infrastructure.EF;
+>>>>>>> orders
 
     public class Startup
     {
@@ -68,18 +62,16 @@ namespace mvccoresb
                 options.AreaViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
             });
 
-            /*Authentication authorization provider */
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("LocalAuthConnection")));
-           
+
+<<<<<<< HEAD
+=======
+            services.AddDbContext<OrderContext>(o =>
+            o.UseSqlServer(
+                Configuration.GetConnectionString("LocalOrderConnection")));
+
             services.AddMvc();
 
-            /*Test db context */
-            services.AddDbContext<TestContext>(o =>
-               o.UseSqlServer(
-                   Configuration.GetConnectionString("LocalDbConnection")));
-
+>>>>>>> orders
             /*SignalR registration*/
             services.AddSignalR();
 
@@ -103,7 +95,7 @@ namespace mvccoresb
             autofacContainer.RegisterInstance(mapper).As<IMapper>();
 
             try{
-            this.ApplicationContainer = autofacContainer.Build();
+                this.ApplicationContainer = autofacContainer.Build();
             }catch(Exception e)
             {
 
@@ -115,20 +107,28 @@ namespace mvccoresb
         public ContainerBuilder ConfigureAutofac(IServiceCollection services, ContainerBuilder autofacContainer)
         {
 
+<<<<<<< HEAD
             /**EF,repo and UOW reg */
             autofacContainer.RegisterType<TestContext>().As<DbContext>().WithMetadata("Name", "TestRepo")
                 .InstancePerLifetimeScope();
      
+=======
+            /**EF context , and repo registration */       
+            autofacContainer.RegisterType<OrderContext>()
+                .As<DbContext>().WithMetadata("Name", "OrderRepo")
+                .InstancePerLifetimeScope();
+>>>>>>> orders
 
             autofacContainer.RegisterType<RepositoryEF>()
                 .As<IRepository>()                
                 .InstancePerLifetimeScope();
 
-            autofacContainer.RegisterType<CQRSBloggingWrite>()
-                .As<ICQRSBloggingWrite>().InstancePerLifetimeScope();
-            autofacContainer.RegisterType<CQRSBloggingRead>()
-                .As<ICQRSBloggingRead>().InstancePerLifetimeScope();
+      
+            /*Orders registration */
+            autofacContainer.RegisterType<Deliverer>()
+                .As<IDeliverer>().InstancePerLifetimeScope();
 
+<<<<<<< HEAD
             //*DAL->BLL reg */
             autofacContainer.RegisterType<BlogEF>()
                 .As<IBlogEF>().InstancePerLifetimeScope();
@@ -136,6 +136,41 @@ namespace mvccoresb
                 .As<IBlogBLL>().InstancePerLifetimeScope();
             autofacContainer.RegisterType<PostBLL>()
                 .As<IPostBLL>().InstancePerLifetimeScope();          
+=======
+            autofacContainer.RegisterType<OrdersManagerWrite>()
+                .As<IOrdersManagerWrite>()
+                .WithParameter(new TypedParameter(typeof(RepositoryEF),
+                    new RepositoryEF(
+                        new OrderContext(new DbContextOptionsBuilder<OrderContext>()
+                            .UseSqlServer(Configuration.GetConnectionString("LocalOrderConnection")).Options)
+                    )
+                ))
+                .InstancePerLifetimeScope();
+>>>>>>> orders
+
+            autofacContainer.RegisterType<BirdAccounter>()
+                .As<IBirdAccounter>().InstancePerLifetimeScope();
+            autofacContainer.RegisterType<TortiseAccounter>()
+                .As<ITortiseAccounter>().InstancePerLifetimeScope();
+
+            
+            autofacContainer.RegisterType<OrderDeliveryBirdBLL>()
+                .As<IOrderDeliveryBirdBLL>().InstancePerLifetimeScope();
+            autofacContainer.RegisterType<OrderBLL>()
+                .As<IOrderBLL>().InstancePerLifetimeScope();
+            autofacContainer.RegisterType<OrderDeliveryTortiseBLL>()
+                .As<IOrderDeliveryTortiseBLL>().InstancePerLifetimeScope();
+            
+            autofacContainer.RegisterType<OrderDeliveryBirdAPI>()
+                .As<IOrderDeliveryBirdAPI>().InstancePerLifetimeScope();
+            autofacContainer.RegisterType<OrderCreateAPI>()
+                .As<IOrderCreateAPI>().InstancePerLifetimeScope();
+            autofacContainer.RegisterType<OrderDeliveryTortiseAPI>()
+                .As<IOrderDeliveryTortiseAPI>().InstancePerLifetimeScope();       
+
+            autofacContainer.RegisterType<DimensionalUnitAPI>()
+                .As<IDimensionalUnitAPI>().InstancePerLifetimeScope();
+        
 
             return autofacContainer;
         }
@@ -143,6 +178,7 @@ namespace mvccoresb
         public MapperConfiguration ConfigureAutoMapper()
         {
             return new MapperConfiguration(cfg =>
+<<<<<<< HEAD
             {
                 //cfg.AddProfiles(typeof(BlogEF), typeof(BlogBLL));
                 cfg.CreateMap<BlogEF, BlogBLL>()
@@ -162,6 +198,25 @@ namespace mvccoresb
                 cfg.CreateMap<BlogEF, BlogAPI>();
                 cfg.CreateMap<PostEF, PostAPI>().ReverseMap();
 
+=======
+            {                                             
+                cfg.CreateMap<OrderItemDAL, OrderItemUpdateDAL>();
+                
+                cfg.CreateMap<OrderItemDAL, OrderBLL>().ForMember(dest => dest.AddressFrom,m => m.MapFrom(src => src.Direction.AddressFrom)).ReverseMap();
+                cfg.CreateMap<OrderItemDAL, OrderBLL>().ForMember(dest => dest.AddressTo, m => m.MapFrom(src => src.Direction.AddressTo)).ReverseMap();
+                cfg.CreateMap<OrderItemDAL, OrderBLL>().ForMember(dest => dest.OrderId, m => m.MapFrom(src => src.Id)).ReverseMap();
+                
+                cfg.CreateMap<OrderDeliveryBirdBLL, OrderUpdateBLL>();
+                cfg.CreateMap<OrderUpdateBLL, OrderItemDAL>();
+
+                cfg.CreateMap<OrderDeliveryTortiseBLL, OrderUpdateBLL>();
+                cfg.CreateMap<OrderItemDAL, OrderDeliveryTortiseAPI>().ForMember(dest => dest.DeliveryDate, m => m.MapFrom(
+                    src => (System.DateTime.Now.AddDays(src.DaysToDelivery!=null ? (double)src.DaysToDelivery : 0)
+                )));
+
+                cfg.CreateMap<OrderDeliveryBirdBLL, OrderDeliveryBirdAPI>();
+                cfg.CreateMap<OrderDeliveryTortiseBLL, OrderDeliveryTortiseAPI>();
+>>>>>>> orders
             });
         }
 
@@ -185,6 +240,9 @@ namespace mvccoresb
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
+            try
+            {
+          
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -196,6 +254,11 @@ namespace mvccoresb
                     template: "{controller=Home}/{action=Index}/{id?}");
 
             });
+            }
+            catch (Exception e)
+            {
+
+            }
 
             /* must be added after use mvc */
             app.UseSignalR(routes =>
@@ -206,18 +269,6 @@ namespace mvccoresb
         }
     }
 
-    public static class AutoMapperStaticConfiguration
-    {
-        public static void Configure()
-        {
-            /*Mapper initialize with Static initialization*/
-            Mapper.Initialize(cfg =>
-            {
-                cfg.CreateMap<BlogEF, BlogBLL>();
-                cfg.CreateMap<PostEF, PostBLL>();
-            });
-        }
-    }
 
     public class CustomViewLocation : IViewLocationExpander
     {
