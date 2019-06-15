@@ -19,12 +19,8 @@ using AutoMapper;
 namespace mvccoresb.Infrastructure.EF
 {
 
-
     using mvccoresb.Domain.TestModels;    
-
     using mvccoresb.Domain.Interfaces;    
-
-
 
     public class RepositoryEF : IRepository
     {

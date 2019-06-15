@@ -24,13 +24,13 @@ namespace mvccoresb
 
     using Microsoft.EntityFrameworkCore;
 
-<<<<<<< HEAD
-=======
+    using mvccoresb.Infrastructure.EF;
+    using mvccoresb.Domain.TestModels;
+
     using order.Domain.Services;
     using order.Domain.Models;
     using order.Domain.Interfaces;
     using order.Infrastructure.EF;
->>>>>>> orders
 
     public class Startup
     {
@@ -63,15 +63,12 @@ namespace mvccoresb
             });
 
 
-<<<<<<< HEAD
-=======
             services.AddDbContext<OrderContext>(o =>
             o.UseSqlServer(
                 Configuration.GetConnectionString("LocalOrderConnection")));
 
             services.AddMvc();
 
->>>>>>> orders
             /*SignalR registration*/
             services.AddSignalR();
 
@@ -107,17 +104,14 @@ namespace mvccoresb
         public ContainerBuilder ConfigureAutofac(IServiceCollection services, ContainerBuilder autofacContainer)
         {
 
-<<<<<<< HEAD
             /**EF,repo and UOW reg */
             autofacContainer.RegisterType<TestContext>().As<DbContext>().WithMetadata("Name", "TestRepo")
                 .InstancePerLifetimeScope();
      
-=======
             /**EF context , and repo registration */       
             autofacContainer.RegisterType<OrderContext>()
                 .As<DbContext>().WithMetadata("Name", "OrderRepo")
                 .InstancePerLifetimeScope();
->>>>>>> orders
 
             autofacContainer.RegisterType<RepositoryEF>()
                 .As<IRepository>()                
@@ -128,7 +122,6 @@ namespace mvccoresb
             autofacContainer.RegisterType<Deliverer>()
                 .As<IDeliverer>().InstancePerLifetimeScope();
 
-<<<<<<< HEAD
             //*DAL->BLL reg */
             autofacContainer.RegisterType<BlogEF>()
                 .As<IBlogEF>().InstancePerLifetimeScope();
@@ -136,7 +129,6 @@ namespace mvccoresb
                 .As<IBlogBLL>().InstancePerLifetimeScope();
             autofacContainer.RegisterType<PostBLL>()
                 .As<IPostBLL>().InstancePerLifetimeScope();          
-=======
             autofacContainer.RegisterType<OrdersManagerWrite>()
                 .As<IOrdersManagerWrite>()
                 .WithParameter(new TypedParameter(typeof(RepositoryEF),
@@ -146,7 +138,6 @@ namespace mvccoresb
                     )
                 ))
                 .InstancePerLifetimeScope();
->>>>>>> orders
 
             autofacContainer.RegisterType<BirdAccounter>()
                 .As<IBirdAccounter>().InstancePerLifetimeScope();
@@ -178,7 +169,6 @@ namespace mvccoresb
         public MapperConfiguration ConfigureAutoMapper()
         {
             return new MapperConfiguration(cfg =>
-<<<<<<< HEAD
             {
                 //cfg.AddProfiles(typeof(BlogEF), typeof(BlogBLL));
                 cfg.CreateMap<BlogEF, BlogBLL>()
@@ -198,8 +188,7 @@ namespace mvccoresb
                 cfg.CreateMap<BlogEF, BlogAPI>();
                 cfg.CreateMap<PostEF, PostAPI>().ReverseMap();
 
-=======
-            {                                             
+                                                       
                 cfg.CreateMap<OrderItemDAL, OrderItemUpdateDAL>();
                 
                 cfg.CreateMap<OrderItemDAL, OrderBLL>().ForMember(dest => dest.AddressFrom,m => m.MapFrom(src => src.Direction.AddressFrom)).ReverseMap();
@@ -216,7 +205,6 @@ namespace mvccoresb
 
                 cfg.CreateMap<OrderDeliveryBirdBLL, OrderDeliveryBirdAPI>();
                 cfg.CreateMap<OrderDeliveryTortiseBLL, OrderDeliveryTortiseAPI>();
->>>>>>> orders
             });
         }
 
