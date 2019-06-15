@@ -296,68 +296,74 @@ BACKLOG/MILESTONES:[
 
 DONE:[
 
-    <- done 13.06.2019 5h06m -> Ef core Orders model, migration and seed Many-to-many 
-    <- done 14.06.2019 1h20m -> cqrs add and multiple context Autofac resolve
-    <- done 14.06.2019 40m -> order created
-    <- done 15.06.2019 40m -> order accounter interfaces
-    <- done 15.06.2019 1h10m -> order new API, BLL interfaces
-    <- done 15.06.2019 1h5m -> order deliverer, clenup
-    <- done 15.06.2019 1h10m -> order mapping
-    <- done 15.06.2019 1h-> mapping changed
+    orders:        
+    [
+        <- done 13.06.2019 5h -> Ef core Orders model, migration and seed Many-to-many
+        <- done 14.06.2019 1h20m -> cqrs add and multiple context Autofac resolve
+        <- done 14.06.2019 40m -> order created
+        <- done 14.06.2019 30m -> props changed
+        <- done 13.06.2019 5h06m -> Ef core Orders model, migration and seed Many-to-many 
+        <- done 14.06.2019 1h20m -> cqrs add and multiple context Autofac resolve
+        <- done 14.06.2019 40m -> order created
+        <- done 15.06.2019 40m -> order accounter interfaces
+        <- done 15.06.2019 1h10m -> order new API, BLL interfaces
+        <- done 15.06.2019 1h5m -> order deliverer, clenup
+        <- done 15.06.2019 1h10m -> order mapping
+        <- done 15.06.2019 1h-> mapping changed
 
+      
+    ]
     ~11h in 3d
 
-    <- done 04.09.2019 23:53 05.09.2019 2:40 2h50m -> SignalR chat checker
+    crmvcsb[
 
-    <- done 05.06.2019 2h30m -> Login and authenticate template    
-    <- done 06.06.2019 7h22m -> Identity on MVC views with Identity DB migrations
-    <- done 07.06.2019 5h3m -> authorization token and cookie redirect on mvc startup setup
-    <- done 08.06.2019 2h15m -> core mvc with auth and defailt ui mvc           rounig with API/areas for view and controller
-	{
-	
-		=> gen mvc 
-		    dotnet new mvc -o {folder} -au individual
-		=> add areas 
-			options.AreaViewLocationFormats.Add("API/Areas/{2}/Views/{1}/{0}.cshtml");
-		=> remove compatibility 
-			//.SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-		=> move MVC v,c folders
-		=> include 
-			@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-			from _viewimport on every layout
-		=> leave basic routing in startup.cs [
-		  routes.MapRoute(
-               name: "areas",
-               template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
-               );
-               
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-		]
+        <- done 04.09.2019 23:53 05.09.2019 2:40 2h50m -> SignalR chat checker
+        <- done 05.06.2019 2h30m -> Login and authenticate template
+        <- done 06.06.2019 7h22m -> Identity on MVC views with Identity DB migrations
+        <- done 07.06.2019 5h3m -> authorization token and cookie redirect on mvc startup setup        
+        <- done 08.06.2019 2h15m -> core mvc with auth and defailt ui mvc           rounig with API/areas for view and controller
+        {
+        
+            => gen mvc 
+                dotnet new mvc -o {folder} -au individual
+            => add areas 
+                options.AreaViewLocationFormats.Add("API/Areas/{2}/Views/{1}/{0}.cshtml");
+            => remove compatibility 
+                //.SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            => move MVC v,c folders
+            => include 
+                @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+                from _viewimport on every layout
+            => leave basic routing in startup.cs [
+            routes.MapRoute(
+                name: "areas",
+                template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                );
+                
+                    routes.MapRoute(
+                        name: "default",
+                        template: "{controller=Home}/{action=Index}/{id?}");
+            ]
 
-        => dont include in startup.cs
-        it conflict with scafoldede razor pages sigin
+            => dont include in startup.cs
+            it conflict with scafoldede razor pages sigin
 
-            services.AddAuthentication
-                o => CookieAuthenticationDefaults
+                services.AddAuthentication
+                    o => CookieAuthenticationDefaults
 
 
-	}
-    <- done 08.06.2019 4h -> move auth
+        }
+        <- done 08.06.2019 4h -> move auth
+        <- done 09.06.2019 1h45m -> signalR and auth user and messages binded
+        <- done 10.06.2019 01:24 1h31m -> signalR work queued,started,finished moque
+        <- done 10.06.2019 22:52 1h12m -> signalR work queue and front edited
+        
+        <- done 12.06.2019 3h30m -> react timer sliders 
+        <- done 12.06.2019 2h -> react todo 
+        
+    ]
+    ~32h 50m in 8d
 
-    <- done 09.06.2019 1h45m -> signalR and auth user and messages binded
-    <- done 10.06.2019 01:24 1h31m -> signalR work queued,started,finished moque
-	<- done 10.06.2019 22:52 1h12m -> signalR work queue and front edited
-	
-    <- done 12.06.2019 3h30m -> react timer sliders 
-    <- done 12.06.2019 2h -> react todo 
-
-    <- done 13.06.2019 5h -> Ef core Orders model, migration and seed Many-to-many
-    <- done 14.06.2019 1h20m -> cqrs add and multiple context Autofac resolve
-    <- done 14.06.2019 40m -> order created
-    <- done 14.06.2019 30m -> props changed
-
-    ~54h in 12d
+    ~43h 50m in 11d
 
 ]
