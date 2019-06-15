@@ -65,31 +65,3 @@ namespace mvccoresb.Domain.Interfaces
     }
     
 }
-
-
-namespace order.Domain.Interfaces
-{
-
-    public class IOrderCreateAPI
-    {
-        public string AdressFrom { get; set; }
-        public string AdressTo { get; set; }
-        public string DelivertyItemName { get; set; }
-
-        public IList<IDimensionalUnitAPI> Dimensions { get; set; }
-    }
-    public interface IDimensionalUnitAPI
-    {
-        string Name { get; set; }
-        string Description { get; set; }
-    }
-    public interface IOrderItemAPI
-    {
-        float DeliveryPrice { get; set; }
-        float DaysToDelivery { get; set; }
-    }
-    public interface IOrdersManagerWrite
-    {
-        IOrderItemAPI AddOrder(IOrderCreateAPI query);
-    }
-}
