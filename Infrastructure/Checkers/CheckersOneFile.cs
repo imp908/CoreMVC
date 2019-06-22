@@ -119,7 +119,15 @@ namespace NetPlatformCheckers
 
 
     /* overriding */
+    
+    // not falls to base but overrides in cases
+    // base as child override
+    // base as childlvlN override
+    // interface of base as child
+     
     /*--------------------------------------------- */
+
+
     public class parent
     {
 
@@ -185,6 +193,171 @@ namespace NetPlatformCheckers
            System.Diagnostics.Trace.WriteLine($"parentAsChild1IsParent: {parentAsChild1IsParent}");
            System.Diagnostics.Trace.WriteLine($"parentAsChild1IsChild1: {parentAsChild1IsChild1}");
            System.Diagnostics.Trace.WriteLine($"childIsParent: {childIsParent}");
+        }
+    }
+
+
+    //Linear inheritance from interface 
+
+    interface IA { void A(); }
+
+    public class AC : IA
+    {
+        public void A() { System.Diagnostics.Trace.WriteLine("A"); }
+    }
+
+    public class BC : AC
+    {
+        public void A() { System.Diagnostics.Trace.WriteLine("B"); }
+    }
+    //overrides 
+    public class CC : BC, IA
+    {
+        public void A() { System.Diagnostics.Trace.WriteLine("C"); }
+    }
+    //Also overrides
+    public class DD : AC, IA
+    {
+        public void A() { System.Diagnostics.Trace.WriteLine("D"); }
+    }
+    public static class LinearInheritance
+    {
+        public static void GO()
+        {
+            AC a = new AC();
+            AC b = new BC();
+            AC c = new CC();
+            AC d = new DD();
+
+            a.A(); b.A(); c.A(); d.A();
+
+            IA iac = new AC();
+            IA ibc = new BC();
+            IA icc = new CC();
+            IA idd = new DD();
+
+            iac.A(); ibc.A(); icc.A(); idd.A();
+        }
+    }
+
+
+
+    //Multiple Interfaces and childs of childs
+    public interface ia{
+        void mA();
+    }
+    public interface ib{
+        void mB();
+    }
+
+    public class A : ia, ib{
+        public void mA(){
+            System.Diagnostics.Trace.WriteLine("a in A");
+        }
+        public virtual void mB(){
+            System.Diagnostics.Trace.WriteLine("b in A");
+        }
+    }
+
+
+    public class B : A
+    {
+        public void mA(){
+            System.Diagnostics.Trace.WriteLine("a in B");
+        }
+        public void mB(){
+            System.Diagnostics.Trace.WriteLine("b in B");
+        }
+    }
+    public class C: A, ia{
+        public void mA(){
+            System.Diagnostics.Trace.WriteLine("a in C");
+        }
+        public new void mB()
+        {
+            System.Diagnostics.Trace.WriteLine("b in C");
+        }
+    }
+    public class D:A{
+        public void mA()
+        {
+            System.Diagnostics.Trace.WriteLine("a in D");
+        }
+        public override void mB()
+        {
+            System.Diagnostics.Trace.WriteLine("b in D");
+        }
+    }
+    public class E:A, ib{
+        public void mA()
+        {
+            System.Diagnostics.Trace.WriteLine("a in E");
+        }
+        public new void mB()
+        {
+            System.Diagnostics.Trace.WriteLine("b in E");
+        }
+    }
+
+    public class D1 : D
+    {
+
+    }
+    public class D2 : D{
+        public override void mB()
+        {
+            System.Diagnostics.Trace.WriteLine("b in D2");
+        } 
+    }
+
+    public static class InheritanceOverridingWithInterfaces {
+        public static void GO()
+        {
+System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
+            A aFromB = new B();
+            A aFormC = new C();
+            A aFromD = new D();
+            A aFromE = new E();
+
+            ia iaFromB = new B();
+            ia iaFromC = new C();
+            ia iaFromD = new D();
+            ia iaFromE = new E();
+
+            ib ibFromB = new B();
+            ib ibFromC = new C();
+            ib ibFromD = new D();
+            ib ibFromE = new E();
+
+            A aFromD1 = new D1();
+            A aFromD2 = new D2();
+
+            //all others to base a in A and b in A
+            aFromB.mA();
+            aFromB.mB();
+            aFormC.mA(); 
+            aFormC.mB(); 
+            aFromD.mA(); 
+            aFromD.mB(); // b in D
+            aFromE.mA(); 
+            aFromE.mB();
+            aFromD1.mA();
+            aFromD1.mB(); // b in D
+            aFromD2.mA();
+            aFromD2.mB(); // b in D2
+
+            //all others to base
+            iaFromB.mA();
+            iaFromC.mA(); // a in C
+            iaFromD.mA();
+            iaFromE.mA();
+
+            //all others to base
+            ibFromB.mB();
+            ibFromC.mB();
+            ibFromD.mB(); // b in D
+            ibFromE.mB(); // b in E
+
         }
     }
 
@@ -1455,7 +1628,7 @@ namespace LINQtoObjectsCheck
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public DateTime SomeDate { get; set; }
+        public DateTime SomeDate { get; set; }        
     };
 
 
@@ -1873,6 +2046,20 @@ namespace LINQtoObjectsCheck
 
         }
 
+        public static void DeferredCheck(){
+System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
+            List<Item> items = new List<Item>(){
+                new Item(){Id=0, Name="nm1"},new Item(){Id=1,Name="nm2"},new Item(){Id=2,Name="nm3"},new Item(){Id=1,Name="nm4"}
+            };
+            int id = 2;
+            var itemById = items.Where(s => s.Id == id);
+
+            id = 1;
+            foreach(var i in itemById){
+                System.Diagnostics.Trace.WriteLine(i.Name);
+                //nm2 nm4
+            };
+        }
 
     }
 
@@ -2363,7 +2550,106 @@ namespace KATAS{
         }
     }
     
+    //Kasper
+    public class StringCount{
+        public static void GO(string input){
+            Dictionary<char,int> result = new Dictionary<char,int>();
+            foreach(char ch in input){
+                if(!result.ContainsKey(ch)){
+                    result.Add(ch,1);
+                }else{
+                    result[ch] += 1;
+                }
+            }
+        }
+    }
+    
+    //OZONe
+    public static class WordsCount{
+        static List<string> input = new List<string>(){"ABC","ACB","ABCD","ABD","ABCE","CBA"};
+        
+        internal class Item {
+            internal string itemRef{get;set;}
+            internal int count {get;set;}
+        }
+        static Dictionary<int,Item> items = new Dictionary<int, Item>();
+        public static void GO(){
+            foreach(var str in input){
+                var hash = str.GetHashCode();
+                string newStr = new string(str.OrderBy( c => c).ToArray());
 
+                var alg = System.Security.Cryptography.SHA256.Create();
+                byte[] hashBytes = alg.ComputeHash(Encoding.UTF8.GetBytes(newStr));                
+                int hashNew = BitConverter.ToInt32(hashBytes);
+
+                if(!items.ContainsKey(hashNew)){
+items.Add(hashNew,new Item{itemRef=str, count=1});
+                }else{
+items[hashNew].count+=1;
+                }
+            }
+
+            items.Select(s => new { s.Value.itemRef,s.Value.count})
+            .ToList()
+            .ForEach(s => 
+                System.Diagnostics.Trace.WriteLine($"Itme entry count: {s.itemRef} {s.count}")
+            );
+
+        }
+
+    }
+
+    //chars
+    public static class Chars{
+        public static void GO(){
+            StreamWriter sw = new StreamWriter("output1.txt");
+            
+
+            byte[] bites = {0X0000,0X0001,0X0002,0X0003,0X0003,0X0061};
+            char[] charsFromBite = BitConverter.ToString(bites).ToCharArray();
+
+            char[] chars = { '\u0061' , '\u0308' }; 
+
+            chars = chars.Union(charsFromBite).ToArray();
+            string str = new string(chars);
+
+            byte[] bytesFromChars = Encoding.UTF8.GetBytes(chars);
+            string stringFromByte = BitConverter.ToString(bytesFromChars);
+
+            sw.WriteLine(str);
+            
+            sw.WriteLine($"Encoding.UTF8: {stringFromByte}");
+            sw.WriteLine($"Encoding.UTF32: {BitConverter.ToString(Encoding.UTF32.GetBytes(chars))}");
+            sw.WriteLine($"Encoding.Unicode: {BitConverter.ToString(Encoding.Unicode.GetBytes(chars))}");
+                        
+            sw.WriteLine($"Encoding UTF8: {BitConverter.ToString(bites)}");
+            
+            StringBuilder sb = new StringBuilder();
+            int width=0;
+            for(int i = 0;i<65535;i++)
+            {
+                try{
+                    char chnew = Convert.ToChar(i);
+                    char ch = Convert.ToChar(i);
+                    if(!char.IsDigit(chnew) && !char.IsHighSurrogate(chnew) && !char.IsLowSurrogate(chnew) && !char.IsSurrogate(chnew))
+                    {
+                        sb.Append(Convert.ToChar(i));
+                        width+=1;
+                        if(width>=50){
+                            sb.Append(System.Environment.NewLine);
+                            width=0;
+                        }
+                    }
+                }catch(Exception e)
+                {
+
+                }
+            }
+            sw.WriteLine(Char.ConvertFromUtf32(0x1D160));
+sw.WriteLine(sb.ToString());
+            sw.Close();
+        }
+    }
 }
 
 

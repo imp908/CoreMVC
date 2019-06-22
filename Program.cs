@@ -15,8 +15,8 @@ namespace mvccoresb
     public class Program
     {
         public static void Main(string[] args)
-        {      
-            
+        {
+            KATAS.Chars.GO();
             CreateWebHostBuilder(args).Build().Run();
         }
 

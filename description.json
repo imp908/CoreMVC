@@ -279,9 +279,9 @@ npx webpack
 
 //////////////
 //DDD layers relation directions
-    API->Infrastructure
-    API->Domain
-    Infrastructure->Domain
+    API -> Infrastructure
+    API -> Domain
+    Infrastructure -> Domain
 
 
 TODO:[
