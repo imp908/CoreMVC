@@ -1565,10 +1565,14 @@ namespace LINQtoObjectsCheck
     {
         public string OwnerName { get; set; }
         public int OwnerInt { get; set; }
-        public List<string> Pets { get; set; }
+        public List<string> PetsStr { get; set; }
+        public List<Pet> Pets {get;set;}
     }
 
-
+    public class Pet {
+        public Guid Id {get;set;}
+        public string Name {get;set;}
+    }
     
     
     public interface Iid{
@@ -1670,23 +1674,52 @@ namespace LINQtoObjectsCheck
             cups.Add(new Cup { Competition = @"Cup7", Year = 1991, Position = 1, RacerName = @"Racer11" });
 
 
-            var a = (from s in cups select s.RacerName).Intersect(from r in racers select r.Name);
-            var b = (from r in racers select r.Name).Except(from s in cups select s.RacerName);            var c = (from s in cups select new { s.RacerName, s.Position })
-            .Zip(from r in racers select new { r.Car }, (z, x) => (z.RacerName + x.Car));
-
             List<PetOwners> petowners = new List<PetOwners>() {
-                new PetOwners {OwnerName=@"Owner1",OwnerInt=0,Pets= new List<string>() { @"Pet1",@"Pet2"} },
-                new PetOwners {OwnerName=@"Owner2",OwnerInt=1,Pets= new List<string>() { @"Pet3",@"Pet4", @"Pet5" } },
-                new PetOwners {OwnerName=@"Owner3",OwnerInt=2,Pets= new List<string>() { @"Pet6"} },
-                new PetOwners {OwnerName=@"Owner4",OwnerInt=3,Pets= new List<string>() { @"Pet7",@"Pet8", @"Pet9", @"Pet10" } }
+                new PetOwners {OwnerName=@"Owner1",OwnerInt=0,PetsStr= new List<string>() { @"Pet1",@"Pet2"} 
+                , Pets = new List<Pet>(){ new Pet(){Name=@"Pet1"}, new Pet() { Name = @"Pet2" }}},
+                new PetOwners {OwnerName=@"Owner2",OwnerInt=1,PetsStr= new List<string>() { @"Pet3",@"Pet4", @"Pet5" }
+                 , Pets = new List<Pet>(){ new Pet(){Name=@"Pet3"}, new Pet() { Name = @"Pet4" }, new Pet() { Name = @"Pet5" }}},
+                new PetOwners {OwnerName=@"Owner3",OwnerInt=2,PetsStr= new List<string>() { @"Pet6" }
+                , Pets = new List<Pet>() { new Pet() { Name = @"Pet6" }}},
+                new PetOwners {OwnerName=@"Owner4",OwnerInt=3,PetsStr= new List<string>() { @"Pet7",@"Pet8", @"Pet9", @"Pet10" }
+                 , Pets = new List<Pet>() { new Pet() { Name = @"Pet7" }, new Pet() { Name = @"Pet8" } ,new Pet() { Name = @"Pet9" },new Pet() { Name = @"Pet10" }}}
             };
 
-            var d =
+            List<Pet> pets = new List<Pet>(){
+                new Pet(){Name=@"Pet3"}
+                ,new Pet() { Name = @"Pet7" }
+                ,new Pet() { Name = @"Pet11" }
+            };
+
+            //where Any
+            var petOwnersWithPetsInList = 
+                petowners.Where(s => s.Pets.Any( x => pets.Any(c => c.Name == x.Name )))
+                .ToList();
+
+            //where exists
+            var petOwnersWithPetsInListExist =
+                petowners.Where(s => s.Pets.Exists(x => pets.Exists(c => c.Name == x.Name)))
+                .ToList();
+
+
+            //Join 
+            var joinRacerCups = 
+                racers.Join(cups,r => r.Name, c => c.RacerName, (r , c) => new {
+                    racer = r.Name, cup =c.Competition
+                });
+            
+    
+            IEnumerable<string> racerNameIntersect = (from s in cups select s.RacerName).Intersect(from r in racers select r.Name);
+            IEnumerable<string> racerNameExcept = (from r in racers select r.Name).Except(from s in cups select s.RacerName);
+            IEnumerable<string> cupsZipRacers = (from s in cups select new { s.RacerName, s.Position })
+                .Zip(from r in racers select new { r.Car }, (z, x) => (z.RacerName + x.Car));       
+
+            IEnumerable<string> d =
                 from t in petowners
-                from t2 in t.Pets
+                from t2 in t.PetsStr
                 select t2;
 
-            var e = petowners.SelectMany(s => s.Pets);
+            IEnumerable<string> e = petowners.SelectMany(s => s.PetsStr);
 
             //group by several columns
             var f =
@@ -1694,6 +1727,34 @@ namespace LINQtoObjectsCheck
                 group t by new { t.Competition, t.Year } into t2
                 orderby t2.Key.Year, t2.Key.Competition descending
                 select new { Comp = t2.Key.Competition, Racer = t2.Key.Year, Count = t2.Count() };
+
+            var RacersCountByCar = 
+                from s in racers
+                group s by new {s.Car} into g
+                select new {
+                    Car = g.Key.Car, RacersCountAll = g.Count()
+                };
+
+            var RacersCountByCarAndYear = 
+                from s in racers 
+                group s by new {s.Year,s.Car} into g
+                select new { Car = g.Key.Car, Year = g.Key.Year, Racers = g.Count() };
+
+
+            //Aggregate
+            var MaxPetsInOnerCnt =
+            petowners.Aggregate<PetOwners,int,int>(0,(s, next) => 
+                next.PetsStr.Count() > s ? next.PetsStr.Count() : s
+            , cp => cp);
+
+            var MaxPetsPetOwner =
+                petowners.Aggregate<PetOwners,PetOwners,PetOwners>(new PetOwners(),
+                    (seed , next) => 
+                    (seed?.PetsStr?.Any() != true) 
+                        ? next 
+                        :
+                            next.PetsStr.Count() > seed?.PetsStr?.Count() ? next : seed, 
+                po => po );
 
             // var g =
             //     from t in cups
@@ -1875,7 +1936,7 @@ namespace LINQtoObjectsCheck
         public static void MaxDateCheck()
         {
             List<Item> items = new List<Item>(){
-            new Item(){Name="Name0", SomeDate = new DateTime(2019,01,01)}
+                new Item(){Name="Name0", SomeDate = new DateTime(2019,01,01)}
                 ,new Item(){Name="Name0", SomeDate = new DateTime(2019,01,01)}
                 ,new Item(){Name="Name0", SomeDate = new DateTime(2019,02,01)}
                 ,new Item(){Name="Name0", SomeDate = new DateTime(2019,01,01)}
@@ -1998,7 +2059,7 @@ namespace LINQtoObjectsCheck
             List<Item> itemsToUpdate = new List<Item>(){
                 new Item(){Id=0, Name = "Nm0"}
                 ,new Item(){Id=1, Name = "Nm1"}
-                ,new Item(){Id=2, Name = "Nm1"}
+                ,new Item(){Id=2, Name = "Nm2"}
             };
 
             List<Item> newItems = new List<Item>(){
@@ -2039,9 +2100,11 @@ namespace LINQtoObjectsCheck
                   new Item(){Id=1, Name = "Nm1"}
                 ,new Item(){Id=2, Name = "Nm2"}
             };
+
             var res = allIds.Where(x =>
-                servicesIds.Where(s => parentIds.Exists(c => c.Id == s.Id))
-                    .ToList().Exists(z => x.Id==z.Id)
+                servicesIds.Where(s => 
+                parentIds.Exists(c => c.Id == s.Id)).ToList()
+                    .Exists(z => x.Id==z.Id)
             );
 
         }
@@ -2574,6 +2637,20 @@ namespace KATAS{
         }
         static Dictionary<int,Item> items = new Dictionary<int, Item>();
         public static void GO(){
+
+            var inp = "aaabbcc";
+            var counts = (
+            from s in inp 
+            group s by new {s} into c
+            select new {
+                Key = c.Key, count = c.Count()
+            }).ToList();
+
+            var countsTwo = inp
+            .GroupBy(p => p, (Key , g) => new {
+                K = Key, C = g.Count()
+            }).ToList();
+
             foreach(var str in input){
                 var hash = str.GetHashCode();
                 string newStr = new string(str.OrderBy( c => c).ToArray());
@@ -2650,6 +2727,7 @@ sw.WriteLine(sb.ToString());
             sw.Close();
         }
     }
+
 }
 
 

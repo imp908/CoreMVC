@@ -16,7 +16,7 @@ namespace mvccoresb
     {
         public static void Main(string[] args)
         {
-            KATAS.Chars.GO();
+            LINQtoObjectsCheck.LinqCheck.GO();
             CreateWebHostBuilder(args).Build().Run();
         }
 
