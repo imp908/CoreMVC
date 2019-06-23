@@ -16,8 +16,17 @@ namespace mvccoresb
     {
         public static void Main(string[] args)
         {
-            LINQtoObjectsCheck.LinqCheck.GO();
-            CreateWebHostBuilder(args).Build().Run();
+            try{
+                CreateWebHostBuilder(args).Build().Run();
+            }
+            catch(Exception e)
+            {
+
+            }
+            // Task.Run(async () =>
+            // {
+            //     await NetPlatformCheckers.AsyncCheck.GO_async();
+            // });
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>

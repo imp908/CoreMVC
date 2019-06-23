@@ -941,7 +941,7 @@ System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMet
             SampleEventCheck();
             CancelationCheck();
             UpdatedCoreEventCheck();
-            //AsyncCheck();
+            //AsyncEventsCheck();
             //NamedEventsCheck();
         }
 
@@ -978,7 +978,7 @@ System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMet
             ce.onCount += cl.listen;
             ce.count(cnt);
         }
-        static void AsyncCheck()
+        static void AsyncEventsCheck()
         {
             System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");            
             CountAsync ca = new CountAsync();
@@ -1258,6 +1258,32 @@ System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMet
     /*--------------------------------------------- */
     //ADD new
     
+    public static class AsyncCheck
+    {
+        static string result = string.Empty;
+        
+        public static async Task<int> GO_async(){
+            System.Diagnostics.Trace.WriteLine("GO async started");
+            System.Diagnostics.Trace.WriteLine($"result = {AsyncCheck.result}");
+            var r = await AsyncCheck.GetStringAsync();
+            System.Diagnostics.Trace.WriteLine("GO async finished");
+            System.Diagnostics.Trace.WriteLine($"result = {AsyncCheck.result}");
+            System.Diagnostics.Trace.WriteLine($"r = {r}");
+            return 1;
+        }
+        public static async Task<string> GetStringAsync ()
+        {
+            await AsyncCheck.ChangeStringAsync();
+            return result;
+        }
+        public static async Task<int> ChangeStringAsync()
+        {
+            await Task.Delay(200);
+            result="finished";
+            return 1;
+        }
+    }
+
     public class TasksToFuckupCPU{
         public static void GO(){
             for(int i=0;i<2000;i++){
@@ -2727,6 +2753,7 @@ sw.WriteLine(sb.ToString());
             sw.Close();
         }
     }
+    
 
 }
 
