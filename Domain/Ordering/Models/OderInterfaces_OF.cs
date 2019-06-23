@@ -7,28 +7,7 @@ using System.Linq.Expressions;
 namespace order.Domain.Interfaces
 {
 
-    using order.Domain.Models;
-
-    public interface IRepository
-    {
-        IQueryable<T> GetAll<T>(Expression<Func<T, bool>> expression = null)
-            where T : class;
-
-        void Add<T>(T item) where T : class;
-        void AddRange<T>(IList<T> items) where T : class;
-        void Delete<T>(T item) where T : class;
-        void DeleteRange<T>(IList<T> items) where T : class;
-        void Update<T>(T item) where T : class;
-        void UpdateRange<T>(IList<T> items) where T : class;
-        IQueryable<T> SkipTake<T>(int skip, int take)
-            where T : class;
-        IQueryable<T> QueryByFilter<T>(Expression<Func<T, bool>> expression)
-            where T : class;
-        void Save();
-
-        void SaveIdentity(string command);
-    }
-
+    using order.Domain.Models;    
 
     public interface IOrderCreateAPI
     {

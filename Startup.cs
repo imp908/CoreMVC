@@ -26,6 +26,7 @@ namespace mvccoresb
 
     using mvccoresb.Infrastructure.EF;
     using mvccoresb.Domain.TestModels;
+    using mvccoresb.Domain.Interfaces;
 
     using order.Domain.Services;
     using order.Domain.Models;
@@ -91,12 +92,8 @@ namespace mvccoresb
             /*Registration of automapper with autofac Instance API */
             autofacContainer.RegisterInstance(mapper).As<IMapper>();
 
-            try{
-                this.ApplicationContainer = autofacContainer.Build();
-            }catch(Exception e)
-            {
-
-            }
+            this.ApplicationContainer = autofacContainer.Build();
+           
             return new AutofacServiceProvider(this.ApplicationContainer);
         }
 
@@ -105,7 +102,8 @@ namespace mvccoresb
         {
 
             /**EF,repo and UOW reg */
-            autofacContainer.RegisterType<TestContext>().As<DbContext>().WithMetadata("Name", "TestRepo")
+            autofacContainer.RegisterType<TestContext>()
+            .As<DbContext>().WithMetadata("Name", "TestRepo")
                 .InstancePerLifetimeScope();
      
             /**EF context , and repo registration */       

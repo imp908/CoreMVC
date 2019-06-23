@@ -20,6 +20,7 @@ namespace order.Infrastructure.EF
 
     using order.Domain.Models;
     using order.Domain.Interfaces;
+    using mvccoresb.Domain.Interfaces;
 
     public class OrdersManager
     {
