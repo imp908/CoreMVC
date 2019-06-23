@@ -1747,6 +1747,18 @@ namespace LINQtoObjectsCheck
 
             IEnumerable<string> e = petowners.SelectMany(s => s.PetsStr);
 
+            var cupsByYearQuery =
+            from t in cups
+            group t by new {t.Year} into g
+            select new {
+                Year = g.Key.Year,
+                Cnt = g.Count()
+            };
+
+            var cupsByYearAPI = cups.GroupBy( p=> p.Year,(z , x)=> new {
+                Year = z, Cnt = x.Count()
+            });
+
             //group by several columns
             var f =
                 from t in cups
@@ -2642,6 +2654,28 @@ namespace KATAS{
     //Kasper
     public class StringCount{
         public static void GO(string input){
+            var inp = "aaabbcc";
+            inp = input;
+
+            //group by query
+            var counts = (
+            from s in inp
+            group s by new { s } into c
+            select new
+            {
+                Key = c.Key,
+                count = c.Count()
+            }).ToList();
+
+            //group by API
+            var countsTwo = inp
+            .GroupBy(p => p, (Key, g) => new
+            {
+                K = Key,
+                C = g.Count()
+            }).ToList();
+
+            //foreach with dictionary
             Dictionary<char,int> result = new Dictionary<char,int>();
             foreach(char ch in input){
                 if(!result.ContainsKey(ch)){
@@ -2663,24 +2697,12 @@ namespace KATAS{
         }
         static Dictionary<int,Item> items = new Dictionary<int, Item>();
         public static void GO(){
+            
+            //foreach
+            foreach(var str in input)
+            {
 
-            var inp = "aaabbcc";
-            var counts = (
-            from s in inp 
-            group s by new {s} into c
-            select new {
-                Key = c.Key, count = c.Count()
-            }).ToList();
-
-            var countsTwo = inp
-            .GroupBy(p => p, (Key , g) => new {
-                K = Key, C = g.Count()
-            }).ToList();
-
-            foreach(var str in input){
-                var hash = str.GetHashCode();
                 string newStr = new string(str.OrderBy( c => c).ToArray());
-
                 var alg = System.Security.Cryptography.SHA256.Create();
                 byte[] hashBytes = alg.ComputeHash(Encoding.UTF8.GetBytes(newStr));                
                 int hashNew = BitConverter.ToInt32(hashBytes);

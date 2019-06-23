@@ -17,6 +17,7 @@ namespace mvccoresb
         public static void Main(string[] args)
         {
             try{
+                LINQtoObjectsCheck.LinqCheck.GO();
                 CreateWebHostBuilder(args).Build().Run();
             }
             catch(Exception e)
