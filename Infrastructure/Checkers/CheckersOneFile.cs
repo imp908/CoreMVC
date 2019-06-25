@@ -106,6 +106,7 @@ namespace NetPlatformCheckers
       
         public static void GO()
         {
+            AbstractClassCheck.GO();
             //TasksToFuckupCPU.GO();
 
             EqualIsCheck.GO();
@@ -116,6 +117,48 @@ namespace NetPlatformCheckers
             ReflectionsCheck.GO();
         }
     }
+
+
+
+    /*Abstract class initialization check */
+
+    /*--------------------------------------------- */
+    public abstract class ABS{
+        
+        public static string ParentProp {get;set;} = "inited from autoprop in abs";
+        public ABS(){}
+        //private ABS(){}
+        static ABS(){
+            ParentProp = "inited in parent static const";
+        }
+    }
+
+    public class ABSchild : ABS
+    {
+        public static string AbsChildProp {get;set;} = "inited in child autoprop";
+        public ABSchild():base() { }
+        public ABSchild(int val){}
+
+        static ABSchild(){
+            //AbsChildProp="inited in child static constr";
+        }
+    }
+    public class AbstractClassCheck{
+        static AbstractClassCheck acch;
+        public static void GO(){
+            acch = new AbstractClassCheck();
+            acch._GO();
+        }
+
+        private void _GO()
+        {
+            ABSchild aschild = new ABSchild();
+            System.Diagnostics.Trace.WriteLine(ABSchild.ParentProp);
+            System.Diagnostics.Trace.WriteLine(ABSchild.AbsChildProp);
+        }
+    }
+
+
 
 
     /* overriding */
@@ -1254,33 +1297,74 @@ System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMet
 
 
 
-    /*Async,Multithreading,Parallell*/    
+    /*Async,Multithreading,Parallell*/
     /*--------------------------------------------- */
     //ADD new
     
-    public static class AsyncCheck
+    public class AsyncCheck
     {
         static string result = string.Empty;
-        
-        public static async Task<int> GO_async(){
+
+        public async static void GO(){
+            AsyncCheck asCheck = new AsyncCheck();
+            await asCheck.SumResultOfCollectionOfTasks();
+        }
+
+        public async Task<int> GO_async(){
             System.Diagnostics.Trace.WriteLine("GO async started");
             System.Diagnostics.Trace.WriteLine($"result = {AsyncCheck.result}");
-            var r = await AsyncCheck.GetStringAsync();
+            var r = await GetStringAsync();
             System.Diagnostics.Trace.WriteLine("GO async finished");
             System.Diagnostics.Trace.WriteLine($"result = {AsyncCheck.result}");
             System.Diagnostics.Trace.WriteLine($"r = {r}");
             return 1;
         }
-        public static async Task<string> GetStringAsync ()
+        public async Task<string> GetStringAsync ()
         {
-            await AsyncCheck.ChangeStringAsync();
+            await ChangeStringAsync();
             return result;
         }
-        public static async Task<int> ChangeStringAsync()
+        public async Task<int> ChangeStringAsync()
         {
             await Task.Delay(200);
             result="finished";
             return 1;
+        }
+
+
+        /*Summs result of several counting tasks */
+        public async Task<string> SumResultOfCollectionOfTasks()
+        {
+
+            List<Task<int>> tasks = new List<Task<int>>()
+            {
+                DoSomeDelayedrWork(1000) 
+                , DoSomeDelayedrWork(1000)
+                , DoSomeDelayedrWork(500)  
+            };
+
+            var awaitedresult = await Task.WhenAll(tasks);
+
+            var res = awaitedresult.Sum();
+
+            return String.Empty;
+        }
+
+
+
+        public async Task<int> DoSomeOtherWork()
+        {
+
+            await Task.Delay(30);
+            return 1;
+
+        }
+        public async Task<int> DoSomeDelayedrWork(int delay)
+        {
+
+            await Task.Delay(delay);
+            return 1;
+
         }
     }
 
