@@ -17,8 +17,15 @@ namespace mvccoresb
         public static void Main(string[] args)
         {
             try{
-//                NetPlatformCheckers.Check.GO();
-                NetPlatformCheckers.AsyncCheck.GO();
+
+                //NetPlatformCheckers.Check.GO();
+                //NetPlatformCheckers.AsyncCheck.GO();
+                //NetPlatformCheckers.InheritanceWithInterfacesCheck.Go();
+                //NetPlatformCheckers.InheritanceOverridingWithInterfaces.GO();
+                //NetPlatformCheckers.TypesCheck.GO();
+                
+                KATAS.Bites.GO();
+
                 CreateWebHostBuilder(args).Build().Run();
             }
             catch(Exception e)

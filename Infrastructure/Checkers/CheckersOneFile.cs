@@ -240,6 +240,7 @@ namespace NetPlatformCheckers
     }
 
 
+
     //Linear inheritance from interface 
 
     interface IA { void A(); }
@@ -341,6 +342,16 @@ namespace NetPlatformCheckers
             System.Diagnostics.Trace.WriteLine("b in E");
         }
     }
+    public class Eo : A, ib{
+
+        public void mA()
+        {
+            System.Diagnostics.Trace.WriteLine("a in E");
+        }
+        public override void mB(){
+            System.Diagnostics.Trace.WriteLine("b in Eo");
+        }
+    }
 
     public class D1 : D
     {
@@ -361,6 +372,8 @@ System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMet
             A aFormC = new C();
             A aFromD = new D();
             A aFromE = new E();
+
+            A aFromEo = new Eo();
 
             ia iaFromB = new B();
             ia iaFromC = new C();
@@ -389,6 +402,8 @@ System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMet
             aFromD2.mA();
             aFromD2.mB(); // b in D2
 
+            aFromEo.mB(); //b in a
+
             //all others to base
             iaFromB.mA();
             iaFromC.mA(); // a in C
@@ -404,8 +419,150 @@ System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMet
         }
     }
 
+    public static class TypesCheck
+    {
+        public static void GO()
+        {
+
+System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
+
+            D1 d1 = new D1();
+            A dfromA = new D1();
+
+            var tD = typeof(D1).ToString();
+            var tiD = d1.GetType().ToString();
+
+            var tA = typeof(A).ToString();
+            var tiA = dfromA.GetType().ToString();
+
+            int i = 1;
+            object o = i;
+            var oRtTp = o.GetType().ToString();
+            
+            int i2 = (int)o;
+                        
+        }
+    }
 
 
+    /* Inheritance with interfaces */
+
+    
+    public interface IMethodD
+    {
+        void MethodD();
+    }
+    public interface IMethodE
+    {
+        void MethodE();
+    }
+
+    public interface IMethodF
+    {
+        void MethodF();
+    }
+    public interface IMethodG
+    {
+        void MethodG();
+    }
+
+    public class ParentClass : IMethodD, IMethodE
+    {
+        public void MethodA()
+        {
+            Console.WriteLine("MethodA from ParentClass");
+        }
+        public virtual void MethodB()
+        {
+            Console.WriteLine("MethodB from ParentClass");
+        }
+        public virtual void MethodC()
+        {
+            Console.WriteLine("MethodC from ParentClass");
+        }
+
+        public virtual void MethodD()
+        {
+            Console.WriteLine("MethodD from ParentClass");
+        }
+        public void MethodE()
+        {
+            Console.WriteLine("MethodE from ParentClass");
+        }
+
+        public virtual void MethodF()
+        {
+            Console.WriteLine("MethodF from ParentClass");
+        }
+        public void MethodG()
+        {
+            Console.WriteLine("MethodG from ParentClass");
+        }
+    }
+
+    public class ChildClass : ParentClass, IMethodF, IMethodG
+    {
+        public new void MethodB()
+        {
+            Console.WriteLine("MethodB from ChildClass");
+        }
+        public override void MethodC()
+        {
+            Console.WriteLine("MethodC from ChildClass");
+        }
+
+        public override void MethodD()
+        {
+            Console.WriteLine("MethodD from ChildClass");
+        }
+        public new void MethodE()
+        {
+            Console.WriteLine("MethodE from ChildClass");
+        }
+
+        public override void MethodF()
+        {
+            Console.WriteLine("MethodF from ChildClass");
+        }
+        public new void MethodG()
+        {
+            Console.WriteLine("MethodG from ChildClass");
+        }
+    }
+
+    public static class InheritanceWithInterfacesCheck
+    {
+
+        public static void Go()
+        {
+
+System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
+
+ParentClass parentFromChild = new ChildClass();
+
+parentFromChild.MethodD(); //from child
+parentFromChild.MethodE(); //from parent
+
+parentFromChild.MethodF(); //from child
+parentFromChild.MethodG(); //from parent
+
+IMethodD methodDfromChild = new ChildClass();
+IMethodE methodEfromChild = new ChildClass();
+IMethodF methodFfromChild = new ChildClass();
+IMethodG methodGfromChild = new ChildClass();
+
+methodDfromChild.MethodD(); //from child
+methodEfromChild.MethodE(); //from parent
+
+methodFfromChild.MethodF(); //from child
+methodGfromChild.MethodG(); //from child
+
+        }
+    
+    }
+
+
+  
 
     /** generic delegate swap*/
     /*--------------------------------------------- */
@@ -1306,6 +1463,7 @@ System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMet
         static string result = string.Empty;
 
         public async static void GO(){
+System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
             AsyncCheck asCheck = new AsyncCheck();
             await asCheck.SumResultOfCollectionOfTasks();
         }
@@ -1370,6 +1528,8 @@ System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMet
 
     public class TasksToFuckupCPU{
         public static void GO(){
+System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
+
             for(int i=0;i<2000;i++){
                 new Thread(o=>{Thread.Sleep(100);}).Start();
             }
@@ -1465,7 +1625,7 @@ System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMet
     {
         public static void GO()
         {
-            System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
+System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
 
             Reflections r = new Reflections();
             r.LoopThroughtAssemblyReflections();
@@ -2860,7 +3020,113 @@ sw.WriteLine(sb.ToString());
         }
     }
     
+    public static class Bites{
+        public static void GO(){
+System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
 
+            Bites.BitesTest();
+        }
+
+        public static void BitesTest(){
+            byte bt = 0X80;
+            int a = 0X80;
+            int res = a & a;
+            var str0 = Convert.ToString(bt, 2);
+
+            byte[] bytes = {0X0001,0X0011,0XF1,0,1};
+            foreach(byte b in bytes){
+System.Diagnostics.Trace.WriteLine(Convert.ToString(b,2));
+            }
+
+            string str = "Value to bytes";
+
+            List<char> charsFromCharBits = new List<char>();
+            List<char> charsFromIntBits = new List<char>();
+
+            foreach(char ch in str)
+            {
+                string str1 = char.ToString(ch);
+                
+                int intFromChar = Convert.ToInt32(ch);                                
+                byte byteFromInt = Convert.ToByte(intFromChar);
+                byte byteFromCh = Convert.ToByte(ch);
+                
+                byte[] btArrCh = BitConverter.GetBytes(ch);
+                byte[] btArrInt = BitConverter.GetBytes(intFromChar);
+
+                charsFromCharBits.Add(BitConverter.ToChar(btArrCh));
+                charsFromIntBits.Add(BitConverter.ToChar(btArrInt));
+
+                string byteStringRep =BitConverter.ToString(btArrCh);
+            }
+
+            string stringFromCharBits = new string(charsFromCharBits.ToArray());
+            string stringFromIntBits = new string(charsFromIntBits.ToArray());
+            
+            bool eq0 = stringFromCharBits == stringFromIntBits;
+            bool eq1 = stringFromCharBits.Equals(stringFromIntBits);
+
+            List<char> charsFromStringOfBites = new List<char>();
+
+            string hexValue = "56 61 6C"; //"48 65 6C 6C 6F 20 57 6F 72 6C 64 21";
+            string[] hexValues = hexValue.Split(' ');
+            foreach(string hS in hexValues)
+            {
+
+                try
+                {
+                    int intFromString = Convert.ToInt32(hS,16);
+                    byte byteFromString = Convert.ToByte(hS,16);
+                    
+                    byte[] bytesFromInt = BitConverter.GetBytes(intFromString);
+                    byte bfs;               
+               
+                    byte.TryParse(hS, out bfs);
+                    charsFromStringOfBites.Add(BitConverter.ToChar(bytesFromInt));
+                }catch(Exception e)
+                {
+
+                }
+            }
+
+            string stringFromStringOfBytes = new string(charsFromStringOfBites.ToArray());
+            
+        }
+           
+      
+    }
+
+    public static class FactorialCount{
+
+        public static List<int> GO(int upperGap){
+            List<int> results = new List<int>();
+            for (
+                int i = 0; i < 10; i++)
+            {
+                results.Add(Count(i));
+            }
+
+            return results;
+        }
+
+        public static int Count(int upperGap){
+            if(upperGap==0){return 0;}
+            int result = 1;
+            for(int i = 1;i<=upperGap;i++){
+                result*=i;
+            }
+            return result;
+        }
+    }
+
+    public static class BalncedDelimeter{
+
+        public static void GO(){
+System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
+          
+        }
+        
+    }
 }
 
 
