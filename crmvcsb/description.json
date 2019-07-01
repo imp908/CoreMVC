@@ -235,6 +235,13 @@ Added http instead of https routing for Fiddler test to:
 
 
 //////////////
+//integrationtests.csproj
+//to eleminate 
+//error CS0017: Program has more than one entry point defined.
+//https://andrewlock.net/fixing-the-error-program-has-more-than-one-entry-point-defined-for-console-apps-containing-xunit-tests/
+<GenerateProgramFile>false</GenerateProgramFile>
+
+//////////////
 //webpack for webpack conf
 webpack.config.js
 //custom webpack to run from gulp

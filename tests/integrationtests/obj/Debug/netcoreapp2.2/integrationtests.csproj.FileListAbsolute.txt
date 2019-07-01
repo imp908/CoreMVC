@@ -28,3 +28,11 @@ G:\disk\Files\git\Core\crmvcsb\tests\integrationtests\obj\Debug\netcoreapp2.2\in
 G:\disk\Files\git\Core\crmvcsb\tests\integrationtests\obj\Debug\netcoreapp2.2\integrationtests.dll
 G:\disk\Files\git\Core\crmvcsb\tests\integrationtests\obj\Debug\netcoreapp2.2\integrationtests.pdb
 G:\disk\Files\git\Core\crmvcsb\tests\integrationtests\obj\Debug\netcoreapp2.2\integrationtests.csproj.CopyComplete
+G:\disk\Files\git\Core\crmvcsb\tests\integrationtests\bin\Debug\netcoreapp2.2\mvccoresb.Views.dll
+G:\disk\Files\git\Core\crmvcsb\tests\integrationtests\bin\Debug\netcoreapp2.2\mvccoresb.Views.pdb
+G:\disk\Files\git\Core\crmvcsb\tests\integrationtests\bin\Debug\netcoreapp2.2\app.db
+G:\disk\Files\git\Core\crmvcsb\tests\integrationtests\bin\Debug\netcoreapp2.2\mvccoresb.dll
+G:\disk\Files\git\Core\crmvcsb\tests\integrationtests\bin\Debug\netcoreapp2.2\mvccoresb.pdb
+G:\disk\Files\git\Core\crmvcsb\tests\integrationtests\bin\Debug\netcoreapp2.2\xunit.runner.visualstudio.dotnetcore.testadapter.dll
+G:\disk\Files\git\Core\crmvcsb\tests\integrationtests\bin\Debug\netcoreapp2.2\xunit.runner.reporters.netcoreapp10.dll
+G:\disk\Files\git\Core\crmvcsb\tests\integrationtests\bin\Debug\netcoreapp2.2\xunit.runner.utility.netcoreapp10.dll
