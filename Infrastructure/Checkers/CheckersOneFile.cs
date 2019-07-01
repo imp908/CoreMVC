@@ -2542,8 +2542,8 @@ namespace TipsAndTricks
 
 }
 
-
-namespace KATAS{
+namespace KATAS
+{
 
     using System;
     using System.Collections.Generic;
@@ -2577,661 +2577,733 @@ namespace KATAS{
 
 
 
-    public static class ReqwindKATA
-    {
-        public static string GO(string input_)
+    public class TNine{
+        //https://code.google.com/codejam/contest/351101/dashboard#s=p2
+        //T9  
+
+        //running custom test cases
+        public static class tNineCheck
         {
-
-            List<char> arr = new List<char>();
-            Stack<char> st = new Stack<char>();
-            Stack<char> st2 = new Stack<char>();
-
-            for (int i =0;i<input_.ToArray().Length;i++)
+            public static void GO()
             {
-                char ch = input_.ToArray()[i];
+                tNineCheck.check1();
+            }
+            public static void check1()
+            {
+                List<CaseList> cl = new List<CaseList>() {
+                    new CaseList(){Case="ab cff",Exp="2 220222333 333",Act=null}
+                    , new CaseList("hg e a","44 403302",null)
+                };
 
-                if (ch != ' ')
+                foreach (CaseList cl_ in cl)
                 {
-                    st.Push(ch);
-                }
-                else
-                {
-                    if (st.Count >= 5)
-                    {
-                        while (st.Count > 0)
-                        {
-                            arr.Add(st.Pop());
-                        }
-                       
-                    }
-                    else
-                    {
-                        while (st.Count > 0)
-                        {
-                            st2.Push(st.Pop());
-                        }
-                        while (st2.Count > 0)
-                        {
-                            arr.Add(st2.Pop());
-                        }
-                        
-                    }
-                    arr.Add(' ');
+                    cl_.Act=tNineChecks.GO(new KeyPadStrait(), cl_.Case);
+                    cl_.check();
                 }
             }
 
-            if (st.Count >= 5)
+        }
+        //class for test  cases usage
+        public class CaseList
+        {
+            public CaseList() { }
+
+            public CaseList(string @case, string exp, string act)
             {
-                while (st.Count > 0)
-                {
-                    arr.Add(st.Pop());
-                }
+                Case = @case;
+                Exp = exp;
+                Act = act;
+            }
+
+            public void check()
+            {
+                if (this.Exp == this.Act) { this.isOK = true; } else { this.isOK = false; }
+                //or 
+                //this.isOK=this.Exp == this.Act ?   true :  false;
+            }
+            public string Case { get; set; } = string.Empty;
+            public string Exp { get; set; } = string.Empty;
+            public string Act { get; set; } = null;
+            public bool? isOK { get; private set; } = null;
+        }
+        
+        //key presser interface handler
+        public static class tNineChecks
+        {       
+            public static string GO(IKeyPresser kp_,string case_)
+            {            
+                return kp_.print(case_);            
+            }
+        }
                 
-            }
-            else
-            {
-                while (st.Count > 0)
-                {
-                    st2.Push(st.Pop());
-                }
-                while (st2.Count > 0)
-                {
-                    arr.Add(st2.Pop());
-                }
-               
-            }
-
-            return string.Join(null, arr);
-        }
-    }
-
-    public static class FindKata
-    {
-        public static char GO(char[] input)
+        //key presser interface with base realization
+        public interface IKeyPresser
         {
-            byte[] arr = Encoding.ASCII.GetBytes(input);
-            char result = ' ';
-            for (int i =0; i< arr.Length-1; i++)
-            {
-                if(arr[i]+1<arr[i+1])
-                {
-                    result = (char)(arr[i]+1);
-                    break;
-                }
-            }
-
-            return result;
+            string print(string input);
         }
-
-    }
-
-    public static class DivideKATA {
-        public static int[] Divisors(int n)
+        public class KeyPresser : IKeyPresser
         {
-            if (n < 2) { return null; }
-                    
-
-            List<int> divisors = new List<int>();
-
-            for (int i = 2; i < n; i++)
-            {
-                if (n % i == 0) { divisors.Add(i); }
-            }
-            if (divisors.Count == 0)
+            public string print(string input)
             {
                 return null;
             }
-            else
-            {
-                return divisors.ToArray();
-            }
-           
         }
-    }
-    
-    public static class FormatRearrange
-    {
-        public static void GO()
+
+        //straightforward "naive" approach with char arrays
+        public class KeyPadStrait : IKeyPresser
         {
-            StringsCheck();
-        }
 
-        static void StringsCheck()
-        {          
-
-            string input = "{0}{1} {2}";        
-            string r1 = Rearrange(input);
-        }
-
-        static string Rearrange(string input_)
-        {
-            string result = input_;
-            char[] chr = input_.ToCharArray();
-            int lng = chr.Length;
-            char[] prevDigit=null;
-            char[] currDigit = null;
-
-            for (int i =0;i<lng;i++)
+            public static Dictionary<char, char?[]> keyPad = new Dictionary<char, char?[]>()
             {
+                {'a', new char?[]{'2'} },{'b', new char?[]{'2','2'} },{'c', new char?[]{'2','2','2'} }
+                ,{'d', new char?[]{'3'} },{'e', new char?[]{'3','3'} },{'f', new char?[]{'3','3','3'} }
+                ,{'g', new char?[]{'4'} },{'h', new char?[]{'4','4'} },{'i', new char?[]{'4','4','4'} }
+                ,{ ' ', new char?[]{'0'}}
 
-                int i2 = i;
+            };
+            public static List<char> presser(char[] str_)
+            {
+            
+                //"".ToCharArray().First();
+                char?[] foundPrev = null;
 
-                if (char.IsDigit(chr[i2]))
-                {     
-
-                    if ( i2+1 < lng)
+                List<char> res = new List<char>();
+                for(int i = 0; i < str_.Count(); i++)
+                {
+                    char?[] found = null;
+                    if(keyPad.ContainsKey(str_[i]))
                     {
-                        while(char.IsDigit(chr[i2+1]))
+                        keyPad.TryGetValue(str_[i], out found);
+                        if (foundPrev != null)
                         {
-                            i2++;
+                            if(foundPrev[0] == found[0]){ res.Add(' '); }
                         }
-                      
+                    
+                        foreach (char ch in found)
+                        {
+                            res.Add(ch);
+                        }
+                        foundPrev = found;
                     }
-               
+                }
+                return res;
+            }
+            
+            public string print(string input_)
+            {
+                return string.Join(string.Empty, KeyPadStrait.presser(input_.ToCharArray()));
+                
+            }
+        }
 
-                    if (prevDigit == null)
+    }    
+
+
+    public class Miscellaneous
+    {
+
+
+        public static class ReqwindKATA
+        {
+            public static string GO(string input_)
+            {
+
+                List<char> arr = new List<char>();
+                Stack<char> st = new Stack<char>();
+                Stack<char> st2 = new Stack<char>();
+
+                for (int i =0;i<input_.ToArray().Length;i++)
+                {
+                    char ch = input_.ToArray()[i];
+
+                    if (ch != ' ')
                     {
-                        prevDigit = ChArrFill(i, i2, chr);                  
+                        st.Push(ch);
                     }
                     else
                     {
-                        currDigit = ChArrFill(i, i2, chr);
-
-                        if (!check(currDigit, prevDigit))
+                        if (st.Count >= 5)
                         {
-                            currDigit = intRecount(currDigit, prevDigit);
-
-                            char[] chrN = new char[chr.Length + currDigit.Length - prevDigit.Length];
-
-                            for (int i4 = 0; i4 < i; i4++)
+                            while (st.Count > 0)
                             {
-                                chrN[i4] = chr[i4];
+                                arr.Add(st.Pop());
                             }
-                            for (int i4 = i; i4 < i2; i4++)
-                            {
-                                chrN[i4] = chr[i4];
-                            }
-                            for (int i4 = i2; i4 <= lng; i4++)
-                            {
-                                chrN[i4] = chr[i4];
-                            }
-
-                            result = charArrToInteger(chrN).ToString();
+                        
                         }
-                        else {
-                            prevDigit = intToCharArr(charArrToInteger(currDigit));                        
+                        else
+                        {
+                            while (st.Count > 0)
+                            {
+                                st2.Push(st.Pop());
+                            }
+                            while (st2.Count > 0)
+                            {
+                                arr.Add(st2.Pop());
+                            }
+                            
                         }
-
+                        arr.Add(' ');
                     }
-
                 }
 
-            }
-
-            return result;
-        }
-
-        static int charArrToInteger(char[] arr_)
-        {
-            int res = 0;
-            int i = 1;            
-            for(int i2 = arr_.Length-1;i2>=0;i2--)
-            {               
-                res += (int)(char.GetNumericValue(arr_[i2]) * i);
-                i *= 10;
-            }
-            return res;
-        }
-        static char[] intToCharArr(int i_)
-        {
-            return i_.ToString().ToCharArray();   
-        }
-        static char[] intRecount(char[] currDig_,char[] prevDigit_)
-        {
-            if(charArrToInteger(currDig_) == charArrToInteger(prevDigit_)+1)
-            {
-                return currDig_;
-            }
-            else
-            {
-                return intToCharArr(charArrToInteger(prevDigit_) + 1);
-            }
-        }
-        static bool check(char[] currDig_, char[] prevDigit_)
-        {
-            if (charArrToInteger(currDig_) == charArrToInteger(prevDigit_) + 1)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        static char[] ChArrFill(int i_,int i2_, char[] chFrom_)
-        {
-            char[] chTo_ = new char[(i2_ - i_)+1];
-
-            for (int i3_ = 0; i3_ <= (i2_ - i_); i3_++)
-            {
-                chTo_[i3_] = chFrom_[i_ + i3_];
-            }
-            return chTo_;
-        }
-
-    }
-
-
-    //https://code.google.com/codejam/contest/351101/dashboard#s=p2
-    //T9  
-
-    //running custom test cases
-    public static class tNineCheck
-    {
-        public static void GO()
-        {
-            tNineCheck.check1();
-        }
-        public static void check1()
-        {
-            List<CaseList> cl = new List<CaseList>() {
-                new CaseList(){Case="ab cff",Exp="2 220222333 333",Act=null}
-                , new CaseList("hg e a","44 403302",null)
-            };
-
-            foreach (CaseList cl_ in cl)
-            {
-                cl_.Act=tNineChecks.GO(new KeyPadStrait(), cl_.Case);
-                cl_.check();
-            }
-        }
-
-    }
-    //class for test  cases usage
-    public class CaseList
-    {
-        public CaseList() { }
-
-        public CaseList(string @case, string exp, string act)
-        {
-            Case = @case;
-            Exp = exp;
-            Act = act;
-        }
-
-        public void check()
-        {
-            if (this.Exp == this.Act) { this.isOK = true; } else { this.isOK = false; }
-            //or 
-            //this.isOK=this.Exp == this.Act ?   true :  false;
-        }
-        public string Case { get; set; } = string.Empty;
-        public string Exp { get; set; } = string.Empty;
-        public string Act { get; set; } = null;
-        public bool? isOK { get; private set; } = null;
-    }
-    
-    //key presser interface handler
-    public static class tNineChecks
-    {       
-        public static string GO(IKeyPresser kp_,string case_)
-        {            
-            return kp_.print(case_);            
-        }
-    }
-            
-    //key presser interface with base realization
-    public interface IKeyPresser
-    {
-        string print(string input);
-    }
-    public class KeyPresser : IKeyPresser
-    {
-        public string print(string input)
-        {
-            return null;
-        }
-    }
-
-    //straightforward "naive" approach with char arrays
-    public class KeyPadStrait : IKeyPresser
-    {
-
-        public static Dictionary<char, char?[]> keyPad = new Dictionary<char, char?[]>()
-        {
-            {'a', new char?[]{'2'} },{'b', new char?[]{'2','2'} },{'c', new char?[]{'2','2','2'} }
-            ,{'d', new char?[]{'3'} },{'e', new char?[]{'3','3'} },{'f', new char?[]{'3','3','3'} }
-            ,{'g', new char?[]{'4'} },{'h', new char?[]{'4','4'} },{'i', new char?[]{'4','4','4'} }
-            ,{ ' ', new char?[]{'0'}}
-
-        };
-        public static List<char> presser(char[] str_)
-        {
-           
-            //"".ToCharArray().First();
-            char?[] foundPrev = null;
-
-            List<char> res = new List<char>();
-            for(int i = 0; i < str_.Count(); i++)
-            {
-                char?[] found = null;
-                if(keyPad.ContainsKey(str_[i]))
+                if (st.Count >= 5)
                 {
-                    keyPad.TryGetValue(str_[i], out found);
-                    if (foundPrev != null)
+                    while (st.Count > 0)
                     {
-                        if(foundPrev[0] == found[0]){ res.Add(' '); }
+                        arr.Add(st.Pop());
                     }
-                   
-                    foreach (char ch in found)
-                    {
-                        res.Add(ch);
-                    }
-                    foundPrev = found;
+                    
                 }
+                else
+                {
+                    while (st.Count > 0)
+                    {
+                        st2.Push(st.Pop());
+                    }
+                    while (st2.Count > 0)
+                    {
+                        arr.Add(st2.Pop());
+                    }
+                
+                }
+
+                return string.Join(null, arr);
             }
-            return res;
         }
-        
-        public string print(string input_)
+
+        public static class FindKata
         {
-            return string.Join(string.Empty, KeyPadStrait.presser(input_.ToCharArray()));
-            
-        }
-    }
-    
-    //Kasper
-    public class StringCount{
-        public static void GO(string input){
-            var inp = "aaabbcc";
-            inp = input;          
-
-            //group by query
-            var counts = (
-            from s in inp
-            group s by new { s } into c
-            select new
+            public static char GO(char[] input)
             {
-                Key = c.Key,
-                count = c.Count()
-            }).ToList();
-
-
-            //group by API
-            var countsTwo = inp
-            .GroupBy(p => p, (Key, g) => new
-            {
-                K = Key,
-                C = g.Count()
-            }).ToList();
-
-            //foreach with dictionary
-            Dictionary<char,int> result = new Dictionary<char,int>();
-            foreach(char ch in input){
-                if(!result.ContainsKey(ch)){
-                    result.Add(ch,1);
-                }else{
-                    result[ch] += 1;
+                byte[] arr = Encoding.ASCII.GetBytes(input);
+                char result = ' ';
+                for (int i =0; i< arr.Length-1; i++)
+                {
+                    if(arr[i]+1<arr[i+1])
+                    {
+                        result = (char)(arr[i]+1);
+                        break;
+                    }
                 }
+
+                return result;
+            }
+
+        }
+
+        public static class DivideKATA {
+            public static int[] Divisors(int n)
+            {
+                if (n < 2) { return null; }
+                        
+
+                List<int> divisors = new List<int>();
+
+                for (int i = 2; i < n; i++)
+                {
+                    if (n % i == 0) { divisors.Add(i); }
+                }
+                if (divisors.Count == 0)
+                {
+                    return null;
+                }
+                else
+                {
+                    return divisors.ToArray();
+                }
+            
             }
         }
-    }
-    
-    //OZONe
-    public static class WordsCount{
-        static List<string> input = new List<string>(){"ABC","ACB","ABCD","ABD","ABCE","CBA"};
         
-        internal class Item {
-            internal string itemRef{get;set;}
-            internal int count {get;set;}
-        }
-        static Dictionary<int,Item> items = new Dictionary<int, Item>();
-        public static void GO(){
-            
-            //foreach
-            foreach(var str in input)
+        public static class FormatRearrange
+        {
+            public static void GO()
             {
-
-                string newStr = new string(str.OrderBy( c => c).ToArray());
-                var alg = System.Security.Cryptography.SHA256.Create();
-                byte[] hashBytes = alg.ComputeHash(Encoding.UTF8.GetBytes(newStr));                
-                int hashNew = BitConverter.ToInt32(hashBytes);
-
-                if(!items.ContainsKey(hashNew)){
-items.Add(hashNew,new Item{itemRef=str, count=1});
-                }else{
-items[hashNew].count+=1;
-                }
+                StringsCheck();
             }
 
-            items.Select(s => new { s.Value.itemRef,s.Value.count})
-            .ToList()
-            .ForEach(s => 
-                System.Diagnostics.Trace.WriteLine($"Itme entry count: {s.itemRef} {s.count}")
-            );
+            static void StringsCheck()
+            {          
+
+                string input = "{0}{1} {2}";        
+                string r1 = Rearrange(input);
+            }
+
+            static string Rearrange(string input_)
+            {
+                string result = input_;
+                char[] chr = input_.ToCharArray();
+                int lng = chr.Length;
+                char[] prevDigit=null;
+                char[] currDigit = null;
+
+                for (int i =0;i<lng;i++)
+                {
+
+                    int i2 = i;
+
+                    if (char.IsDigit(chr[i2]))
+                    {     
+
+                        if ( i2+1 < lng)
+                        {
+                            while(char.IsDigit(chr[i2+1]))
+                            {
+                                i2++;
+                            }
+                        
+                        }
+                
+
+                        if (prevDigit == null)
+                        {
+                            prevDigit = ChArrFill(i, i2, chr);                  
+                        }
+                        else
+                        {
+                            currDigit = ChArrFill(i, i2, chr);
+
+                            if (!check(currDigit, prevDigit))
+                            {
+                                currDigit = intRecount(currDigit, prevDigit);
+
+                                char[] chrN = new char[chr.Length + currDigit.Length - prevDigit.Length];
+
+                                for (int i4 = 0; i4 < i; i4++)
+                                {
+                                    chrN[i4] = chr[i4];
+                                }
+                                for (int i4 = i; i4 < i2; i4++)
+                                {
+                                    chrN[i4] = chr[i4];
+                                }
+                                for (int i4 = i2; i4 <= lng; i4++)
+                                {
+                                    chrN[i4] = chr[i4];
+                                }
+
+                                result = charArrToInteger(chrN).ToString();
+                            }
+                            else {
+                                prevDigit = intToCharArr(charArrToInteger(currDigit));                        
+                            }
+
+                        }
+
+                    }
+
+                }
+
+                return result;
+            }
+
+            static int charArrToInteger(char[] arr_)
+            {
+                int res = 0;
+                int i = 1;            
+                for(int i2 = arr_.Length-1;i2>=0;i2--)
+                {               
+                    res += (int)(char.GetNumericValue(arr_[i2]) * i);
+                    i *= 10;
+                }
+                return res;
+            }
+            static char[] intToCharArr(int i_)
+            {
+                return i_.ToString().ToCharArray();   
+            }
+            static char[] intRecount(char[] currDig_,char[] prevDigit_)
+            {
+                if(charArrToInteger(currDig_) == charArrToInteger(prevDigit_)+1)
+                {
+                    return currDig_;
+                }
+                else
+                {
+                    return intToCharArr(charArrToInteger(prevDigit_) + 1);
+                }
+            }
+            static bool check(char[] currDig_, char[] prevDigit_)
+            {
+                if (charArrToInteger(currDig_) == charArrToInteger(prevDigit_) + 1)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            static char[] ChArrFill(int i_,int i2_, char[] chFrom_)
+            {
+                char[] chTo_ = new char[(i2_ - i_)+1];
+
+                for (int i3_ = 0; i3_ <= (i2_ - i_); i3_++)
+                {
+                    chTo_[i3_] = chFrom_[i_ + i3_];
+                }
+                return chTo_;
+            }
 
         }
 
-    }
 
-    //chars
-    public class Chars
-    {
+        //Kasper
+        public class StringCount
+        {
+            public static void GO(string input)
+            {
+                var inp = "aaabbcc";
+                inp = input;
 
-        public static void GO(){
-            try{
-                string input = "abcd123";
-                List<byte> bytesFromString = new List<byte>();
+                //group by query
+                var counts = (
+                from s in inp
+                group s by new { s } into c
+                select new
+                {
+                    Key = c.Key,
+                    count = c.Count()
+                }).ToList();
+
+
+                //group by API
+                var countsTwo = inp
+                .GroupBy(p => p, (Key, g) => new
+                {
+                    K = Key,
+                    C = g.Count()
+                }).ToList();
+
+                //foreach with dictionary
+                Dictionary<char, int> result = new Dictionary<char, int>();
                 foreach (char ch in input)
                 {
-                    byte[] tempBytes = BitConverter.GetBytes(ch);
-                    bytesFromString.AddRange(tempBytes);
+                    if (!result.ContainsKey(ch))
+                    {
+                        result.Add(ch, 1);
+                    }
+                    else
+                    {
+                        result[ch] += 1;
+                    }
                 }
-                
-                //converted bytes
-                string result = new string(BitConverter.ToString(bytesFromString.ToArray()));
-                //original chars
-                List<char> charsFromByte = new List<char>(bytesFromString.ToList().Where(s => s != 0 ).Select(Convert.ToChar));
-                //original string
-                string resultOne = new string(charsFromByte.ToArray());
-
-                //new string from converted bytes
-                string[] byteString = result.Split("-");
-                List<char> charsFromBiteString = new List<char>();
-                foreach(string st in byteString){
-                    byte bt;
-                    byte.TryParse(st,out bt);
-
-                    char ch = Convert.ToChar(bt);
-                    charsFromBiteString.Add(ch);
-                }
-                string resultTwo = new string(charsFromBiteString.ToArray());
-            }
-            catch(Exception e)
-            {
-
             }
         }
 
-        public void Bulk(){
-            StreamWriter sw = new StreamWriter("output1.txt");            
+        //OZONe
+        public static class WordsCount
+        {
+            static List<string> input = new List<string>() { "ABC", "ACB", "ABCD", "ABD", "ABCE", "CBA" };
 
-            byte[] bites = {0X0000,0X0001,0X0002,0X0003,0X0003,0X0061};
-            char[] charsFromBite = BitConverter.ToString(bites).ToCharArray();
-
-            char[] chars = { '\u0061' , '\u0308' }; 
-
-            chars = chars.Union(charsFromBite).ToArray();
-            string str = new string(chars);
-
-            byte[] bytesFromChars = Encoding.UTF8.GetBytes(chars);
-            string stringFromByte = BitConverter.ToString(bytesFromChars);
-            
-            sw.WriteLine(str);
-            
-            sw.WriteLine($"Encoding.UTF8: {stringFromByte}");
-            sw.WriteLine($"Encoding.UTF32: {BitConverter.ToString(Encoding.UTF32.GetBytes(chars))}");
-            sw.WriteLine($"Encoding.Unicode: {BitConverter.ToString(Encoding.Unicode.GetBytes(chars))}");                        
-            sw.WriteLine($"Encoding UTF8: {BitConverter.ToString(bites)}");
-            
-            StringBuilder sb = new StringBuilder();
-            int width=0;
-            for(int i = 0;i<65535;i++)
+            internal class Item
             {
-                try{
-                    char chnew = Convert.ToChar(i);
-                    char ch = Convert.ToChar(i);
-                    if(!char.IsDigit(chnew) && !char.IsHighSurrogate(chnew) && !char.IsLowSurrogate(chnew) && !char.IsSurrogate(chnew))
-                    {
-                        sb.Append(Convert.ToChar(i));
-                        width+=1;
-                        if(width>=50){
-                            sb.Append(System.Environment.NewLine);
-                            width=0;
-                        }
-                    }
-                }catch(Exception e)
+                internal string itemRef { get; set; }
+                internal int count { get; set; }
+            }
+            static Dictionary<int, Item> items = new Dictionary<int, Item>();
+            public static void GO()
+            {
+
+                //foreach
+                foreach (var str in input)
                 {
 
+                    string newStr = new string(str.OrderBy(c => c).ToArray());
+                    var alg = System.Security.Cryptography.SHA256.Create();
+                    byte[] hashBytes = alg.ComputeHash(Encoding.UTF8.GetBytes(newStr));
+                    int hashNew = BitConverter.ToInt32(hashBytes);
+
+                    if (!items.ContainsKey(hashNew))
+                    {
+                        items.Add(hashNew, new Item { itemRef = str, count = 1 });
+                    }
+                    else
+                    {
+                        items[hashNew].count += 1;
+                    }
                 }
-            }
-            sw.WriteLine(Char.ConvertFromUtf32(0x1D160));
-sw.WriteLine(sb.ToString());
-            sw.Close();
-        }
-        
-    }
-    
-    public static class Bites{
-        public static void GO(){
-System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
 
-            Bites.BitesTest();
+                items.Select(s => new { s.Value.itemRef, s.Value.count })
+                .ToList()
+                .ForEach(s =>
+                    System.Diagnostics.Trace.WriteLine($"Itme entry count: {s.itemRef} {s.count}")
+                );
+
+            }
+
         }
 
-        public static void BitesTest(){
-            byte bt = 0X80;
-            int a = 0X80;
-            int res = a & a;
-            var str0 = Convert.ToString(bt, 2);
+        //chars
+        public class Chars
+        {
 
-            byte[] bytes = {0X0001,0X0011,0XF1,0,1};
-            foreach(byte b in bytes){
-System.Diagnostics.Trace.WriteLine(Convert.ToString(b,2));
-            }
-
-            string str = "Value to bytes";
-
-            List<char> charsFromCharBits = new List<char>();
-            List<char> charsFromIntBits = new List<char>();
-
-            foreach(char ch in str)
+            public static void GO()
             {
-                string str1 = char.ToString(ch);
-                
-                int intFromChar = Convert.ToInt32(ch);                                
-                byte byteFromInt = Convert.ToByte(intFromChar);
-                byte byteFromCh = Convert.ToByte(ch);
-                
-                byte[] btArrCh = BitConverter.GetBytes(ch);
-                byte[] btArrInt = BitConverter.GetBytes(intFromChar);
-
-                charsFromCharBits.Add(BitConverter.ToChar(btArrCh));
-                charsFromIntBits.Add(BitConverter.ToChar(btArrInt));
-
-                string byteStringRep = BitConverter.ToString(btArrCh);
-            }
-
-            string stringFromCharBits = new string(charsFromCharBits.ToArray());
-            string stringFromIntBits = new string(charsFromIntBits.ToArray());
-            
-            bool eq0 = stringFromCharBits == stringFromIntBits;
-            bool eq1 = stringFromCharBits.Equals(stringFromIntBits);
-
-            List<char> charsFromStringOfBites = new List<char>();
-
-            string hexValue = "56 61 6C"; //"48 65 6C 6C 6F 20 57 6F 72 6C 64 21";
-            string[] hexValues = hexValue.Split(' ');
-            foreach(string hS in hexValues)
-            {
-
                 try
                 {
-                    int intFromString = Convert.ToInt32(hS,16);
-                    byte byteFromString = Convert.ToByte(hS,16);
-                    
-                    byte[] bytesFromInt = BitConverter.GetBytes(intFromString);
-                    byte bfs;               
-               
-                    byte.TryParse(hS, out bfs);
-                    charsFromStringOfBites.Add(BitConverter.ToChar(bytesFromInt));
-                }catch(Exception e)
+                    string input = "abcd123";
+                    List<byte> bytesFromString = new List<byte>();
+                    foreach (char ch in input)
+                    {
+                        byte[] tempBytes = BitConverter.GetBytes(ch);
+                        bytesFromString.AddRange(tempBytes);
+                    }
+
+                    //converted bytes
+                    string result = new string(BitConverter.ToString(bytesFromString.ToArray()));
+                    //original chars
+                    List<char> charsFromByte = new List<char>(bytesFromString.ToList().Where(s => s != 0).Select(Convert.ToChar));
+                    //original string
+                    string resultOne = new string(charsFromByte.ToArray());
+
+                    //new string from converted bytes
+                    string[] byteString = result.Split("-");
+                    List<char> charsFromBiteString = new List<char>();
+                    foreach (string st in byteString)
+                    {
+                        byte bt;
+                        byte.TryParse(st, out bt);
+
+                        char ch = Convert.ToChar(bt);
+                        charsFromBiteString.Add(ch);
+                    }
+                    string resultTwo = new string(charsFromBiteString.ToArray());
+                }
+                catch (Exception e)
                 {
 
                 }
             }
 
-            string stringFromStringOfBytes = new string(charsFromStringOfBites.ToArray());
-            
-        }
-           
-      
-    }
-
-    public class LinkedListSort{
-
-        public class Node
-        {
-            int Id{get;set;}
-            Node previous {get;set;}
-            Node next { get; set; }
-        }
-
-        public static void GO(){
-            
-        }
-
-        public void Sort(){
-
-        }
-    }
-
-
-
-    public static class FactorialCount{
-
-        public static List<int> GO(int upperGap){
-            List<int> results = new List<int>();
-            for (
-                int i = 0; i < 10; i++)
+            public void Bulk()
             {
-                results.Add(Count(i));
+                StreamWriter sw = new StreamWriter("output1.txt");
+
+                byte[] bites = { 0X0000, 0X0001, 0X0002, 0X0003, 0X0003, 0X0061 };
+                char[] charsFromBite = BitConverter.ToString(bites).ToCharArray();
+
+                char[] chars = { '\u0061', '\u0308' };
+
+                chars = chars.Union(charsFromBite).ToArray();
+                string str = new string(chars);
+
+                byte[] bytesFromChars = Encoding.UTF8.GetBytes(chars);
+                string stringFromByte = BitConverter.ToString(bytesFromChars);
+
+                sw.WriteLine(str);
+
+                sw.WriteLine($"Encoding.UTF8: {stringFromByte}");
+                sw.WriteLine($"Encoding.UTF32: {BitConverter.ToString(Encoding.UTF32.GetBytes(chars))}");
+                sw.WriteLine($"Encoding.Unicode: {BitConverter.ToString(Encoding.Unicode.GetBytes(chars))}");
+                sw.WriteLine($"Encoding UTF8: {BitConverter.ToString(bites)}");
+
+                StringBuilder sb = new StringBuilder();
+                int width = 0;
+                for (int i = 0; i < 65535; i++)
+                {
+                    try
+                    {
+                        char chnew = Convert.ToChar(i);
+                        char ch = Convert.ToChar(i);
+                        if (!char.IsDigit(chnew) && !char.IsHighSurrogate(chnew) && !char.IsLowSurrogate(chnew) && !char.IsSurrogate(chnew))
+                        {
+                            sb.Append(Convert.ToChar(i));
+                            width += 1;
+                            if (width >= 50)
+                            {
+                                sb.Append(System.Environment.NewLine);
+                                width = 0;
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
+                }
+                sw.WriteLine(Char.ConvertFromUtf32(0x1D160));
+                sw.WriteLine(sb.ToString());
+                sw.Close();
             }
 
-            return results;
         }
 
-        public static int Count(int upperGap){
-            if(upperGap==0){return 0;}
+        public static class Bites
+        {
+            public static void GO()
+            {
+                System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
+
+                Bites.BitesTest();
+            }
+
+            public static void BitesTest()
+            {
+                byte bt = 0X80;
+                int a = 0X80;
+                int res = a & a;
+                var str0 = Convert.ToString(bt, 2);
+
+                byte[] bytes = { 0X0001, 0X0011, 0XF1, 0, 1 };
+                foreach (byte b in bytes)
+                {
+                    System.Diagnostics.Trace.WriteLine(Convert.ToString(b, 2));
+                }
+
+                string str = "Value to bytes";
+
+                List<char> charsFromCharBits = new List<char>();
+                List<char> charsFromIntBits = new List<char>();
+
+                foreach (char ch in str)
+                {
+                    string str1 = char.ToString(ch);
+
+                    int intFromChar = Convert.ToInt32(ch);
+                    byte byteFromInt = Convert.ToByte(intFromChar);
+                    byte byteFromCh = Convert.ToByte(ch);
+
+                    byte[] btArrCh = BitConverter.GetBytes(ch);
+                    byte[] btArrInt = BitConverter.GetBytes(intFromChar);
+
+                    charsFromCharBits.Add(BitConverter.ToChar(btArrCh));
+                    charsFromIntBits.Add(BitConverter.ToChar(btArrInt));
+
+                    string byteStringRep = BitConverter.ToString(btArrCh);
+                }
+
+                string stringFromCharBits = new string(charsFromCharBits.ToArray());
+                string stringFromIntBits = new string(charsFromIntBits.ToArray());
+
+                bool eq0 = stringFromCharBits == stringFromIntBits;
+                bool eq1 = stringFromCharBits.Equals(stringFromIntBits);
+
+                List<char> charsFromStringOfBites = new List<char>();
+
+                string hexValue = "56 61 6C"; //"48 65 6C 6C 6F 20 57 6F 72 6C 64 21";
+                string[] hexValues = hexValue.Split(' ');
+                foreach (string hS in hexValues)
+                {
+
+                    try
+                    {
+                        int intFromString = Convert.ToInt32(hS, 16);
+                        byte byteFromString = Convert.ToByte(hS, 16);
+
+                        byte[] bytesFromInt = BitConverter.GetBytes(intFromString);
+                        byte bfs;
+
+                        byte.TryParse(hS, out bfs);
+                        charsFromStringOfBites.Add(BitConverter.ToChar(bytesFromInt));
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
+                }
+
+                string stringFromStringOfBytes = new string(charsFromStringOfBites.ToArray());
+
+            }
+
+
+        }
+
+        public static int FactorialCount(int upperGap)
+        {
+            if (upperGap == 0) { return 0; }
             int result = 1;
-            for(int i = 1;i<=upperGap;i++){
-                result*=i;
+            for (int i = 1; i <= upperGap; i++)
+            {
+                result *= i;
             }
             return result;
         }
-    }
 
-    public static class BalncedDelimeter{
 
-        public static void GO(){
-System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
-          
+
+        public class QuickSort{
+         
         }
-        
-    }
 
+        public class HeapSort{
+            
+            public void Sort(List<int> arr){
+                int lastNotLeafNode = arr.Count/2-1;
+                
+                for(int i = lastNotLeafNode;i>=0;i--){
+
+                    ChechChildsAndSwap(arr,i);
+                }
+            }
+            void ChechChildsAndSwap(List<int> arr, int i)
+            {
+                var maxChildIdx = GetMaxNodeIndex(arr, i * 2 + 1, i * 2 + 2);
+                if (maxChildIdx>=0 && arr[maxChildIdx] > arr[i])
+                {
+                    Swap(arr, arr[maxChildIdx], arr[i]);
+                    ChechChildsAndSwap(arr,maxChildIdx);
+                }
+            }
+            int GetMaxNodeIndex(List<int> arr,int idxSt,int idxFn)
+            {
+                int result=0;
+                int idx=-1;
+                for(int i =idxSt;i<=idxFn;i++){
+                    if(i<= arr.Count && arr[i]>result){
+                        result=arr[i];
+                        idx=i;
+                    }
+                }
+                return idx;
+            }
+            List<int> Swap(List<int> arr,int a,int b)
+            {
+                var item = arr[a];
+                arr[a]=arr[b];
+                arr[b]=item;
+                return arr;
+            }
+            
+        }
+
+        public class LinkedListSort
+        {
+
+            public class Node
+            {
+                int Id { get; set; }
+                Node previous { get; set; }
+                Node next { get; set; }
+            }
+
+            public static void GO()
+            {
+
+            }
+
+            public void Sort()
+            {
+
+            }
+        }
+
+        public static class BalancedDelimeter
+        {
+
+            public static void GO()
+            {
+                System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
+
+            }
+
+        }
+
+    }    
 
 }
+
 
 
 namespace Rewrite
