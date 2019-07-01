@@ -1842,6 +1842,8 @@ namespace LINQtoObjectsCheck
     public class Pet {
         public Guid Id {get;set;}
         public string Name {get;set;}
+
+        public PetOwners Owner {get;set;}
     }
     
     
@@ -1944,7 +1946,7 @@ namespace LINQtoObjectsCheck
             cups.Add(new Cup { Competition = @"Cup7", Year = 1991, Position = 1, RacerName = @"Racer11" });
 
 
-            List<PetOwners> petowners = new List<PetOwners>() {
+            List<PetOwners> petownersWithPets = new List<PetOwners>() {
                 new PetOwners {OwnerName=@"Owner1",OwnerInt=0,PetsStr= new List<string>() { @"Pet1",@"Pet2"} 
                 , Pets = new List<Pet>(){ new Pet(){Name=@"Pet1"}, new Pet() { Name = @"Pet2" }}},
                 new PetOwners {OwnerName=@"Owner2",OwnerInt=1,PetsStr= new List<string>() { @"Pet3",@"Pet4", @"Pet5" }
@@ -1955,20 +1957,46 @@ namespace LINQtoObjectsCheck
                  , Pets = new List<Pet>() { new Pet() { Name = @"Pet7" }, new Pet() { Name = @"Pet8" } ,new Pet() { Name = @"Pet9" },new Pet() { Name = @"Pet10" }}}
             };
 
-            List<Pet> pets = new List<Pet>(){
+            List<Pet> petsWithoutOwners = new List<Pet>(){
                 new Pet(){Name=@"Pet3"}
                 ,new Pet() { Name = @"Pet7" }
                 ,new Pet() { Name = @"Pet11" }
             };
 
+            List<Pet> petsWithOwners = new List<Pet>(){
+                new Pet(){Name = "Pet20", Owner = petownersWithPets[0]}
+                ,new Pet(){Name = "Pet21", Owner = petownersWithPets[0]}
+                
+                ,new Pet(){Name = "Pet22", Owner = petownersWithPets[1]}
+
+                ,new Pet(){Name = "Pet23", Owner = petownersWithPets[2]}
+                ,new Pet(){Name = "Pet24", Owner = petownersWithPets[2]}
+                ,new Pet(){Name = "Pet25", Owner = petownersWithPets[2]}
+            };
+
+            var ownersOfPets = 
+                from s in petownersWithPets
+                join c in petsWithOwners on s equals c.Owner into t
+                from c in t.DefaultIfEmpty()
+                select new {
+                    Owner = s?.OwnerName ?? "",
+                    Pet = c?.Name ?? ""
+                };
+
+            var owersOfPetsAPI = 
+                petownersWithPets.Join(petsWithOwners, petowner => petowner, pet => pet.Owner, (petowner,pet)=>new{ 
+                    Owner = petowner.OwnerName,
+                    Pet = pet.Name
+                });
+
             //where Any
             var petOwnersWithPetsInList = 
-                petowners.Where(s => s.Pets.Any( x => pets.Any(c => c.Name == x.Name )))
+                petownersWithPets.Where(s => s.Pets.Any( x => petsWithoutOwners.Any(c => c.Name == x.Name )))
                 .ToList();
 
             //where exists
             var petOwnersWithPetsInListExist =
-                petowners.Where(s => s.Pets.Exists(x => pets.Exists(c => c.Name == x.Name)))
+                petownersWithPets.Where(s => s.Pets.Exists(x => petsWithoutOwners.Exists(c => c.Name == x.Name)))
                 .ToList();
 
 
@@ -1985,11 +2013,11 @@ namespace LINQtoObjectsCheck
                 .Zip(from r in racers select new { r.Car }, (z, x) => (z.RacerName + x.Car));       
 
             IEnumerable<string> d =
-                from t in petowners
+                from t in petownersWithPets
                 from t2 in t.PetsStr
                 select t2;
 
-            IEnumerable<string> e = petowners.SelectMany(s => s.PetsStr);
+            IEnumerable<string> e = petownersWithPets.SelectMany(s => s.PetsStr);
 
             var cupsByYearQuery =
             from t in cups
@@ -2025,12 +2053,14 @@ namespace LINQtoObjectsCheck
 
             //Aggregate
             var MaxPetsInOnerCnt =
-            petowners.Aggregate<PetOwners,int,int>(0,(s, next) => 
+            petownersWithPets.Aggregate<PetOwners,int,int>(0,(s, next) => 
                 next.PetsStr.Count() > s ? next.PetsStr.Count() : s
             , cp => cp);
 
+            //seed is temprary store
+            //next is iteratable item
             var MaxPetsPetOwner =
-                petowners.Aggregate<PetOwners,PetOwners,PetOwners>(new PetOwners(),
+                petownersWithPets.Aggregate<PetOwners,PetOwners,PetOwners>(new PetOwners(),
                     (seed , next) => 
                     (seed?.PetsStr?.Any() != true) 
                         ? next 
@@ -2043,6 +2073,7 @@ namespace LINQtoObjectsCheck
             //     group t by new { t.Competition } into t2
             //     select new {Cup = t2.Key, Count = t2.Key.Count(), 
             //Racer = from s in t2 select s.RacerName };
+           
 
             //join from different sources            
             var h = from s in racers select s;
@@ -2058,6 +2089,20 @@ namespace LINQtoObjectsCheck
                      t2.Position
                  }).Skip(2 * 2).Take(2);
             ;
+
+            var leftJoin =
+            (from s in cups
+            join c in racers on s.RacerName equals c.Name into t
+            from c in t.DefaultIfEmpty()
+            select new
+            {
+                Cup = s?.Competition ?? "",
+                Name = s?.RacerName ?? "",
+
+                NameRigth = c?.Name ?? "",
+                CarRigth = c?.Car ?? ""
+            }).ToList();
+            
 
             //???
             var k =
@@ -2899,7 +2944,7 @@ namespace KATAS{
     public class StringCount{
         public static void GO(string input){
             var inp = "aaabbcc";
-            inp = input;
+            inp = input;          
 
             //group by query
             var counts = (
@@ -2910,6 +2955,7 @@ namespace KATAS{
                 Key = c.Key,
                 count = c.Count()
             }).ToList();
+
 
             //group by API
             var countsTwo = inp
@@ -2969,10 +3015,46 @@ items[hashNew].count+=1;
     }
 
     //chars
-    public static class Chars{
+    public class Chars
+    {
+
         public static void GO(){
-            StreamWriter sw = new StreamWriter("output1.txt");
-            
+            try{
+                string input = "abcd123";
+                List<byte> bytesFromString = new List<byte>();
+                foreach (char ch in input)
+                {
+                    byte[] tempBytes = BitConverter.GetBytes(ch);
+                    bytesFromString.AddRange(tempBytes);
+                }
+                
+                //converted bytes
+                string result = new string(BitConverter.ToString(bytesFromString.ToArray()));
+                //original chars
+                List<char> charsFromByte = new List<char>(bytesFromString.ToList().Where(s => s != 0 ).Select(Convert.ToChar));
+                //original string
+                string resultOne = new string(charsFromByte.ToArray());
+
+                //new string from converted bytes
+                string[] byteString = result.Split("-");
+                List<char> charsFromBiteString = new List<char>();
+                foreach(string st in byteString){
+                    byte bt;
+                    byte.TryParse(st,out bt);
+
+                    char ch = Convert.ToChar(bt);
+                    charsFromBiteString.Add(ch);
+                }
+                string resultTwo = new string(charsFromBiteString.ToArray());
+            }
+            catch(Exception e)
+            {
+
+            }
+        }
+
+        public void Bulk(){
+            StreamWriter sw = new StreamWriter("output1.txt");            
 
             byte[] bites = {0X0000,0X0001,0X0002,0X0003,0X0003,0X0061};
             char[] charsFromBite = BitConverter.ToString(bites).ToCharArray();
@@ -2984,13 +3066,12 @@ items[hashNew].count+=1;
 
             byte[] bytesFromChars = Encoding.UTF8.GetBytes(chars);
             string stringFromByte = BitConverter.ToString(bytesFromChars);
-
+            
             sw.WriteLine(str);
             
             sw.WriteLine($"Encoding.UTF8: {stringFromByte}");
             sw.WriteLine($"Encoding.UTF32: {BitConverter.ToString(Encoding.UTF32.GetBytes(chars))}");
-            sw.WriteLine($"Encoding.Unicode: {BitConverter.ToString(Encoding.Unicode.GetBytes(chars))}");
-                        
+            sw.WriteLine($"Encoding.Unicode: {BitConverter.ToString(Encoding.Unicode.GetBytes(chars))}");                        
             sw.WriteLine($"Encoding UTF8: {BitConverter.ToString(bites)}");
             
             StringBuilder sb = new StringBuilder();
@@ -3018,6 +3099,7 @@ items[hashNew].count+=1;
 sw.WriteLine(sb.ToString());
             sw.Close();
         }
+        
     }
     
     public static class Bites{
@@ -3057,7 +3139,7 @@ System.Diagnostics.Trace.WriteLine(Convert.ToString(b,2));
                 charsFromCharBits.Add(BitConverter.ToChar(btArrCh));
                 charsFromIntBits.Add(BitConverter.ToChar(btArrInt));
 
-                string byteStringRep =BitConverter.ToString(btArrCh);
+                string byteStringRep = BitConverter.ToString(btArrCh);
             }
 
             string stringFromCharBits = new string(charsFromCharBits.ToArray());
@@ -3096,6 +3178,26 @@ System.Diagnostics.Trace.WriteLine(Convert.ToString(b,2));
       
     }
 
+    public class LinkedListSort{
+
+        public class Node
+        {
+            int Id{get;set;}
+            Node previous {get;set;}
+            Node next { get; set; }
+        }
+
+        public static void GO(){
+            
+        }
+
+        public void Sort(){
+
+        }
+    }
+
+
+
     public static class FactorialCount{
 
         public static List<int> GO(int upperGap){
@@ -3127,6 +3229,8 @@ System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMet
         }
         
     }
+
+
 }
 
 

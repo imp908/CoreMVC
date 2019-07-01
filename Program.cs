@@ -24,7 +24,11 @@ namespace mvccoresb
                 //NetPlatformCheckers.InheritanceOverridingWithInterfaces.GO();
                 //NetPlatformCheckers.TypesCheck.GO();
                 
-                KATAS.Bites.GO();
+                KATAS.Chars.GO();
+                
+                LINQtoObjectsCheck.LinqCheck.GO();
+
+                //KATAS.Bites.GO();
 
                 CreateWebHostBuilder(args).Build().Run();
             }
