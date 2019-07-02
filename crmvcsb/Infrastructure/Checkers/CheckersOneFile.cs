@@ -3223,24 +3223,98 @@ namespace KATAS
 
 
 
+
+        /*Collection for testing value collections */
+        public class TestLestsGV<T> where T : struct, IComparable
+        {
+            public List<T> Arrange { get; set; }
+            public List<T> Expected { get; set; }
+            public bool result
+            {
+                get
+                {
+                    if (this.Arrange == null || this.Expected == null) { return false; }
+                    return this.Arrange.SequenceEqual(this.Expected);
+                }
+                private set { value = false; }
+            }
+        }
+        /*Collection for testing class collections */
+        public class TestLestsGC<T> where T : class, IComparable
+        {
+            public List<T> Arrange { get; set; }
+            public List<T> Expected { get; set; }
+            public bool result 
+            { 
+                get
+                {
+                    if(this.Arrange == null || this.Expected == null){return false;}
+                    return this.Arrange.SequenceEqual(this.Expected);
+                }
+                private set{value = false;}
+            } 
+        }
+
+
+        public class QuickSortTest
+        {
+            public static void GO(){
+                QuickSortTest qt = new QuickSortTest();
+                qt.QuickSortGenericTest();
+            }
+
+            void QuickSortGenericTest()
+            {
+                QuickSort<int> qs = new QuickSort<int>();
+                List<TestLestsGV<int>> array = new List<TestLestsGV<int>>(){
+                    new TestLestsGV<int>(){Arrange =  new List<int>(){1,5,3,4,2,7}, Expected = new List<int>() { 1, 2, 3, 4, 5, 7 } }
+                    ,new TestLestsGV<int>(){Arrange =  new List<int>(){15, 25, 3, 9, 34, 8, 18, 6, 16 }, Expected = new List<int>() { 3,6,8,9,15,16,18,25,34} }
+                };
+                
+                foreach(var item in array){
+                    qs.Sort(item.Arrange);
+                }
+            }
+        }
         public class QuickSort<T> where T: struct, IComparable
         {
-            public void Sort(List<T> arr)
+            public void Sort(IList<T> arr)
             {
                 sort(arr,0,arr.Count-1);
             }
-            List<T> sort(List<T> arr,int idxLw, int idxHg)
+            IList<T> sort(IList<T> arr,int idxLw, int idxHg)
             {
-                int p = partition(arr);
+                if(idxHg >0 && idxLw<=idxHg){                
+                    int p = partition(arr,idxLw, idxHg);
 
-                sort(arr, 0, p - 1);
-                sort(arr, p + 1, arr.Count - 1);
+                    sort(arr, 0, p - 1);
+                    sort(arr, p + 1, idxHg);
+                }
                 return arr;
             }
-            int partition(List<T> arr)
+            int partition(IList<T> arr,int idxLw, int idxHg)
             {
-                T pivot = arr[arr.Count-1];
-                return -1;
+                T pivot = arr[idxHg];
+                int i = idxLw -1;
+                
+                for(int j=idxLw; j<=idxHg-1; j++)
+                {
+                    if(Comparer<T>.Default.Compare(pivot,arr[j])>0)
+                    {
+                        i++;
+                        Swap(arr,i,j);
+                    }
+                }
+
+                i++;
+                Swap(arr, i, idxHg);
+                return i;
+            }
+            void Swap(IList<T> arr, int idxFt, int idxLt)
+            {
+                T item = arr[idxFt];
+                arr[idxFt] = arr[idxLt];
+                arr[idxLt] = item;
             }
         }
 
@@ -3254,18 +3328,6 @@ namespace KATAS
                 public bool result { get; set; } = false;
             }
 
-            protected class TestLestsGV<T> where T : struct, IComparable
-            {
-                public List<T> Arrange { get; set; }
-                public List<T> Expected { get; set; }
-                public bool result { get; set; } = false;
-            }
-            protected class TestLestsGC<T> where T : class, IComparable
-            {
-                public List<T> Arrange { get; set; }
-                public List<T> Expected { get; set; }
-                public bool result { get; set; } = false;
-            }
             public static void GO()
             {
                 HeapSortTest.HeapSortIntCheck();
@@ -3300,7 +3362,6 @@ namespace KATAS
 
                 foreach(var list in arrange){
                     hsInt.Sort(list.Arrange);
-                    list.result = list.Arrange.SequenceEqual(list.Expected);
                 }
                 
             }
@@ -3313,8 +3374,7 @@ namespace KATAS
 
                 foreach (var list in arrange)
                 {
-                    hsInt.Sort(list.Arrange);
-                    list.result = list.Arrange.SequenceEqual(list.Expected);
+                    hsInt.Sort(list.Arrange);                    
                 }
 
             }
