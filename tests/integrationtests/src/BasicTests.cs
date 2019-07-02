@@ -20,16 +20,22 @@ namespace integrationtests
             _factory = factory;
         }
 
-        [Theory]
-        [InlineData("/")]
-        [InlineData("/Index")]
-        [InlineData("/About")]
-        [InlineData("/Privacy")]
-        [InlineData("/Contact")]
+        [Theory]        
+        [InlineData("/TestArea")]
+        [InlineData("/TestArea/Home/")]
+        [InlineData("/TestArea/Home/NewHomeIndex")]
+        [InlineData("/Scaffolded/home/index")]        
+        [InlineData("/TestArea/JScheck/CheckAppOne")]        
+        [InlineData("/TestArea/React/CheckShoppingList")]
+        [InlineData("/TestArea/SignalR/hub")]        
+        // [InlineData("/Index")]
+        // [InlineData("/About")]
+        // [InlineData("/Privacy")]
+        // [InlineData("/Contact")]        
         public async Task Get_EndpointsReturnSuccessAndCorrectContentType(string url)
         {
             // Arrange
-            var client = _factory.CreateClient();
+            var client = _factory.CreateClient();                        
 
             // Act
             var response = await client.GetAsync(url);
@@ -39,6 +45,23 @@ namespace integrationtests
             Assert.Equal("text/html; charset=utf-8",
                 response.Content.Headers.ContentType.ToString());
         }
+        
+        [Theory]
+        [InlineData("/api/values")]
+        public async Task Get_ApiEndpointsReturnSuccessAndJsonContentType(string url){
+
+            // Arrange
+            var client = _factory.CreateClient();
+
+            // Act
+            var response = await client.GetAsync(url);
+
+            // Assert
+            response.EnsureSuccessStatusCode(); // Status Code 200-299
+            Assert.Equal("application/json; charset=utf-8",
+                response.Content.Headers.ContentType.ToString());
+        }
+        
     }
     
 }

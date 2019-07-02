@@ -380,14 +380,18 @@ DONE:[
    
         
         <- done 12.06.2019 3h30m -> react timer sliders 
-        <- done 12.06.2019 2h -> react todo                 
+        <- done 12.06.2019 2h -> react todo        
 
     ] ~37h 15m in 7d
 
     master:[
         <- done 15.06.2019 12:35-16:02 3h30m -> git merge crmvcsb -> master, order -> master, cleanup master,crmvcsb,order
-    ]~ 3h:30m 
+        
+        <- done 01.07.2019 4h -> KATAs heapsort 
+        <- done 01.07.2019 1h -> test server project multiple build tasks, and integrate run
+        
+    ]~ 8h:30m 
 
-    ~64h: 40m in 12d
+    ~72h: 40m in 12d
 
 ]

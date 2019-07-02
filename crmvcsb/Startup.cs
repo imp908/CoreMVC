@@ -126,7 +126,12 @@ namespace mvccoresb
             autofacContainer.RegisterType<BlogBLL>()
                 .As<IBlogBLL>().InstancePerLifetimeScope();
             autofacContainer.RegisterType<PostBLL>()
-                .As<IPostBLL>().InstancePerLifetimeScope();          
+                .As<IPostBLL>().InstancePerLifetimeScope();
+            autofacContainer.RegisterType<CQRSBloggingWrite>()
+                .As<ICQRSBloggingWrite>().InstancePerLifetimeScope();
+            autofacContainer.RegisterType<CQRSBloggingRead>()
+                .As<ICQRSBloggingRead>().InstancePerLifetimeScope();
+
             autofacContainer.RegisterType<OrdersManagerWrite>()
                 .As<IOrdersManagerWrite>()
                 .WithParameter(new TypedParameter(typeof(RepositoryEF),
