@@ -3223,33 +3223,105 @@ namespace KATAS
 
 
 
-        public class QuickSort{
-         
+        public class QuickSort<T> where T: struct, IComparable
+        {
+            public void Sort(List<T> arr)
+            {
+                sort(arr,0,arr.Count-1);
+            }
+            List<T> sort(List<T> arr,int idxLw, int idxHg)
+            {
+                int p = partition(arr);
+
+                sort(arr, 0, p - 1);
+                sort(arr, p + 1, arr.Count - 1);
+                return arr;
+            }
+            int partition(List<T> arr)
+            {
+                T pivot = arr[arr.Count-1];
+                return -1;
+            }
         }
 
-        public class HeapSort{
-            
-            protected class TestLists{
-                public List<int> Arrange{get;set;}
-                public List<int> Expected {get;set;}
-                public bool result {get;set;}=false;
+
+
+        public class HeapSortTest{
+            protected class TestLists
+            {
+                public List<int> Arrange { get; set; }
+                public List<int> Expected { get; set; }
+                public bool result { get; set; } = false;
             }
-            public static void GO(){
-                HeapSort hs = new HeapSort();
+
+            protected class TestLestsGV<T> where T : struct, IComparable
+            {
+                public List<T> Arrange { get; set; }
+                public List<T> Expected { get; set; }
+                public bool result { get; set; } = false;
+            }
+            protected class TestLestsGC<T> where T : class, IComparable
+            {
+                public List<T> Arrange { get; set; }
+                public List<T> Expected { get; set; }
+                public bool result { get; set; } = false;
+            }
+            public static void GO()
+            {
+                HeapSortTest.HeapSortIntCheck();
+                HeapSortTest.HeapSortGenericCheckInt();
+                HeapSortTest.HeapSortGenericCheckChars();
+
+            }
+            static void HeapSortIntCheck(){
+                HeapSortInt hs = new HeapSortInt();
 
                 List<TestLists> arrange = new List<TestLists>(){
-                   new TestLists(){ Arrange = new List<int>() { 4, 5, 3, 2, 1 }, Expected = new List<int>() { 5, 4, 3, 2, 1 }}
-                   ,new TestLists(){ Arrange = new List<int>() { 4, 10, 3, 5, 1 }, Expected = new List<int>() { 10, 5, 3, 4, 1 }}
-                   ,new TestLists(){ Arrange = new List<int>() {1, 3, 5, 4, 6, 13, 10, 9, 8, 15, 17}, Expected = new List<int>() {17,15,13,9,6,5,10,4,8,3,1}}
-                };
+                    new TestLists(){ Arrange = new List<int>() { 4, 5, 3, 2, 1 }, Expected = new List<int>() { 5, 4, 3, 2, 1 }}
+                    ,new TestLists(){ Arrange = new List<int>() { 4, 10, 3, 5, 1 }, Expected = new List<int>() { 10, 5, 3, 4, 1 }}
+                    ,new TestLists(){ Arrange = new List<int>() {1, 3, 5, 4, 6, 13, 10, 9, 8, 15, 17}, Expected = new List<int>() {17,15,13,9,6,5,10,4,8,3,1}}
+                    };
 
-                foreach(var list in arrange){
+                foreach(var list in arrange)
+                {
                     hs.Sort(list.Arrange);
                     list.result = list.Arrange.SequenceEqual(list.Expected);
                 };
-              
+
             }
 
+            static void HeapSortGenericCheckInt(){
+                HeapSort<int> hsInt = new HeapSort<int>();
+                List<TestLestsGV<int>> arrange = new List<TestLestsGV<int>>(){
+                    new TestLestsGV<int>(){Arrange = new List<int>(){4,5,3,2,1}, Expected = new List<int>(){5,4,3,2,1} }
+                    ,new TestLestsGV<int>(){ Arrange = new List<int>() { 4, 10, 3, 5, 1 }, Expected = new List<int>() { 10, 5, 3, 4, 1 }}
+                    ,new TestLestsGV<int>(){ Arrange = new List<int>() {1, 3, 5, 4, 6, 13, 10, 9, 8, 15, 17}, Expected = new List<int>() {17,15,13,9,6,5,10,4,8,3,1}}
+                };
+
+                foreach(var list in arrange){
+                    hsInt.Sort(list.Arrange);
+                    list.result = list.Arrange.SequenceEqual(list.Expected);
+                }
+                
+            }
+            static void HeapSortGenericCheckChars()
+            {
+                HeapSort<char> hsInt = new HeapSort<char>();
+                List<TestLestsGV<char>> arrange = new List<TestLestsGV<char>>(){
+                    new TestLestsGV<char>(){Arrange = "adfbec".ToArray().ToList(), Expected = "abcdef".ToArray().ToList() }                    
+                };
+
+                foreach (var list in arrange)
+                {
+                    hsInt.Sort(list.Arrange);
+                    list.result = list.Arrange.SequenceEqual(list.Expected);
+                }
+
+            }
+        
+        }
+        public class HeapSortInt{
+            
             public void Sort(List<int> arr){
                 int lastNotLeafNode = arr.Count/2-1;
                 
@@ -3288,6 +3360,76 @@ namespace KATAS
             }
             
         }
+        public class HeapSort<T> where T : struct, IComparable
+        {
+            private readonly int nodesPerLvlv = 2;
+
+            public void Sort(List<T> arr)
+            {
+                if(arr != null && arr.Count>0)
+                {
+                    int lastNotLeafNodeIndex = arr.Count / nodesPerLvlv - 1;
+
+                    for(int i = lastNotLeafNodeIndex; i>=0; i--){
+                        ChildrenCheckAndSwap(arr,i);
+                    }
+                  
+                }
+            }
+
+            void ChildrenCheckAndSwap(List<T> arr, int index)
+            {
+                int maxParentOrChildIndex = GetMaxNodesIndex(arr, index);
+                if (maxParentOrChildIndex >= 0 && maxParentOrChildIndex > index)
+                {
+                    Swap(arr, maxParentOrChildIndex, index);
+                    ChildrenCheckAndSwap(arr,maxParentOrChildIndex);
+                }
+            }
+            int GetMaxNodesIndex(List<T> arr, int idx)
+            {
+                int resultindex=-1;
+                
+                if(
+                    idx < (arr.Count - 1)
+                    &&
+                    //There are childs in array with lowerbound index
+                    ((arr.Count - 1) - (idx * nodesPerLvlv + 1) > 0)
+                ){
+                    int nodesLwInds = idx * nodesPerLvlv + 1;
+                    int nodesHgIdx = idx * (nodesPerLvlv) + nodesPerLvlv;
+                    nodesHgIdx = nodesHgIdx <= arr.Count ? nodesHgIdx : arr.Count;
+
+                    T tempResult = arr[idx];
+                    for(int nodesIndex = nodesLwInds; nodesIndex <= nodesHgIdx;nodesIndex++ )
+                    {
+                        if(Comparer<T>.Default.Compare(arr[nodesIndex], tempResult) > 0)
+                        {
+                            tempResult = arr[nodesIndex];
+                            resultindex=nodesIndex;
+                        }
+                    }
+                }
+
+                return resultindex;
+            }
+            void Swap(List<T> arr,int idxLw,int idxHg)
+            {
+                T item = arr[idxLw];
+                arr[idxLw] = arr[idxHg];
+                arr[idxHg] = item;
+            }
+
+            public void Compare<T>(T one,T two)
+            {
+                if(Comparer<T>.Default.Compare(one,two) > 0){
+
+                }
+            }
+        }
+
+
+
 
         public class LinkedListSort
         {
