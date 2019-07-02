@@ -44,6 +44,8 @@ Related files:
 	dotnet add tests\integrationtests\integrationtests.csproj package xunit --version 2.4.1
 	dotnet add tests\integrationtests\integrationtests.csproj package xunit.runner.visualstudio --version 2.4.1
 	dotnet add tests\integrationtests\integrationtests.csproj package AngleSharp --version 0.12.1
+	dotnet add tests\integrationtests\integrationtests.csproj package FluentAssertions --version 5.7.0
+	dotnet add tests\integrationtests\integrationtests.csproj package Microsoft.NET.Test.Sdk --version 16.2.0
 ```
 
 ## Pckages to build js:

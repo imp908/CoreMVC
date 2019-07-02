@@ -3229,6 +3229,27 @@ namespace KATAS
 
         public class HeapSort{
             
+            protected class TestLists{
+                public List<int> Arrange{get;set;}
+                public List<int> Expected {get;set;}
+                public bool result {get;set;}=false;
+            }
+            public static void GO(){
+                HeapSort hs = new HeapSort();
+
+                List<TestLists> arrange = new List<TestLists>(){
+                   new TestLists(){ Arrange = new List<int>() { 4, 5, 3, 2, 1 }, Expected = new List<int>() { 5, 4, 3, 2, 1 }}
+                   ,new TestLists(){ Arrange = new List<int>() { 4, 10, 3, 5, 1 }, Expected = new List<int>() { 10, 5, 3, 4, 1 }}
+                   ,new TestLists(){ Arrange = new List<int>() {1, 3, 5, 4, 6, 13, 10, 9, 8, 15, 17}, Expected = new List<int>() {17,15,13,9,6,5,10,4,8,3,1}}
+                };
+
+                foreach(var list in arrange){
+                    hs.Sort(list.Arrange);
+                    list.result = list.Arrange.SequenceEqual(list.Expected);
+                };
+              
+            }
+
             public void Sort(List<int> arr){
                 int lastNotLeafNode = arr.Count/2-1;
                 
@@ -3242,7 +3263,7 @@ namespace KATAS
                 var maxChildIdx = GetMaxNodeIndex(arr, i * 2 + 1, i * 2 + 2);
                 if (maxChildIdx>=0 && arr[maxChildIdx] > arr[i])
                 {
-                    Swap(arr, arr[maxChildIdx], arr[i]);
+                    Swap(arr, maxChildIdx, i);
                     ChechChildsAndSwap(arr,maxChildIdx);
                 }
             }
@@ -3251,7 +3272,7 @@ namespace KATAS
                 int result=0;
                 int idx=-1;
                 for(int i =idxSt;i<=idxFn;i++){
-                    if(i<= arr.Count && arr[i]>result){
+                    if(i<= (arr.Count-1) && arr[i]>result){
                         result=arr[i];
                         idx=i;
                     }

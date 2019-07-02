@@ -24,9 +24,11 @@ namespace mvccoresb
                 //NetPlatformCheckers.InheritanceOverridingWithInterfaces.GO();
                 //NetPlatformCheckers.TypesCheck.GO();
                 
-                KATAS.Miscellaneous.Chars.GO();
+                KATAS.Miscellaneous.HeapSort.GO();
 
-                LINQtoObjectsCheck.LinqCheck.GO();
+                //KATAS.Miscellaneous.Chars.GO();
+
+                //LINQtoObjectsCheck.LinqCheck.GO();
 
                 //KATAS.Bites.GO();
 
