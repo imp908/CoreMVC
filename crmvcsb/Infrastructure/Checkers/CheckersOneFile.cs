@@ -3256,6 +3256,9 @@ namespace KATAS
         }
 
 
+
+
+
         public class QuickSortTest
         {
             public static void GO(){
@@ -3317,7 +3320,6 @@ namespace KATAS
                 arr[idxLt] = item;
             }
         }
-
 
 
         public class HeapSortTest{
@@ -3491,16 +3493,74 @@ namespace KATAS
 
 
 
-        public class LinkedListSort
-        {
-
-            public class Node
-            {
-                int Id { get; set; }
-                Node previous { get; set; }
-                Node next { get; set; }
+        public class LinkedListSortTest{
+            public static void GO(){
+                LinkedListSortTest ls = new LinkedListSortTest();
+                ls.ReverseAndPrintCheck();
             }
 
+            void ReverseAndPrintCheck()
+            {
+                var node0 = new Node<int>() { Id = 1, Value = 'a', Previous = null, Next = null };
+                var node1 = new Node<int>() { Id = 2, Value = 'b', Previous = node0, Next = null };
+                var node2 = new Node<int>() { Id = 3, Value = 'c', Previous = node1, Next = null };
+                var node3 = new Node<int>() { Id = 4, Value = 'c', Previous = node2, Next = null };
+                var node4 = new Node<int>() { Id = 5, Value = 'b', Previous = node3, Next = null };
+                var node5 = new Node<int>() { Id = 6, Value = 'a', Previous = node4, Next = null };
+
+                node0.Next=node1;                
+                node1.Next = node2;
+                node2.Next = node3;
+                node3.Next = node4;
+                node4.Next = node5;
+
+                List<Node<int>> LkdList = new List<Node<int>>(){
+                    node0,node1,node2,node3,node4,node5
+                };
+                
+                LinkedListSort<int> ls = new LinkedListSort<int>();
+
+                ls.PrintLine(LkdList);
+                ls.Reverse(LkdList);
+                ls.PrintLine(LkdList);
+
+
+
+
+                var pn0 = new Node<int>() { Id = 1, Value = 'a', Previous = null, Next = null };
+                var pn1 = new Node<int>() { Id = 2, Value = 'b', Previous = pn0, Next = null };
+                var pn2 = new Node<int>() { Id = 3, Value = 'b', Previous = pn1, Next = null };
+                var pn3 = new Node<int>() { Id = 4, Value = 'b', Previous = pn2, Next = null };
+                var pn4 = new Node<int>() { Id = 5, Value = 'a', Previous = pn3, Next = null };
+                
+                pn0.Next = pn1;
+                pn1.Next = pn2;
+                pn2.Next = pn3;
+                pn3.Next = pn4;
+
+                List<Node<int>> LkdListp = new List<Node<int>>(){
+                    pn0,pn1,pn2,pn3,pn4
+                };
+                
+
+                bool isPolindrome = ls.PolindromeCheck(LkdListp);
+                ls.PrintLine(LkdListp);
+                ls.Reverse(LkdListp);
+                ls.PrintLine(LkdListp);
+                bool isPolindromeAfter = ls.PolindromeCheck(LkdListp);
+            }
+        }
+        public class Node<T> where T : struct, IComparable
+        {
+            public T Id { get; set; }
+            public char Value {get;set;}
+
+            public Node<T> Previous { get; set; }
+            public Node<T> Next { get; set; }
+        }
+        public class LinkedListSort<T> where T : struct, IComparable
+        {
+          
             public static void GO()
             {
 
@@ -3509,6 +3569,71 @@ namespace KATAS
             public void Sort()
             {
 
+            }
+
+            public void Reverse(IList<Node<T>> list)
+            {
+                foreach(Node<T> node in list)
+                {
+                    Node<T> prev = node.Previous;
+                    node.Previous=node.Next;
+                    node.Next = prev;
+                }
+            }
+
+            public bool PolindromeCheck(IList<Node<T>> list)
+            {
+                Node<T> st = list.Where(s => s.Previous==null).FirstOrDefault();
+                Node<T> fn = list.Where(s => s.Next==null).FirstOrDefault();
+
+                while(fn != null){
+                    if(st.Value != fn.Value){return false;}
+                                        
+                    if(st != fn.Previous && fn!= st.Next){
+                        st = st.Next;
+                        fn = fn.Previous;
+                    }else{
+                        fn=null;
+                    }
+                    
+                }
+
+                return true;
+            }
+
+            public void Print(IList<Node<T>> list)
+            {
+                foreach (Node<T> node in list)
+                {
+System.Diagnostics.Trace.WriteLine($"Node: {node.Id}; In reference: {node.Previous?.Id}-{node.Id}->{node.Next?.Id};");
+                }
+            }
+            public string PrintLine(IList<Node<T>> list){
+                
+                string result = String.Empty;
+                Node<T> item = list.Where(s=>s.Previous == null).FirstOrDefault();
+
+                while(item!=null)
+                {
+                    result += $"-{item?.Id}-";
+                    item=item.Next;                    
+                }
+                System.Diagnostics.Trace.WriteLine(result);          
+                return result;
+            }
+            public string PrintValue(IList<Node<T>> list)
+            {
+
+                string result = String.Empty;
+                Node<T> item = list.Where(s => s.Previous == null).FirstOrDefault();
+
+                while (item != null)
+                {
+                    result += $"-{item?.Value}-";
+                    item = item.Next;
+                }
+                System.Diagnostics.Trace.WriteLine(result);
+                return result;
             }
         }
 
