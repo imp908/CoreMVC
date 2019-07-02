@@ -389,9 +389,15 @@ DONE:[
         
         <- done 01.07.2019 4h -> KATAs heapsort 
         <- done 01.07.2019 1h -> test server project multiple build tasks, and integrate run
+        <- done 1h -> integration tests        
         
-    ]~ 8h:30m 
+        <- done 02.07.2019 1h -> integration tests
+        <- done 02.07.2019 2h -> quicksort        
+        <- done 02.07.2019 1h10m -> heap sort
+        <- done 02.07.2019 1h45m -> linked nodes reverce,polindrome check
 
-    ~72h: 40m in 12d
+    ]~ 14h:30m 
+
+    ~78h: 40m in 12d
 
 ]

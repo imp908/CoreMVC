@@ -3322,6 +3322,7 @@ namespace KATAS
         }
 
 
+
         public class HeapSortTest{
             protected class TestLists
             {
@@ -3636,6 +3637,8 @@ System.Diagnostics.Trace.WriteLine($"Node: {node.Id}; In reference: {node.Previo
                 return result;
             }
         }
+
+
 
         public static class BalancedDelimeter
         {
