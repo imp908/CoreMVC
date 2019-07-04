@@ -2948,6 +2948,7 @@ namespace KATAS
         }
 
 
+
         //Kasper
         public class StringCount
         {
@@ -3223,7 +3224,6 @@ namespace KATAS
 
 
 
-
         /*Collection for testing value collections */
         public class TestLestsGV<T> where T : struct, IComparable
         {
@@ -3254,8 +3254,6 @@ namespace KATAS
                 private set{value = false;}
             } 
         }
-
-
 
 
 
@@ -3493,8 +3491,129 @@ namespace KATAS
 
 
 
+        public class MergeSortTest
+        {
+            public static void GO(){
+                MergeSortTest mst = new MergeSortTest();
+                mst.MergeSortIntTest();
+            }
 
-        public class LinkedListSortTest{
+            void MergeSortIntTest()
+            {
+                List<TestLestsGV<int>> arr = new List<TestLestsGV<int>>()
+                {
+                    new TestLestsGV<int>(){Arrange = new List<int>(){ 3,1 } ,Expected = new List<int>() { 1, 3 }},
+                    new TestLestsGV<int>(){Arrange = new List<int>(){ 3,1,4,2 } ,Expected = new List<int>() { 1, 2, 3,4 }},
+                    new TestLestsGV<int>(){Arrange = new List<int>(){ 3,1,2 } ,Expected = new List<int>() { 1, 2, 3 }},                    
+                    new TestLestsGV<int>(){Arrange = new List<int>(){ 7, 3, 5, 6, 1, 2, 4, 8 } ,Expected = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8 }}
+                    
+                };
+                
+                MergeSort<int> ms = new MergeSort<int>();
+                foreach(var i in arr){
+                    i.Arrange = ms.Sort(i.Arrange).ToList();
+                }
+                
+            }
+        }
+        public class MergeSort<T> where T : struct, IComparable
+        {
+            public IList<T> Sort(IList<T> arr)
+            {
+                IList<T> result = new List<T>(arr.Count);
+                if (arr?.Count > 0)
+                {                    
+                    result = split(arr, 0, arr.Count-1);
+                }
+                return result;                
+            }
+            IList<T> split(IList<T> arr, int idxLw, int idxHg)
+            {
+                IList<T> leftPart = new List<T>();
+                IList<T> rightPart = new List<T>();
+
+                /* Number of elements in array to split or compare */
+                int gap = idxHg - idxLw;
+
+                /* more then 2 elements in arr */
+                if (gap > 1)
+                {
+                    int idxNewHg = idxLw + (gap / 2);
+                    leftPart = split(arr, idxLw, idxNewHg);
+                    rightPart = split(arr, (idxNewHg + 1), idxHg);
+                }
+                /* one element in arr*/
+                if(gap==0)
+                {
+                    return new List<T>(){arr[idxHg]};
+                }               
+                /* two elements in arr */
+                if (gap == 1 && compare(arr, idxLw, idxHg) > 0)
+                {
+                    return swap(arr, idxLw, idxHg);
+                }               
+
+                return sortArr(leftPart, rightPart);
+            }
+
+            IList<T> sortArr(IList<T> arrA, IList<T> arrB)
+            {
+                IList <T> result = new List<T>();
+                     
+                int i = 0, i2 = 0;
+
+                bool iterate = true;
+                while(iterate){
+                    
+                    /*arr b depleted */
+                    if(i2 >= arrB.Count)
+                    {
+                        for(int i3 =i;i3<arrA.Count;i3++){
+                            result.Add(arrA[i3]);
+                        }
+                        iterate = false;
+                        break;
+                    }
+
+                    /*arr a depleted */
+                    if (i >= arrA.Count)
+                    {
+                        for (int i4 = i2; i4 < arrB.Count; i4++)
+                        {
+                            result.Add(arrB[i4]);
+                        }
+                        iterate = false;
+                        break;
+                    }
+                    
+                    if (Comparer<T>.Default.Compare(arrA[i], arrB[i2]) >= 0)
+                    {
+                        result.Add(arrB[i2]);
+                        i2++;
+                    }
+                    else if(Comparer<T>.Default.Compare(arrA[i], arrB[i2]) < 0)
+                    {
+                        result.Add(arrA[i]);
+                        i++;
+                    }
+                     
+                }
+
+                return result;
+            }           
+            int compare(IList<T> arr, int idxLw, int idxHg)
+            {                
+                return System.Collections.Generic.Comparer<T>.Default.Compare(arr[idxLw],arr[idxHg]);
+            }      
+            IList<T> swap(IList<T> arr, int idxLw, int idxHg)
+            {
+                return new List<T>(){arr[idxHg],arr[idxLw]};
+            }          
+        }
+
+
+        public class LinkedListSortTest
+        {
             public static void GO(){
                 LinkedListSortTest ls = new LinkedListSortTest();
                 ls.ReverseAndPrintCheck();
