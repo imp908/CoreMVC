@@ -393,11 +393,13 @@ DONE:[
         
         <- done 02.07.2019 1h -> integration tests
         <- done 02.07.2019 2h -> quicksort        
-        <- done 02.07.2019 1h10m -> heap sort
-        <- done 02.07.2019 1h45m -> linked nodes reverce,polindrome check
+        <- done 02.07.2019 1h10m -> heapsort
+        <- done 02.07.2019 1h45m -> linked nodes reverce, polindrome check
 
-    ]~ 14h:30m 
+        <- done 04.06.2019 2h30m-> merge sort
 
-    ~78h: 40m in 12d
+    ]~ 17h 
+
+    ~81h: 10m in 15d
 
 ]

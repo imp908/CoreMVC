@@ -3502,10 +3502,10 @@ namespace KATAS
             {
                 List<TestLestsGV<int>> arr = new List<TestLestsGV<int>>()
                 {
-                    new TestLestsGV<int>(){Arrange = new List<int>(){ 3,1 } ,Expected = new List<int>() { 1, 3 }},
-                    new TestLestsGV<int>(){Arrange = new List<int>(){ 3,1,4,2 } ,Expected = new List<int>() { 1, 2, 3,4 }},
-                    new TestLestsGV<int>(){Arrange = new List<int>(){ 3,1,2 } ,Expected = new List<int>() { 1, 2, 3 }},                    
                     new TestLestsGV<int>(){Arrange = new List<int>(){ 7, 3, 5, 6, 1, 2, 4, 8 } ,Expected = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8 }}
+                    ,new TestLestsGV<int>(){Arrange = new List<int>(){ 3,1 } ,Expected = new List<int>() { 1, 3 }}
+                    ,new TestLestsGV<int>(){Arrange = new List<int>(){ 3,1,4,2 } ,Expected = new List<int>() { 1, 2, 3,4 }}
+                    ,new TestLestsGV<int>(){Arrange = new List<int>(){ 3,1,2 } ,Expected = new List<int>() { 1, 2, 3 }}
                     
                 };
                 
@@ -3521,12 +3521,18 @@ namespace KATAS
             public IList<T> Sort(IList<T> arr)
             {
                 IList<T> result = new List<T>(arr.Count);
-                if (arr?.Count > 0)
-                {                    
-                    result = split(arr, 0, arr.Count-1);
+                if (arr?.Count == 1){
+                    return arr;
+                }
+                if (arr?.Count > 1)
+                {
+                    //result = split(arr, 0, arr.Count-1);
+                    result = splitNoConditions(arr, 0, arr.Count - 1);
                 }
                 return result;                
             }
+
+            /* Conditional split  */
             IList<T> split(IList<T> arr, int idxLw, int idxHg)
             {
                 IList<T> leftPart = new List<T>();
@@ -3548,12 +3554,35 @@ namespace KATAS
                     return new List<T>(){arr[idxHg]};
                 }               
                 /* two elements in arr */
-                if (gap == 1 && compare(arr, idxLw, idxHg) > 0)
+                if (gap == 1)
                 {
-                    return swap(arr, idxLw, idxHg);
-                }               
+                    if(compare(arr, idxLw, idxHg) > 0){
+                        return swap(arr, idxLw, idxHg);
+                    }else{
+                        return arr.Skip(idxLw).Take((idxHg-idxLw)+1).ToList();
+                    }
+                }
 
                 return sortArr(leftPart, rightPart);
+            }
+
+            /* Less if switches, no swap and sorting down to arrays of 1 element*/
+            IList<T> splitNoConditions(IList<T> arr, int idxLw, int idxHg)
+            {
+                IList<T> result = new List<T>(){};
+                if(idxHg==idxLw){
+                    return arr.Skip(idxLw).Take(1).ToList();
+                }
+                if(idxHg > idxLw)
+                {
+                    int p = idxLw+(idxHg-idxLw)/2;
+                    var left = splitNoConditions(arr, idxLw,p);
+                    var right = splitNoConditions(arr, p+1, idxHg);
+
+                    result =  sortArr(left,right);
+                }
+
+                return result;
             }
 
             IList<T> sortArr(IList<T> arrA, IList<T> arrB)
@@ -3561,43 +3590,33 @@ namespace KATAS
                 IList <T> result = new List<T>();
                      
                 int i = 0, i2 = 0;
+                
+                while(i<arrA.Count && i2< arrB.Count){
 
-                bool iterate = true;
-                while(iterate){
-                    
-                    /*arr b depleted */
-                    if(i2 >= arrB.Count)
-                    {
-                        for(int i3 =i;i3<arrA.Count;i3++){
-                            result.Add(arrA[i3]);
-                        }
-                        iterate = false;
-                        break;
-                    }
-
-                    /*arr a depleted */
-                    if (i >= arrA.Count)
-                    {
-                        for (int i4 = i2; i4 < arrB.Count; i4++)
-                        {
-                            result.Add(arrB[i4]);
-                        }
-                        iterate = false;
-                        break;
-                    }
-                    
                     if (Comparer<T>.Default.Compare(arrA[i], arrB[i2]) >= 0)
                     {
                         result.Add(arrB[i2]);
                         i2++;
                     }
-                    else if(Comparer<T>.Default.Compare(arrA[i], arrB[i2]) < 0)
+                    else if (Comparer<T>.Default.Compare(arrA[i], arrB[i2]) < 0)
                     {
                         result.Add(arrA[i]);
                         i++;
                     }
-                     
+                        
                 }
+
+                while(i < arrA.Count)
+                {
+                    result.Add(arrA[i]);
+                    i++;
+                }
+
+                while(i2 < arrB.Count)
+                {
+                    result.Add(arrB[i2]);
+                    i2++;
+                }              
 
                 return result;
             }           
@@ -3610,6 +3629,7 @@ namespace KATAS
                 return new List<T>(){arr[idxHg],arr[idxLw]};
             }          
         }
+
 
 
         public class LinkedListSortTest
