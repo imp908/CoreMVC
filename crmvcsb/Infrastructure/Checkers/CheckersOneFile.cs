@@ -3224,11 +3224,15 @@ namespace KATAS
 
 
 
+
         /*Collection for testing value collections */
-        public class TestLestsGV<T> where T : struct, IComparable
+        public class TestListsStructs<T> where T : struct, IComparable
         {
             public List<T> Arrange { get; set; }
             public List<T> Expected { get; set; }
+     
+            public string MethodName { get; set; }
+            public long Elapsed { get; set; }
             public bool result
             {
                 get
@@ -3240,7 +3244,7 @@ namespace KATAS
             }
         }
         /*Collection for testing class collections */
-        public class TestLestsGC<T> where T : class, IComparable
+        public class TestListsClasses<T> where T : class, IComparable
         {
             public List<T> Arrange { get; set; }
             public List<T> Expected { get; set; }
@@ -3255,6 +3259,136 @@ namespace KATAS
             } 
         }
 
+        public class AlgorithmTest<T>
+            where T : struct, IComparable
+        {
+            public AlgorithmTest(List<TestListsStructs<T>> testArr, SortingDelegate m )
+            {
+                this.TestLists = new List<TestListsStructs<T>>();
+
+                foreach(var item in testArr){
+                    this.TestLists.Add(new TestListsStructs<T>()
+                        { Arrange = item?.Arrange?.Select(c => c).ToList(), Expected = item?.Expected?.Select(c => c).ToList() }
+                    );
+                }
+                this.SortingMethod = m;                       
+                this.MethodName = $"{m.Method.DeclaringType.Name} {m.Method.Name}";
+            }
+
+            public List<TestListsStructs<T>> TestLists { get; set; }
+
+            public delegate IList<T> SortingDelegate(IList<T> arr);
+            public SortingDelegate SortingMethod{get;set;}
+            public string MethodName {get;set;}
+            
+        }      
+
+        public class SortingTests
+        {
+            List<AlgorithmTest<int>> test;
+            Random rnd = new Random();
+
+            public static void GO(){
+                                
+                SortingTests st = new SortingTests();
+                st.insertionSortTest();
+            }
+   
+            List<TestListsStructs<int>> createIntCollection()                 
+            {
+                
+                List<int> longList = new List<int>(10000);
+                for(int i =0;i<10000;i++){
+                    longList.Add(rnd.Next(0, 10000));
+                    
+                }
+                List<int> longListSorted = longList.Select(s=>s).ToList();
+                longListSorted.Sort();
+
+                return new List<TestListsStructs<int>>(){
+                    new TestListsStructs<int>(){Arrange = new List<int>(){1,3, 3, 2,1}, Expected= new List<int>{1,1,2, 3, 3}},
+                    new TestListsStructs<int>(){Arrange = new List<int>(){3, 1, 2}, Expected= new List<int>{1, 2, 3}}
+                    ,new TestListsStructs<int>(){Arrange =  new List<int>(){15, 25, 3, 9, 34, 8, 18, 6, 16 }, Expected = new List<int>() { 3,6,8,9,15,16,18,25,34} }
+                    , getLongCollection(100,100)
+                    //, getLongCollection(1000,1000)
+
+                };
+            }
+            TestListsStructs<int> getLongCollection(int count,int maxRandomGap){
+                List<int> longList = new List<int>(count);
+                for (int i = 0; i < count; i++)
+                {
+                    longList.Add(rnd.Next(0, maxRandomGap));
+
+                }
+                List<int> longListSorted = longList.Select(s => s).ToList();
+                longListSorted.Sort();
+                return new TestListsStructs<int>() { Arrange = longList, Expected = longListSorted };
+            }
+            void insertionSortTest()
+            {
+                InsertionSort<int> insertionSort = new InsertionSort<int>();
+                QuickSort<int> quickSort = new QuickSort<int>();
+                List<TestListsStructs<int>> lists = createIntCollection();
+
+                test = new List<AlgorithmTest<int>>(){
+                    new AlgorithmTest<int>(lists,insertionSort.Sort)
+                    ,new AlgorithmTest<int>(lists,quickSort.Sort)
+                };
+                
+                foreach(var t in test)
+                {
+                    foreach(var array in t.TestLists)
+                    {
+                        var watch = System.Diagnostics.Stopwatch.StartNew();
+                            array.MethodName = t.MethodName;
+                            array.Arrange = t.SortingMethod(array.Arrange).ToList();
+                        watch.Stop();
+                        array.Elapsed=watch.ElapsedMilliseconds;
+                        
+                        System.Diagnostics.Trace.WriteLine($"{array.MethodName}: {array.Arrange.Count} : {array.Elapsed} : {array.result}");
+                    }
+                    
+                }
+            }
+        }
+
+
+        public class InsertionSort<T> where T: struct, IComparable
+        {
+            public IList<T> Sort(IList<T> arr)
+            {
+                IList<T> result = new List<T>();
+                if(arr == null || arr?.Count == 0){
+                    return result;
+                }
+                if(arr.Count == 1){
+                    result.Add(arr[0]);
+                }
+
+                return sort(arr);
+            }
+            IList<T> sort(IList<T> arr)
+            {
+                
+                for(int i = 1; i<=arr.Count-1;i++)
+                {
+                    T pivot = arr[i];
+
+                    int j = i-1;
+
+                    while (j>=0 && Comparer<T>.Default.Compare(pivot,arr[j])<1)
+                    {
+                        arr[j+1] = arr[j];
+                        j--;
+                    }
+                    arr[j+1] = pivot;
+                }
+
+                return arr;
+            }
+        }
+
 
 
         public class QuickSortTest
@@ -3267,9 +3401,9 @@ namespace KATAS
             void QuickSortGenericTest()
             {
                 QuickSort<int> qs = new QuickSort<int>();
-                List<TestLestsGV<int>> array = new List<TestLestsGV<int>>(){
-                    new TestLestsGV<int>(){Arrange =  new List<int>(){1,5,3,4,2,7}, Expected = new List<int>() { 1, 2, 3, 4, 5, 7 } }
-                    ,new TestLestsGV<int>(){Arrange =  new List<int>(){15, 25, 3, 9, 34, 8, 18, 6, 16 }, Expected = new List<int>() { 3,6,8,9,15,16,18,25,34} }
+                List<TestListsStructs<int>> array = new List<TestListsStructs<int>>(){
+                    new TestListsStructs<int>(){Arrange =  new List<int>(){1,5,3,4,2,7}, Expected = new List<int>() { 1, 2, 3, 4, 5, 7 } }
+                    ,new TestListsStructs<int>(){Arrange =  new List<int>(){15, 25, 3, 9, 34, 8, 18, 6, 16 }, Expected = new List<int>() { 3,6,8,9,15,16,18,25,34} }
                 };
                 
                 foreach(var item in array){
@@ -3279,13 +3413,13 @@ namespace KATAS
         }
         public class QuickSort<T> where T: struct, IComparable
         {
-            public void Sort(IList<T> arr)
+            public IList<T> Sort(IList<T> arr)
             {
-                sort(arr,0,arr.Count-1);
+                return sort(arr,0,arr.Count-1);
             }
             IList<T> sort(IList<T> arr,int idxLw, int idxHg)
-            {
-                if(idxHg >0 && idxLw<=idxHg){                
+            {                
+                if(idxHg >0 && idxLw<idxHg){                
                     int p = partition(arr,idxLw, idxHg);
 
                     sort(arr, 0, p - 1);
@@ -3355,10 +3489,10 @@ namespace KATAS
 
             static void HeapSortGenericCheckInt(){
                 HeapSort<int> hsInt = new HeapSort<int>();
-                List<TestLestsGV<int>> arrange = new List<TestLestsGV<int>>(){
-                    new TestLestsGV<int>(){Arrange = new List<int>(){4,5,3,2,1}, Expected = new List<int>(){5,4,3,2,1} }
-                    ,new TestLestsGV<int>(){ Arrange = new List<int>() { 4, 10, 3, 5, 1 }, Expected = new List<int>() { 10, 5, 3, 4, 1 }}
-                    ,new TestLestsGV<int>(){ Arrange = new List<int>() {1, 3, 5, 4, 6, 13, 10, 9, 8, 15, 17}, Expected = new List<int>() {17,15,13,9,6,5,10,4,8,3,1}}
+                List<TestListsStructs<int>> arrange = new List<TestListsStructs<int>>(){
+                    new TestListsStructs<int>(){Arrange = new List<int>(){4,5,3,2,1}, Expected = new List<int>(){5,4,3,2,1} }
+                    ,new TestListsStructs<int>(){ Arrange = new List<int>() { 4, 10, 3, 5, 1 }, Expected = new List<int>() { 10, 5, 3, 4, 1 }}
+                    ,new TestListsStructs<int>(){ Arrange = new List<int>() {1, 3, 5, 4, 6, 13, 10, 9, 8, 15, 17}, Expected = new List<int>() {17,15,13,9,6,5,10,4,8,3,1}}
                 };
 
                 foreach(var list in arrange){
@@ -3369,8 +3503,8 @@ namespace KATAS
             static void HeapSortGenericCheckChars()
             {
                 HeapSort<char> hsInt = new HeapSort<char>();
-                List<TestLestsGV<char>> arrange = new List<TestLestsGV<char>>(){
-                    new TestLestsGV<char>(){Arrange = "adfbec".ToArray().ToList(), Expected = "abcdef".ToArray().ToList() }                    
+                List<TestListsStructs<char>> arrange = new List<TestListsStructs<char>>(){
+                    new TestListsStructs<char>(){Arrange = "adfbec".ToArray().ToList(), Expected = "abcdef".ToArray().ToList() }                    
                 };
 
                 foreach (var list in arrange)
@@ -3500,12 +3634,12 @@ namespace KATAS
 
             void MergeSortIntTest()
             {
-                List<TestLestsGV<int>> arr = new List<TestLestsGV<int>>()
+                List<TestListsStructs<int>> arr = new List<TestListsStructs<int>>()
                 {
-                    new TestLestsGV<int>(){Arrange = new List<int>(){ 7, 3, 5, 6, 1, 2, 4, 8 } ,Expected = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8 }}
-                    ,new TestLestsGV<int>(){Arrange = new List<int>(){ 3,1 } ,Expected = new List<int>() { 1, 3 }}
-                    ,new TestLestsGV<int>(){Arrange = new List<int>(){ 3,1,4,2 } ,Expected = new List<int>() { 1, 2, 3,4 }}
-                    ,new TestLestsGV<int>(){Arrange = new List<int>(){ 3,1,2 } ,Expected = new List<int>() { 1, 2, 3 }}
+                    new TestListsStructs<int>(){Arrange = new List<int>(){ 7, 3, 5, 6, 1, 2, 4, 8 } ,Expected = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8 }}
+                    ,new TestListsStructs<int>(){Arrange = new List<int>(){ 3,1 } ,Expected = new List<int>() { 1, 3 }}
+                    ,new TestListsStructs<int>(){Arrange = new List<int>(){ 3,1,4,2 } ,Expected = new List<int>() { 1, 2, 3,4 }}
+                    ,new TestListsStructs<int>(){Arrange = new List<int>(){ 3,1,2 } ,Expected = new List<int>() { 1, 2, 3 }}
                     
                 };
                 
@@ -3628,6 +3762,7 @@ namespace KATAS
             {
                 return new List<T>(){arr[idxHg],arr[idxLw]};
             }          
+
         }
 
 
