@@ -396,10 +396,16 @@ DONE:[
         <- done 02.07.2019 1h10m -> heapsort
         <- done 02.07.2019 1h45m -> linked nodes reverce, polindrome check
 
-        <- done 04.06.2019 2h30m-> merge sort
+        <- done 04.06.2019 2h30m -> merge sort
+        
+        <- done 05.06.2019 1h -> insertion sort 
+        <- done 05.06.2019 1h -> sorting tests
 
-    ]~ 17h 
+        <- done 07.06.2019 2h insert sort rep ->
+        <- done 07.06.2019 2h heapsort above heapify ->
 
-    ~81h: 10m in 15d
+    ]~ 23h 
+
+    ~87h: 10m in 15d
 
 ]
