@@ -261,6 +261,7 @@ namespace mvccoresb
     }
 
 
+    /**Changes default view locations folder for whole project */
     public class CustomViewLocation : IViewLocationExpander
     {
         string ValueKey = "Views";
@@ -284,4 +285,5 @@ namespace mvccoresb
             context.Values[ValueKey] = context.ActionContext.RouteData.Values[ValueKey]?.ToString();
         }
     }
+
 }

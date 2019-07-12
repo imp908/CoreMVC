@@ -51,8 +51,8 @@ namespace mvccoresb.Infrastructure.EF
                 this._repository.Save();
 
                 var postAdded = this._repository.QueryByFilter<PostEF>(s => s.PostId == postToAdd.PostId)
-                .Include(x => x.Blog).Include(x => x.Author)
-                .FirstOrDefault();
+                    .Include(x => x.Blog).Include(x => x.Author)
+                    .FirstOrDefault();
 
                 postReturn = this._mapper.Map(postAdded, postAdded.GetType(), typeof(PostAPI)) as PostAPI;
                 return postReturn;
