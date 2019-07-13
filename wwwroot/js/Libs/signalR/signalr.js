@@ -33,14 +33,14 @@ class SignalRhub
         document.getElementById("sendButton").addEventListener("click", (event) => {
             this.SendMessages();
             event.preventDefault();
-        });     
-
+        });
+        
     }
 
 
     SendMessages = () =>{
         
-        this.FetchURL({ url:"/Identity/CustomAccount/GetCurrentUser",method:"GET",params:null})
+        this.FetchURL({ url:"/TestArea/SignalR/FakeCurrentUser",method:"GET",params:null})
         .then(r=>{
             if (r && r.userName){
                 var message = document.getElementById("messageInput").value;
@@ -50,6 +50,7 @@ class SignalRhub
                     });
             }
         })
+
 
     }
 

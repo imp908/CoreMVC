@@ -16,5 +16,9 @@ namespace crmvcsb.TestArea.Controllers
             return View("../SignalR/hub");
         }
 
+        public JsonResult FakeCurrentUser()
+        {            
+            return Json(new { userName ="FakeUserName"});
+        }
     }
 }
