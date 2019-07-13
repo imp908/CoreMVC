@@ -4,9 +4,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using mvccoresb.Domain.Models;
+using crmvcsb.Domain.Models;
 
-namespace mvccoresb.TestArea.Controllers
+namespace crmvcsb.TestArea.Controllers
 {
     /** while mapping in startup.completionlist exists no custom attribute needed */
     [Area("TestArea")]

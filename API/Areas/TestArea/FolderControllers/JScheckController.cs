@@ -4,13 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-using mvccoresb.Domain.Interfaces;
+using crmvcsb.Domain.Interfaces;
 
-using mvccoresb.Domain.TestModels;
+using crmvcsb.Domain.TestModels;
 
 using Newtonsoft.Json;
 
-namespace mvccoresb.TestArea.Controllers
+namespace crmvcsb.TestArea.Controllers
 {
     /** while mapping in startup.completionlist exists no custom attribute needed */
     [Area("TestArea")]

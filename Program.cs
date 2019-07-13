@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 
 
 
-namespace mvccoresb
+namespace crmvcsb
 {
     public class Program
     {

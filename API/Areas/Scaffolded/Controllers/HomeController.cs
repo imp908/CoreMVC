@@ -4,9 +4,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using mvccoresb.Domain.Models;
+using crmvcsb.Domain.Models;
 
-namespace mvccoresb.Default.Controllers
+namespace crmvcsb.Default.Controllers
 {
     [Area("Scaffolded")]
     public class HomeController : Controller

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
 
-namespace mvccoresb.Infrastructure.SignalR
+namespace crmvcsb.Infrastructure.SignalR
 {
     public class SignalRhub : Hub
     {

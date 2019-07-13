@@ -2940,7 +2940,7 @@
     ],
     "CSharpLanguageVersion": 703
   },
-  "RootNamespace": "mvccoresb",
+  "RootNamespace": null,
   "Documents": [
     {
       "FilePath": "API\\Areas\\TestArea\\Views\\JScheck\\CheckAppTwo.cshtml",
@@ -2973,18 +2973,8 @@
       "FileKind": "mvc"
     },
     {
-      "FilePath": "Views\\Shared\\_Layout.cshtml",
-      "TargetPath": "Views\\Shared\\_Layout.cshtml",
-      "FileKind": "mvc"
-    },
-    {
       "FilePath": "API\\Areas\\Scaffolded\\Views\\Shared\\_ValidationScriptsPartial.cshtml",
       "TargetPath": "API\\Areas\\Scaffolded\\Views\\Shared\\_ValidationScriptsPartial.cshtml",
-      "FileKind": "mvc"
-    },
-    {
-      "FilePath": "API\\Areas\\Identity\\Views\\Chat\\RoomPrivate.cshtml",
-      "TargetPath": "API\\Areas\\Identity\\Views\\Chat\\RoomPrivate.cshtml",
       "FileKind": "mvc"
     },
     {
@@ -2993,18 +2983,8 @@
       "FileKind": "mvc"
     },
     {
-      "FilePath": "API\\Areas\\TestArea\\Views\\SignalRWork\\work.cshtml",
-      "TargetPath": "API\\Areas\\TestArea\\Views\\SignalRWork\\work.cshtml",
-      "FileKind": "mvc"
-    },
-    {
       "FilePath": "API\\Areas\\TestArea\\Views\\JScheck\\CheckAppOne.cshtml",
       "TargetPath": "API\\Areas\\TestArea\\Views\\JScheck\\CheckAppOne.cshtml",
-      "FileKind": "mvc"
-    },
-    {
-      "FilePath": "Views\\Shared\\_LoginPartial.cshtml",
-      "TargetPath": "Views\\Shared\\_LoginPartial.cshtml",
       "FileKind": "mvc"
     },
     {
@@ -3025,11 +3005,6 @@
     {
       "FilePath": "API\\Areas\\Scaffolded\\Views\\_ViewStart.cshtml",
       "TargetPath": "API\\Areas\\Scaffolded\\Views\\_ViewStart.cshtml",
-      "FileKind": "mvc"
-    },
-    {
-      "FilePath": "API\\Areas\\Identity\\Views\\Chat\\RoomPublic.cshtml",
-      "TargetPath": "API\\Areas\\Identity\\Views\\Chat\\RoomPublic.cshtml",
       "FileKind": "mvc"
     },
     {

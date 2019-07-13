@@ -8,11 +8,11 @@ using System.Linq;
 using AutoMapper;
 
 
-namespace mvccoresb.Infrastructure.EF
+namespace crmvcsb.Infrastructure.EF
 {
 
-    using mvccoresb.Domain.TestModels;    
-    using mvccoresb.Domain.Interfaces;    
+    using crmvcsb.Domain.TestModels;    
+    using crmvcsb.Domain.Interfaces;    
 
 
     public class CQRSEFBlogging 

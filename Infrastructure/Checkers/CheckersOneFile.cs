@@ -4,11 +4,11 @@ namespace InfrastructureCheckers
     using System.Linq;
     
     using Microsoft.EntityFrameworkCore;
-    using mvccoresb.Infrastructure.EF;
+    using crmvcsb.Infrastructure.EF;
 
     using System.Collections.Generic;
 
-    using mvccoresb.Domain.TestModels;
+    using crmvcsb.Domain.TestModels;
 
     using AutoMapper;
 
@@ -28,7 +28,7 @@ namespace InfrastructureCheckers
                 new DbContextOptionsBuilder<TestContext>()
                     .UseSqlServer(connectionStringSQL).Options))
             {
-                mvccoresb.Infrastructure.EF.RepositoryEF repo = new mvccoresb.Infrastructure.EF.RepositoryEF(context);
+                crmvcsb.Infrastructure.EF.RepositoryEF repo = new crmvcsb.Infrastructure.EF.RepositoryEF(context);
 
                 List<BlogEF> blogs = repo.QueryByFilter<BlogEF>(s => s.BlogId != null).ToList();
                 repo.DeleteRange(blogs);

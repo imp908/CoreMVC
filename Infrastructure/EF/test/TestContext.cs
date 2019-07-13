@@ -1,13 +1,13 @@
 
 
-namespace mvccoresb.Infrastructure.EF
+namespace crmvcsb.Infrastructure.EF
 {
     using Microsoft.EntityFrameworkCore;
     using System.Collections.Generic;
 
-    using mvccoresb.Domain.TestModels;
+    using crmvcsb.Domain.TestModels;
 
-    using mvccoresb.Domain.Interfaces;
+    using crmvcsb.Domain.Interfaces;
 
     using System.Threading.Tasks;
 

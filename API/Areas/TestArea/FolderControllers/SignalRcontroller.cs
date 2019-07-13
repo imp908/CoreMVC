@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 
-namespace mvccoresb.TestArea.Controllers
+namespace crmvcsb.TestArea.Controllers
 {
     /** while mapping in startup.completionlist exists no custom attribute needed */
     [Area("TestArea")]

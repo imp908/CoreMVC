@@ -12,7 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Mvc.Razor;
 
 
-namespace mvccoresb
+namespace crmvcsb
 {
 
     using Autofac;
@@ -22,12 +22,13 @@ namespace mvccoresb
 
     using Microsoft.EntityFrameworkCore;
 
-    using mvccoresb.Infrastructure.SignalR;
+    using crmvcsb.Infrastructure.SignalR;
 
-    using mvccoresb.Infrastructure.EF;
-    using mvccoresb.Domain.TestModels;
-    using mvccoresb.Domain.Interfaces;
+    using crmvcsb.Infrastructure.EF;
+    using crmvcsb.Domain.TestModels;
+    using crmvcsb.Domain.Interfaces;
 
+    using crmvcsb.Infrastructure.EF.newOrder;
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -62,6 +63,10 @@ namespace mvccoresb
             services.AddDbContext<TestContext>(o =>
             o.UseSqlServer(
                 Configuration.GetConnectionString("LocalDbConnection")));
+            
+            services.AddDbContext<NewOrderContext>(o=>
+            o.UseSqlServer(
+                Configuration.GetConnectionString("LocalNewOrderConnection")));
 
             services.AddMvc();
 
