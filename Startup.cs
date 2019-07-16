@@ -18,7 +18,7 @@ namespace crmvcsb
     using Autofac;
     using Autofac.Extensions.DependencyInjection;
 
-    using AutoMapper;    
+    using AutoMapper;
 
     using Microsoft.EntityFrameworkCore;
 
@@ -63,8 +63,8 @@ namespace crmvcsb
             services.AddDbContext<TestContext>(o =>
             o.UseSqlServer(
                 Configuration.GetConnectionString("LocalDbConnection")));
-            
-            services.AddDbContext<NewOrderContext>(o=>
+
+            services.AddDbContext<NewOrderContext>(o =>
             o.UseSqlServer(
                 Configuration.GetConnectionString("LocalNewOrderConnection")));
 
@@ -92,9 +92,11 @@ namespace crmvcsb
             /*Registration of automapper with autofac Instance API */
             autofacContainer.RegisterInstance(mapper).As<IMapper>();
 
-            try{
+            try
+            {
                 this.ApplicationContainer = autofacContainer.Build();
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
 
             }
@@ -109,12 +111,12 @@ namespace crmvcsb
             autofacContainer.RegisterType<TestContext>()
                 .As<DbContext>().WithMetadata("Name", "TestRepo")
                 .InstancePerLifetimeScope();
-         
+
             autofacContainer.RegisterType<RepositoryEF>()
-                .As<IRepository>()                
+                .As<IRepository>()
                 .InstancePerLifetimeScope();
 
-               
+
             //*DAL->BLL reg */
             autofacContainer.RegisterType<BlogEF>()
                 .As<IBlogEF>().InstancePerLifetimeScope();
@@ -147,7 +149,7 @@ namespace crmvcsb
                 cfg.CreateMap<PersonEF, PersonAPI>();
                 cfg.CreateMap<BlogEF, BlogAPI>();
                 cfg.CreateMap<PostEF, PostAPI>().ReverseMap();
-            
+
             });
         }
 
@@ -173,18 +175,18 @@ namespace crmvcsb
 
             try
             {
-          
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                   name: "areas",
-                   template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                app.UseMvc(routes =>
+                {
+                    routes.MapRoute(
+                       name: "areas",
+                       template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
-            });
+                    routes.MapRoute(
+                        name: "default",
+                        template: "{controller=Home}/{action=Index}/{id?}");
+
+                });
             }
             catch (Exception e)
             {

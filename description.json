@@ -275,60 +275,11 @@ BACKLOG/MILESTONES:[
 ]
 
 DONE:[
-
-    crmvcsb: [
-
-        <- done 02.06.2019 01: 53 2h -> PersonAddsPost	
-        <- done 02.06.2019 14: 40-14: 50 10m -> get posts by person
-        <- done 02.06.2019 12: 14-14: 40 2h30m -> get posts by blog
-        <- done 02.06.2019 12: 14-14: 50 2h30m -> get blogs by person
-        <- done 02.06.2019 15: 13-15: 53 40m -> person removes post
-        <- done 02.06.2019 15: 53-16: 03 10m -> person updates post
-
-        <- done 04.06.2019 5h -> react boardGame checker
-
-        <- done 04.09.2019 23: 53 05.09.2019 2: 40 2h50m -> SignalR chat checker
-        <- done 05.06.2019 2h30m -> Login and authenticate template
-        <- done 06.06.2019 7h22m -> Identity on MVC views with Identity DB migrations
-        <- done 07.06.2019 5h3m -> authorization token and cookie redirect on mvc startup setup        
-        <- done 08.06.2019 2h15m -> core mvc with auth and defailt ui mvc 
-            rounig with API/areas for view and controller
-            {            
-                => gen mvc 
-                    dotnet new mvc -o {folder
-            } -au individual
-                => add areas 
-                    options.AreaViewLocationFormats.Add("API/Areas/{2}/Views/{1}/{0}.cshtml");
-                => remove compatibility 
-                    //.SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-                => move MVC v,c folders
-                => include 
-                    @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-                    from _viewimport on every layout
-                => leave basic routing in startup.cs [
-                routes.MapRoute(
-                    name: "areas",
-                    template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
-                    );
-                    
-                        routes.MapRoute(
-                            name: "default",
-                            template: "{controller=Home}/{action=Index}/{id?}");
-            ]
-
-                => dont include in startup.cs
-                it conflict with scafoldede razor pages sigin
-
-                    services.AddAuthentication
-                        o => CookieAuthenticationDefaults
-        }
-        <- done 08.06.2019 4h -> move auth
-        <- done 09.06.2019 1h45m -> signalR and auth user and messages binded
-   
-        
-        <- done 12.06.2019 3h30m -> react timer sliders 
-        <- done 12.06.2019 2h -> react todo
     
-    ] ~37h 15m in 7d
-
+    neworder:[        		
+		<- 15.07.2019 1h -> new order model
+		<- 16.07.2019 1h -> new order migration
+    ]
+    ~2h in 2 days
+    
 ]

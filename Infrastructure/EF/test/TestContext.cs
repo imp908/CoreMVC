@@ -39,7 +39,8 @@ namespace crmvcsb.Infrastructure.EF
             .HasKey(p => p.ServiceId);
 
             modelBuilder.Entity<ServiceType>()
-            .Property(p => p.ServiceId).HasColumnName("ServiceID");
+            .Property(p => p.ServiceId)
+            .HasColumnName("ServiceID");
             
             modelBuilder.Entity<ServiceType>()
             .HasIndex(p => p.ServiceId);
