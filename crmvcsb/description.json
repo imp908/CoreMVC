@@ -278,8 +278,9 @@ DONE:[
     
     neworder:[        		
 		<- 15.07.2019 1h -> new order model
-		<- 16.07.2019 1h -> new order migration
+        <- 16.07.2019 1h -> new order migration
+        <- 16.07.2019 1h -> new order migration
     ]
-    ~2h in 2 days
+    ~3h in 3days
     
 ]

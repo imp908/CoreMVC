@@ -16,7 +16,8 @@ namespace crmvcsb
     {
         public static void Main(string[] args)
         {      
-            
+            NewOrderInitializer.Initialize();
+            NewOrderInitializer.CleanUp();
             CreateWebHostBuilder(args).Build().Run();
         }
 

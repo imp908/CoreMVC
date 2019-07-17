@@ -21,9 +21,9 @@ namespace mvccoresb.Migrations
 
             modelBuilder.Entity("crmvcsb.Domain.NewOrder.DAL.AddressDAL", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("NEWID()");
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("City");
 
@@ -40,26 +40,6 @@ namespace mvccoresb.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Adresses");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("d7080866-e95f-40fc-a352-af967db9dff0"),
-                            Code = 1,
-                            StreetName = "test street 1"
-                        },
-                        new
-                        {
-                            Id = new Guid("77b20699-c361-4618-8793-188bce2d79dc"),
-                            Code = 2,
-                            StreetName = "test street 2"
-                        },
-                        new
-                        {
-                            Id = new Guid("fab41030-e160-439d-8af7-3c62e2ce025b"),
-                            Code = 3,
-                            StreetName = "test street 3"
-                        });
                 });
 
             modelBuilder.Entity("crmvcsb.Domain.NewOrder.DAL.ClientDAL", b =>
@@ -90,8 +70,9 @@ namespace mvccoresb.Migrations
 
             modelBuilder.Entity("crmvcsb.Domain.NewOrder.DAL.GoodsDAL", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ProductName");
 
@@ -116,12 +97,13 @@ namespace mvccoresb.Migrations
 
             modelBuilder.Entity("crmvcsb.Domain.NewOrder.DAL.PhysicalDimensionDAL", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<double>("Amount");
 
-                    b.Property<Guid?>("DimensionUnitId");
+                    b.Property<int?>("DimensionUnitId");
 
                     b.Property<string>("ParameterName");
 
@@ -134,8 +116,9 @@ namespace mvccoresb.Migrations
 
             modelBuilder.Entity("crmvcsb.Domain.NewOrder.DAL.PhysicalUnitDAL", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name");
 
@@ -146,8 +129,9 @@ namespace mvccoresb.Migrations
 
             modelBuilder.Entity("crmvcsb.Domain.NewOrder.DAL.RouteDAL", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name");
 
@@ -158,20 +142,21 @@ namespace mvccoresb.Migrations
 
             modelBuilder.Entity("crmvcsb.Domain.NewOrder.DAL.RouteVertexDAL", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<double>("Distance");
 
-                    b.Property<Guid?>("FromId");
+                    b.Property<int?>("FromId");
 
                     b.Property<int>("InRouteMoveOrder");
 
                     b.Property<int>("PriorityWeigth");
 
-                    b.Property<Guid?>("RouteDALId");
+                    b.Property<int?>("RouteDALId");
 
-                    b.Property<Guid?>("ToId");
+                    b.Property<int?>("ToId");
 
                     b.HasKey("Id");
 

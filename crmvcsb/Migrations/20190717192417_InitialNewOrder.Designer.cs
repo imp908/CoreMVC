@@ -10,8 +10,8 @@ using crmvcsb.Infrastructure.EF.newOrder;
 namespace mvccoresb.Migrations
 {
     [DbContext(typeof(NewOrderContext))]
-    [Migration("20190715184247_Initial")]
-    partial class Initial
+    [Migration("20190717192417_InitialNewOrder")]
+    partial class InitialNewOrder
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,8 +23,9 @@ namespace mvccoresb.Migrations
 
             modelBuilder.Entity("crmvcsb.Domain.NewOrder.DAL.AddressDAL", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("City");
 
@@ -71,8 +72,9 @@ namespace mvccoresb.Migrations
 
             modelBuilder.Entity("crmvcsb.Domain.NewOrder.DAL.GoodsDAL", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ProductName");
 
@@ -97,12 +99,13 @@ namespace mvccoresb.Migrations
 
             modelBuilder.Entity("crmvcsb.Domain.NewOrder.DAL.PhysicalDimensionDAL", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<double>("Amount");
 
-                    b.Property<Guid?>("DimensionUnitId");
+                    b.Property<int?>("DimensionUnitId");
 
                     b.Property<string>("ParameterName");
 
@@ -115,8 +118,9 @@ namespace mvccoresb.Migrations
 
             modelBuilder.Entity("crmvcsb.Domain.NewOrder.DAL.PhysicalUnitDAL", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name");
 
@@ -127,8 +131,9 @@ namespace mvccoresb.Migrations
 
             modelBuilder.Entity("crmvcsb.Domain.NewOrder.DAL.RouteDAL", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name");
 
@@ -139,20 +144,21 @@ namespace mvccoresb.Migrations
 
             modelBuilder.Entity("crmvcsb.Domain.NewOrder.DAL.RouteVertexDAL", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<double>("Distance");
 
-                    b.Property<Guid?>("FromId");
+                    b.Property<int?>("FromId");
 
                     b.Property<int>("InRouteMoveOrder");
 
                     b.Property<int>("PriorityWeigth");
 
-                    b.Property<Guid?>("RouteDALId");
+                    b.Property<int?>("RouteDALId");
 
-                    b.Property<Guid?>("ToId");
+                    b.Property<int?>("ToId");
 
                     b.HasKey("Id");
 
@@ -162,7 +168,7 @@ namespace mvccoresb.Migrations
 
                     b.HasIndex("ToId");
 
-                    b.ToTable("RouteVertexes");
+                    b.ToTable("RouteVertex");
                 });
 
             modelBuilder.Entity("crmvcsb.Domain.NewOrder.DAL.OrderDAL", b =>

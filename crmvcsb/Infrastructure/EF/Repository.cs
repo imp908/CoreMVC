@@ -103,6 +103,11 @@ namespace crmvcsb.Infrastructure.EF
             return this._context.SaveChangesAsync();
         }
 
+        public void SaveIdentity<T>()
+        {
+            this.SaveIdentity(nameof(T));
+        }
+
         /*Provides identity column manual insert while testing */
         public void SaveIdentity(string tableFullName)
         {

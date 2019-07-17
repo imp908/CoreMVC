@@ -29,13 +29,9 @@ namespace crmvcsb.Infrastructure.EF.newOrder
             builder.Entity<RouteVertexDAL>().ToTable("RouteVertex");
 
             /* Generate value in db*/
-            builder.Entity<AddressDAL>().Property(s => s.Id).ValueGeneratedOnAdd().HasDefaultValueSql("NEWID()");
-
-            builder.Entity<AddressDAL>().HasData(
-                new AddressDAL(){ Id = Guid.NewGuid(), StreetName ="test street 1", Code = 1}
-                ,new AddressDAL() { Id = Guid.NewGuid(), StreetName = "test street 2", Code = 2 }
-                , new AddressDAL() { Id = Guid.NewGuid(), StreetName = "test street 3", Code = 3 }
-            );
+            builder.Entity<AddressDAL>().Property(s => s.Id).ValueGeneratedOnAdd()
+            //.HasDefaultValueSql("IDENTITY(1,1)")
+            ;
 
         }
         public DbSet<AddressDAL> Adresses {get;set;}

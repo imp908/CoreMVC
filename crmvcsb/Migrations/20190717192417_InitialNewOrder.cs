@@ -1,9 +1,10 @@
 ﻿using System;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace mvccoresb.Migrations
 {
-    public partial class Initial : Migration
+    public partial class InitialNewOrder : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,7 +12,8 @@ namespace mvccoresb.Migrations
                 name: "Adresses",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Country = table.Column<string>(nullable: true),
                     City = table.Column<string>(nullable: true),
                     State = table.Column<string>(nullable: true),
@@ -53,7 +55,8 @@ namespace mvccoresb.Migrations
                 name: "Goods",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     ProductName = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -65,7 +68,8 @@ namespace mvccoresb.Migrations
                 name: "PhysicalUnits",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -77,7 +81,8 @@ namespace mvccoresb.Migrations
                 name: "Routes",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -107,10 +112,11 @@ namespace mvccoresb.Migrations
                 name: "PhysicalDimensions",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     ParameterName = table.Column<string>(nullable: true),
                     Amount = table.Column<double>(nullable: false),
-                    DimensionUnitId = table.Column<Guid>(nullable: true)
+                    DimensionUnitId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -124,34 +130,35 @@ namespace mvccoresb.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RouteVertexes",
+                name: "RouteVertex",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     InRouteMoveOrder = table.Column<int>(nullable: false),
-                    FromId = table.Column<Guid>(nullable: true),
-                    ToId = table.Column<Guid>(nullable: true),
+                    FromId = table.Column<int>(nullable: true),
+                    ToId = table.Column<int>(nullable: true),
                     Distance = table.Column<double>(nullable: false),
                     PriorityWeigth = table.Column<int>(nullable: false),
-                    RouteDALId = table.Column<Guid>(nullable: true)
+                    RouteDALId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RouteVertexes", x => x.Id);
+                    table.PrimaryKey("PK_RouteVertex", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_RouteVertexes_Adresses_FromId",
+                        name: "FK_RouteVertex_Adresses_FromId",
                         column: x => x.FromId,
                         principalTable: "Adresses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_RouteVertexes_Routes_RouteDALId",
+                        name: "FK_RouteVertex_Routes_RouteDALId",
                         column: x => x.RouteDALId,
                         principalTable: "Routes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_RouteVertexes_Adresses_ToId",
+                        name: "FK_RouteVertex_Adresses_ToId",
                         column: x => x.ToId,
                         principalTable: "Adresses",
                         principalColumn: "Id",
@@ -169,18 +176,18 @@ namespace mvccoresb.Migrations
                 column: "DimensionUnitId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RouteVertexes_FromId",
-                table: "RouteVertexes",
+                name: "IX_RouteVertex_FromId",
+                table: "RouteVertex",
                 column: "FromId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RouteVertexes_RouteDALId",
-                table: "RouteVertexes",
+                name: "IX_RouteVertex_RouteDALId",
+                table: "RouteVertex",
                 column: "RouteDALId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RouteVertexes_ToId",
-                table: "RouteVertexes",
+                name: "IX_RouteVertex_ToId",
+                table: "RouteVertex",
                 column: "ToId");
         }
 
@@ -199,7 +206,7 @@ namespace mvccoresb.Migrations
                 name: "PhysicalDimensions");
 
             migrationBuilder.DropTable(
-                name: "RouteVertexes");
+                name: "RouteVertex");
 
             migrationBuilder.DropTable(
                 name: "Clients");
