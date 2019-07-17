@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
 using System.Threading;
 
-namespace mvccoresb.Infrastructure.SignalR
+namespace crmvcsb.Infrastructure.SignalR
 {
     using chat.Domain.APImodels;
 

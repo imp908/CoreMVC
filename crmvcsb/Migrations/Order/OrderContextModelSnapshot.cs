@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using order.Infrastructure.EF;
 
-namespace mvccoresb.Migrations.Order
+namespace crmvcsb.Migrations.Order
 {
     [DbContext(typeof(OrderContext))]
     partial class OrderContextModelSnapshot : ModelSnapshot

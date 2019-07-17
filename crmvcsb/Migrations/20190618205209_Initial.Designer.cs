@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using mvccoresb.Infrastructure.EF;
+using crmvcsb.Infrastructure.EF;
 
-namespace mvccoresb.Migrations
+namespace crmvcsb.Migrations
 {
     [DbContext(typeof(TestContext))]
     [Migration("20190618205209_Initial")]
-    partial class Initial
+    partial class NewOrderInitial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

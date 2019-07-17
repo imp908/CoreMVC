@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using mvccoresb.Infrastructure.EF;
+using crmvcsb.Infrastructure.EF;
 
-namespace mvccoresb.Migrations
+namespace crmvcsb.Migrations
 {
     [DbContext(typeof(TestContext))]
     partial class TestContextModelSnapshot : ModelSnapshot

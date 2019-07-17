@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace mvccoresb.Migrations.Order
+namespace crmvcsb.Migrations.Order
 {
     public partial class tableNamingChange : Migration
     {

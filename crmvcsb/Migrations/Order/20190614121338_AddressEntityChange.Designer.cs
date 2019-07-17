@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using order.Infrastructure.EF;
 
-namespace mvccoresb.Migrations.Order
+namespace crmvcsb.Migrations.Order
 {
     [DbContext(typeof(OrderContext))]
     [Migration("20190614121338_AddressEntityChange")]
