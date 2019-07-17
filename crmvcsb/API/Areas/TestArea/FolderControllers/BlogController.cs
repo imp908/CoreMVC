@@ -4,13 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-using mvccoresb.Domain.Interfaces;
+using crmvcsb.Domain.Interfaces;
 
-using mvccoresb.Domain.TestModels;
+using crmvcsb.Domain.TestModels;
 
 using Newtonsoft.Json;
 
-namespace mvccoresb.Default.Controllers
+namespace crmvcsb.Default.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

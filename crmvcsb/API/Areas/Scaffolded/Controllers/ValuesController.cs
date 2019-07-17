@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-namespace mvccoresb.Default.Controllers
+namespace crmvcsb.Default.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

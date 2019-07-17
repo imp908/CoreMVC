@@ -5,10 +5,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace mvccoresb.Domain.Interfaces
+namespace crmvcsb.Domain.Interfaces
 {
     
-    using mvccoresb.Domain.TestModels;
+    using crmvcsb.Domain.TestModels;
     
     public interface IEntityIntId
     {

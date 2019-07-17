@@ -10,47 +10,14 @@ using Microsoft.Extensions.Logging;
 
 
 
-namespace mvccoresb
+namespace crmvcsb
 {
     public class Program
     {
         public static void Main(string[] args)
-        {
-            try{
-
-                //NetPlatformCheckers.Check.GO();
-                //NetPlatformCheckers.AsyncCheck.GO();
-                //NetPlatformCheckers.InheritanceWithInterfacesCheck.Go();
-                //NetPlatformCheckers.InheritanceOverridingWithInterfaces.GO();
-                //NetPlatformCheckers.TypesCheck.GO();
-
-                
-                
-                KATAS.Miscellaneous.SortingTests.GO();
-
-                //KATAS.Miscellaneous.MergeSortTest.GO();
-                //KATAS.Miscellaneous.LinkedListSortTest.GO();
-                //KATAS.Miscellaneous.QuickSortTest.GO();
-                //KATAS.Miscellaneous.HeapSortTest.GO();
-                
-
-
-                //KATAS.Miscellaneous.Chars.GO();
-
-                //LINQtoObjectsCheck.LinqCheck.GO();
-
-                //KATAS.Bites.GO();
-
-                CreateWebHostBuilder(args).Build().Run();
-            }
-            catch(Exception e)
-            {
-
-            }
-            // Task.Run(async () =>
-            // {
-            //     await NetPlatformCheckers.AsyncCheck.GO_async();
-            // });
+        {      
+            
+            CreateWebHostBuilder(args).Build().Run();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>

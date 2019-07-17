@@ -1,4 +1,4 @@
-namespace mvccoresb.Infrastructure.EF
+namespace crmvcsb.Infrastructure.EF
 {
     using System.Threading.Tasks;
     using System.Linq.Expressions;
@@ -12,7 +12,7 @@ namespace mvccoresb.Infrastructure.EF
 
     using System.Linq;
 
-    using mvccoresb.Domain.Interfaces;
+    using crmvcsb.Domain.Interfaces;
 
 
     public class RepositoryEF : IRepository

@@ -1,6 +1,6 @@
 
 
-namespace mvccoresb.Domain.TestModels
+namespace crmvcsb.Domain.TestModels
 {
 
     using System.ComponentModel.DataAnnotations;
