@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using crmvcsb.Infrastructure.EF.newOrder;
 
-namespace crmvcsb.Migrations
+namespace mvccoresb.Migrations
 {
     [DbContext(typeof(NewOrderContext))]
-    partial class NewOrderContextModelSnapshot : ModelSnapshot
+    [Migration("20190717192417_InitialNewOrder")]
+    partial class InitialNewOrder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

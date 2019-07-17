@@ -386,9 +386,10 @@ DONE:[
 
     neworder:[        		
 		<- 15.07.2019 1h -> new order model
-		<- 16.07.2019 1h -> new order migration
+        <- 16.07.2019 1h -> new order migration
+        <- 16.07.2019 2h -> new order migration, address initialize, clearup
     ]
-    ~2h in 2 days
+    ~4h in 3days
 
     master:[
         <- done 15.06.2019 12:35-16:02 3h30m -> git merge crmvcsb -> master, order -> master, cleanup master,crmvcsb,order
@@ -412,6 +413,6 @@ DONE:[
 
     ]~ 23h 
 
-    ~89h: 10m in 17d
-
+    ~90h: 10m in 17d 
+    
 ]

@@ -48,13 +48,13 @@ namespace crmvcsb.Domain.NewOrder.DAL
     }
 
     /*Kg,Pnd,sm,meter etc*/
-    public class PhysicalUnitDAL : EntityGuidIdDAL
+    public class PhysicalUnitDAL : EntityIntIdDAL
     {
         public string Name {get;set;}        
     }
     
     /*Length,Height, Weight or density exmpl*/
-    public class PhysicalDimensionDAL : EntityGuidIdDAL
+    public class PhysicalDimensionDAL : EntityIntIdDAL
     {
         /*Length goes here */
         public string ParameterName {get;set;}
@@ -65,7 +65,7 @@ namespace crmvcsb.Domain.NewOrder.DAL
         /*And sm goes here */
         public PhysicalUnitDAL DimensionUnit {get;set;}
     }
-    public class GoodsDAL : EntityGuidIdDAL
+    public class GoodsDAL : EntityIntIdDAL
     {
         public string ProductName { get; set; }
 
@@ -77,7 +77,7 @@ namespace crmvcsb.Domain.NewOrder.DAL
     }
     
 
-    public class AddressDAL: EntityGuidIdDAL
+    public class AddressDAL: EntityIntIdDAL
     {
         public string Country { get; set; }
         public string City {get;set;}
@@ -86,7 +86,7 @@ namespace crmvcsb.Domain.NewOrder.DAL
         public string StreetName { get; set; }
         public int Code {get;set;}
     }
-    public class RouteVertexDAL : EntityGuidIdDAL
+    public class RouteVertexDAL : EntityIntIdDAL
     {
         public int InRouteMoveOrder {get;set;}
         public AddressDAL From {get;set;}
@@ -94,7 +94,7 @@ namespace crmvcsb.Domain.NewOrder.DAL
         public double Distance { get; set; }
         public int PriorityWeigth { get; set; }
     }
-    public class RouteDAL : EntityGuidIdDAL
+    public class RouteDAL : EntityIntIdDAL
     {
         public string Name {get;set;}
         
