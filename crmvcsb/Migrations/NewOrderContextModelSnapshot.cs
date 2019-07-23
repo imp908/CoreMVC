@@ -54,6 +54,44 @@ namespace mvccoresb.Migrations
                     b.ToTable("Clients");
                 });
 
+            modelBuilder.Entity("crmvcsb.Domain.NewOrder.DAL.Currency", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("IsoCode");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Currency");
+                });
+
+            modelBuilder.Entity("crmvcsb.Domain.NewOrder.DAL.CurrencyRates", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CurrencyFromId");
+
+                    b.Property<int>("CurrencyToId");
+
+                    b.Property<DateTime>("Date");
+
+                    b.Property<decimal>("Rate");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CurrencyFromId");
+
+                    b.HasIndex("CurrencyToId");
+
+                    b.ToTable("CurrencyRates");
+                });
+
             modelBuilder.Entity("crmvcsb.Domain.NewOrder.DAL.DeliveryItemDAL", b =>
                 {
                     b.Property<Guid>("Id")
@@ -167,6 +205,19 @@ namespace mvccoresb.Migrations
                     b.HasIndex("ToId");
 
                     b.ToTable("RouteVertex");
+                });
+
+            modelBuilder.Entity("crmvcsb.Domain.NewOrder.DAL.CurrencyRates", b =>
+                {
+                    b.HasOne("crmvcsb.Domain.NewOrder.DAL.Currency", "CurrencyFrom")
+                        .WithMany("CurRatesFrom")
+                        .HasForeignKey("CurrencyFromId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("crmvcsb.Domain.NewOrder.DAL.Currency", "CurrencyTo")
+                        .WithMany("CurRatesTo")
+                        .HasForeignKey("CurrencyToId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("crmvcsb.Domain.NewOrder.DAL.OrderDAL", b =>

@@ -19,6 +19,11 @@ namespace crmvcsb.Infrastructure.EF
     {
         DbContext _context;
 
+        public DbContext GetContext()
+        {
+            return this._context;
+        }
+
         public RepositoryEF(DbContext context)
         {
             _context = context;
@@ -30,7 +35,6 @@ namespace crmvcsb.Infrastructure.EF
             return (expression == null)
                 ? this._context.Set<T>()
                 : this._context.Set<T>().Where(expression);
-
         }
 
         public void Add<T>(T item)
@@ -104,8 +108,10 @@ namespace crmvcsb.Infrastructure.EF
         }
 
         public void SaveIdentity<T>()
+            where T : class
         {
-            this.SaveIdentity(nameof(T));
+            string name = typeof(T).Name;
+            this.SaveIdentity(name);
         }
 
         /*Provides identity column manual insert while testing */
