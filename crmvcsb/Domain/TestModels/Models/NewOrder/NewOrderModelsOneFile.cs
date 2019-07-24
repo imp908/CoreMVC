@@ -64,19 +64,19 @@ namespace crmvcsb.Domain.NewOrder
 namespace crmvcsb.Domain.NewOrder.DAL
 {
 
-    public class Currency : EntityIntIdDAL
+    public class CurrencyDAL : EntityIntIdDAL
     {
         public string Name { get; set; }
         public string IsoCode { get; set; }
 
-        public List<CurrencyRates> CurRatesFrom { get; set; }
-        public List<CurrencyRates> CurRatesTo { get; set; }
+        public List<CurrencyRatesDAL> CurRatesFrom { get; set; }
+        public List<CurrencyRatesDAL> CurRatesTo { get; set; }
     }
 
-    public class CurrencyRates : EntityIntIdDAL, IEntityIntIdDAL, IDateEntityDAL
+    public class CurrencyRatesDAL : EntityIntIdDAL, IEntityIntIdDAL, IDateEntityDAL
     {
-        public Currency CurrencyFrom { get; set; }
-        public Currency CurrencyTo { get; set; }
+        public CurrencyDAL CurrencyFrom { get; set; }
+        public CurrencyDAL CurrencyTo { get; set; }
         
         public int CurrencyFromId { get; set; }
         public int CurrencyToId { get; set; }
@@ -177,5 +177,15 @@ namespace crmvcsb.Domain.NewOrder.DAL
 namespace crmvcsb.Domain.NewOrder.API
 {
 
+    public class CrossCurrenciesAPI
+    {
+        public string From {get;set;}
+        public string To { get; set; }
+        public decimal Rate { get; set; }
+    }
+
+    public class GetCurrencyCommand {
+        public string IsoCode {get;set;}
+    }
 
 }
