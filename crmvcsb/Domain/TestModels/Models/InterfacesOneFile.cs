@@ -37,7 +37,7 @@ namespace crmvcsb.Domain.Interfaces
         void Save();
 
         void SaveIdentity(string command);
-        void SaveIdentity<T>();
+        void SaveIdentity<T>() where T : class;
     }
 
     public interface ICQRScrud

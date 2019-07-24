@@ -384,12 +384,21 @@ DONE:[
 
     ] ~37h 15m in 7d
 
-    neworder:[        		
+   newOrder: [
+
 		<- 15.07.2019 1h -> new order model
         <- 16.07.2019 1h -> new order migration
         <- 16.07.2019 2h -> new order migration, address initialize, clearup
+        
+        <- 17.07.2019 45m -> new order migration cleanup
+
+        <- 22.07.2019 1h -> new order currenciesDAL model
+
+        <- 23.07.2019 1h -> new order currenciesDAL model
+
+        <- 24.07.2019 1h -> new order currencies manager
     ]
-    ~4h in 3days
+    ~6h 45m in 6days
 
     master:[
         <- done 15.06.2019 12:35-16:02 3h30m -> git merge crmvcsb -> master, order -> master, cleanup master,crmvcsb,order
@@ -413,6 +422,6 @@ DONE:[
 
     ]~ 23h 
 
-    ~90h: 10m in 17d 
-    
+    ~94h: 5m in 21d
+
 ]

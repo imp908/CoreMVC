@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace mvccoresb.Migrations
 {
-    public partial class InitialNewOrder : Migration
+    public partial class InitCurrency : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -36,6 +36,20 @@ namespace mvccoresb.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Clients", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Currency",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: true),
+                    IsoCode = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Currency", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -109,6 +123,34 @@ namespace mvccoresb.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CurrencyRates",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    CurrencyFromId = table.Column<int>(nullable: false),
+                    CurrencyToId = table.Column<int>(nullable: false),
+                    Rate = table.Column<decimal>(nullable: false),
+                    Date = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CurrencyRates", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CurrencyRates_Currency_CurrencyFromId",
+                        column: x => x.CurrencyFromId,
+                        principalTable: "Currency",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_CurrencyRates_Currency_CurrencyToId",
+                        column: x => x.CurrencyToId,
+                        principalTable: "Currency",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PhysicalDimensions",
                 columns: table => new
                 {
@@ -166,6 +208,16 @@ namespace mvccoresb.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_CurrencyRates_CurrencyFromId",
+                table: "CurrencyRates",
+                column: "CurrencyFromId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CurrencyRates_CurrencyToId",
+                table: "CurrencyRates",
+                column: "CurrencyToId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Orders_ClientId",
                 table: "Orders",
                 column: "ClientId");
@@ -194,6 +246,9 @@ namespace mvccoresb.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "CurrencyRates");
+
+            migrationBuilder.DropTable(
                 name: "DeliveryItems");
 
             migrationBuilder.DropTable(
@@ -207,6 +262,9 @@ namespace mvccoresb.Migrations
 
             migrationBuilder.DropTable(
                 name: "RouteVertex");
+
+            migrationBuilder.DropTable(
+                name: "Currency");
 
             migrationBuilder.DropTable(
                 name: "Clients");

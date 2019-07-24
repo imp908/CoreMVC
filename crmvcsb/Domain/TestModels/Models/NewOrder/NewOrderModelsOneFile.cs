@@ -20,6 +20,19 @@ namespace crmvcsb.Domain.NewOrder
         string Id { get; set; }
     }
 
+    public interface IDateEntityDAL
+    {
+        DateTime Date {get;set;}
+    }
+    public interface IDateRangeEntityDAL
+    {
+        DateTime DateFrom { get; set; }
+        DateTime DateTo { get; set; }
+    }
+
+
+
+
 
     public class EntityGuidIdDAL : IEntityGuidIdDAL
     {
@@ -35,35 +48,71 @@ namespace crmvcsb.Domain.NewOrder
     }
 
 
+    public class EntityDateDAL : IDateEntityDAL
+    {
+        public DateTime Date {get;set;}
+    }
+    public class EntityDateRangeDAL : IDateRangeEntityDAL
+    {
+        public DateTime DateFrom { get; set; }
+        public DateTime DateTo { get; set; }
+    }
+
+
 }
 
 namespace crmvcsb.Domain.NewOrder.DAL
 {
-    
+
+    public class CurrencyDAL : EntityIntIdDAL
+    {
+        public string Name { get; set; }
+        public string IsoCode { get; set; }
+
+        public List<CurrencyRatesDAL> CurRatesFrom { get; set; }
+        public List<CurrencyRatesDAL> CurRatesTo { get; set; }
+    }
+
+    public class CurrencyRatesDAL : EntityIntIdDAL, IEntityIntIdDAL, IDateEntityDAL
+    {
+        public CurrencyDAL CurrencyFrom { get; set; }
+        public CurrencyDAL CurrencyTo { get; set; }
+        
+        public int CurrencyFromId { get; set; }
+        public int CurrencyToId { get; set; }
+        
+        public decimal Rate { get; set; }
+        public DateTime Date { get; set; }
+    }
+
+
+
+
+
     public class PhysicalUnitConvertions : EntityIntIdDAL
     {
-        public PhysicalUnitDAL UnitFrom {get;set;}
+        public PhysicalUnitDAL UnitFrom { get; set; }
         public PhysicalUnitDAL UnitTo { get; set; }
-        public double Coefficient {get;set;}
+        public double Coefficient { get; set; }
     }
 
     /*Kg,Pnd,sm,meter etc*/
     public class PhysicalUnitDAL : EntityIntIdDAL
     {
-        public string Name {get;set;}        
+        public string Name { get; set; }
     }
-    
+
     /*Length,Height, Weight or density exmpl*/
     public class PhysicalDimensionDAL : EntityIntIdDAL
     {
         /*Length goes here */
-        public string ParameterName {get;set;}
+        public string ParameterName { get; set; }
 
         /*Amount */
         public double Amount { get; set; }
 
         /*And sm goes here */
-        public PhysicalUnitDAL DimensionUnit {get;set;}
+        public PhysicalUnitDAL DimensionUnit { get; set; }
     }
     public class GoodsDAL : EntityIntIdDAL
     {
@@ -75,30 +124,30 @@ namespace crmvcsb.Domain.NewOrder.DAL
         */
         List<PhysicalDimensionDAL> Dimensions { get; set; }
     }
-    
 
-    public class AddressDAL: EntityIntIdDAL
+
+    public class AddressDAL : EntityIntIdDAL
     {
         public string Country { get; set; }
-        public string City {get;set;}
+        public string City { get; set; }
         public string State { get; set; }
         public string Province { get; set; }
         public string StreetName { get; set; }
-        public int Code {get;set;}
+        public int Code { get; set; }
     }
     public class RouteVertexDAL : EntityIntIdDAL
     {
-        public int InRouteMoveOrder {get;set;}
-        public AddressDAL From {get;set;}
+        public int InRouteMoveOrder { get; set; }
+        public AddressDAL From { get; set; }
         public AddressDAL To { get; set; }
         public double Distance { get; set; }
         public int PriorityWeigth { get; set; }
     }
     public class RouteDAL : EntityIntIdDAL
     {
-        public string Name {get;set;}
-        
-        public List<RouteVertexDAL> RouteVertexes {get;set;}
+        public string Name { get; set; }
+
+        public List<RouteVertexDAL> RouteVertexes { get; set; }
     }
 
 
@@ -107,7 +156,7 @@ namespace crmvcsb.Domain.NewOrder.DAL
         public string DeliveryName { get; set; }
         public int DeliveryNumber { get; set; }
 
-        List<GoodsDAL> GoodsToDeliver {get;set;}
+        List<GoodsDAL> GoodsToDeliver { get; set; }
         List<RouteDAL> Routes { get; set; }
     }
 
@@ -119,8 +168,8 @@ namespace crmvcsb.Domain.NewOrder.DAL
 
     public class OrderDAL : EntityGuidIdDAL
     {
-        public ClientDAL Client {get;set;}
-        List<DeliveryItemDAL> OrderedItems {get;set;}
+        public ClientDAL Client { get; set; }
+        List<DeliveryItemDAL> OrderedItems { get; set; }
     }
 
 }
@@ -128,5 +177,15 @@ namespace crmvcsb.Domain.NewOrder.DAL
 namespace crmvcsb.Domain.NewOrder.API
 {
 
+    public class CrossCurrenciesAPI
+    {
+        public string From {get;set;}
+        public string To { get; set; }
+        public decimal Rate { get; set; }
+    }
+
+    public class GetCurrencyCommand {
+        public string IsoCode {get;set;}
+    }
 
 }
