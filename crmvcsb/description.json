@@ -276,11 +276,21 @@ BACKLOG/MILESTONES:[
 
 DONE:[
     
-    neworder:[        		
+    newOrder:[
+
 		<- 15.07.2019 1h -> new order model
         <- 16.07.2019 1h -> new order migration
         <- 16.07.2019 1h -> new order migration
+        
+        <- 17.07.2019 45m -> new order migration cleanup
+
+        <- 22.07.2019 1h -> new order currenciesDAL model
+
+        <- 23.07.2019 1h -> new order currenciesDAL model
+
+        <- 24.07.2019 1h -> new order currencies manager
+
     ]
-    ~3h in 3days
+    ~6h 45m in 6days
     
 ]
