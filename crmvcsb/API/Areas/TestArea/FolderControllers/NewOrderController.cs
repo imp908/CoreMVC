@@ -19,7 +19,7 @@ namespace crmvcsb.API.Areas.TestArea.FolderControllers
 {
     [Area("NewOrder")]
     [Route("Currency")]
-    public class NewOrderController
+    public class NewOrderController : ControllerBase
     {
 
         private INewOrdermanager _manager;
@@ -29,12 +29,14 @@ namespace crmvcsb.API.Areas.TestArea.FolderControllers
         }
 
         [HttpGet("Get")]
-        public async ActionResult<Task<IList<ICrossCurrenciesAPI>>> GetCurrency(GetCurrencyCommand command){
+        public async Task<IActionResult> GetCurrency(GetCurrencyCommand command){
             try{
-                return await _manager.GetCurrencyCrossRates(command);
+                var result =  await _manager.GetCurrencyCrossRates(command);
+                return Ok(result);
             }catch(Exception e){
-                
+                return BadRequest();
             }
         }
+        
     }
 }
