@@ -291,9 +291,7 @@ npx webpack
     Infrastructure -> Domain
 
 
-TODO:[
-
-    
+TODO:[ 
 
 ]
 
@@ -397,8 +395,10 @@ DONE:[
         <- 23.07.2019 1h -> new order currenciesDAL model
 
         <- 24.07.2019 1h -> new order currencies manager
+        
+        <- 25.07.2019 1h 30m -> currencies manager API resp
     ]
-    ~6h 45m in 6days
+    ~8h 15m in 7days
 
     master:[
         <- done 15.06.2019 12:35-16:02 3h30m -> git merge crmvcsb -> master, order -> master, cleanup master,crmvcsb,order
@@ -422,6 +422,6 @@ DONE:[
 
     ]~ 23h 
 
-    ~94h: 5m in 21d
+    ~95h: 35m in 22d
 
 ]

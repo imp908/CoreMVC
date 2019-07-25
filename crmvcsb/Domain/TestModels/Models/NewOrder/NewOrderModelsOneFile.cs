@@ -4,9 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace crmvcsb.Domain.NewOrder
 {
+
     public interface IEntityGuidIdDAL
     {
         Guid Id { get; set; }
@@ -58,8 +61,26 @@ namespace crmvcsb.Domain.NewOrder
         public DateTime DateTo { get; set; }
     }
 
+    public interface ICrossCurrenciesAPI
+    {
+        string From {get;set;}
+        string To { get; set; }
+        decimal Rate { get; set; }
+    }
+
+
+    public interface INewOrdermanager
+    {
+        Task<IList<ICrossCurrenciesAPI>> GetCurrencyCrossRates(GetCurrencyCommand command);
+    }
+
+    public class GetCurrencyCommand
+    {
+        public string IsoCode { get; set; }
+    }
 
 }
+
 
 namespace crmvcsb.Domain.NewOrder.DAL
 {
@@ -177,15 +198,13 @@ namespace crmvcsb.Domain.NewOrder.DAL
 namespace crmvcsb.Domain.NewOrder.API
 {
 
-    public class CrossCurrenciesAPI
+    public class CrossCurrenciesAPI : ICrossCurrenciesAPI
     {
         public string From {get;set;}
         public string To { get; set; }
         public decimal Rate { get; set; }
     }
 
-    public class GetCurrencyCommand {
-        public string IsoCode {get;set;}
-    }
+ 
 
 }
