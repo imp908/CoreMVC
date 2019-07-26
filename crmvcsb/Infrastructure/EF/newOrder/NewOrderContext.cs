@@ -16,7 +16,6 @@ namespace crmvcsb.Infrastructure.EF.newOrder
             //registration in startup.cs
             //optionsBuilder.UseSqlServer(@"Servedotnet buildr=AAAPC;Database=testdb;User Id=tl;Password=QwErT123;");
         }
-
         protected override void OnModelCreating(ModelBuilder builder)
         {
             /*Mark key */

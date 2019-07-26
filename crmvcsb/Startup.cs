@@ -29,6 +29,8 @@ namespace crmvcsb
     using crmvcsb.Domain.Interfaces;
 
     using crmvcsb.Infrastructure.EF.newOrder;
+    using crmvcsb.Infrastructure.EF.costControl;
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -67,6 +69,9 @@ namespace crmvcsb
             services.AddDbContext<NewOrderContext>(o =>
             o.UseSqlServer(
                 Configuration.GetConnectionString("LocalNewOrderConnection")));
+
+            services.AddDbContext<CostControllContext>(o =>
+            o.UseSqlServer(Configuration.GetConnectionString("CostControlDb")));
 
             services.AddMvc();
 
