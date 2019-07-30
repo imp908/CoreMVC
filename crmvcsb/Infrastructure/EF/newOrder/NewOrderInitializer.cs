@@ -19,7 +19,7 @@ namespace crmvcsb
                 RepositoryEF repo = new RepositoryEF(context);
 
                 List<AddressDAL> addresses = new List<AddressDAL>();
-                
+
                 for(int i = 0; i < 10; i++){
                     addresses.Add(new AddressDAL(){Id = i+1, StreetName = $"test street {i}", Code = i+1});
                 };
@@ -27,12 +27,29 @@ namespace crmvcsb
                 repo.AddRange(addresses);
                 
                 try {
-                    repo.SaveIdentity("Adresses");                    
-                } catch(Exception e) 
+                    repo.SaveIdentity("Adresses");
+                } catch(Exception e)
                 {
-                    throw;
-                }                
-                
+                  
+                }
+
+                repo.Add<CurrencyDAL>(new CurrencyDAL() { Id = 1, Name = "USD", IsoCode = "USD" });
+                repo.Add<CurrencyDAL>(new CurrencyDAL() { Id = 2, Name = "EUR", IsoCode = "EUR" });
+                repo.Add<CurrencyDAL>(new CurrencyDAL() { Id = 3, Name = "GBP", IsoCode = "GBP" });
+                repo.Add<CurrencyDAL>(new CurrencyDAL() { Id = 4, Name = "RUB", IsoCode = "RUB" });
+                repo.Add<CurrencyDAL>(new CurrencyDAL() { Id = 5, Name = "JPY", IsoCode = "JPY" });
+                repo.Add<CurrencyDAL>(new CurrencyDAL() { Id = 6, Name = "AUD", IsoCode = "AUD" });
+                repo.Add<CurrencyDAL>(new CurrencyDAL() { Id = 7, Name = "CAD", IsoCode = "CAD" });
+                repo.Add<CurrencyDAL>(new CurrencyDAL() { Id = 8, Name = "CHF", IsoCode = "CHF" });
+                try{repo.SaveIdentity<CurrencyDAL>();}catch(Exception e)
+                {}
+
+                repo.Add<CurrencyRatesDAL>(new CurrencyRatesDAL() { Id = 4, CurrencyFromId = 1, CurrencyToId = 4, Rate = 63.18M, Date = new DateTime(2019, 07, 23) });
+                repo.Add<CurrencyRatesDAL>(new CurrencyRatesDAL() { Id = 5, CurrencyFromId = 2, CurrencyToId = 4, Rate = 70.64M, Date = new DateTime(2019, 07, 23) });
+                repo.Add<CurrencyRatesDAL>(new CurrencyRatesDAL() { Id = 6, CurrencyFromId = 3, CurrencyToId = 4, Rate = 78.67M, Date = new DateTime(2019, 07, 23) });
+                try { repo.SaveIdentity<CurrencyRatesDAL>(); }catch (Exception e)
+                {}
+
             }
         }
 
@@ -40,19 +57,16 @@ namespace crmvcsb
         {
             using(NewOrderContext context = new NewOrderContext(new DbContextOptionsBuilder<NewOrderContext>().UseSqlServer(connectionString).Options))
             {
+
                 RepositoryEF repo = new RepositoryEF(context);
                 var addressesExist = repo.QueryByFilter<AddressDAL>(s => s.Id != null).ToList();
                 repo.DeleteRange(addressesExist);
+                try { repo.Save(); } catch (Exception e) { throw; }
 
-                try
-                {
-                    repo.Save();
-                }
-                catch (Exception e)
-                {
-                    throw;
-                }
-              
+                repo.DeleteRange(repo.GetAll<CurrencyRatesDAL>().ToList());
+                repo.DeleteRange(repo.GetAll<CurrencyDAL>().ToList());
+                try { repo.Save(); } catch (Exception e) { throw; }
+
             }
            
         }
