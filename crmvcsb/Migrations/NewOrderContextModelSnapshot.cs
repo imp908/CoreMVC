@@ -54,7 +54,7 @@ namespace mvccoresb.Migrations
                     b.ToTable("Clients");
                 });
 
-            modelBuilder.Entity("crmvcsb.Domain.NewOrder.DAL.Currency", b =>
+            modelBuilder.Entity("crmvcsb.Domain.NewOrder.DAL.CurrencyDAL", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -69,7 +69,7 @@ namespace mvccoresb.Migrations
                     b.ToTable("Currency");
                 });
 
-            modelBuilder.Entity("crmvcsb.Domain.NewOrder.DAL.CurrencyRates", b =>
+            modelBuilder.Entity("crmvcsb.Domain.NewOrder.DAL.CurrencyRatesDAL", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -207,14 +207,14 @@ namespace mvccoresb.Migrations
                     b.ToTable("RouteVertex");
                 });
 
-            modelBuilder.Entity("crmvcsb.Domain.NewOrder.DAL.CurrencyRates", b =>
+            modelBuilder.Entity("crmvcsb.Domain.NewOrder.DAL.CurrencyRatesDAL", b =>
                 {
-                    b.HasOne("crmvcsb.Domain.NewOrder.DAL.Currency", "CurrencyFrom")
+                    b.HasOne("crmvcsb.Domain.NewOrder.DAL.CurrencyDAL", "CurrencyFrom")
                         .WithMany("CurRatesFrom")
                         .HasForeignKey("CurrencyFromId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("crmvcsb.Domain.NewOrder.DAL.Currency", "CurrencyTo")
+                    b.HasOne("crmvcsb.Domain.NewOrder.DAL.CurrencyDAL", "CurrencyTo")
                         .WithMany("CurRatesTo")
                         .HasForeignKey("CurrencyToId")
                         .OnDelete(DeleteBehavior.Restrict);

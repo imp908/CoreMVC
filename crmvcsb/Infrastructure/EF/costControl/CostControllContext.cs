@@ -24,16 +24,34 @@ namespace crmvcsb.Infrastructure.EF.costControl
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+
             builder.Entity<BusinessColumn>().HasKey(k => k.Id);
             builder.Entity<BusinessColumn>().Property(p => p.Id).HasColumnName("Id_Business_Column");
             builder.Entity<BusinessColumn>().HasMany(p => p.BusinessLines).WithOne(p => p.BusinessColumn).HasForeignKey("BusinessColumnId");
 
             builder.Entity<BusinessLine>().HasKey(k => k.Id);
             builder.Entity<BusinessLine>().Property(p => p.Id).HasColumnName("Id_Business_Line");
+
+
+            builder.Entity<DictionaryToDictionaryAttachment>()
+                .HasOne(p => p.Dictionary)
+                .WithMany(p => p.Attachments)
+                .HasForeignKey(s => s.Id_Dictinary_Type);
+
+            builder.Entity<DictionaryToDictionaryAttachment>()
+                .HasOne(p => p.DictionaryAttachment)
+                .WithMany(p => p.Attachments)
+                .HasForeignKey(s => s.Id_Attachment);
+
         }
 
         public DbSet<BusinessColumn> BudgetColumn { get; set; }
         public DbSet<BusinessLine> BusinessLine { get; set; }
+
+
+        public DbSet<DictionaryDB> DictionaryDB { get; set; }
+        public DbSet<DictionaryAttachment> DictionaryAttachment { get; set; }
+        public DbSet<DictionaryToDictionaryAttachment> DictionaryToDictionaryAttachment { get; set; }
 
     }
 }

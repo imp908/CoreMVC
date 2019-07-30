@@ -17,9 +17,8 @@ using crmvcsb.Domain.NewOrder;
 
 namespace crmvcsb.API.Areas.TestArea.FolderControllers
 {
-    [Area("NewOrder")]
-    [Route("Currency")]
-    public class NewOrderController : ControllerBase
+    [Route("api/Currency")]
+    public class NewOrderController : Controller
     {
 
         private INewOrdermanager _manager;
@@ -36,6 +35,12 @@ namespace crmvcsb.API.Areas.TestArea.FolderControllers
             }catch(Exception e){
                 return BadRequest();
             }
+        }
+
+        [HttpGet("GetNoParam")]
+        public async Task<IActionResult> GetCurrencyNoParam()
+        {
+            return Ok(null);
         }
         
     }
