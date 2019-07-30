@@ -9,15 +9,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 
-
 namespace crmvcsb
 {
     public class Program
     {
         public static void Main(string[] args)
-        {      
-            //NewOrderInitializer.Initialize();
-            //NewOrderInitializer.CleanUp();
+        {
+            NewOrderInitializer.CleanUp();
+            NewOrderInitializer.Initialize();            
             CreateWebHostBuilder(args).Build().Run();
         }
 

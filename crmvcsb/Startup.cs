@@ -204,6 +204,11 @@ namespace crmvcsb
                 routes.MapHub<SignalRhub>("/rHub");
             });
         }
+
+        public IConfiguration GetConfig()
+        {
+            return this.Configuration;
+        }
     }
 
 
@@ -230,4 +235,5 @@ namespace crmvcsb
             context.Values[ValueKey] = context.ActionContext.RouteData.Values[ValueKey]?.ToString();
         }
     }
+
 }

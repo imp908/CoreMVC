@@ -8,16 +8,39 @@ namespace crmvcsb
     using crmvcsb.Domain.NewOrder.DAL;
     using System.Linq;
 
+    using System.IO;
+
+    using Microsoft.Extensions.Configuration;
+
     public class NewOrderInitializer
     {
-        static string  connectionString = "Server=AAAPC;Database=newOrderDB;User Id=tl;Password=QwErT123;";
-     
+        static string connectionString = "Server=AAAPC;Database=newOrderDB;User Id=tl;Password=QwErT123;";
+        public static IConfigurationRoot configuration { get; set; }
+
+        static NewOrderInitializer()
+        {
+            var builder = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+           .AddJsonFile("appsettings.json");
+
+            configuration = builder.Build();
+            connectionString = configuration.GetConnectionString("CostControlDb");
+        }
+   
+
         public static void Initialize()
         {
-            using( NewOrderContext context = new NewOrderContext(new DbContextOptionsBuilder<NewOrderContext>().UseSqlServer(connectionString).Options))
+            var builder = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+           .AddJsonFile("appsettings.json");
+
+            configuration = builder.Build();
+            connectionString = configuration.GetConnectionString("CostControlDb");
+
+            using ( NewOrderContext context = new NewOrderContext(new DbContextOptionsBuilder<NewOrderContext>().UseSqlServer(connectionString).Options))
             {
                 RepositoryEF repo = new RepositoryEF(context);
-
+                
                 List<AddressDAL> addresses = new List<AddressDAL>();
 
                 for(int i = 0; i < 10; i++){
