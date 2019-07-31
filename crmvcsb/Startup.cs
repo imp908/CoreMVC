@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Builder;
@@ -31,10 +32,11 @@ namespace crmvcsb
     using crmvcsb.Infrastructure.EF.newOrder;
     using crmvcsb.Infrastructure.EF.costControl;
 
-
     using crmvcsb.Domain.NewOrder;
+
     public class Startup
     {
+		
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -72,7 +74,12 @@ namespace crmvcsb
                 services.AddDbContext<NewOrderContext>(o =>
                 o.UseSqlServer(
                 Configuration.GetConnectionString("LocalNewOrderConnection")));
+			}
+			catch (Exception e)
+            {
 
+            }
+			
             services.AddDbContext<CostControllContext>(o =>
             o.UseSqlServer(Configuration.GetConnectionString("CostControlDb")));
 
@@ -110,136 +117,139 @@ namespace crmvcsb
             }
             return new AutofacServiceProvider(this.ApplicationContainer);
         }
+    
 
 
-        public ContainerBuilder ConfigureAutofac(IServiceCollection services, ContainerBuilder autofacContainer)
-        {
+		public ContainerBuilder ConfigureAutofac(IServiceCollection services, ContainerBuilder autofacContainer)
+		{
 
-            /**EF,repo and UOW reg */
-            autofacContainer.RegisterType<TestContext>()
-                .As<DbContext>().WithMetadata("Name", "TestRepo")
-                .InstancePerLifetimeScope();
+			/**EF,repo and UOW reg */
+			autofacContainer.RegisterType<TestContext>()
+				.As<DbContext>().WithMetadata("Name", "TestRepo")
+				.InstancePerLifetimeScope();
 
-            autofacContainer.RegisterType<RepositoryEF>()
-                .As<IRepository>()
-                .InstancePerLifetimeScope();
-
-
-            //*DAL->BLL reg */
-            autofacContainer.RegisterType<BlogEF>()
-                .As<IBlogEF>().InstancePerLifetimeScope();
-            autofacContainer.RegisterType<BlogBLL>()
-                .As<IBlogBLL>().InstancePerLifetimeScope();
-            autofacContainer.RegisterType<PostBLL>()
-                .As<IPostBLL>().InstancePerLifetimeScope();
-
-            autofacContainer.RegisterType<NewOrdermanager>()
-                .As<INewOrdermanager>().InstancePerLifetimeScope();
-
-            return autofacContainer;
-        }
-
-        public MapperConfiguration ConfigureAutoMapper()
-        {
-            return new MapperConfiguration(cfg =>
-            {
-                //cfg.AddProfiles(typeof(BlogEF), typeof(BlogBLL));
-                cfg.CreateMap<BlogEF, BlogBLL>()
-                    .ForMember(dest => dest.Id, m => m.MapFrom(src => src.BlogId))
-                    .ForMember(dest => dest.Posts, m => m.Ignore());
-
-                cfg.CreateMap<PostEF, PostBLL>(MemberList.None).ReverseMap();
-
-                cfg.CreateMap<PersonAdsPostCommand, PostEF>()
-                    .ForMember(dest => dest.AuthorId, m => m.MapFrom(src => src.PersonId));
-
-                cfg.CreateMap<AddPostAPI, PostEF>()
-                    .ForMember(dest => dest.AuthorId, m => m.MapFrom(src => src.PersonId))
-                    .ForMember(dest => dest.BlogId, m => m.MapFrom(src => src.BlogId));
-
-                cfg.CreateMap<PersonEF, PersonAPI>();
-                cfg.CreateMap<BlogEF, BlogAPI>();
-                cfg.CreateMap<PostEF, PostAPI>().ReverseMap();
-
-            });
-        }
+			autofacContainer.RegisterType<RepositoryEF>()
+				.As<IRepository>()
+				.InstancePerLifetimeScope();
 
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
+			//*DAL->BLL reg */
+			autofacContainer.RegisterType<BlogEF>()
+				.As<IBlogEF>().InstancePerLifetimeScope();
+			autofacContainer.RegisterType<BlogBLL>()
+				.As<IBlogBLL>().InstancePerLifetimeScope();
+			autofacContainer.RegisterType<PostBLL>()
+				.As<IPostBLL>().InstancePerLifetimeScope();
 
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
-            app.UseCookiePolicy();
+			autofacContainer.RegisterType<NewOrdermanager>()
+				.As<INewOrdermanager>().InstancePerLifetimeScope();
 
-            try
-            {
+			return autofacContainer;
+		}
 
-                app.UseMvc(routes =>
-                {
-                    routes.MapRoute(
-                       name: "areas",
-                       template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+		public MapperConfiguration ConfigureAutoMapper()
+		{
+			return new MapperConfiguration(cfg =>
+			{
+				//cfg.AddProfiles(typeof(BlogEF), typeof(BlogBLL));
+				cfg.CreateMap<BlogEF, BlogBLL>()
+					.ForMember(dest => dest.Id, m => m.MapFrom(src => src.BlogId))
+					.ForMember(dest => dest.Posts, m => m.Ignore());
 
-                    routes.MapRoute(
-                        name: "default",
-                        template: "{controller=Home}/{action=Index}/{id?}");
+				cfg.CreateMap<PostEF, PostBLL>(MemberList.None).ReverseMap();
 
-                });
-            }
-            catch (Exception e)
-            {
+				cfg.CreateMap<PersonAdsPostCommand, PostEF>()
+					.ForMember(dest => dest.AuthorId, m => m.MapFrom(src => src.PersonId));
 
-            }
+				cfg.CreateMap<AddPostAPI, PostEF>()
+					.ForMember(dest => dest.AuthorId, m => m.MapFrom(src => src.PersonId))
+					.ForMember(dest => dest.BlogId, m => m.MapFrom(src => src.BlogId));
 
-            /* must be added after use mvc */
-            app.UseSignalR(routes =>
-            {
-                routes.MapHub<SignalRhub>("/rHub");
-            });
-        }
+				cfg.CreateMap<PersonEF, PersonAPI>();
+				cfg.CreateMap<BlogEF, BlogAPI>();
+				cfg.CreateMap<PostEF, PostAPI>().ReverseMap();
 
-        public IConfiguration GetConfig()
-        {
-            return this.Configuration;
-        }
-    }
+			});
+		}
 
 
-    public class CustomViewLocation : IViewLocationExpander
-    {
-        string ValueKey = "Views";
-        public IEnumerable<string> ExpandViewLocations(
-            ViewLocationExpanderContext context,
-            IEnumerable<string> viewLocations)
-        {
+		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+		{
+			if (env.IsDevelopment())
+			{
+				app.UseDeveloperExceptionPage();
+				app.UseDatabaseErrorPage();
+			}
+			else
+			{
+				app.UseExceptionHandler("/Home/Error");
+				// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+				app.UseHsts();
+			}
 
-            return ExpandViewLocationsCore(viewLocations);
-        }
+			app.UseHttpsRedirection();
+			app.UseStaticFiles();
+			app.UseCookiePolicy();
 
-        private IEnumerable<string> ExpandViewLocationsCore(IEnumerable<string> viewLocations)
-        {
-            viewLocations = viewLocations.Select(s => s.Replace("Views", ValueKey));
+			try
+			{
 
-            return viewLocations;
-        }
+				app.UseMvc(routes =>
+				{
+					routes.MapRoute(
+					   name: "areas",
+					   template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
-        public void PopulateValues(ViewLocationExpanderContext context)
-        {
-            context.Values[ValueKey] = context.ActionContext.RouteData.Values[ValueKey]?.ToString();
-        }
-    }
+					routes.MapRoute(
+						name: "default",
+						template: "{controller=Home}/{action=Index}/{id?}");
+
+				});
+			}
+			catch (Exception e)
+			{
+
+			}
+
+			/* must be added after use mvc */
+			app.UseSignalR(routes =>
+			{
+				routes.MapHub<SignalRhub>("/rHub");
+			});
+		}
+
+		public IConfiguration GetConfig()
+		{
+			return this.Configuration;
+		}
+	
+
+
+		public class CustomViewLocation : IViewLocationExpander
+		{
+			string ValueKey = "Views";
+			public IEnumerable<string> ExpandViewLocations(
+				ViewLocationExpanderContext context,
+				IEnumerable<string> viewLocations)
+			{
+
+				return ExpandViewLocationsCore(viewLocations);
+			}
+
+			private IEnumerable<string> ExpandViewLocationsCore(IEnumerable<string> viewLocations)
+			{
+				viewLocations = viewLocations.Select(s => s.Replace("Views", ValueKey));
+
+				return viewLocations;
+			}
+
+			public void PopulateValues(ViewLocationExpanderContext context)
+			{
+				context.Values[ValueKey] = context.ActionContext.RouteData.Values[ValueKey]?.ToString();
+			}
+		}
+
+	}
 
 }
