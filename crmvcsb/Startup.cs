@@ -29,6 +29,8 @@ namespace crmvcsb
     using crmvcsb.Domain.Interfaces;
 
     using crmvcsb.Infrastructure.EF.newOrder;
+    using crmvcsb.Infrastructure.EF.costControl;
+
 
     using crmvcsb.Domain.NewOrder;
     public class Startup
@@ -71,10 +73,8 @@ namespace crmvcsb
                 o.UseSqlServer(
                 Configuration.GetConnectionString("LocalNewOrderConnection")));
 
-            } catch(Exception e)
-            {
-
-            }        
+            services.AddDbContext<CostControllContext>(o =>
+            o.UseSqlServer(Configuration.GetConnectionString("CostControlDb")));
 
             services.AddMvc();
 
@@ -210,6 +210,11 @@ namespace crmvcsb
                 routes.MapHub<SignalRhub>("/rHub");
             });
         }
+
+        public IConfiguration GetConfig()
+        {
+            return this.Configuration;
+        }
     }
 
 
@@ -236,4 +241,5 @@ namespace crmvcsb
             context.Values[ValueKey] = context.ActionContext.RouteData.Values[ValueKey]?.ToString();
         }
     }
+
 }
