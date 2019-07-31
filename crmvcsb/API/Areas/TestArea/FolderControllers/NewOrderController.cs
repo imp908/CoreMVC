@@ -17,9 +17,9 @@ using crmvcsb.Domain.NewOrder;
 
 namespace crmvcsb.API.Areas.TestArea.FolderControllers
 {
-    [Area("NewOrder")]
-    [Route("Currency")]
-    public class NewOrderController : ControllerBase
+    [Route("api/[controller]")]
+    [ApiController]
+    public class NewOrderController : Controller
     {
 
         private INewOrdermanager _manager;
@@ -29,7 +29,7 @@ namespace crmvcsb.API.Areas.TestArea.FolderControllers
         }
 
         [HttpGet("Get")]
-        public async Task<IActionResult> GetCurrency(GetCurrencyCommand command){
+        public async Task<IActionResult> GetCurrency([FromRoute]GetCurrencyCommand command){
             try{
                 var result =  await _manager.GetCurrencyCrossRates(command);
                 return Ok(result);
@@ -37,6 +37,25 @@ namespace crmvcsb.API.Areas.TestArea.FolderControllers
                 return BadRequest();
             }
         }
-        
+        [HttpGet("GetParam")]
+        public async Task<IActionResult> GetCurrencyParam(string IsoCode){
+            try{                
+                return Ok(null);
+            }catch(Exception e){
+                return BadRequest();
+            }
+        }
+        [HttpGet("GetNoParam")]
+        public async Task<IActionResult> GetNoParam()
+        {
+            try
+            {
+                return Ok(null);
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
+        }
     }
 }

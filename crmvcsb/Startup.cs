@@ -29,6 +29,8 @@ namespace crmvcsb
     using crmvcsb.Domain.Interfaces;
 
     using crmvcsb.Infrastructure.EF.newOrder;
+
+    using crmvcsb.Domain.NewOrder;
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -59,14 +61,20 @@ namespace crmvcsb
                 options.AreaViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
             });
 
-
-            services.AddDbContext<TestContext>(o =>
-            o.UseSqlServer(
+            try
+            {
+                services.AddDbContext<TestContext>(o =>
+                o.UseSqlServer(
                 Configuration.GetConnectionString("LocalDbConnection")));
 
-            services.AddDbContext<NewOrderContext>(o =>
-            o.UseSqlServer(
+                services.AddDbContext<NewOrderContext>(o =>
+                o.UseSqlServer(
                 Configuration.GetConnectionString("LocalNewOrderConnection")));
+
+            } catch(Exception e)
+            {
+
+            }        
 
             services.AddMvc();
 
@@ -124,6 +132,9 @@ namespace crmvcsb
                 .As<IBlogBLL>().InstancePerLifetimeScope();
             autofacContainer.RegisterType<PostBLL>()
                 .As<IPostBLL>().InstancePerLifetimeScope();
+
+            autofacContainer.RegisterType<NewOrdermanager>()
+                .As<INewOrdermanager>().InstancePerLifetimeScope();
 
             return autofacContainer;
         }
