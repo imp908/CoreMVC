@@ -22,6 +22,5 @@ bin/
 */bin
 */obj
 */node_modules
-appsettings.json
-.vs/
 *appsettings.json
+.vs/

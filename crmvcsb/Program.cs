@@ -15,16 +15,23 @@ namespace crmvcsb
     {
         public static void Main(string[] args)
         {
-            NewOrderInitializer.CleanUp();
-            NewOrderInitializer.Initialize();            
-            CreateWebHostBuilder(args).Build().Run();
+            //NewOrderInitializer.CleanUp();NewOrderInitializer.Initialize();
+            
+            try
+            {
+                CreateWebHostBuilder(args).Build().Run();
+            }
+            catch (Exception e)
+            {
+
+            }
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
             //http host for Fidler http test
-            .UseUrls("http://localhost:5002")
-                .UseStartup<Startup>();
+            //.UseUrls("http://localhost:5002")
+            .UseStartup<Startup>();
 
     }
 }

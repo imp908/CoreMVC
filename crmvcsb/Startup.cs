@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using Microsoft.AspNetCore.Mvc.Razor;
 
-
+using crmvcsb.Domain.NewOrder;
 namespace crmvcsb
 {
 
@@ -33,14 +33,14 @@ namespace crmvcsb
 
     public class Startup
     {
+        public IContainer ApplicationContainer { get; private set; }
+
+        public IConfiguration Configuration { get; }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
-
-        public IContainer ApplicationContainer { get; private set; }
-
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
@@ -97,29 +97,51 @@ namespace crmvcsb
             /*Registration of automapper with autofac Instance API */
             autofacContainer.RegisterInstance(mapper).As<IMapper>();
 
+            AutofacServiceProvider r=null;
+
             try
             {
                 this.ApplicationContainer = autofacContainer.Build();
+                r = new AutofacServiceProvider(this.ApplicationContainer);
             }
             catch (Exception e)
             {
 
             }
-            return new AutofacServiceProvider(this.ApplicationContainer);
+            return r;
         }
 
 
         public ContainerBuilder ConfigureAutofac(IServiceCollection services, ContainerBuilder autofacContainer)
         {
 
-            /**EF,repo and UOW reg */
+            /**EF, repo and UOW reg */
             autofacContainer.RegisterType<TestContext>()
-                .As<DbContext>().WithMetadata("Name", "TestRepo")
+                .As<DbContext>().WithMetadata("Name", "TestContext")
                 .InstancePerLifetimeScope();
+
+            //autofacContainer.RegisterType<TestContext>().AsImplementedInterfaces();
+
+            autofacContainer.RegisterType<NewOrderContext>()
+                .As<DbContext>().WithMetadata("Name", "NewOrderContext")
+                .InstancePerLifetimeScope();
+
+            autofacContainer.RegisterType<CostControllContext>()
+             .As<DbContext>().WithMetadata("Name", "CostControllContext")
+             .InstancePerLifetimeScope();
+
+
 
             autofacContainer.RegisterType<RepositoryEF>()
                 .As<IRepository>()
                 .InstancePerLifetimeScope();
+
+
+
+            autofacContainer.RegisterType<NewOrdermanager>()
+                .As<INewOrdermanager>()
+                .InstancePerLifetimeScope();
+
 
 
             //*DAL->BLL reg */
