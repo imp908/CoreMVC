@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Builder;
@@ -31,16 +32,20 @@ namespace crmvcsb
     using crmvcsb.Infrastructure.EF.newOrder;
     using crmvcsb.Infrastructure.EF.costControl;
 
+    using crmvcsb.Domain.NewOrder;
+
     public class Startup
     {
         public IContainer ApplicationContainer { get; private set; }
 
         public IConfiguration Configuration { get; }
 
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
+
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
@@ -61,15 +66,21 @@ namespace crmvcsb
                 options.AreaViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
             });
 
-
-            services.AddDbContext<TestContext>(o =>
-            o.UseSqlServer(
+            try
+            {
+                services.AddDbContext<TestContext>(o =>
+                o.UseSqlServer(
                 Configuration.GetConnectionString("LocalDbConnection")));
 
-            services.AddDbContext<NewOrderContext>(o =>
-            o.UseSqlServer(
+                services.AddDbContext<NewOrderContext>(o =>
+                o.UseSqlServer(
                 Configuration.GetConnectionString("LocalNewOrderConnection")));
+			}
+			catch (Exception e)
+            {
 
+            }
+			
             services.AddDbContext<CostControllContext>(o =>
             o.UseSqlServer(Configuration.GetConnectionString("CostControlDb")));
 
@@ -257,5 +268,8 @@ namespace crmvcsb
             context.Values[ValueKey] = context.ActionContext.RouteData.Values[ValueKey]?.ToString();
         }
     }
+    
+
+
 
 }

@@ -31,6 +31,7 @@ namespace crmvcsb.API.Areas.TestArea.FolderControllers
         [HttpGet("Get")]
         public async Task<IActionResult> GetCurrency([FromRoute]GetCurrencyCommand command)
         {
+
             try{
                 var result =  await _manager.GetCurrencyCrossRates(command);
                 return Ok(result);
@@ -38,12 +39,25 @@ namespace crmvcsb.API.Areas.TestArea.FolderControllers
                 return BadRequest();
             }
         }
-
-        [HttpGet("GetNoParam")]
-        public async Task<IActionResult> GetCurrencyNoParam()
-        {
-            return Ok();
+        [HttpGet("GetParam")]
+        public async Task<IActionResult> GetCurrencyParam(string IsoCode){
+            try{
+                return Ok();
+            }catch(Exception e){
+                return BadRequest();
+            }
         }
-        
+        [HttpGet("GetNoParam")]
+        public async Task<IActionResult> GetNoParam()
+        {
+            try
+            {
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
+        }
     }
 }
