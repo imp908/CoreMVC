@@ -66,24 +66,7 @@ namespace crmvcsb
                 options.AreaViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
             });
 
-            try
-            {
-                services.AddDbContext<TestContext>(o =>
-                o.UseSqlServer(
-                Configuration.GetConnectionString("LocalDbConnection")));
-
-                services.AddDbContext<NewOrderContext>(o =>
-                o.UseSqlServer(
-                Configuration.GetConnectionString("LocalNewOrderConnection")));
-			}
-			catch (Exception e)
-            {
-
-            }
-			
-            services.AddDbContext<CostControllContext>(o =>
-            o.UseSqlServer(Configuration.GetConnectionString("CostControlDb")));
-
+      
             services.AddMvc();
 
             /*SignalR registration*/
@@ -108,7 +91,7 @@ namespace crmvcsb
             /*Registration of automapper with autofac Instance API */
             autofacContainer.RegisterInstance(mapper).As<IMapper>();
 
-            AutofacServiceProvider r=null;
+            AutofacServiceProvider r = null;
 
             try
             {
@@ -119,6 +102,24 @@ namespace crmvcsb
             {
 
             }
+
+            try
+            {
+
+                // services.AddDbContext<TestContext>(o =>
+                // o.UseSqlServer(Configuration.GetConnectionString("LocalDbConnection")));
+
+                // services.AddDbContext<NewOrderContext>(o =>
+                // o.UseSqlServer(Configuration.GetConnectionString("LocalNewOrderConnection")));
+
+                // services.AddDbContext<CostControllContext>(o =>
+                // o.UseSqlServer(Configuration.GetConnectionString("CostControlDb")));
+
+			}
+			catch (Exception e)
+            {
+
+            }
             return r;
         }
 
@@ -126,20 +127,29 @@ namespace crmvcsb
         public ContainerBuilder ConfigureAutofac(IServiceCollection services, ContainerBuilder autofacContainer)
         {
 
+
             /**EF, repo and UOW reg */
             autofacContainer.RegisterType<TestContext>()
-                .As<DbContext>().WithMetadata("Name", "TestContext")
+                .As<DbContext>()
+                .WithParameter("options",
+                    new DbContextOptionsBuilder<TestContext>()
+                    .UseSqlServer(Configuration.GetConnectionString("LocalDbConnection")).Options)
+                .WithMetadata("Name", "TestContext")
                 .InstancePerLifetimeScope();
 
-            //autofacContainer.RegisterType<TestContext>().AsImplementedInterfaces();
-
             autofacContainer.RegisterType<NewOrderContext>()
-                .As<DbContext>().WithMetadata("Name", "NewOrderContext")
+                .As<DbContext>()
+                .WithParameter("options", new DbContextOptionsBuilder<NewOrderContext>()
+                    .UseSqlServer(Configuration.GetConnectionString("LocalNewOrderConnection")).Options)
+                .WithMetadata("Name", "NewOrderContext")
                 .InstancePerLifetimeScope();
 
             autofacContainer.RegisterType<CostControllContext>()
-             .As<DbContext>().WithMetadata("Name", "CostControllContext")
-             .InstancePerLifetimeScope();
+                .As<DbContext>()
+                .WithParameter("options",new DbContextOptionsBuilder<CostControllContext>()
+                    .UseSqlServer(Configuration.GetConnectionString("CostControlDb")).Options)
+                .WithMetadata("Name", "CostControllContext")
+                .InstancePerLifetimeScope();
 
 
 
@@ -148,11 +158,9 @@ namespace crmvcsb
                 .InstancePerLifetimeScope();
 
 
-
             autofacContainer.RegisterType<NewOrdermanager>()
                 .As<INewOrdermanager>()
                 .InstancePerLifetimeScope();
-
 
 
             //*DAL->BLL reg */
@@ -162,6 +170,7 @@ namespace crmvcsb
                 .As<IBlogBLL>().InstancePerLifetimeScope();
             autofacContainer.RegisterType<PostBLL>()
                 .As<IPostBLL>().InstancePerLifetimeScope();
+
 
             return autofacContainer;
         }

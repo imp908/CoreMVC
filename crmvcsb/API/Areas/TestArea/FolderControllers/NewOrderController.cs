@@ -32,18 +32,23 @@ namespace crmvcsb.API.Areas.TestArea.FolderControllers
         public async Task<IActionResult> GetCurrency([FromRoute]GetCurrencyCommand command)
         {
 
-            try{
+            try
+            {
                 var result =  await _manager.GetCurrencyCrossRates(command);
                 return Ok(result);
-            }catch(Exception e){
+            } catch (Exception e) {
                 return BadRequest();
             }
         }
         [HttpGet("GetParam")]
-        public async Task<IActionResult> GetCurrencyParam(string IsoCode){
-            try{
+        public async Task<IActionResult> GetCurrencyParam(string IsoCode)
+        {
+            try
+            {
                 return Ok();
-            }catch(Exception e){
+            }
+            catch (Exception e)
+            {
                 return BadRequest();
             }
         }
