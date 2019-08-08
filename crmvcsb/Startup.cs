@@ -34,6 +34,10 @@ namespace crmvcsb
 
     using crmvcsb.Domain.NewOrder;
 
+    using crmvcsb.Domain.NewOrder.DAL;
+    using crmvcsb.Domain.NewOrder.API;
+
+
     public class Startup
     {
         public IContainer ApplicationContainer { get; private set; }
@@ -137,32 +141,31 @@ namespace crmvcsb
                 .WithMetadata("Name", "TestContext")
                 .InstancePerLifetimeScope();
 
+
+            autofacContainer.RegisterType<CostControllContext>()
+                .As<DbContext>()
+                .WithParameter("options", new DbContextOptionsBuilder<CostControllContext>()
+                    .UseSqlServer(Configuration.GetConnectionString("CostControlDb")).Options)
+                .WithMetadata("Name", "CostControllContext")
+                .InstancePerLifetimeScope();
+
+
             autofacContainer.RegisterType<NewOrderContext>()
                 .As<DbContext>()
                 .WithParameter("options", new DbContextOptionsBuilder<NewOrderContext>()
                     .UseSqlServer(Configuration.GetConnectionString("LocalNewOrderConnection")).Options)
                 .WithMetadata("Name", "NewOrderContext")
                 .InstancePerLifetimeScope();
-
-            autofacContainer.RegisterType<CostControllContext>()
-                .As<DbContext>()
-                .WithParameter("options",new DbContextOptionsBuilder<CostControllContext>()
-                    .UseSqlServer(Configuration.GetConnectionString("CostControlDb")).Options)
-                .WithMetadata("Name", "CostControllContext")
-                .InstancePerLifetimeScope();
-
-
-
             autofacContainer.RegisterType<RepositoryEF>()
                 .As<IRepository>()
+                .WithMetadata<AppendMetadata>(m => m.For(am => am.AppendName, "NewOrderContext"))
                 .InstancePerLifetimeScope();
-
-
             autofacContainer.RegisterType<NewOrdermanager>()
                 .As<INewOrdermanager>()
+                .WithMetadata<AppendMetadata>(m => m.For(am => am.AppendName, "NewOrderContext"))
                 .InstancePerLifetimeScope();
 
-
+      
             //*DAL->BLL reg */
             autofacContainer.RegisterType<BlogEF>()
                 .As<IBlogEF>().InstancePerLifetimeScope();
@@ -196,6 +199,13 @@ namespace crmvcsb
                 cfg.CreateMap<PersonEF, PersonAPI>();
                 cfg.CreateMap<BlogEF, BlogAPI>();
                 cfg.CreateMap<PostEF, PostAPI>().ReverseMap();
+
+
+
+                cfg.CreateMap<CurrencyRatesDAL, CrossCurrenciesAPI>()
+                    .ForMember(d => d.From, m => m.MapFrom(src => src.CurrencyFrom.Name))
+                    .ForMember(d => d.To, m => m.MapFrom(src => src.CurrencyTo.Name))
+                    .ReverseMap().ForAllMembers(o => o.Ignore());
 
             });
         }
@@ -253,6 +263,10 @@ namespace crmvcsb
         }
     }
 
+
+    public class AppendMetadata {
+        public string AppendName {get; set;}
+    }
 
     public class CustomViewLocation : IViewLocationExpander
     {

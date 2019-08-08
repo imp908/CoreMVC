@@ -44,7 +44,7 @@ namespace crmvcsb.Infrastructure.EF.costControl
                 .HasForeignKey(s => s.Id_Attachment);
 
         }
-
+        
         public DbSet<BusinessColumn> BudgetColumn { get; set; }
         public DbSet<BusinessLine> BusinessLine { get; set; }
 

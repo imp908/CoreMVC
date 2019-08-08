@@ -81,7 +81,6 @@ namespace crmvcsb.Domain.NewOrder
 
 }
 
-
 namespace crmvcsb.Domain.NewOrder.DAL
 {
 

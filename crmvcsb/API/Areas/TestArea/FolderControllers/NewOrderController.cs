@@ -24,17 +24,18 @@ namespace crmvcsb.API.Areas.TestArea.FolderControllers
 
         private INewOrdermanager _manager;
 
-        public NewOrderController(INewOrdermanager manager) {
+        public NewOrderController(INewOrdermanager manager) 
+        {
             _manager = manager;
         }
 
         [HttpGet("Get")]
-        public async Task<IActionResult> GetCurrency([FromRoute]GetCurrencyCommand command)
+        public async Task<IActionResult> GetCurrency([FromRoute]string IsoCode )
         {
-
             try
             {
-                var result =  await _manager.GetCurrencyCrossRates(command);
+                var cmd = new GetCurrencyCommand(){IsoCode="USD"};
+                var result = await _manager.GetCurrencyCrossRates(cmd);
                 return Ok(result);
             } catch (Exception e) {
                 return BadRequest();

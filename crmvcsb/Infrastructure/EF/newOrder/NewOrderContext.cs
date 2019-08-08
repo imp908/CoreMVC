@@ -4,13 +4,14 @@ namespace crmvcsb.Infrastructure.EF.newOrder
     using System.Collections.Generic;
     using crmvcsb.Domain.NewOrder.DAL;
     using System;
+    using Autofac;
 
     public class NewOrderContext : DbContext
     {
         public NewOrderContext(DbContextOptions<NewOrderContext> options) : base(options)
         {
 
-        }        
+        }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //registration in startup.cs

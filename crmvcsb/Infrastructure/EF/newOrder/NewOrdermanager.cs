@@ -13,12 +13,14 @@ namespace crmvcsb.Infrastructure.EF.newOrder
     using crmvcsb.Domain.Interfaces;
     using crmvcsb.Domain.NewOrder;
 
+    using Autofac.Features.AttributeFilters;
+
     public class NewOrdermanager : INewOrdermanager
     {
         IRepository _repository;
         IMapper _mapper;
 
-        public NewOrdermanager(IRepository repository, IMapper mapper)
+        public NewOrdermanager([KeyFilter("NewOrderContext")] IRepository repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
@@ -26,11 +28,15 @@ namespace crmvcsb.Infrastructure.EF.newOrder
 
         public async Task<IList<ICrossCurrenciesAPI>> GetCurrencyCrossRates(GetCurrencyCommand command) {
 
-            List<CurrencyRatesDAL> r = await _repository
-                .QueryByFilter<CurrencyRatesDAL>(c => c.CurrencyFrom.IsoCode.ToLower() == command.IsoCode.ToLower())
-                .ToListAsync();
+            IList<CrossCurrenciesAPI> result = new List<CrossCurrenciesAPI>();
 
-            var result = _mapper.Map<IList<CurrencyRatesDAL>, IList<CrossCurrenciesAPI>>(r);
+            if(command != null && command.IsoCode != null){
+                List<CurrencyRatesDAL>  r = await _repository
+                    .QueryByFilter<CurrencyRatesDAL>(c => c.CurrencyFrom.IsoCode.ToLower() == command.IsoCode.ToLower())
+                    .Include(p => p.CurrencyFrom).Include(p => p.CurrencyTo)
+                    .ToListAsync();
+                result = _mapper.Map<IList<CurrencyRatesDAL>, IList<CrossCurrenciesAPI>>(r);
+            }
 
             return result.Cast<ICrossCurrenciesAPI>().ToList();
         }
