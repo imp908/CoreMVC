@@ -34,7 +34,7 @@ namespace crmvcsb.API.Areas.TestArea.FolderControllers
         {
             try
             {
-                var cmd = new GetCurrencyCommand(){IsoCode="USD"};
+                var cmd = new GetCurrencyCommand(){IsoCode=IsoCode};
                 var result = await _manager.GetCurrencyCrossRates(cmd);
                 return Ok(result);
             } catch (Exception e) {

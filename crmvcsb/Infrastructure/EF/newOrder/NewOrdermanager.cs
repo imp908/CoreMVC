@@ -31,10 +31,15 @@ namespace crmvcsb.Infrastructure.EF.newOrder
             IList<CrossCurrenciesAPI> result = new List<CrossCurrenciesAPI>();
 
             if(command != null && command.IsoCode != null){
+
                 List<CurrencyRatesDAL>  r = await _repository
-                    .QueryByFilter<CurrencyRatesDAL>(c => c.CurrencyFrom.IsoCode.ToLower() == command.IsoCode.ToLower())
+                    .QueryByFilter<CurrencyRatesDAL>(c => c.CurrencyFrom.IsoCode.ToLower() == command.IsoCode.ToLower()
+                        && c.Date.Year == command.Date.Year && c.Date.Month == command.Date.Month)
                     .Include(p => p.CurrencyFrom).Include(p => p.CurrencyTo)
+                    .Where(s => s.CurrencyFrom.IsMain == true && s.CurrencyTo.IsMain ==  true)
                     .ToListAsync();
+
+
                 result = _mapper.Map<IList<CurrencyRatesDAL>, IList<CrossCurrenciesAPI>>(r);
             }
 

@@ -77,6 +77,7 @@ namespace crmvcsb.Domain.NewOrder
     public class GetCurrencyCommand
     {
         public string IsoCode { get; set; }
+        public DateTime Date { get; set; }
     }
 
 }
@@ -88,6 +89,7 @@ namespace crmvcsb.Domain.NewOrder.DAL
     {
         public string Name { get; set; }
         public string IsoCode { get; set; }
+        public bool IsMain { get; set; }
 
         public List<CurrencyRatesDAL> CurRatesFrom { get; set; }
         public List<CurrencyRatesDAL> CurRatesTo { get; set; }
@@ -204,6 +206,4 @@ namespace crmvcsb.Domain.NewOrder.API
         public decimal Rate { get; set; }
     }
 
- 
-
-}
+ }
