@@ -28,7 +28,9 @@ namespace crmvcsb.Domain.newOrder
         {
 
             List<CurrencyRatesDAL> r = await _repository
-                .QueryByFilter<CurrencyRatesDAL>(c => c.CurrencyFrom.IsoCode.ToLower() == command.IsoCode.ToLower())
+                .GetAll<CurrencyRatesDAL>()
+                .Where(s => s.CurrencyFrom.IsoCode.ToLower() == command.IsoCode.ToLower() 
+                || s.CurrencyTo.IsoCode.ToLower() == command.IsoCode.ToLower())
                 .Include(s => s.CurrencyFrom).Include(s => s.CurrencyTo)
                 .ToListAsync();
 
