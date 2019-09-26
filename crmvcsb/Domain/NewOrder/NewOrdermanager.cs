@@ -1,5 +1,5 @@
 
-namespace crmvcsb.Infrastructure.EF.newOrder
+namespace crmvcsb.Domain.NewOrder
 {
     using System.Linq;
 
@@ -15,12 +15,12 @@ namespace crmvcsb.Infrastructure.EF.newOrder
 
     using Autofac.Features.AttributeFilters;
 
-    public class NewOrdermanager : INewOrdermanager
+    public class NewOrderManager : INewOrderManager
     {
         IRepository _repository;
         IMapper _mapper;
 
-        public NewOrdermanager([KeyFilter("NewOrderContext")] IRepository repository, IMapper mapper)
+        public NewOrderManager([KeyFilter("NewOrderContext")] IRepository repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;

@@ -69,7 +69,7 @@ namespace crmvcsb.Domain.NewOrder
     }
 
 
-    public interface INewOrdermanager
+    public interface INewOrderManager
     {
         Task<IList<ICrossCurrenciesAPI>> GetCurrencyCrossRates(GetCurrencyCommand command);
     }
