@@ -20,7 +20,7 @@ namespace crmvcsb.Domain.NewOrder
         IRepository _repository;
         IMapper _mapper;
 
-        public NewOrderManager([KeyFilter("NewOrderContext")] IRepository repository, IMapper mapper)
+        public NewOrderManager([KeyFilter("NewOrderRepo")] IRepository repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
