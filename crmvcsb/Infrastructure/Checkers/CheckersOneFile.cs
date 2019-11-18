@@ -47,9 +47,9 @@ namespace InfrastructureCheckers
               
                 repo.Add(b);
                 repo.Add(p);
-                try{                   
+                try {                   
                     repo.SaveIdentity("Blogs");
-                }catch(Exception e)
+                } catch(Exception e)
                 {
 
                 }
@@ -2394,9 +2394,7 @@ namespace Rewrite
     using System.Net;
     using System.Net.Sockets;
 
-    using System.Web.Http;
-
-
+    
     //custom linq
     using System.Linq.Expressions;
 

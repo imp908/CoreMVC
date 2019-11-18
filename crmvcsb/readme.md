@@ -126,5 +126,3 @@ AutofacServiceProvider returned from ConfigureServices
 -------------------------------------------------------
 Added http instead of https routing for Fiddler test to:
     .UseUrls("http://localhost:5002")
-
-

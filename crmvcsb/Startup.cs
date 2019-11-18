@@ -184,7 +184,7 @@ namespace crmvcsb
                 .InstancePerLifetimeScope();
             autofacContainer.RegisterType<NewOrderManager>()
                 .As<INewOrderManager>()
-                .WithMetadata<AppendMetadata>(m => m.For(am => am.AppendName, "NewOrderContext"))
+                .WithMetadata<AppendMetadata>(m => m.For(am => am.AppendName, "NewOrderRepo"))
                 .InstancePerLifetimeScope();
 
             return autofacContainer;

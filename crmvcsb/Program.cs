@@ -15,15 +15,15 @@ namespace crmvcsb
     {
         public static void Main(string[] args)
         {
-            //NewOrderInitializer.CleanUp();NewOrderInitializer.Initialize();
             
             try
             {
+                NewOrderInitializer.ReInitialize();
                 CreateWebHostBuilder(args).Build().Run();
             }
             catch (Exception e)
             {
-
+                
             }
         }
 

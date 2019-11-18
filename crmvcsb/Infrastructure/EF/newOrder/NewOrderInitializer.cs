@@ -28,7 +28,7 @@ namespace crmvcsb
         }
    
 
-        public static void Initialize()
+        public static void ReInitialize()
         {
             var builder = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
@@ -39,6 +39,9 @@ namespace crmvcsb
 
             using ( NewOrderContext context = new NewOrderContext(new DbContextOptionsBuilder<NewOrderContext>().UseSqlServer(connectionString).Options))
             {
+                context.Database.EnsureDeleted();
+                context.Database.EnsureCreated();
+
                 RepositoryEF repo = new RepositoryEF(context);
                 
                 List<AddressDAL> addresses = new List<AddressDAL>();
@@ -80,7 +83,7 @@ namespace crmvcsb
         {
             using(NewOrderContext context = new NewOrderContext(new DbContextOptionsBuilder<NewOrderContext>().UseSqlServer(connectionString).Options))
             {
-
+                context.Database.EnsureCreated();
                 RepositoryEF repo = new RepositoryEF(context);
                 var addressesExist = repo.QueryByFilter<AddressDAL>(s => s.Id != null).ToList();
                 repo.DeleteRange(addressesExist);
