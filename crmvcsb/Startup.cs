@@ -155,37 +155,44 @@ namespace crmvcsb
         public ContainerBuilder ConfigureAutofacDbContexts(IServiceCollection services, ContainerBuilder autofacContainer)
         {
             /**EF, repo and UOW reg */
-            autofacContainer.RegisterType<TestContext>()
-                .As<DbContext>()
-                .WithParameter("options",
-                    new DbContextOptionsBuilder<TestContext>()
-                    .UseSqlServer(Configuration.GetConnectionString("LocalDbConnection")).Options)
-                .WithMetadata("Name", "TestContext")
-                .InstancePerLifetimeScope();
-
-
             autofacContainer.RegisterType<CostControllContext>()
-                .As<DbContext>()
-                .WithParameter("options", new DbContextOptionsBuilder<CostControllContext>()
-                    .UseSqlServer(Configuration.GetConnectionString("CostControlDb")).Options)
-                .WithMetadata("Name", "CostControllContext")
-                .InstancePerLifetimeScope();
+              .As<DbContext>()
+              .WithParameter("options", new DbContextOptionsBuilder<CostControllContext>()
+                  .UseSqlServer(Configuration.GetConnectionString("CostControlDb")).Options)
+              .InstancePerLifetimeScope();
 
 
-            autofacContainer.RegisterType<NewOrderContext>()
-                .As<DbContext>()
-                .WithParameter("options", new DbContextOptionsBuilder<NewOrderContext>()
-                    .UseSqlServer(Configuration.GetConnectionString("LocalNewOrderConnection")).Options)
-                .WithMetadata("Name", "NewOrderContext")
-                .InstancePerLifetimeScope();
-            autofacContainer.RegisterType<RepositoryEF>()
-                .As<IRepository>()
-                .WithMetadata<AppendMetadata>(m => m.For(am => am.AppendName, "NewOrderContext"))
-                .InstancePerLifetimeScope();
+
+            autofacContainer.RegisterType<RepositoryNewOrder>()
+            .WithParameter("context",
+
+                new NewOrderContext(new DbContextOptionsBuilder<NewOrderContext>()
+                .UseSqlServer(Configuration.GetConnectionString("LocalNewOrderConnection")).Options)
+
+            ).As<IRepository>()
+            .InstancePerLifetimeScope();
+
+
+            autofacContainer.RegisterType<RepositoryTest>()
+            .WithParameter("context",
+
+                new TestContext(new DbContextOptionsBuilder<TestContext>()
+                .UseSqlServer(Configuration.GetConnectionString("LocalDbConnection")).Options))
+
+            .As<IRepository>()
+            .InstancePerLifetimeScope();
+
+
+
             autofacContainer.RegisterType<NewOrderManager>()
-                .As<INewOrderManager>()
-                .WithMetadata<AppendMetadata>(m => m.For(am => am.AppendName, "NewOrderRepo"))
-                .InstancePerLifetimeScope();
+            .As<INewOrderManager>()
+            .InstancePerLifetimeScope();
+
+            autofacContainer.RegisterType<TestManager>()
+            .As<ITestManager>()
+            .InstancePerLifetimeScope();
+
+
 
             return autofacContainer;
         }

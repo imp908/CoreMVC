@@ -21,7 +21,7 @@ namespace crmvcsb.Domain.TestModels
         IRepository _repository;
         IMapper _mapper;
 
-        public TestManager([KeyFilter("TestContext")] IRepository repository, IMapper mapper)
+        public TestManager(IRepository repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
