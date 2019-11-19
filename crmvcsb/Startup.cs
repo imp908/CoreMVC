@@ -98,6 +98,9 @@ namespace crmvcsb
             /*Autofac registrations */
             autofacContainer.Populate(services);
 
+            /*Registration of automapper with autofac Instance API */
+            autofacContainer.RegisterInstance(mapper).As<IMapper>();
+
             /* Chose registration of test sql lite or sql server*/
 
             if (Configuration.GetSection("RegistrationSettings").Get<RegistrationSettings>().ContextType == ContextType.SQL)
@@ -116,8 +119,7 @@ namespace crmvcsb
 
             ConfigureAutofac(services, autofacContainer);
 
-            /*Registration of automapper with autofac Instance API */
-            autofacContainer.RegisterInstance(mapper).As<IMapper>();
+          
 
             AutofacServiceProvider r = null;
 
@@ -169,14 +171,8 @@ namespace crmvcsb
                 new NewOrderContext(new DbContextOptionsBuilder<NewOrderContext>()
                 .UseSqlServer(Configuration.GetConnectionString("LocalNewOrderConnection")).Options)
 
-            ).As<IRepository>()
+            ).As<IRepository>().AsSelf()
             .InstancePerLifetimeScope();
-
-            autofacContainer.RegisterType<NewOrderManager>()
-            .As<INewOrderManager>()
-            .InstancePerLifetimeScope();
-
-
 
             autofacContainer.RegisterType<RepositoryTest>()
             .WithParameter("context",
@@ -184,10 +180,16 @@ namespace crmvcsb
                 new TestContext(new DbContextOptionsBuilder<TestContext>()
                 .UseSqlServer(Configuration.GetConnectionString("LocalDbConnection")).Options))
 
-            .As<IRepository>()
+            .As<IRepository>().AsSelf()
             .InstancePerLifetimeScope();
 
-            autofacContainer.RegisterType<TestManager>()
+
+
+            autofacContainer.Register(ctx => new NewOrderManager(ctx.Resolve<RepositoryNewOrder>(), ctx.Resolve<IMapper>()))
+            .As<INewOrderManager>()
+            .InstancePerLifetimeScope();
+
+            autofacContainer.Register(ctx => new TestManager(ctx.Resolve<RepositoryTest>(), ctx.Resolve<IMapper>()))
             .As<ITestManager>()
             .InstancePerLifetimeScope();
 
