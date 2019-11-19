@@ -76,7 +76,9 @@ namespace crmvcsb.Domain.NewOrder
 
     public class GetCurrencyCommand
     {
-        public string IsoCode { get; set; }
+        public string FromCurrency { get; set; }
+        public string ToCurrency { get; set; }
+        public string ThroughCurrency { get; set; }
         public DateTime Date { get; set; }
     }
 

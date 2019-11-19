@@ -232,7 +232,7 @@ Condition is enum class from appsettings.json
 //////////////
 //Program.cs 
 Added http instead of https routing for Fiddler test to:
-    .UseUrls("http://localhost:5002")
+  .UseUrls("http://localhost:5002")
 
 
 //////////////
@@ -313,9 +313,12 @@ DONE:[
 
       <- 25.07.2019 1h 30m -> currencies manager API resp
 
-      <- 26.09.2019 1h 30m -> inmemmory, SQL, SQL , SQLlite conditional contexts
-    
+      <- 26.09.2019 1h 30m -> inmemmory, SQL, SQL, SQLlite conditional contexts
+      
+      <- 19.11.2019 1h 30m -> Autofac multiple Irepositories registration
+
     ]
-    ~9h 45m in 8days
+    
+    ~11h 15m in 9days
     
 ]

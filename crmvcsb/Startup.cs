@@ -172,6 +172,11 @@ namespace crmvcsb
             ).As<IRepository>()
             .InstancePerLifetimeScope();
 
+            autofacContainer.RegisterType<NewOrderManager>()
+            .As<INewOrderManager>()
+            .InstancePerLifetimeScope();
+
+
 
             autofacContainer.RegisterType<RepositoryTest>()
             .WithParameter("context",
@@ -180,12 +185,6 @@ namespace crmvcsb
                 .UseSqlServer(Configuration.GetConnectionString("LocalDbConnection")).Options))
 
             .As<IRepository>()
-            .InstancePerLifetimeScope();
-
-
-
-            autofacContainer.RegisterType<NewOrderManager>()
-            .As<INewOrderManager>()
             .InstancePerLifetimeScope();
 
             autofacContainer.RegisterType<TestManager>()

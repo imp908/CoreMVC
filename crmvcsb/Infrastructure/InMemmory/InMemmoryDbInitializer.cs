@@ -21,7 +21,6 @@ namespace mvccoresb.Infrastructure.InMemmory
             configuration = builder.Build();
             var connectionString = configuration.GetConnectionString("CostControlDb");
 
-
         }
     }
 }

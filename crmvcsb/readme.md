@@ -122,6 +122,8 @@ AutoFact to Automapper registration added
 
 AutofacServiceProvider returned from ConfigureServices
 
+Autofac multiple Irepositories registration
+https://autofaccn.readthedocs.io/en/latest/faq/select-by-context.html
 
 -------------------------------------------------------
 Added http instead of https routing for Fiddler test to:

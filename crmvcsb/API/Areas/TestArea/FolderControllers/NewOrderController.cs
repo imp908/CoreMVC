@@ -34,7 +34,7 @@ namespace crmvcsb.API.Areas.TestArea.FolderControllers
         {
             try
             {
-                var cmd = new GetCurrencyCommand(){IsoCode=IsoCode};
+                var cmd = new GetCurrencyCommand(){FromCurrency=IsoCode};
                 var result = await _manager.GetCurrencyCrossRates(cmd);
                 return Ok(result);
             }
@@ -61,6 +61,20 @@ namespace crmvcsb.API.Areas.TestArea.FolderControllers
             try
             {
                 return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpPost("CrossRates")]
+        public async Task<IActionResult> GetCrossRates([FromBody] GetCurrencyCommand command)
+        {
+            try
+            {
+                var result = await _manager.GetCurrencyCrossRates(command);
+                return Ok(result);
             }
             catch (Exception e)
             {
