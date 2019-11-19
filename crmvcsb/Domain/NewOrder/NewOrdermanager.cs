@@ -31,7 +31,8 @@ namespace crmvcsb.Domain.NewOrder
 
             IList<CrossCurrenciesAPI> result = new List<CrossCurrenciesAPI>();
 
-            if(command != null && command.FromCurrency != null) {
+            if(command != null && command.FromCurrency != null) 
+            {
 
                 decimal fromRate;
                 decimal toRate;

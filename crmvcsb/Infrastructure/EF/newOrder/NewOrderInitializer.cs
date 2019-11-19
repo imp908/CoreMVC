@@ -46,7 +46,7 @@ namespace crmvcsb
                 
                 List<AddressDAL> addresses = new List<AddressDAL>();
 
-                for(int i = 0; i < 10; i++){
+                for(int i = 0; i < 10; i++) {
                     addresses.Add(new AddressDAL(){Id = i+1, StreetName = $"test street {i}", Code = i+1});
                 };
 
