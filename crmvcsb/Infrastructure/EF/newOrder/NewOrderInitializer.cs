@@ -54,7 +54,8 @@ namespace crmvcsb
                 
                 try {
                     repo.SaveIdentity("Adresses");
-                } catch(Exception e)
+                }
+                catch(Exception e)
                 {
                   
                 }
@@ -73,6 +74,9 @@ namespace crmvcsb
                 repo.Add<CurrencyRatesDAL>(new CurrencyRatesDAL() { Id = 4, CurrencyFromId = 1, CurrencyToId = 4, Rate = 63.18M, Date = new DateTime(2019, 07, 23) });
                 repo.Add<CurrencyRatesDAL>(new CurrencyRatesDAL() { Id = 5, CurrencyFromId = 2, CurrencyToId = 4, Rate = 70.64M, Date = new DateTime(2019, 07, 23) });
                 repo.Add<CurrencyRatesDAL>(new CurrencyRatesDAL() { Id = 6, CurrencyFromId = 3, CurrencyToId = 4, Rate = 78.67M, Date = new DateTime(2019, 07, 23) });
+
+                repo.Add<CurrencyRatesDAL>(new CurrencyRatesDAL() { Id = 7, CurrencyFromId = 2, CurrencyToId = 5, Rate = 85.2M, Date = new DateTime(2019, 07, 23) });
+                repo.Add<CurrencyRatesDAL>(new CurrencyRatesDAL() { Id = 8, CurrencyFromId = 3, CurrencyToId = 5, Rate = 95.2M, Date = new DateTime(2019, 07, 23) });
                 try { repo.SaveIdentity<CurrencyRatesDAL>(); }catch (Exception e)
                 {}
 
@@ -92,9 +96,7 @@ namespace crmvcsb
                 repo.DeleteRange(repo.GetAll<CurrencyRatesDAL>().ToList());
                 repo.DeleteRange(repo.GetAll<CurrencyDAL>().ToList());
                 try { repo.Save(); } catch (Exception e) { throw; }
-
-            }
-           
+            }           
         }
     }
 }

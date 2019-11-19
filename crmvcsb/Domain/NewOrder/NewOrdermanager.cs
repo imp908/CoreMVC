@@ -26,19 +26,34 @@ namespace crmvcsb.Domain.NewOrder
             _mapper = mapper;
         }
 
-        public async Task<IList<ICrossCurrenciesAPI>> GetCurrencyCrossRates(GetCurrencyCommand command) {
+        public async Task<IList<ICrossCurrenciesAPI>> GetCurrencyCrossRates(GetCurrencyCommand command) 
+        {
 
             IList<CrossCurrenciesAPI> result = new List<CrossCurrenciesAPI>();
 
-            if(command != null && command.FromCurrency != null){
+            if(command != null && command.FromCurrency != null) {
 
-                List<CurrencyRatesDAL>  r = await _repository
+                CurrencyRatesDAL firstPair = await _repository
                     .QueryByFilter<CurrencyRatesDAL>(c => c.CurrencyFrom.IsoCode.ToLower() == command.FromCurrency.ToLower()
-                        && c.Date.Year == command.Date.Year && c.Date.Month == command.Date.Month)
-                    .Include(p => p.CurrencyFrom).Include(p => p.CurrencyTo)                    
-                    .ToListAsync();
+                    && c.CurrencyTo.IsoCode.ToLower() == command.ThroughCurrency.ToLower())
+                    .Include(s => s.CurrencyFrom).Include(s => s.CurrencyTo)
+                    .FirstOrDefaultAsync();
 
-                result = _mapper.Map<IList<CurrencyRatesDAL>, IList<CrossCurrenciesAPI>>(r);
+                if(firstPair == null) { throw new System.Exception("No from currency pair found");}
+
+
+                CurrencyRatesDAL secondPair = await _repository
+                    .QueryByFilter<CurrencyRatesDAL>(c => c.CurrencyFrom.IsoCode.ToLower() == command.ToCurrency.ToLower()
+                    && c.CurrencyTo.IsoCode.ToLower() == command.ThroughCurrency.ToLower())
+                    .Include(s => s.CurrencyFrom).Include(s => s.CurrencyTo)
+                    .FirstOrDefaultAsync();
+
+                if (secondPair == null) { throw new System.Exception("No to currency pair found");}
+
+
+                var rate = firstPair.Rate / secondPair.Rate;
+
+                result.Add(new CrossCurrenciesAPI() { From = command.FromCurrency, To = command.ToCurrency, Throught = command.ThroughCurrency, Rate = rate });
             }
 
             return result.Cast<ICrossCurrenciesAPI>().ToList();

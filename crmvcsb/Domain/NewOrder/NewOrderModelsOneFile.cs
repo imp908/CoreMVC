@@ -205,6 +205,7 @@ namespace crmvcsb.Domain.NewOrder.API
     {
         public string From {get;set;}
         public string To { get; set; }
+        public string Throught { get; set; }
         public decimal Rate { get; set; }
     }
 
