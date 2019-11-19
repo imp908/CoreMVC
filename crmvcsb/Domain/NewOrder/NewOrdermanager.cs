@@ -33,25 +33,58 @@ namespace crmvcsb.Domain.NewOrder
 
             if(command != null && command.FromCurrency != null) {
 
-                CurrencyRatesDAL firstPair = await _repository
+                decimal fromRate;
+                decimal toRate;
+
+                var pairFrom = await _repository
                     .QueryByFilter<CurrencyRatesDAL>(c => c.CurrencyFrom.IsoCode.ToLower() == command.FromCurrency.ToLower()
                     && c.CurrencyTo.IsoCode.ToLower() == command.ThroughCurrency.ToLower())
                     .Include(s => s.CurrencyFrom).Include(s => s.CurrencyTo)
                     .FirstOrDefaultAsync();
 
-                if(firstPair == null) { throw new System.Exception("No from currency pair found");}
+                if(pairFrom == null) 
+                {
+                    var pairFromReveresd = await _repository
+                    .QueryByFilter<CurrencyRatesDAL>(c => c.CurrencyTo.IsoCode.ToLower() == command.FromCurrency.ToLower()
+                    && c.CurrencyFrom.IsoCode.ToLower() == command.ThroughCurrency.ToLower())
+                    .Include(s => s.CurrencyFrom).Include(s => s.CurrencyTo)
+                    .FirstOrDefaultAsync();
+
+                    if (pairFromReveresd == null) { throw new System.Exception("No from currency pair found"); }
+
+                    fromRate = 1 / pairFromReveresd.Rate;
+                }
+                else
+                {
+                    fromRate = pairFrom.Rate;
+                }
 
 
-                CurrencyRatesDAL secondPair = await _repository
+                var pairTo = await _repository
                     .QueryByFilter<CurrencyRatesDAL>(c => c.CurrencyFrom.IsoCode.ToLower() == command.ToCurrency.ToLower()
                     && c.CurrencyTo.IsoCode.ToLower() == command.ThroughCurrency.ToLower())
                     .Include(s => s.CurrencyFrom).Include(s => s.CurrencyTo)
                     .FirstOrDefaultAsync();
 
-                if (secondPair == null) { throw new System.Exception("No to currency pair found");}
+                if (pairTo == null) {
+
+                    var pairToReversed = await _repository
+                        .QueryByFilter<CurrencyRatesDAL>(c => c.CurrencyFrom.IsoCode.ToLower() == command.ToCurrency.ToLower()
+                        && c.CurrencyTo.IsoCode.ToLower() == command.ThroughCurrency.ToLower())
+                        .Include(s => s.CurrencyFrom).Include(s => s.CurrencyTo)
+                        .FirstOrDefaultAsync();
+
+                    if (pairToReversed == null) { throw new System.Exception("No to currency pair found");}
+
+                    toRate = 1 / pairToReversed.Rate;
+                } 
+                else
+                {
+                    toRate = pairTo.Rate;
+                }
 
 
-                var rate = firstPair.Rate / secondPair.Rate;
+                var rate = fromRate / toRate;
 
                 result.Add(new CrossCurrenciesAPI() { From = command.FromCurrency, To = command.ToCurrency, Throught = command.ThroughCurrency, Rate = rate });
             }
