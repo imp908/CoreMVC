@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Mvc.Razor;
 
 using crmvcsb.Domain.NewOrder;
+
 namespace crmvcsb
 {
 
@@ -131,7 +132,6 @@ namespace crmvcsb
         public ContainerBuilder ConfigureAutofac(IServiceCollection services, ContainerBuilder autofacContainer)
         {
 
-
             /**EF, repo and UOW reg */
             autofacContainer.RegisterType<TestContext>()
                 .As<DbContext>()
@@ -199,7 +199,6 @@ namespace crmvcsb
                 cfg.CreateMap<PersonEF, PersonAPI>();
                 cfg.CreateMap<BlogEF, BlogAPI>();
                 cfg.CreateMap<PostEF, PostAPI>().ReverseMap();
-
 
 
                 cfg.CreateMap<CurrencyRatesDAL, CrossCurrenciesAPI>()
@@ -291,8 +290,5 @@ namespace crmvcsb
             context.Values[ValueKey] = context.ActionContext.RouteData.Values[ValueKey]?.ToString();
         }
     }
-    
-
-
 
 }

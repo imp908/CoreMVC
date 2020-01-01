@@ -160,10 +160,10 @@ OR -> controller routing attribute
 		
 OR -> NAMED routing in startup.cs wihtout attributes
 
-        routes.MapAreaRoute(
-        name: "TestArea",
-        areaName: "TestArea",
-        template: "TestArea/{controller=Home}/{action=Index}");
+    routes.MapAreaRoute(
+    name: "TestArea",
+    areaName: "TestArea",
+    template: "TestArea/{controller=Home}/{action=Index}");
 
 
 //////////////
