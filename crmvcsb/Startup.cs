@@ -37,8 +37,15 @@ namespace crmvcsb
 
     using crmvcsb.Domain.NewOrder.DAL;
     using crmvcsb.Domain.NewOrder.API;
-
-
+    
+    enum ContextType
+    {
+        SQL, SQLLite, InMemmory
+    }
+    class RegistrationSettings
+    {
+        public ContextType ContextType { get; set; }
+    }
     public class Startup
     {
         public IContainer ApplicationContainer { get; private set; }
@@ -91,10 +98,29 @@ namespace crmvcsb
 
             /*Autofac registrations */
             autofacContainer.Populate(services);
-            ConfigureAutofac(services, autofacContainer);
 
             /*Registration of automapper with autofac Instance API */
             autofacContainer.RegisterInstance(mapper).As<IMapper>();
+
+            /* Chose registration of test sql lite or sql server*/
+
+            if (Configuration.GetSection("RegistrationSettings").Get<RegistrationSettings>().ContextType == ContextType.SQL)
+            {
+                ConfigureAutofacDbContexts(services, autofacContainer);
+            }
+            if (Configuration.GetSection("RegistrationSettings").Get<RegistrationSettings>().ContextType == ContextType.SQLLite)
+            {
+                ConfigureSqlLiteDbContexts(services, autofacContainer);
+            }
+            if (Configuration.GetSection("RegistrationSettings").Get<RegistrationSettings>().ContextType == ContextType.InMemmory)
+            {
+                ConfigureInMemmoryDbContexts(services, autofacContainer);
+            }
+
+
+            ConfigureAutofac(services, autofacContainer);
+
+          
 
             AutofacServiceProvider r = null;
 
@@ -128,44 +154,131 @@ namespace crmvcsb
             return r;
         }
 
-
-        public ContainerBuilder ConfigureAutofac(IServiceCollection services, ContainerBuilder autofacContainer)
+        /* Db context registration with sql server for connection strings from appsettings.json */
+        public ContainerBuilder ConfigureAutofacDbContexts(IServiceCollection services, ContainerBuilder autofacContainer)
         {
+            /**EF, repo and UOW reg */
+            autofacContainer.RegisterType<CostControllContext>()
+              .As<DbContext>()
+              .WithParameter("options", new DbContextOptionsBuilder<CostControllContext>()
+                  .UseSqlServer(Configuration.GetConnectionString("CostControlDb")).Options)
+              .InstancePerLifetimeScope();
+
+
+
+            autofacContainer.RegisterType<RepositoryNewOrder>()
+            .WithParameter("context",
+
+                new NewOrderContext(new DbContextOptionsBuilder<NewOrderContext>()
+                .UseSqlServer(Configuration.GetConnectionString("LocalNewOrderConnection")).Options)
+
+            ).As<IRepository>().AsSelf()
+            .InstancePerLifetimeScope();
+
+            autofacContainer.RegisterType<RepositoryTest>()
+            .WithParameter("context",
+
+                new TestContext(new DbContextOptionsBuilder<TestContext>()
+                .UseSqlServer(Configuration.GetConnectionString("LocalDbConnection")).Options))
+
+            .As<IRepository>().AsSelf()
+            .InstancePerLifetimeScope();
+
+
+
+            autofacContainer.Register(ctx => new NewOrderManager(ctx.Resolve<RepositoryNewOrder>(), ctx.Resolve<IMapper>()))
+            .As<INewOrderManager>()
+            .InstancePerLifetimeScope();
+
+            autofacContainer.Register(ctx => new TestManager(ctx.Resolve<RepositoryTest>(), ctx.Resolve<IMapper>()))
+            .As<ITestManager>()
+            .InstancePerLifetimeScope();
+
+
+
+            return autofacContainer;
+        }
+
+        /* Db context configuration for test with SqlLite database */
+        public ContainerBuilder ConfigureSqlLiteDbContexts(IServiceCollection services, ContainerBuilder autofacContainer)
+        {
+            autofacContainer.RegisterType<TestContext>()
+               .As<DbContext>()
+               .WithParameter("options",
+                   new DbContextOptionsBuilder<TestContext>()
+                   .UseSqlite("Data Source=app.db").Options)
+               .WithMetadata("Name", "TestContext")
+               .InstancePerLifetimeScope();
 
             /**EF, repo and UOW reg */
-            autofacContainer.RegisterType<TestContext>()
-                .As<DbContext>()
-                .WithParameter("options",
-                    new DbContextOptionsBuilder<TestContext>()
-                    .UseSqlServer(Configuration.GetConnectionString("LocalDbConnection")).Options)
-                .WithMetadata("Name", "TestContext")
-                .InstancePerLifetimeScope();
-
-
             autofacContainer.RegisterType<CostControllContext>()
-                .As<DbContext>()
-                .WithParameter("options", new DbContextOptionsBuilder<CostControllContext>()
-                    .UseSqlServer(Configuration.GetConnectionString("CostControlDb")).Options)
-                .WithMetadata("Name", "CostControllContext")
-                .InstancePerLifetimeScope();
-
+               .As<DbContext>()
+               .WithParameter("options", new DbContextOptionsBuilder<CostControllContext>()
+                   .UseSqlite("Data Source=app.db").Options)
+               .WithMetadata("Name", "CostControllContext")
+               .InstancePerLifetimeScope();
 
             autofacContainer.RegisterType<NewOrderContext>()
                 .As<DbContext>()
                 .WithParameter("options", new DbContextOptionsBuilder<NewOrderContext>()
-                    .UseSqlServer(Configuration.GetConnectionString("LocalNewOrderConnection")).Options)
+                    .UseSqlite("Data Source=app.db").Options)
                 .WithMetadata("Name", "NewOrderContext")
                 .InstancePerLifetimeScope();
+
             autofacContainer.RegisterType<RepositoryEF>()
                 .As<IRepository>()
                 .WithMetadata<AppendMetadata>(m => m.For(am => am.AppendName, "NewOrderContext"))
                 .InstancePerLifetimeScope();
-            autofacContainer.RegisterType<NewOrdermanager>()
-                .As<INewOrdermanager>()
+
+            autofacContainer.RegisterType<NewOrderManager>()
+                .As<INewOrderManager>()
                 .WithMetadata<AppendMetadata>(m => m.For(am => am.AppendName, "NewOrderContext"))
                 .InstancePerLifetimeScope();
 
-      
+            return autofacContainer;
+        }
+
+        /* Db context configuration for test with InMemmory database */
+        public ContainerBuilder ConfigureInMemmoryDbContexts(IServiceCollection services, ContainerBuilder autofacContainer)
+        {
+            autofacContainer.RegisterType<TestContext>()
+               .As<DbContext>()
+               .WithParameter("options",
+                   new DbContextOptionsBuilder<TestContext>()
+                   .UseInMemoryDatabase("TestContext").Options)
+               .WithMetadata("Name", "TestContext")
+               .InstancePerLifetimeScope();
+
+            autofacContainer.RegisterType<CostControllContext>()
+               .As<DbContext>()
+               .WithParameter("options", new DbContextOptionsBuilder<CostControllContext>()
+                   .UseInMemoryDatabase("CostControllContext").Options)
+               .WithMetadata("Name", "CostControllContext")
+               .InstancePerLifetimeScope();
+
+            autofacContainer.RegisterType<NewOrderContext>()
+                .As<DbContext>()
+                .WithParameter("options", new DbContextOptionsBuilder<NewOrderContext>()
+                    .UseInMemoryDatabase("NewOrderContext").Options)
+                .WithMetadata("Name", "NewOrderContext")
+                .InstancePerLifetimeScope();
+
+            autofacContainer.RegisterType<RepositoryEF>()
+                .As<IRepository>()
+                .WithMetadata<AppendMetadata>(m => m.For(am => am.AppendName, "NewOrderContext"))
+                .InstancePerLifetimeScope();
+
+            autofacContainer.RegisterType<NewOrderManager>()
+                .As<INewOrderManager>()
+                .WithMetadata<AppendMetadata>(m => m.For(am => am.AppendName, "NewOrderContext"))
+                .InstancePerLifetimeScope();
+
+            return autofacContainer;
+        }
+        
+
+        public ContainerBuilder ConfigureAutofac(IServiceCollection services, ContainerBuilder autofacContainer)
+        {
             //*DAL->BLL reg */
             autofacContainer.RegisterType<BlogEF>()
                 .As<IBlogEF>().InstancePerLifetimeScope();
@@ -173,7 +286,6 @@ namespace crmvcsb
                 .As<IBlogBLL>().InstancePerLifetimeScope();
             autofacContainer.RegisterType<PostBLL>()
                 .As<IPostBLL>().InstancePerLifetimeScope();
-
 
             return autofacContainer;
         }

@@ -22,26 +22,28 @@ namespace crmvcsb.API.Areas.TestArea.FolderControllers
     public class NewOrderController : Controller
     {
 
-        private INewOrdermanager _manager;
+        private INewOrderManager _manager;
 
-        public NewOrderController(INewOrdermanager manager) 
+        public NewOrderController(INewOrderManager manager) 
         {
             _manager = manager;
         }
 
-        [HttpGet("Get")]
-        public async Task<IActionResult> GetCurrency([FromRoute]string IsoCode )
+        [HttpGet("GetDefault/{IsoCode}")]
+        public async Task<IActionResult> Get([FromRoute]string IsoCode)
         {
             try
             {
-                var cmd = new GetCurrencyCommand(){IsoCode=IsoCode};
+                var cmd = new GetCurrencyCommand(){FromCurrency=IsoCode};
                 var result = await _manager.GetCurrencyCrossRates(cmd);
                 return Ok(result);
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 return BadRequest();
             }
         }
-        [HttpGet("GetParam")]
+        [HttpGet("GetCurrency")]
         public async Task<IActionResult> GetCurrencyParam(string IsoCode)
         {
             try
@@ -53,12 +55,26 @@ namespace crmvcsb.API.Areas.TestArea.FolderControllers
                 return BadRequest();
             }
         }
-        [HttpGet("GetNoParam")]
-        public async Task<IActionResult> GetNoParam()
+        [HttpGet("GetCurrencyParam")]
+        public async Task<IActionResult> GetNoParam([FromQuery]string IsoCode)
         {
             try
             {
                 return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpPost("CrossRates")]
+        public async Task<IActionResult> GetCrossRates([FromBody] GetCurrencyCommand command)
+        {
+            try
+            {
+                var result = await _manager.GetCurrencyCrossRates(command);
+                return Ok(result);
             }
             catch (Exception e)
             {

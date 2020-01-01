@@ -69,14 +69,16 @@ namespace crmvcsb.Domain.NewOrder
     }
 
 
-    public interface INewOrdermanager
+    public interface INewOrderManager
     {
         Task<IList<ICrossCurrenciesAPI>> GetCurrencyCrossRates(GetCurrencyCommand command);
     }
 
     public class GetCurrencyCommand
     {
-        public string IsoCode { get; set; }
+        public string FromCurrency { get; set; }
+        public string ToCurrency { get; set; }
+        public string ThroughCurrency { get; set; }
         public DateTime Date { get; set; }
     }
 
@@ -203,6 +205,7 @@ namespace crmvcsb.Domain.NewOrder.API
     {
         public string From {get;set;}
         public string To { get; set; }
+        public string Throught { get; set; }
         public decimal Rate { get; set; }
     }
 

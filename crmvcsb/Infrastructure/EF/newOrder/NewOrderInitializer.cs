@@ -28,7 +28,7 @@ namespace crmvcsb
         }
    
 
-        public static void Initialize()
+        public static void ReInitialize()
         {
             var builder = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
@@ -39,11 +39,14 @@ namespace crmvcsb
 
             using ( NewOrderContext context = new NewOrderContext(new DbContextOptionsBuilder<NewOrderContext>().UseSqlServer(connectionString).Options))
             {
+                context.Database.EnsureDeleted();
+                context.Database.EnsureCreated();
+
                 RepositoryEF repo = new RepositoryEF(context);
                 
                 List<AddressDAL> addresses = new List<AddressDAL>();
 
-                for(int i = 0; i < 10; i++){
+                for(int i = 0; i < 10; i++) {
                     addresses.Add(new AddressDAL(){Id = i+1, StreetName = $"test street {i}", Code = i+1});
                 };
 
@@ -51,7 +54,8 @@ namespace crmvcsb
                 
                 try {
                     repo.SaveIdentity("Adresses");
-                } catch(Exception e)
+                }
+                catch(Exception e)
                 {
                   
                 }
@@ -70,6 +74,13 @@ namespace crmvcsb
                 repo.Add<CurrencyRatesDAL>(new CurrencyRatesDAL() { Id = 4, CurrencyFromId = 1, CurrencyToId = 4, Rate = 63.18M, Date = new DateTime(2019, 07, 23) });
                 repo.Add<CurrencyRatesDAL>(new CurrencyRatesDAL() { Id = 5, CurrencyFromId = 2, CurrencyToId = 4, Rate = 70.64M, Date = new DateTime(2019, 07, 23) });
                 repo.Add<CurrencyRatesDAL>(new CurrencyRatesDAL() { Id = 6, CurrencyFromId = 3, CurrencyToId = 4, Rate = 78.67M, Date = new DateTime(2019, 07, 23) });
+
+                repo.Add<CurrencyRatesDAL>(new CurrencyRatesDAL() { Id = 7, CurrencyFromId = 2, CurrencyToId = 5, Rate = 85.2M, Date = new DateTime(2019, 07, 23) });
+                repo.Add<CurrencyRatesDAL>(new CurrencyRatesDAL() { Id = 8, CurrencyFromId = 3, CurrencyToId = 5, Rate = 95.2M, Date = new DateTime(2019, 07, 23) });
+
+                repo.Add<CurrencyRatesDAL>(new CurrencyRatesDAL() { Id = 9, CurrencyFromId = 2, CurrencyToId = 6, Rate = 15M, Date = new DateTime(2019, 07, 23) });
+                repo.Add<CurrencyRatesDAL>(new CurrencyRatesDAL() { Id = 10, CurrencyFromId = 6, CurrencyToId = 3, Rate = 0.25M, Date = new DateTime(2019, 07, 23) });
+
                 try { repo.SaveIdentity<CurrencyRatesDAL>(); }catch (Exception e)
                 {}
 
@@ -80,7 +91,7 @@ namespace crmvcsb
         {
             using(NewOrderContext context = new NewOrderContext(new DbContextOptionsBuilder<NewOrderContext>().UseSqlServer(connectionString).Options))
             {
-
+                context.Database.EnsureCreated();
                 RepositoryEF repo = new RepositoryEF(context);
                 var addressesExist = repo.QueryByFilter<AddressDAL>(s => s.Id != null).ToList();
                 repo.DeleteRange(addressesExist);
@@ -89,9 +100,7 @@ namespace crmvcsb
                 repo.DeleteRange(repo.GetAll<CurrencyRatesDAL>().ToList());
                 repo.DeleteRange(repo.GetAll<CurrencyDAL>().ToList());
                 try { repo.Save(); } catch (Exception e) { throw; }
-
-            }
-           
+            }           
         }
     }
 }

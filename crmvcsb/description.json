@@ -49,8 +49,26 @@ Routes:
             //get Newtonsoft Jsonized string
                 http://localhost:5000/api/blog/GetString/{id}
             
+        NewOrderController -> 
+            //GET signature
+			      [HttpGet("GetDefault/{IsoCode}")]
+			      public async Task<IActionResult> Get([FromRoute]string IsoCode)
+			      //URL
+			      http://localhost:49585/api/NewOrder/GetDefault/usd
 
-            //POST
+			      //GET named
+			      [HttpGet("GetCurrency")]
+			      public async Task<IActionResult> GetCurrencyParam(string IsoCode)
+			      //URL
+			      http://localhost:49585/api/NewOrder/GetCurrency?IsoCode=usd
+
+			      //GET named
+			      [HttpGet("GetCurrencyParam")]
+			      public async Task<IActionResult> GetNoParam([FromQuery]string IsoCode)
+			      //URL
+			      http://localhost:49585/api/NewOrder/GetCurrencyParam?IsoCode=asd
+  
+          //POST
             Posts add,delete, posts and blog by person, get post by blog
             http://localhost:5000/api/blog/AddPostJSON
                 {"PersonId":"81A130D2-502F-4CF1-A376-63EDEB000E9F",
@@ -207,11 +225,14 @@ Authentication EF db context
 Identity core for user managment
 Added authentication with cookies
 
+Added conditional registration for 
+SQL, SQLlite and InMemmory databases
+Condition is enum class from appsettings.json
 
 //////////////
 //Program.cs 
 Added http instead of https routing for Fiddler test to:
-    .UseUrls("http://localhost:5002")
+  .UseUrls("http://localhost:5002")
 
 
 //////////////
@@ -278,21 +299,26 @@ DONE:[
     
     newOrder:[
 
-		<- 15.07.2019 1h -> new order model
-        <- 16.07.2019 1h -> new order migration
-        <- 16.07.2019 1h -> new order migration
+		  <- 15.07.2019 1h -> new order model
+      <- 16.07.2019 1h -> new order migration
+      <- 16.07.2019 1h -> new order migration
         
-        <- 17.07.2019 45m -> new order migration cleanup
+      <- 17.07.2019 45m -> new order migration cleanup
 
-        <- 22.07.2019 1h -> new order currenciesDAL model
+      <- 22.07.2019 1h -> new order currenciesDAL model
 
-        <- 23.07.2019 1h -> new order currenciesDAL model
+      <- 23.07.2019 1h -> new order currenciesDAL model
 
-        <- 24.07.2019 1h -> new order currencies manager
+      <- 24.07.2019 1h -> new order currencies manager
 
-        <- 25.07.2019 1h 30m -> currencies manager API resp
+      <- 25.07.2019 1h 30m -> currencies manager API resp
+
+      <- 26.09.2019 1h 30m -> inmemmory, SQL, SQL, SQLlite conditional contexts
+      
+      <- 19.11.2019 3h 30m -> Autofac multiple Irepositories registration
 
     ]
-    ~8h 15m in 7days
+    
+    ~13h 15m in 9days
     
 ]
