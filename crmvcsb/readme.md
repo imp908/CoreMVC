@@ -7,10 +7,13 @@ to test:
 - npx webpack to build JS
 - build net core
 - run
+(change ISS port in proj configs on IIS start profile)
 
 test url after start:
 -------------------------------------------------------
 > http://localhost:5002/TestArea/SignalRwork/work
+> http://localhost:5002/TestArea/React/CheckShoppingList
+> http://localhost:5002/TestArea/Home
 
 
 Related files:
