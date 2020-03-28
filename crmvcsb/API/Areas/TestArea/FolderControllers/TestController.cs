@@ -40,6 +40,20 @@ namespace crmvcsb.API.Areas.TestArea.FolderControllers
             {
                 return BadRequest();
             }
-        }      
+        }
+
+        [HttpGet("GetId")]
+        public async Task<IActionResult> GetId()
+        {
+            try
+            {
+                return Ok(1);
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
+        }
+
     }
 }

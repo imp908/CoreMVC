@@ -37,7 +37,10 @@ namespace crmvcsb
 
     using crmvcsb.Domain.NewOrder.DAL;
     using crmvcsb.Domain.NewOrder.API;
-    
+
+    /*Build in logging*/
+    using Microsoft.Extensions.Logging;
+
     enum ContextType
     {
         SQL, SQLLite, InMemmory
@@ -46,22 +49,31 @@ namespace crmvcsb
     {
         public ContextType ContextType { get; set; }
     }
+
     public class Startup
     {
+        /*Build in logging*/
+        private static ILogger _logger;
+
         public IContainer ApplicationContainer { get; private set; }
 
         public IConfiguration Configuration { get; }
 
 
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, ILogger<Startup> logger)
         {
             Configuration = configuration;
+            _logger = logger;
         }
 
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            /*Build in logging to console message*/
+            var Message = $"About page visited at {DateTime.UtcNow.ToLongTimeString()}";
+            _logger?.LogInformation("Message displayed: {Message}", Message);
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -119,7 +131,6 @@ namespace crmvcsb
 
 
             ConfigureAutofac(services, autofacContainer);
-
           
 
             AutofacServiceProvider r = null;

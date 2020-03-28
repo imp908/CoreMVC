@@ -7,18 +7,21 @@ namespace crmvcsb
     using crmvcsb.Infrastructure.EF;
     using crmvcsb.Domain.NewOrder.DAL;
     using System.Linq;
-
     using System.IO;
 
     using Microsoft.Extensions.Configuration;
+
+    using Microsoft.Extensions.Logging;
+
 
     public class NewOrderInitializer
     {
         static string connectionString = "Server=AAAPC;Database=newOrderDB;User Id=tl;Password=QwErT123;";
         public static IConfigurationRoot configuration { get; set; }
 
+        private static ILogger _logger;
         static NewOrderInitializer()
-        {
+        { 
             var builder = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
            .AddJsonFile("appsettings.json");
@@ -26,7 +29,6 @@ namespace crmvcsb
             configuration = builder.Build();
             connectionString = configuration.GetConnectionString("CostControlDb");
         }
-   
 
         public static void ReInitialize()
         {
@@ -35,7 +37,7 @@ namespace crmvcsb
            .AddJsonFile("appsettings.json");
 
             configuration = builder.Build();
-            connectionString = configuration.GetConnectionString("CostControlDb");
+            connectionString = configuration.GetConnectionString("CostControlDb");           
 
             using ( NewOrderContext context = new NewOrderContext(new DbContextOptionsBuilder<NewOrderContext>().UseSqlServer(connectionString).Options))
             {
@@ -57,7 +59,7 @@ namespace crmvcsb
                 }
                 catch(Exception e)
                 {
-                  
+                   
                 }
 
                 repo.Add<CurrencyDAL>(new CurrencyDAL() { Id = 1, Name = "USD", IsoCode = "USD" });
@@ -69,7 +71,9 @@ namespace crmvcsb
                 repo.Add<CurrencyDAL>(new CurrencyDAL() { Id = 7, Name = "CAD", IsoCode = "CAD" });
                 repo.Add<CurrencyDAL>(new CurrencyDAL() { Id = 8, Name = "CHF", IsoCode = "CHF" });
                 try{repo.SaveIdentity<CurrencyDAL>();}catch(Exception e)
-                {}
+                {
+                
+                }
 
                 repo.Add<CurrencyRatesDAL>(new CurrencyRatesDAL() { Id = 4, CurrencyFromId = 1, CurrencyToId = 4, Rate = 63.18M, Date = new DateTime(2019, 07, 23) });
                 repo.Add<CurrencyRatesDAL>(new CurrencyRatesDAL() { Id = 5, CurrencyFromId = 2, CurrencyToId = 4, Rate = 70.64M, Date = new DateTime(2019, 07, 23) });
@@ -82,7 +86,9 @@ namespace crmvcsb
                 repo.Add<CurrencyRatesDAL>(new CurrencyRatesDAL() { Id = 10, CurrencyFromId = 6, CurrencyToId = 3, Rate = 0.25M, Date = new DateTime(2019, 07, 23) });
 
                 try { repo.SaveIdentity<CurrencyRatesDAL>(); }catch (Exception e)
-                {}
+                {
+                
+                }
 
             }
         }

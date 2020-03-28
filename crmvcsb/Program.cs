@@ -29,6 +29,11 @@ namespace crmvcsb
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+            .ConfigureLogging(logging => {
+                logging.ClearProviders();
+                logging.AddConsole();
+                logging.AddDebug();
+            })
             //http host for Fidler http test
             .UseUrls("http://localhost:5002")
             .UseStartup<Startup>();
