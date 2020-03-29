@@ -21,7 +21,8 @@ namespace crmvcsb
 
         private static ILogger _logger;
         static NewOrderInitializer()
-        { 
+        {
+            
             var builder = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
            .AddJsonFile("appsettings.json");

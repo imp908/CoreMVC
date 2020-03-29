@@ -33,11 +33,12 @@ Related files:
 ## Pckages to build core:
 -------------------------------------------------------
 ```
-    dotnet add package Newtonsoft.Json --version 12.0.2
+    dotnet add package Newtonsoft.Json --version 12.0.3
     dotnet add package Autofac.Extensions.DependencyInjection --version 4.4.0
     dotnet add package AutoMapper --version 8.1.0
     dotnet add package AutoMapper.Extensions.Microsoft.DependencyInjection --version 6.1.0
-    dotnet add package Microsoft.AspNetCore.SignalR
+    dotnet add package Microsoft.AspNetCore.SignalR		
+	dotnet add package Serilog.AspNetCore
 ```
 
 ## Pckages to build js:

@@ -71,7 +71,9 @@ namespace crmvcsb
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             /*Build in logging to console message*/
-            var Message = $"About page visited at {DateTime.UtcNow.ToLongTimeString()}";
+            var m = new mvccoresb.Infrastructure.IO.Settings.MessagesInitialization();
+
+            var Message = mvccoresb.Infrastructure.IO.Settings.MessagesInitialization.Variables.Messages.SrviceMessages.TestMessage;
             _logger?.LogInformation("Message displayed: {Message}", Message);
 
             services.Configure<CookiePolicyOptions>(options =>
