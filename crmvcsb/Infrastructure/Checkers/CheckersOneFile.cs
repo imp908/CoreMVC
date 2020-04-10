@@ -30,15 +30,15 @@ namespace InfrastructureCheckers
             {
                 crmvcsb.Infrastructure.EF.RepositoryEF repo = new crmvcsb.Infrastructure.EF.RepositoryEF(context);
 
-                List<BlogEF> blogs = repo.QueryByFilter<BlogEF>(s => s.BlogId != null).ToList();
+                List<BlogEF> blogs = repo.QueryByFilter<BlogEF>(s => s.BlogId != 0).ToList();
                 repo.DeleteRange(blogs);
                 repo.Save();
 
-                List<PersonEF> persons = repo.QueryByFilter<PersonEF>(s => s.Id != null).ToList();
+                List<PersonEF> persons = repo.QueryByFilter<PersonEF>(s => s.Id != Guid.Empty ).ToList();
                 repo.DeleteRange(persons);
                 repo.Save();
 
-                List<PostEF> posts = repo.QueryByFilter<PostEF>(s => s.PostId != null).ToList();
+                List<PostEF> posts = repo.QueryByFilter<PostEF>(s => s.PostId != 0).ToList();
                 repo.DeleteRange(posts);
                 repo.Save();
 
@@ -1248,7 +1248,6 @@ namespace NetPlatformCheckers
                 socket.Close();
 
             }
-            listener.Close();
         }
         
     }
@@ -1422,8 +1421,9 @@ namespace LINQtoObjectsCheck
         private Address addresPriv;
         public readonly Address addrRdn;
 
-        public void BindPrivAddr(string name){
-            this.addresPriv.name=name;
+        public void BindPrivAddr(string name)
+        {
+            this.addresPriv.name = name;
         }
     }
 
@@ -3242,7 +3242,6 @@ namespace Rewrite
     {
       ParameterExpression leftParamExpr;
       Type leftType_=null;
-      string memberName;
 
       ConstantExpression constExpr;    
 
@@ -3329,8 +3328,7 @@ namespace Rewrite
         double result = function(1, 2, 3, 4, 5); // 12
       }
       public void ExpressionBuild(){
-        double a = 2;
-        double b = 3;
+        
         BinaryExpression be = Expression.Power(Expression.Constant(2D), Expression.Constant(3D));
         Expression<Func<double>> fd = Expression.Lambda<Func<double>>(be);
         Func<double> ce = fd.Compile();

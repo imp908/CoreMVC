@@ -99,7 +99,6 @@ namespace crmvcsb.Infrastructure.EF
                 return null;
             }
 
-            return updatedItem;
         }
 
         public bool PersonDeletesPostFromBlog(PersonDeletesPost command)
@@ -125,7 +124,6 @@ namespace crmvcsb.Infrastructure.EF
 
                 return false;
             }
-            return true;
         }
 
     }

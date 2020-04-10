@@ -100,7 +100,7 @@ namespace crmvcsb
             {
                 context.Database.EnsureCreated();
                 RepositoryEF repo = new RepositoryEF(context);
-                var addressesExist = repo.QueryByFilter<AddressDAL>(s => s.Id != null).ToList();
+                var addressesExist = repo.QueryByFilter<AddressDAL>(s => s.Id != 0).ToList();
                 repo.DeleteRange(addressesExist);
                 try { repo.Save(); } catch (Exception e) { throw; }
 

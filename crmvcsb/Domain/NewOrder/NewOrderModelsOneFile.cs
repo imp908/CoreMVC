@@ -7,7 +7,10 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace crmvcsb.Domain.NewOrder
+/// <summary>
+/// Interfaces for generic IRepository entities
+/// </summary>
+namespace crmvcsb.Domain.IEFEntities
 {
 
     public interface IEntityGuidIdDAL
@@ -25,7 +28,7 @@ namespace crmvcsb.Domain.NewOrder
 
     public interface IDateEntityDAL
     {
-        DateTime Date {get;set;}
+        DateTime Date { get; set; }
     }
     public interface IDateRangeEntityDAL
     {
@@ -33,10 +36,14 @@ namespace crmvcsb.Domain.NewOrder
         DateTime DateTo { get; set; }
     }
 
+}
 
-
-
-
+/// <summary>
+/// EF reusable entities repository
+/// </summary>
+namespace crmvcsb.Domain.EFEntities
+{
+    using crmvcsb.Domain.IEFEntities;
     public class EntityGuidIdDAL : IEntityGuidIdDAL
     {
         public Guid Id { get; set; }
@@ -53,14 +60,18 @@ namespace crmvcsb.Domain.NewOrder
 
     public class EntityDateDAL : IDateEntityDAL
     {
-        public DateTime Date {get;set;}
+        public DateTime Date { get; set; }
     }
     public class EntityDateRangeDAL : IDateRangeEntityDAL
     {
         public DateTime DateFrom { get; set; }
         public DateTime DateTo { get; set; }
     }
+}
 
+namespace crmvcsb.Domain.NewOrder
+{
+    
     public interface ICrossCurrenciesAPI
     {
         string From {get;set;}
@@ -86,6 +97,8 @@ namespace crmvcsb.Domain.NewOrder
 
 namespace crmvcsb.Domain.NewOrder.DAL
 {
+    using crmvcsb.Domain.IEFEntities;
+    using crmvcsb.Domain.EFEntities;
 
     public class CurrencyDAL : EntityIntIdDAL
     {
