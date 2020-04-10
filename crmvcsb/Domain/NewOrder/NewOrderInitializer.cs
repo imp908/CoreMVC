@@ -1,4 +1,4 @@
-namespace crmvcsb
+namespace crmvcsb.Domain.NewOrder
 {
     using System;
     using System.Collections.Generic;

@@ -8,17 +8,15 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-
 namespace crmvcsb
 {
     public class Program
     {
         public static void Main(string[] args)
         {
-            
             try
             {
-                NewOrderInitializer.ReInitialize();
+                crmvcsb.Domain.NewOrder.NewOrderInitializer.ReInitialize();
                 CreateWebHostBuilder(args).Build().Run();
             }
             catch (Exception e)

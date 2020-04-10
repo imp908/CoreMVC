@@ -21,52 +21,56 @@ Areas/TestArea/Views/ReactCheck/ReactCheck.cshtml Routes: Added http routing for
 ValuesController -> https: //localhost:5001/api/values
 added controllers: HomeController ->
 //conventional view
-https: //localhost:5001/TestArea/Home/
+https://localhost:5001/TestArea/Home/
 //another folder view
-https: //localhost:5001/TestArea/Home/NewHomeIndex
+https://localhost:5001/TestArea/Home/NewHomeIndex
 NewHomeController ->
 //conventional view
-https: //localhost:5001/TestArea/NewHome/
+https://localhost:5001/TestArea/NewHome/
 //another folder view
-https: //localhost:5001/TestArea/NewHome/OldHomeIndex
+https://localhost:5001/TestArea/NewHome/OldHomeIndex
 BlogController ->
 //hardcoded string blog collection
-https: //localhost:5001/api/blog
+https://localhost:5001/api/blog
 //blog object
-http: //localhost:5000/api/blog/{id}
+http://localhost:5000/api/blog/{id}
 //get Newtonsoft Jsonized string
-http: //localhost:5000/api/blog/GetString/{id}
+http://localhost:5000/api/blog/GetString/{id}
 
 NewOrderController ->
 //GET signature
 [ HttpGet("GetDefault/{IsoCode}") ] public async Task<IActionResult> Get( [ FromRoute ]string IsoCode)
 //URL
-http: //localhost:49585/api/NewOrder/GetDefault/usd
+http://localhost:49585/api/NewOrder/GetDefault/usd
 
 //GET named
 [ HttpGet("GetCurrency") ] public async Task<IActionResult> GetCurrencyParam(string IsoCode)
 //URL
-http: //localhost:49585/api/NewOrder/GetCurrency?IsoCode=usd
+http://localhost:49585/api/NewOrder/GetCurrency?IsoCode=usd
 
 //GET named
 [ HttpGet("GetCurrencyParam") ] public async Task<IActionResult> GetNoParam( [ FromQuery ]string IsoCode)
 //URL
-http: //localhost:49585/api/NewOrder/GetCurrencyParam?IsoCode=asd
+http://localhost:49585/api/NewOrder/GetCurrencyParam?IsoCode=asd
 
 //POST
-Posts add,delete, posts and blog by person, get post by blog http: //localhost:5000/api/blog/AddPostJSON
+Posts add,delete, posts and blog by person, get post by blog 
+http://localhost:5000/api/blog/AddPostJSON
 {
   "PersonId": "81A130D2-502F-4CF1-A376-63EDEB000E9F",
   "BlogId": "1",
   "Title": "PostTitle",
   "Content": "PostContent"
-} http: //localhost:5000/api/blog/GetPostsByPerson
-{ "PersonId": "81A130D2-502F-4CF1-A376-63EDEB000E9F" } http: //localhost:5000/api/blog/GetPostsByBlog
-{ "BlogId": "1" } http: //localhost:5000/api/blog/GetBlogsByPerson
+} 
+http://localhost:5000/api/blog/GetPostsByPerson
+{ "PersonId": "81A130D2-502F-4CF1-A376-63EDEB000E9F" } 
+http://localhost:5000/api/blog/GetPostsByBlog
+{ "BlogId": "1" } 
+http://localhost:5000/api/blog/GetBlogsByPerson
 { "PersonId": "81A130D2-502F-4CF1-A376-63EDEB000E9F" }
 
 //PUT
-http: //localhost:5000/api/blog/UpdatePost
+http://localhost:5000/api/blog/UpdatePost
 {
   "PersonId": "81A130D2-502F-4CF1-A376-63EDEB000E9F",
   "Post": {
@@ -77,34 +81,32 @@ http: //localhost:5000/api/blog/UpdatePost
 }
 
 //POST
-http: //localhost:5000/api/blog/DeletePost
+http://localhost:5000/api/blog/DeletePost
 {
   "PersonId": "81A130D2-502F-4CF1-A376-63EDEB000E9F",
   "PostId": "1"
 } JScheckController ->
 //check Events in AppOne
 //uses function Bus,listener and amiter
-http: //localhost:5000/TestArea/JScheck/CheckAppOne
+http://localhost:5000/TestArea/JScheck/CheckAppOne
 
 //check Events in AppTwo
 //uses class realization Bus,listener and amiter
-http: //localhost:5000/TestArea/JScheck/CheckAppTwo
+http://localhost:5000/TestArea/JScheck/CheckAppTwo
 
 ReactController
 //react check
-http: //localhost:5000/TestArea/React/CheckShoppingList
+http://localhost:5000/TestArea/React/CheckShoppingList
 
-SignalRcontroller (copypast to several browser windows to test) http: //localhost:5000/TestArea/SignalR/hub
+SignalRcontroller (copypast to several browser windows to test) 
+http://localhost:5000/TestArea/SignalR/hub
 
 
 API: [
-  http
-  : //localhost:5000/api/blog/AddPost -> returns Ok(result)
-  http
-  : //localhost:5000/api/blog/AddPostJSON -> retorns Json(result)
+  http://localhost:5000/api/blog/AddPost -> returns Ok(result)
+  http://localhost:5000/api/blog/AddPostJSON -> retorns Json(result)
 
-  Body
-  :
+  Body:
   {
     "PersonId": "81A130D2-502F-4CF1-A376-63EDEB000E9F",
     "BlogId": "1",
@@ -113,8 +115,7 @@ API: [
   }
 
   PersonAddsPost
-  http
-  : //localhost:5000/api/blog/AddPostJSON
+  http: /localhost:5000/api/blog/AddPostJSON
   {
     "PersonId": "81A130D2-502F-4CF1-A376-63EDEB000E9F",
     "BlogId": "1",
@@ -122,44 +123,21 @@ API: [
     "Content": "PostContent"
   }
 
-  get
-  posts
-  by
-  person
-  personId
-  ->
+  get posts by person personId ->
   List<Posts>
-  http
-  : //localhost:5000/api/blog/GetPostsByPerson
+  http://localhost:5000/api/blog/GetPostsByPerson
   { "PersonId": "81A130D2-502F-4CF1-A376-63EDEB000E9F" }
 
-  get
-  posts
-  by
-  blog
-  personId
-  ->
-  List<blogs>
-  http
-  : //localhost:5000/api/blog/GetPostsByBlog
+  get posts by blog personId -> List<blogs>
+  http://localhost:5000/api/blog/GetPostsByBlog
   { "BlogId": "1" }
 
-  get
-  blogs
-  by
-  person
-  blogId
-  ->
-  List<Posts>
-  http
-  : //localhost:5000/api/blog/GetBlogsByPerson
+  get blogs by person blogId -> List<Posts>
+  http://localhost:5000/api/blog/GetBlogsByPerson
   { "PersonId": "81A130D2-502F-4CF1-A376-63EDEB000E9F" }
 
-  person
-  removes
-  post
-  http
-  : //localhost:5000/api/blog/UpdatePost
+  person removes post 
+  http://localhost:5000/api/blog/UpdatePost
   {
     "PersonId": "81A130D2-502F-4CF1-A376-63EDEB000E9F",
     "Post": {
@@ -169,11 +147,8 @@ API: [
     }
   }
 
-  person
-  updates
-  post
-  http
-  : //localhost:5000/api/blog/DeletePost
+  person updates post
+  http://localhost:5000/api/blog/DeletePost
   {
     "PersonId": "81A130D2-502F-4CF1-A376-63EDEB000E9F",
     "PostId": "1"
@@ -186,7 +161,7 @@ attribute vs named area routing OR -> controller routing attribute [ Area("TestA
 
 
 //////////////
-Default Views folder rename http: //jackhiston.com/2017/10/24/extending-the-razor-view-engine-with-view-location-expanders/
+Default Views folder rename http://jackhiston.com/2017/10/24/extending-the-razor-view-engine-with-view-location-expanders/
 View -> ViewsNew CustomViewLocations.cs registered in statup.cs => services.Configure<RazorViewEngineOptions>( options => options.ViewLocationExpanders.Add( new CustomViewLocation()));
 
 
@@ -246,119 +221,38 @@ API->Infrastructure API->Domain Infrastructure->Domain TODO: [
 
 
 
-] BACKLOG/MILESTONES: [
+] 
 
-] DONE: [
+BACKLOG/MILESTONES: [
 
-  newOrder
-  :
+] 
+
+DONE: [
+
+  newOrder :
   [
 
-    <-
-    15.07.2019
-    1h
-    ->
-    new
-    order
-    model
-    <-
-    16.07.2019
-    1h
-    ->
-    new
-    order
-    migration
-    <-
-    16.07.2019
-    1h
-    ->
-    new
-    order
-    migration
+    <- 15.07.2019 1h -> new order model
+    <- 16.07.2019 1h -> new order migration
+    <- 16.07.2019 1h -> new order migration
 
-    <-
-    17.07.2019
-    45m
-    ->
-    new
-    order
-    migration
-    cleanup
+    <- 17.07.2019 45m -> new order migration cleanup
 
-    <-
-    22.07.2019
-    1h
-    ->
-    new
-    order
-    currenciesDAL
-    model
+    <- 22.07.2019 1h -> new order currenciesDAL model
 
-    <-
-    23.07.2019
-    1h
-    ->
-    new
-    order
-    currenciesDAL
-    model
+    <- 23.07.2019 1h -> new order currenciesDAL model
 
-    <-
-    24.07.2019
-    1h
-    ->
-    new
-    order
-    currencies
-    manager
+    <- 24.07.2019 1h -> new order currencies manager
 
-    <-
-    25.07.2019
-    1h
-    30m
-    ->
-    currencies
-    manager
-    API
-    resp
+    <- 25.07.2019 1h 30m -> currencies manager API resp
 
-    <-
-    26.09.2019
-    1h
-    30m
-    ->
-    inmemmory,
-    SQL,
-    SQL,
-    SQLlite
-    conditional
-    contexts
+    <- 26.09.2019 1h 30m -> inmemmory, SQL, SQL, SQLlite conditional contexts
 
-    <-
-    19.11.2019
-    3h
-    30m
-    ->
-    Autofac
-    multiple
-    Irepositories
-    registration
+    <- 19.11.2019 3h 30m -> Autofac multiple Irepositories registration
 
-    <-
-    29.03.2020
-    3h
-    ->
-    Ilogger,
-    Iserializer,
-    variables
-    classes
-    with
-    variable.json
+    <- 29.03.2020 3h -> Ilogger, Iserializer, variables classes with variable.json
   ]
 
-  ~13h
-  15m
-  in
-  9days
+  ~13h 15m in 9days
 
 ]
