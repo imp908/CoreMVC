@@ -27,5 +27,10 @@ namespace crmvcsb.Domain.TestModels
             _mapper = mapper;
         }
 
+        public string GetDbName()
+        {
+            return this._repository.GetConnectionString();
+        }
+
     }
 }

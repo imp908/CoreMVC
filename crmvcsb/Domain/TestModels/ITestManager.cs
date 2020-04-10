@@ -7,5 +7,6 @@ namespace crmvcsb.Domain.TestModels
 {
     public interface ITestManager
     {
+        string GetDbName();
     }
 }

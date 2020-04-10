@@ -13,7 +13,7 @@ using AutoMapper;
 using crmvcsb.Domain.NewOrder.API;
 
 using crmvcsb.Domain.TestModels;
-
+using crmvcsb.Domain.NewOrder;
 
 namespace crmvcsb.API.Areas.TestArea.FolderControllers
 {
@@ -22,11 +22,13 @@ namespace crmvcsb.API.Areas.TestArea.FolderControllers
     public class TestController : Controller
     {
 
-        private ITestManager _manager;
+        private ITestManager _testManager;
+        private INewOrderManager _newOrderManager;
 
-        public TestController(ITestManager manager) 
+        public TestController(ITestManager testManager, INewOrderManager newOrderManager) 
         {
-            _manager = manager;
+            _testManager = testManager;
+            _newOrderManager = newOrderManager;
         }
 
         [HttpGet]
@@ -55,5 +57,20 @@ namespace crmvcsb.API.Areas.TestArea.FolderControllers
             }
         }
 
+        [HttpGet("ConnStr")]
+        public async Task<IActionResult> EfContextsRegistrationCheck()
+        {
+            try 
+            {
+                var testDbConnStr = _testManager.GetDbName();
+                var newOrderDbConnStr = _newOrderManager.GetDbName();
+
+                return Ok();
+            }
+            catch(Exception e)
+            {
+                return BadRequest();
+            }
+        }
     }
 }

@@ -137,6 +137,13 @@ namespace crmvcsb.Infrastructure.EF
             this._context.Database.ExecuteSqlCommand(cmd);
             this._context.Database.CloseConnection();
         }
+
+
+
+        public string GetConnectionString() 
+        { 
+            return this._context.Database.GetDbConnection().ConnectionString;
+        }
     }
 
 }

@@ -83,6 +83,8 @@ namespace crmvcsb.Domain.NewOrder
     public interface INewOrderManager
     {
         Task<IList<ICrossCurrenciesAPI>> GetCurrencyCrossRates(GetCurrencyCommand command);
+
+        string GetDbName();
     }
 
     public class GetCurrencyCommand

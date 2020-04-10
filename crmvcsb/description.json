@@ -175,6 +175,10 @@ View -> ViewsNew CustomViewLocations.cs registered in statup.cs => services.Conf
 //startup.cs
 custom default MVC Area location folder in API/Areas in startup.cs rerouted through RazorViewEngineOptions Autofac container registration added AutoMapper service added, one coniguration two types of initialization - static and instance API AutoFact to Automapper registration added AutofacServiceProvider returned from ConfigureServices SignalR use and hub routing added Authentication registration: Authentication EF db context Identity core for user managment Added authentication with cookies Added conditional registration for SQL, SQLlite and InMemmory databases Condition is enum class from appsettings.json
 
+ConfigureAutofacDbContexts
+multiple SQL DBs in one project possible with Dummy Repository clones per DB scope
+registration of connection string to context to Repository to service with IRepository
+
 //////////////
 //Program.cs 
 Added http instead of https routing for Fiddler test to: .UseUrls("http://localhost:5002")
@@ -207,7 +211,8 @@ API: WebApi, Controllers Infrastructure: ORMs contexts : [ EF ]; Repo and UOW re
   repo uses
   DAL concrete
   classes
-} UOW: {
+} 
+UOW: {
   Contains IRepository<ConcreteRealization>,
   maps DAL
   to BLL,
@@ -217,8 +222,9 @@ API: WebApi, Controllers Infrastructure: ORMs contexts : [ EF ]; Repo and UOW re
 
 //////////////
 //DDD layers relation directions
-API->Infrastructure API->Domain Infrastructure->Domain TODO: [
+API->Infrastructure API->Domain Infrastructure->Domain 
 
+TODO: [
 
 
 ] 
@@ -255,8 +261,8 @@ DONE: [
 	]
 	TMPL
 	[
-		<- 10.04.2020  3h -> TMPL branch create and cleanup, warmup
+		<- 10.04.2020  4h -> TMPL branch create and cleanup, warmup
 	]
-	~16h 15m in 10days
+	~17h 15m in 10days
 
 ]

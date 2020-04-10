@@ -26,6 +26,11 @@ namespace crmvcsb.Domain.NewOrder
             _mapper = mapper;
         }
 
+        public string GetDbName()
+        {
+            return this._repository.GetConnectionString();
+        }
+
         public async Task<IList<ICrossCurrenciesAPI>> GetCurrencyCrossRates(GetCurrencyCommand command) 
         {
 

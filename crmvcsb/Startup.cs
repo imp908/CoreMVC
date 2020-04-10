@@ -179,7 +179,13 @@ namespace crmvcsb
               .InstancePerLifetimeScope();
 
 
+            /*
+           * Registering multiple IRepository clones with different connections trings
+           * For multiple SQL DBs in one project
+           */
 
+            /*registering repository dummy clones, with EF concrete contexts to connection strings*/
+            //--------
             autofacContainer.RegisterType<RepositoryNewOrder>()
             .WithParameter("context",
 
@@ -188,7 +194,8 @@ namespace crmvcsb
 
             ).As<IRepository>().AsSelf()
             .InstancePerLifetimeScope();
-
+            
+            //--------
             autofacContainer.RegisterType<RepositoryTest>()
             .WithParameter("context",
 
@@ -199,7 +206,7 @@ namespace crmvcsb
             .InstancePerLifetimeScope();
 
 
-
+            /*Register repository dummy clones for DB scope to services*/
             autofacContainer.Register(ctx => new NewOrderManager(ctx.Resolve<RepositoryNewOrder>(), ctx.Resolve<IMapper>()))
             .As<INewOrderManager>()
             .InstancePerLifetimeScope();
@@ -207,8 +214,6 @@ namespace crmvcsb
             autofacContainer.Register(ctx => new TestManager(ctx.Resolve<RepositoryTest>(), ctx.Resolve<IMapper>()))
             .As<ITestManager>()
             .InstancePerLifetimeScope();
-
-
 
             return autofacContainer;
         }

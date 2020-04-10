@@ -7,12 +7,10 @@ using System.Linq.Expressions;
 
 namespace crmvcsb.Domain.Interfaces
 {
-    
-    using crmvcsb.Domain.TestModels;
-    
+
     public interface IEntityIntId
     {
-        int Id{get;set;}
+        int Id { get; set; }
     }
     public interface IEntityGuidId
     {
@@ -23,14 +21,14 @@ namespace crmvcsb.Domain.Interfaces
     {
         IQueryable<T> GetAll<T>(Expression<Func<T, bool>> expression = null)
             where T : class;
-   
+
         void Add<T>(T item) where T : class;
         void AddRange<T>(IList<T> items) where T : class;
         void Delete<T>(T item) where T : class;
         void DeleteRange<T>(IList<T> items) where T : class;
         void Update<T>(T item) where T : class;
         void UpdateRange<T>(IList<T> items) where T : class;
-        IQueryable<T> SkipTake<T>(int skip,int take)
+        IQueryable<T> SkipTake<T>(int skip, int take)
             where T : class;
         IQueryable<T> QueryByFilter<T>(Expression<Func<T, bool>> expression)
             where T : class;
@@ -38,7 +36,16 @@ namespace crmvcsb.Domain.Interfaces
 
         void SaveIdentity(string command);
         void SaveIdentity<T>() where T : class;
+
+
+        string GetConnectionString();
     }
+
+}
+
+namespace crmvcsb.Domain.Interfaces
+{
+    using crmvcsb.Domain.TestModels;
 
     public interface ICQRScrud
     {
