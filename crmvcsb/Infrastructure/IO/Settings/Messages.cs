@@ -32,9 +32,14 @@ namespace mvccoresb.Infrastructure.IO.Settings
     /// </summary>
     public class MessagesInitialization
     {
+        public static MessagesInitialization _this;
         static JSONio serialization = new JSONio();
         public static _variables Variables = new _variables();
         string path = $"{Directory.GetCurrentDirectory()}\\variables.json";
+        public static void Init()
+        {
+            _this = new MessagesInitialization();
+        }
         public MessagesInitialization()
         {
             

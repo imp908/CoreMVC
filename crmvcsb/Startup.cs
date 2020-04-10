@@ -71,7 +71,7 @@ namespace crmvcsb
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             /*Build in logging to console message*/
-            var m = new mvccoresb.Infrastructure.IO.Settings.MessagesInitialization();
+            mvccoresb.Infrastructure.IO.Settings.MessagesInitialization.Init();
 
             var Message = mvccoresb.Infrastructure.IO.Settings.MessagesInitialization.Variables.Messages.SrviceMessages.TestMessage;
             _logger?.LogInformation("Message displayed: {Message}", Message);
