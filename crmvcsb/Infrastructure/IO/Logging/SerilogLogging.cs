@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 using Serilog;
 
-namespace mvccoresb.Infrastructure.IO.Logging
+namespace crmvcsb.Infrastructure.IO.Logging
 {
     public class SerilogLogging : ILogger
     {

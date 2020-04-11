@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace mvccoresb.Migrations
+namespace crmvcsb.Migrations
 {
     public partial class NewOrderInit : Migration
     {

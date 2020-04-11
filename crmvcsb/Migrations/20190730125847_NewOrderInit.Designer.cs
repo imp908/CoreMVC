@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using crmvcsb.Infrastructure.EF.newOrder;
+using crmvcsb.Infrastructure.EF.NewOrder;
 
-namespace mvccoresb.Migrations
+namespace crmvcsb.Migrations
 {
-    [DbContext(typeof(NewOrderContext))]
+    [DbContext(typeof(ContextNewOrder))]
     [Migration("20190730125847_NewOrderInit")]
     partial class NewOrderInit
     {

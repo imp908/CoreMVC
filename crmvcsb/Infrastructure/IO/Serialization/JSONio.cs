@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-using mvccoresb.Infrastructure.IO.Serialization;
+using crmvcsb.Infrastructure.IO.Serialization;
 using Newtonsoft.Json;
 
-namespace mvccoresb.Infrastructure.IO.Serialization
+namespace crmvcsb.Infrastructure.IO.Serialization
 {
     public class JSONio : ISerialization
     {

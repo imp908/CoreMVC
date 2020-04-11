@@ -5,43 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace crmvcsb.Domain.Interfaces
-{
-
-    public interface IEntityIntId
-    {
-        int Id { get; set; }
-    }
-    public interface IEntityGuidId
-    {
-        Guid Id { get; set; }
-    }
-
-    public interface IRepository
-    {
-        IQueryable<T> GetAll<T>(Expression<Func<T, bool>> expression = null)
-            where T : class;
-
-        void Add<T>(T item) where T : class;
-        void AddRange<T>(IList<T> items) where T : class;
-        void Delete<T>(T item) where T : class;
-        void DeleteRange<T>(IList<T> items) where T : class;
-        void Update<T>(T item) where T : class;
-        void UpdateRange<T>(IList<T> items) where T : class;
-        IQueryable<T> SkipTake<T>(int skip, int take)
-            where T : class;
-        IQueryable<T> QueryByFilter<T>(Expression<Func<T, bool>> expression)
-            where T : class;
-        void Save();
-
-        void SaveIdentity(string command);
-        void SaveIdentity<T>() where T : class;
-
-
-        string GetConnectionString();
-    }
-
-}
 
 namespace crmvcsb.Domain.Interfaces
 {

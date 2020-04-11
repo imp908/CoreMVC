@@ -7,100 +7,48 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-/// <summary>
-/// Interfaces for generic IRepository entities
-/// </summary>
-namespace crmvcsb.Domain.IEFEntities
+
+
+
+namespace crmvcsb.Domain.Currencies
 {
 
-    public interface IEntityGuidIdDAL
-    {
-        Guid Id { get; set; }
-    }
-    public interface IEntityIntIdDAL
-    {
-        int Id { get; set; }
-    }
-    public interface IEntityStringIdDAL
-    {
-        string Id { get; set; }
-    }
-
-    public interface IDateEntityDAL
-    {
-        DateTime Date { get; set; }
-    }
-    public interface IDateRangeEntityDAL
-    {
-        DateTime DateFrom { get; set; }
-        DateTime DateTo { get; set; }
-    }
-
-}
-
-/// <summary>
-/// EF reusable entities repository
-/// </summary>
-namespace crmvcsb.Domain.EFEntities
-{
-    using crmvcsb.Domain.IEFEntities;
-    public class EntityGuidIdDAL : IEntityGuidIdDAL
-    {
-        public Guid Id { get; set; }
-    }
-    public class EntityIntIdDAL : IEntityIntIdDAL
-    {
-        public int Id { get; set; }
-    }
-    public class EntityStringIdDAL : IEntityStringIdDAL
-    {
-        public string Id { get; set; }
-    }
-
-
-    public class EntityDateDAL : IDateEntityDAL
-    {
-        public DateTime Date { get; set; }
-    }
-    public class EntityDateRangeDAL : IDateRangeEntityDAL
-    {
-        public DateTime DateFrom { get; set; }
-        public DateTime DateTo { get; set; }
-    }
-}
-
-namespace crmvcsb.Domain.NewOrder
-{
-    
     public interface ICrossCurrenciesAPI
     {
-        string From {get;set;}
+        string From { get; set; }
         string To { get; set; }
         decimal Rate { get; set; }
     }
 
-
-    public interface INewOrderManager
+    public interface IGetCurrencyCommand
     {
-        Task<IList<ICrossCurrenciesAPI>> GetCurrencyCrossRates(GetCurrencyCommand command);
+        string FromCurrency { get; set; }
+        string ToCurrency { get; set; }
+        string ThroughCurrency { get; set; }
+        DateTime Date { get; set; }
+    }
 
+    public interface IService
+    {
         string GetDbName();
+
+        void ReInitialize();
+
+        void CleanUp();
     }
 
-    public class GetCurrencyCommand
+    public interface INewOrderService : IService
     {
-        public string FromCurrency { get; set; }
-        public string ToCurrency { get; set; }
-        public string ThroughCurrency { get; set; }
-        public DateTime Date { get; set; }
-    }
+        Task<IList<ICrossCurrenciesAPI>> GetCurrencyCrossRates(IGetCurrencyCommand command);
 
+    }
 }
 
-namespace crmvcsb.Domain.NewOrder.DAL
+
+namespace crmvcsb.Domain.Currencies.DAL
 {
-    using crmvcsb.Domain.IEFEntities;
-    using crmvcsb.Domain.EFEntities;
+    using crmvcsb.Domain.IEntities;
+    using crmvcsb.Domain.Entities;
 
     public class CurrencyDAL : EntityIntIdDAL
     {
@@ -116,105 +64,28 @@ namespace crmvcsb.Domain.NewOrder.DAL
     {
         public CurrencyDAL CurrencyFrom { get; set; }
         public CurrencyDAL CurrencyTo { get; set; }
-        
+
         public int CurrencyFromId { get; set; }
         public int CurrencyToId { get; set; }
-        
+
         public decimal Rate { get; set; }
         public DateTime Date { get; set; }
     }
 
 
-
-
-
-    public class PhysicalUnitConvertions : EntityIntIdDAL
-    {
-        public PhysicalUnitDAL UnitFrom { get; set; }
-        public PhysicalUnitDAL UnitTo { get; set; }
-        public double Coefficient { get; set; }
-    }
-
-    /*Kg,Pnd,sm,meter etc*/
-    public class PhysicalUnitDAL : EntityIntIdDAL
-    {
-        public string Name { get; set; }
-    }
-
-    /*Length,Height, Weight or density exmpl*/
-    public class PhysicalDimensionDAL : EntityIntIdDAL
-    {
-        /*Length goes here */
-        public string ParameterName { get; set; }
-
-        /*Amount */
-        public double Amount { get; set; }
-
-        /*And sm goes here */
-        public PhysicalUnitDAL DimensionUnit { get; set; }
-    }
-    public class GoodsDAL : EntityIntIdDAL
-    {
-        public string ProductName { get; set; }
-
-        /*
-            Can be a bulk of corn, and it hase only volume and wigth 
-            but t can be a pck of corn, with dimensions added to vlume and weight
-        */
-        List<PhysicalDimensionDAL> Dimensions { get; set; }
-    }
-
-
-    public class AddressDAL : EntityIntIdDAL
-    {
-        public string Country { get; set; }
-        public string City { get; set; }
-        public string State { get; set; }
-        public string Province { get; set; }
-        public string StreetName { get; set; }
-        public int Code { get; set; }
-    }
-    public class RouteVertexDAL : EntityIntIdDAL
-    {
-        public int InRouteMoveOrder { get; set; }
-        public AddressDAL From { get; set; }
-        public AddressDAL To { get; set; }
-        public double Distance { get; set; }
-        public int PriorityWeigth { get; set; }
-    }
-    public class RouteDAL : EntityIntIdDAL
-    {
-        public string Name { get; set; }
-
-        public List<RouteVertexDAL> RouteVertexes { get; set; }
-    }
-
-
-    public class DeliveryItemDAL : EntityGuidIdDAL
-    {
-        public string DeliveryName { get; set; }
-        public int DeliveryNumber { get; set; }
-
-        List<GoodsDAL> GoodsToDeliver { get; set; }
-        List<RouteDAL> Routes { get; set; }
-    }
-
-    public class ClientDAL : EntityGuidIdDAL
-    {
-        public string ClientName { get; set; }
-        List<OrderDAL> Orders { get; set; }
-    }
-
-    public class OrderDAL : EntityGuidIdDAL
-    {
-        public ClientDAL Client { get; set; }
-        List<DeliveryItemDAL> OrderedItems { get; set; }
-    }
-
 }
 
-namespace crmvcsb.Domain.NewOrder.API
+
+namespace crmvcsb.Domain.Currencies.API
 {
+
+    public class GetCurrencyCommand : IGetCurrencyCommand
+    {
+        public string FromCurrency { get; set; }
+        public string ToCurrency { get; set; }
+        public string ThroughCurrency { get; set; }
+        public DateTime Date { get; set; }
+    }
 
     public class CrossCurrenciesAPI : ICrossCurrenciesAPI
     {

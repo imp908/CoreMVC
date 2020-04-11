@@ -1,22 +1,11 @@
 
 namespace crmvcsb.Infrastructure.EF
 {
-    using System.Threading.Tasks;
-    using System.Linq.Expressions;
-
-    using Microsoft.EntityFrameworkCore.ChangeTracking;
-
+    using crmvcsb.Domain.IRepository;
     using Microsoft.EntityFrameworkCore;
-    using System.Collections.Generic;
+    using crmvcsb.Infrastructure.IRepositoryEF;
 
-    using System;
-
-    using System.Linq;
-
-    using crmvcsb.Domain.Interfaces;
-    using System.Reflection;
-
-    public class RepositoryTest : RepositoryEF, IRepository
+    public class RepositoryTest : RepositoryEF, IRepositoryEF, IRepository
     {
         public RepositoryTest(DbContext context) : base(context)
         {

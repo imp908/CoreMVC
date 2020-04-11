@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <UserSecretsId>aspnet-mvccoresb-9F9992A1-972D-4114-B4E1-EA987746CC85</UserSecretsId>
+    <UserSecretsId>aspnet-crmvcsb-9F9992A1-972D-4114-B4E1-EA987746CC85</UserSecretsId>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <StartupObject>crmvcsb.Program</StartupObject>
   </PropertyGroup>

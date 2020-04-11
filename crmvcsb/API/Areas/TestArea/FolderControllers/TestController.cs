@@ -7,13 +7,12 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 
 using crmvcsb.Infrastructure.EF;
-using crmvcsb.Infrastructure.EF.newOrder;
+using crmvcsb.Infrastructure.EF.NewOrder;
 using crmvcsb.Domain.Interfaces;
 using AutoMapper;
-using crmvcsb.Domain.NewOrder.API;
 
 using crmvcsb.Domain.TestModels;
-using crmvcsb.Domain.NewOrder;
+using crmvcsb.Domain.Currencies;
 
 namespace crmvcsb.API.Areas.TestArea.FolderControllers
 {
@@ -23,9 +22,9 @@ namespace crmvcsb.API.Areas.TestArea.FolderControllers
     {
 
         private ITestManager _testManager;
-        private INewOrderManager _newOrderManager;
+        private INewOrderService _newOrderManager;
 
-        public TestController(ITestManager testManager, INewOrderManager newOrderManager) 
+        public TestController(ITestManager testManager, INewOrderService newOrderManager) 
         {
             _testManager = testManager;
             _newOrderManager = newOrderManager;

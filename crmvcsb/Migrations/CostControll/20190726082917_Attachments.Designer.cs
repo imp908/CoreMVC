@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using crmvcsb.Infrastructure.EF.costControl;
 
-namespace mvccoresb.Migrations.CostControll
+namespace crmvcsb.Migrations.CostControll
 {
     [DbContext(typeof(CostControllContext))]
     [Migration("20190726082917_Attachments")]

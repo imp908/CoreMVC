@@ -12,7 +12,8 @@ namespace crmvcsb.Infrastructure.EF
 {
 
     using crmvcsb.Domain.TestModels;    
-    using crmvcsb.Domain.Interfaces;    
+    using crmvcsb.Domain.Interfaces;
+    using crmvcsb.Domain.IRepository;
 
 
     public class CQRSEFBlogging 

@@ -1,14 +1,12 @@
-namespace crmvcsb.Infrastructure.EF.newOrder
+namespace crmvcsb.Infrastructure.EF.NewOrder
 {
     using Microsoft.EntityFrameworkCore;
-    using System.Collections.Generic;
     using crmvcsb.Domain.NewOrder.DAL;
-    using System;
-    using Autofac;
+    using crmvcsb.Domain.Currencies.DAL;
 
-    public class NewOrderContext : DbContext
+    public class ContextNewOrder : DbContext
     {
-        public NewOrderContext(DbContextOptions<NewOrderContext> options) : base(options)
+        public ContextNewOrder(DbContextOptions<ContextNewOrder> options) : base(options)
         {
 
         }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace mvccoresb.Infrastructure.IO.Logging
+namespace crmvcsb.Infrastructure.IO.Logging
 {
     public interface ILogger
     {

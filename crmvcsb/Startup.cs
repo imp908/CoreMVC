@@ -28,15 +28,16 @@ namespace crmvcsb
 
     using crmvcsb.Infrastructure.EF;
     using crmvcsb.Domain.TestModels;
-    using crmvcsb.Domain.Interfaces;
+    using crmvcsb.Domain.IRepository;
 
-    using crmvcsb.Infrastructure.EF.newOrder;
+    using crmvcsb.Infrastructure.EF.NewOrder;
     using crmvcsb.Infrastructure.EF.costControl;
 
     using crmvcsb.Domain.NewOrder;
+    using crmvcsb.Domain.Currencies;
 
-    using crmvcsb.Domain.NewOrder.DAL;
-    using crmvcsb.Domain.NewOrder.API;
+    using crmvcsb.Domain.Currencies.API;
+    using crmvcsb.Domain.Currencies.DAL;
 
     /*Build in logging*/
     using Microsoft.Extensions.Logging;
@@ -71,9 +72,9 @@ namespace crmvcsb
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             /*Build in logging to console message*/
-            mvccoresb.Infrastructure.IO.Settings.MessagesInitialization.Init();
+            crmvcsb.Infrastructure.IO.Settings.MessagesInitialization.Init();
 
-            var Message = mvccoresb.Infrastructure.IO.Settings.MessagesInitialization.Variables.Messages.SrviceMessages.TestMessage;
+            var Message = crmvcsb.Infrastructure.IO.Settings.MessagesInitialization.Variables.Messages.SrviceMessages.TestMessage;
             _logger?.LogInformation("Message displayed: {Message}", Message);
 
             services.Configure<CookiePolicyOptions>(options =>
@@ -180,16 +181,16 @@ namespace crmvcsb
 
 
             /*
-           * Registering multiple IRepository clones with different connections trings
-           * For multiple SQL DBs in one project
-           */
+            * Registering multiple IRepository clones with different connections trings
+            * For multiple SQL DBs in one project
+            */
 
             /*registering repository dummy clones, with EF concrete contexts to connection strings*/
             //--------
             autofacContainer.RegisterType<RepositoryNewOrder>()
             .WithParameter("context",
 
-                new NewOrderContext(new DbContextOptionsBuilder<NewOrderContext>()
+                new ContextNewOrder(new DbContextOptionsBuilder<ContextNewOrder>()
                 .UseSqlServer(Configuration.GetConnectionString("LocalNewOrderConnection")).Options)
 
             ).As<IRepository>().AsSelf()
@@ -207,8 +208,8 @@ namespace crmvcsb
 
 
             /*Register repository dummy clones for DB scope to services*/
-            autofacContainer.Register(ctx => new NewOrderManager(ctx.Resolve<RepositoryNewOrder>(), ctx.Resolve<IMapper>()))
-            .As<INewOrderManager>()
+            autofacContainer.Register(ctx => new NewOrderService(ctx.Resolve<RepositoryNewOrder>(), ctx.Resolve<IMapper>()))
+            .As<INewOrderService>()
             .InstancePerLifetimeScope();
 
             autofacContainer.Register(ctx => new TestManager(ctx.Resolve<RepositoryTest>(), ctx.Resolve<IMapper>()))
@@ -237,9 +238,9 @@ namespace crmvcsb
                .WithMetadata("Name", "CostControllContext")
                .InstancePerLifetimeScope();
 
-            autofacContainer.RegisterType<NewOrderContext>()
+            autofacContainer.RegisterType<ContextNewOrder>()
                 .As<DbContext>()
-                .WithParameter("options", new DbContextOptionsBuilder<NewOrderContext>()
+                .WithParameter("options", new DbContextOptionsBuilder<ContextNewOrder>()
                     .UseSqlite("Data Source=app.db").Options)
                 .WithMetadata("Name", "NewOrderContext")
                 .InstancePerLifetimeScope();
@@ -249,8 +250,8 @@ namespace crmvcsb
                 .WithMetadata<AppendMetadata>(m => m.For(am => am.AppendName, "NewOrderContext"))
                 .InstancePerLifetimeScope();
 
-            autofacContainer.RegisterType<NewOrderManager>()
-                .As<INewOrderManager>()
+            autofacContainer.RegisterType<NewOrderService>()
+                .As<INewOrderService>()
                 .WithMetadata<AppendMetadata>(m => m.For(am => am.AppendName, "NewOrderContext"))
                 .InstancePerLifetimeScope();
 
@@ -275,9 +276,9 @@ namespace crmvcsb
                .WithMetadata("Name", "CostControllContext")
                .InstancePerLifetimeScope();
 
-            autofacContainer.RegisterType<NewOrderContext>()
+            autofacContainer.RegisterType<ContextNewOrder>()
                 .As<DbContext>()
-                .WithParameter("options", new DbContextOptionsBuilder<NewOrderContext>()
+                .WithParameter("options", new DbContextOptionsBuilder<ContextNewOrder>()
                     .UseInMemoryDatabase("NewOrderContext").Options)
                 .WithMetadata("Name", "NewOrderContext")
                 .InstancePerLifetimeScope();
@@ -287,8 +288,8 @@ namespace crmvcsb
                 .WithMetadata<AppendMetadata>(m => m.For(am => am.AppendName, "NewOrderContext"))
                 .InstancePerLifetimeScope();
 
-            autofacContainer.RegisterType<NewOrderManager>()
-                .As<INewOrderManager>()
+            autofacContainer.RegisterType<NewOrderService>()
+                .As<INewOrderService>()
                 .WithMetadata<AppendMetadata>(m => m.For(am => am.AppendName, "NewOrderContext"))
                 .InstancePerLifetimeScope();
 

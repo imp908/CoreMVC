@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using System.IO;
 
 
-namespace mvccoresb.Infrastructure.IO.Settings
+namespace crmvcsb.Infrastructure.IO.Settings
 {
     using Microsoft.AspNetCore.Hosting;
-    using mvccoresb.Infrastructure.IO.Serialization;
+    using crmvcsb.Infrastructure.IO.Serialization;
 
     /// <summary>
     /// Contains class hierarhy for varialbes JSOn serialization, deserialization

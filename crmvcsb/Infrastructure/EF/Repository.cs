@@ -16,6 +16,10 @@ namespace crmvcsb.Infrastructure.EF
     using crmvcsb.Domain.Interfaces;
     using System.Reflection;
 
+    using Microsoft.EntityFrameworkCore.Infrastructure;
+
+    using crmvcsb.Domain.IRepository;
+
     /// <summary>
     /// Basic repository implementation
     /// </summary>
@@ -144,6 +148,13 @@ namespace crmvcsb.Infrastructure.EF
         { 
             return this._context.Database.GetDbConnection().ConnectionString;
         }
+        
+
+        public DatabaseFacade GetDatabase()
+        {
+            return this._context.Database;
+        }
+
     }
 
 }

@@ -2,18 +2,9 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-
-using Newtonsoft.Json;
-
-using crmvcsb.Infrastructure.EF;
-using crmvcsb.Infrastructure.EF.newOrder;
-using crmvcsb.Domain.Interfaces;
-using AutoMapper;
-using crmvcsb.Domain.NewOrder.API;
-
 using crmvcsb.Domain.NewOrder;
-
+using crmvcsb.Domain.Currencies;
+using crmvcsb.Domain.Currencies.API;
 
 namespace crmvcsb.API.Areas.TestArea.FolderControllers
 {
@@ -22,9 +13,9 @@ namespace crmvcsb.API.Areas.TestArea.FolderControllers
     public class NewOrderController : Controller
     {
 
-        private INewOrderManager _manager;
+        private INewOrderService _manager;
 
-        public NewOrderController(INewOrderManager manager) 
+        public NewOrderController(INewOrderService manager) 
         {
             _manager = manager;
         }
@@ -34,7 +25,7 @@ namespace crmvcsb.API.Areas.TestArea.FolderControllers
         {
             try
             {
-                var cmd = new GetCurrencyCommand(){FromCurrency=IsoCode};
+                IGetCurrencyCommand cmd = new GetCurrencyCommand(){FromCurrency=IsoCode};
                 var result = await _manager.GetCurrencyCrossRates(cmd);
                 return Ok(result);
             }

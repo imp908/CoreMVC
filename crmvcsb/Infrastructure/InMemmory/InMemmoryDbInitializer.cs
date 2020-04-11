@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using System.IO;
 
-namespace mvccoresb.Infrastructure.InMemmory
+namespace crmvcsb.Infrastructure.InMemmory
 {
     public class InMemmoryDbInitializer
     {
