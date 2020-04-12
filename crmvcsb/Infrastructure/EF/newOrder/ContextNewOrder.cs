@@ -2,7 +2,7 @@ namespace crmvcsb.Infrastructure.EF.NewOrder
 {
     using Microsoft.EntityFrameworkCore;
     using crmvcsb.Domain.NewOrder.DAL;
-    using crmvcsb.Domain.Currencies.DAL;
+    using crmvcsb.Domain.Currency.DAL;
 
     public class ContextNewOrder : DbContext
     {

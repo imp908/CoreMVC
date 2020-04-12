@@ -1,14 +1,11 @@
-using System;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-
 
 namespace crmvcsb.Domain.Interfaces
 {
-    using crmvcsb.Domain.TestModels;
+    using System;
+    using crmvcsb.Domain.Blogging.API;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Linq.Expressions;
 
     public interface ICQRScrud
     {

@@ -4,13 +4,13 @@ namespace InfrastructureCheckers
     using System.Linq;
     
     using Microsoft.EntityFrameworkCore;
-    using crmvcsb.Infrastructure.EF;
 
     using System.Collections.Generic;
 
-    using crmvcsb.Domain.TestModels;
 
     using AutoMapper;
+
+    using crmvcsb.Infrastructure.Blogging.EF;
 
     public static class RepoAndUOWCheck
     {
@@ -24,8 +24,8 @@ namespace InfrastructureCheckers
         
         public static void DbWithRepoReinitCheck(){
                       
-            using(TestContext context = new TestContext(
-                new DbContextOptionsBuilder<TestContext>()
+            using(BloggingContext context = new BloggingContext(
+                new DbContextOptionsBuilder<BloggingContext>()
                     .UseSqlServer(connectionStringSQL).Options))
             {
                 crmvcsb.Infrastructure.EF.RepositoryEF repo = new crmvcsb.Infrastructure.EF.RepositoryEF(context);

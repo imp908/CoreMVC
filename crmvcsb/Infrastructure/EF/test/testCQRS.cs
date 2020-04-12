@@ -7,14 +7,14 @@ using System.Linq;
 
 using AutoMapper;
 
+using crmvcsb.Domain.Blogging.API;
+using crmvcsb.Infrastructure.Blogging.EF;
 
 namespace crmvcsb.Infrastructure.EF
 {
 
-    using crmvcsb.Domain.TestModels;    
     using crmvcsb.Domain.Interfaces;
     using crmvcsb.Domain.IRepository;
-
 
     public class CQRSEFBlogging 
     {

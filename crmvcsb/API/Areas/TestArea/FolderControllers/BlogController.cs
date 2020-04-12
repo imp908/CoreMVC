@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-
-using crmvcsb.Domain.Interfaces;
-
-using crmvcsb.Domain.TestModels;
-
-using Newtonsoft.Json;
-
-using crmvcsb.Domain.IRepository;
+﻿
 
 namespace crmvcsb.Default.Controllers
 {
+
+    using Microsoft.AspNetCore.Mvc;
+
+    using crmvcsb.Domain.Interfaces;
+
+    using crmvcsb.Domain.IRepository;
+    using crmvcsb.Domain.Blogging.API;
+    using crmvcsb.Infrastructure.Blogging.EF;
+
     [Route("api/[controller]")]
     [ApiController]
     public class BlogController : Controller

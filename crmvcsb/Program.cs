@@ -16,7 +16,7 @@ namespace crmvcsb
         {
             try
             {
-                crmvcsb.Domain.NewOrder.NewOrderInitializer.ReInitialize();
+                crmvcsb.Domain.NewOrder.NewOrderManager.ReInitialize();
                 CreateWebHostBuilder(args).Build().Run();
             }
             catch (Exception e)

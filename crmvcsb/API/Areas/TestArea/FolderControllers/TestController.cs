@@ -12,7 +12,8 @@ using crmvcsb.Domain.Interfaces;
 using AutoMapper;
 
 using crmvcsb.Domain.TestModels;
-using crmvcsb.Domain.Currencies;
+using crmvcsb.Domain.Currency;
+using crmvcsb.Domain.NewOrder;
 
 namespace crmvcsb.API.Areas.TestArea.FolderControllers
 {

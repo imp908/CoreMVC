@@ -1,6 +1,6 @@
 
 
-namespace crmvcsb.Infrastructure.EF
+namespace crmvcsb.Infrastructure.Blogging.EF
 {
     using Microsoft.EntityFrameworkCore;
     using System.Collections.Generic;
@@ -11,10 +11,12 @@ namespace crmvcsb.Infrastructure.EF
 
     using System.Threading.Tasks;
 
-    public class TestContext : DbContext
+    using crmvcsb.Infrastructure.Blogging.EF;
+
+    public class BloggingContext : DbContext
     {
         
-        public TestContext(DbContextOptions<TestContext> options) : base(options)
+        public BloggingContext(DbContextOptions<BloggingContext> options) : base(options)
         {
 
         }

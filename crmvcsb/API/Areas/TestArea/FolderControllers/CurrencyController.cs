@@ -3,19 +3,19 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using crmvcsb.Domain.NewOrder;
-using crmvcsb.Domain.Currencies;
-using crmvcsb.Domain.Currencies.API;
+using crmvcsb.Domain.Currency;
+using crmvcsb.Domain.Currency.API;
 
 namespace crmvcsb.API.Areas.TestArea.FolderControllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class NewOrderController : Controller
+    public class CurrencyController : Controller
     {
 
-        private INewOrderService _manager;
+        private ICurrencyService _manager;
 
-        public NewOrderController(INewOrderService manager) 
+        public CurrencyController(ICurrencyService manager) 
         {
             _manager = manager;
         }

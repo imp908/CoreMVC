@@ -12,9 +12,9 @@ namespace crmvcsb.Domain.NewOrder
     using Microsoft.Extensions.Configuration;
 
     using Microsoft.Extensions.Logging;
-    using crmvcsb.Domain.Currencies;
+    using crmvcsb.Domain.Currency;
 
-    public class NewOrderInitializer
+    public class NewOrderManager
     {
         public static IConfigurationRoot configuration { get; set; }
 
@@ -22,9 +22,9 @@ namespace crmvcsb.Domain.NewOrder
 
         private static INewOrderService NewOrderService  { get;set;}
 
-        static NewOrderInitializer()
+        static NewOrderManager()
         {
-                       
+
         }
 
         public static void ReInitialize()

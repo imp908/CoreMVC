@@ -1,21 +1,21 @@
 ﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.AspNetCore.Builder;
-
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-
-using Microsoft.AspNetCore.Mvc.Razor;
-
-using crmvcsb.Domain.NewOrder;
 
 namespace crmvcsb
 {
+
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Microsoft.AspNetCore.Builder;
+
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
+
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+
+    using Microsoft.AspNetCore.Mvc.Razor;
+
 
     using Autofac;
     using Autofac.Extensions.DependencyInjection;
@@ -32,16 +32,24 @@ namespace crmvcsb
 
     using crmvcsb.Infrastructure.EF.NewOrder;
     using crmvcsb.Infrastructure.EF.costControl;
+    
 
     using crmvcsb.Domain.NewOrder;
-    using crmvcsb.Domain.Currencies;
+    using crmvcsb.Domain.Blogging;
+    using crmvcsb.Domain.Blogging.API;
+    using crmvcsb.Domain.Blogging.BLL;
+    using crmvcsb.Domain.Blogging.DAL;
+    using crmvcsb.Infrastructure.Blogging.EF;
 
-    using crmvcsb.Domain.Currencies.API;
-    using crmvcsb.Domain.Currencies.DAL;
+    using crmvcsb.Domain.Currency;
+
+    using crmvcsb.Domain.Currency.API;
+    using crmvcsb.Domain.Currency.DAL;
 
     /*Build in logging*/
     using Microsoft.Extensions.Logging;
-
+    
+    
     enum ContextType
     {
         SQL, SQLLite, InMemmory
@@ -200,7 +208,7 @@ namespace crmvcsb
             autofacContainer.RegisterType<RepositoryTest>()
             .WithParameter("context",
 
-                new TestContext(new DbContextOptionsBuilder<TestContext>()
+                new BloggingContext(new DbContextOptionsBuilder<BloggingContext>()
                 .UseSqlServer(Configuration.GetConnectionString("LocalDbConnection")).Options))
 
             .As<IRepository>().AsSelf()
@@ -222,10 +230,10 @@ namespace crmvcsb
         /* Db context configuration for test with SqlLite database */
         public ContainerBuilder ConfigureSqlLiteDbContexts(IServiceCollection services, ContainerBuilder autofacContainer)
         {
-            autofacContainer.RegisterType<TestContext>()
+            autofacContainer.RegisterType<BloggingContext>()
                .As<DbContext>()
                .WithParameter("options",
-                   new DbContextOptionsBuilder<TestContext>()
+                   new DbContextOptionsBuilder<BloggingContext>()
                    .UseSqlite("Data Source=app.db").Options)
                .WithMetadata("Name", "TestContext")
                .InstancePerLifetimeScope();
@@ -261,10 +269,10 @@ namespace crmvcsb
         /* Db context configuration for test with InMemmory database */
         public ContainerBuilder ConfigureInMemmoryDbContexts(IServiceCollection services, ContainerBuilder autofacContainer)
         {
-            autofacContainer.RegisterType<TestContext>()
+            autofacContainer.RegisterType<BloggingContext>()
                .As<DbContext>()
                .WithParameter("options",
-                   new DbContextOptionsBuilder<TestContext>()
+                   new DbContextOptionsBuilder<BloggingContext>()
                    .UseInMemoryDatabase("TestContext").Options)
                .WithMetadata("Name", "TestContext")
                .InstancePerLifetimeScope();
@@ -301,7 +309,7 @@ namespace crmvcsb
         {
             //*DAL->BLL reg */
             autofacContainer.RegisterType<BlogEF>()
-                .As<IBlogEF>().InstancePerLifetimeScope();
+                .As<IBlogDAL>().InstancePerLifetimeScope();
             autofacContainer.RegisterType<BlogBLL>()
                 .As<IBlogBLL>().InstancePerLifetimeScope();
             autofacContainer.RegisterType<PostBLL>()

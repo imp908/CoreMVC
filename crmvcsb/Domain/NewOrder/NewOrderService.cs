@@ -9,27 +9,24 @@ namespace crmvcsb.Domain.NewOrder
     using System.Threading.Tasks;
     using System.Collections.Generic;
 
-    using crmvcsb.Domain.Currencies.DAL;
-    using crmvcsb.Domain.Currencies.API;
-    using crmvcsb.Domain.Currencies;
+    using crmvcsb.Domain.Currency.DAL;
+    using crmvcsb.Domain.Currency.API;
+    using crmvcsb.Domain.Currency;
     using crmvcsb.Infrastructure.IRepositoryEF;
     using crmvcsb.Domain.NewOrder.DAL;
 
-    public class NewOrderService : INewOrderService
+    public class NewOrderService : ServiceEF, INewOrderService
     {
         IRepositoryEF _repository;
         IMapper _mapper;
 
-        public NewOrderService(IRepositoryEF repository, IMapper mapper)
+        public NewOrderService(IRepositoryEF repository, IMapper mapper) 
+            : base(repository, mapper)
         {
             _repository = repository;
             _mapper = mapper;
         }
-
-        public string GetDbName()
-        {
-            return this._repository.GetConnectionString();
-        }
+     
 
         public async Task<IList<ICrossCurrenciesAPI>> GetCurrencyCrossRates(IGetCurrencyCommand command) 
         {
@@ -97,7 +94,7 @@ namespace crmvcsb.Domain.NewOrder
 
             return result.Cast<ICrossCurrenciesAPI>().ToList();
         }
-
+      
 
         public void ReInitialize()
         {
