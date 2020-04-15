@@ -1,38 +1,23 @@
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-
-using System;
-
-using System.Linq;
-
-using AutoMapper;
-
-using crmvcsb.Domain.Blogging.API;
-using crmvcsb.Infrastructure.Blogging.EF;
 
 namespace crmvcsb.Infrastructure.EF
 {
+    using Microsoft.EntityFrameworkCore;
+    using System.Collections.Generic;
 
-    using crmvcsb.Domain.Interfaces;
-    using crmvcsb.Domain.IRepository;
+    using System;
 
-    public class CQRSEFBlogging 
-    {
-        internal IRepository _repository;
-        internal IMapper _mapper;
-        
-        public CQRSEFBlogging(IRepository repository,IMapper mapper)
-        {
-            this._repository = repository;
-            this._mapper = mapper;
-        }
+    using System.Linq;
 
-    }
+    using AutoMapper;
 
-    public class CQRSBloggingWrite : CQRSEFBlogging, ICQRSBloggingWrite
+    using crmvcsb.Domain.Blogging.API;
+    using crmvcsb.Infrastructure.EF.Blogging;
+    using crmvcsb.Infrastructure.EF;
+
+    public class BloggingCQRSWrite : BloggingRepository, ICQRSBloggingWrite
     {
 
-        public CQRSBloggingWrite(IRepository repository, IMapper mapper) 
+        public BloggingCQRSWrite(IRepositoryEF repository, IMapper mapper) 
             : base(repository,mapper){}
 
         /*Adding object drom command, mapping and command->EF returning EF -> API*/
@@ -129,10 +114,10 @@ namespace crmvcsb.Infrastructure.EF
 
     }
 
-    public class CQRSBloggingRead : CQRSEFBlogging, ICQRSBloggingRead
+    public class BloggingCQRSRead : BloggingRepository, ICQRSBloggingRead
     {
 
-        public CQRSBloggingRead(IRepository repository, IMapper mapper)
+        public BloggingCQRSRead(IRepositoryEF repository, IMapper mapper)
             : base(repository, mapper) { }
 
 
@@ -207,6 +192,5 @@ namespace crmvcsb.Infrastructure.EF
         }
     
     }
-
    
 }

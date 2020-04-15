@@ -12,9 +12,7 @@ namespace crmvcsb.Domain.Currency
 
     using crmvcsb.Domain.Currency.DAL;
     using crmvcsb.Domain.Currency.API;
-    using crmvcsb.Infrastructure.IRepositoryEF;
-    using crmvcsb.Domain.Currency;
-    
+    using crmvcsb.Infrastructure.EF;
 
     public class CurrencyService : ServiceEF, ICurrencyService
     {

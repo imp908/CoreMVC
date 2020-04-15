@@ -27,29 +27,27 @@ namespace crmvcsb
     using crmvcsb.Infrastructure.SignalR;
 
     using crmvcsb.Infrastructure.EF;
-    using crmvcsb.Domain.TestModels;
     using crmvcsb.Domain.IRepository;
 
     using crmvcsb.Infrastructure.EF.NewOrder;
-    using crmvcsb.Infrastructure.EF.costControl;
-    
 
+    using crmvcsb.Domain;
     using crmvcsb.Domain.NewOrder;
-    using crmvcsb.Domain.Blogging;
     using crmvcsb.Domain.Blogging.API;
     using crmvcsb.Domain.Blogging.BLL;
     using crmvcsb.Domain.Blogging.DAL;
-    using crmvcsb.Infrastructure.Blogging.EF;
+    using crmvcsb.Infrastructure.EF.Blogging;
 
+    using crmvcsb.Infrastructure.EF.Currencies;
     using crmvcsb.Domain.Currency;
-
     using crmvcsb.Domain.Currency.API;
     using crmvcsb.Domain.Currency.DAL;
 
     /*Build in logging*/
     using Microsoft.Extensions.Logging;
+
     
-    
+
     enum ContextType
     {
         SQL, SQLLite, InMemmory
@@ -180,14 +178,7 @@ namespace crmvcsb
         /* Db context registration with sql server for connection strings from appsettings.json */
         public ContainerBuilder ConfigureAutofacDbContexts(IServiceCollection services, ContainerBuilder autofacContainer)
         {
-            /**EF, repo and UOW reg */
-            autofacContainer.RegisterType<CostControllContext>()
-              .As<DbContext>()
-              .WithParameter("options", new DbContextOptionsBuilder<CostControllContext>()
-                  .UseSqlServer(Configuration.GetConnectionString("CostControlDb")).Options)
-              .InstancePerLifetimeScope();
-
-
+  
             /*
             * Registering multiple IRepository clones with different connections trings
             * For multiple SQL DBs in one project
@@ -201,28 +192,52 @@ namespace crmvcsb
                 new ContextNewOrder(new DbContextOptionsBuilder<ContextNewOrder>()
                 .UseSqlServer(Configuration.GetConnectionString("LocalNewOrderConnection")).Options)
 
-            ).As<IRepository>().AsSelf()
+            ).As<IRepositoryEF>().AsSelf()
             .InstancePerLifetimeScope();
-            
+
+
             //--------
-            autofacContainer.RegisterType<RepositoryTest>()
+            autofacContainer.RegisterType<RepositoryEF>()
+            .WithParameter("context",
+
+                new CurrencyContext(new DbContextOptionsBuilder<CurrencyContext>()
+                .UseSqlServer(Configuration.GetConnectionString("LocalCurrenciesConnection")).Options))
+
+            .As<IRepositoryEF>().AsSelf()
+            .InstancePerLifetimeScope();
+
+
+            //--------
+            autofacContainer.RegisterType<RepositoryEF>()
             .WithParameter("context",
 
                 new BloggingContext(new DbContextOptionsBuilder<BloggingContext>()
-                .UseSqlServer(Configuration.GetConnectionString("LocalDbConnection")).Options))
+                .UseSqlServer(Configuration.GetConnectionString("LocalBloggingConnection")).Options))
 
-            .As<IRepository>().AsSelf()
+            .As<IRepositoryEF>().AsSelf()
             .InstancePerLifetimeScope();
 
 
             /*Register repository dummy clones for DB scope to services*/
+            autofacContainer.Register(ctx => new ServiceEF(ctx.Resolve<RepositoryEF>(), ctx.Resolve<IMapper>()))
+            .As<IServiceEF>()
+            .InstancePerLifetimeScope();
+
             autofacContainer.Register(ctx => new NewOrderService(ctx.Resolve<RepositoryNewOrder>(), ctx.Resolve<IMapper>()))
             .As<INewOrderService>()
             .InstancePerLifetimeScope();
 
-            autofacContainer.Register(ctx => new TestManager(ctx.Resolve<RepositoryTest>(), ctx.Resolve<IMapper>()))
-            .As<ITestManager>()
+            autofacContainer.Register(ctx => new CurrencyService(ctx.Resolve<RepositoryEF>(), ctx.Resolve<IMapper>()))
+            .As<ICurrencyService>()
             .InstancePerLifetimeScope();
+
+            //PropertyAccessMode registration of Iservice to Manger to static
+            autofacContainer.Register(c=> {
+                var result = new NewOrderManager();
+                var dep = c.Resolve<INewOrderService>();
+                result.BindService(dep);
+                return result;
+            }) ;
 
             return autofacContainer;
         }
@@ -239,13 +254,7 @@ namespace crmvcsb
                .InstancePerLifetimeScope();
 
             /**EF, repo and UOW reg */
-            autofacContainer.RegisterType<CostControllContext>()
-               .As<DbContext>()
-               .WithParameter("options", new DbContextOptionsBuilder<CostControllContext>()
-                   .UseSqlite("Data Source=app.db").Options)
-               .WithMetadata("Name", "CostControllContext")
-               .InstancePerLifetimeScope();
-
+   
             autofacContainer.RegisterType<ContextNewOrder>()
                 .As<DbContext>()
                 .WithParameter("options", new DbContextOptionsBuilder<ContextNewOrder>()
@@ -275,14 +284,7 @@ namespace crmvcsb
                    new DbContextOptionsBuilder<BloggingContext>()
                    .UseInMemoryDatabase("TestContext").Options)
                .WithMetadata("Name", "TestContext")
-               .InstancePerLifetimeScope();
-
-            autofacContainer.RegisterType<CostControllContext>()
-               .As<DbContext>()
-               .WithParameter("options", new DbContextOptionsBuilder<CostControllContext>()
-                   .UseInMemoryDatabase("CostControllContext").Options)
-               .WithMetadata("Name", "CostControllContext")
-               .InstancePerLifetimeScope();
+               .InstancePerLifetimeScope();          
 
             autofacContainer.RegisterType<ContextNewOrder>()
                 .As<DbContext>()

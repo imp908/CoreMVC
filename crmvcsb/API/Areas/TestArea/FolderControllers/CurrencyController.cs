@@ -13,11 +13,25 @@ namespace crmvcsb.API.Areas.TestArea.FolderControllers
     public class CurrencyController : Controller
     {
 
-        private ICurrencyService _manager;
+        private ICurrencyService _service;
 
         public CurrencyController(ICurrencyService manager) 
         {
-            _manager = manager;
+            _service = manager;
+        }
+
+        [HttpGet("GetDbName")]
+        public async Task<IActionResult> Get()
+        {
+            try
+            {
+                var result = this._service.GetDbName();
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
         }
 
         [HttpGet("GetDefault/{IsoCode}")]
@@ -26,7 +40,7 @@ namespace crmvcsb.API.Areas.TestArea.FolderControllers
             try
             {
                 IGetCurrencyCommand cmd = new GetCurrencyCommand(){FromCurrency=IsoCode};
-                var result = await _manager.GetCurrencyCrossRates(cmd);
+                var result = await _service.GetCurrencyCrossRates(cmd);
                 return Ok(result);
             }
             catch (Exception e)
@@ -64,7 +78,7 @@ namespace crmvcsb.API.Areas.TestArea.FolderControllers
         {
             try
             {
-                var result = await _manager.GetCurrencyCrossRates(command);
+                var result = await _service.GetCurrencyCrossRates(command);
                 return Ok(result);
             }
             catch (Exception e)

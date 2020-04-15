@@ -1,17 +1,8 @@
 
 
-namespace crmvcsb.Infrastructure.Blogging.EF
+namespace crmvcsb.Infrastructure.EF.Blogging
 {
     using Microsoft.EntityFrameworkCore;
-    using System.Collections.Generic;
-
-    using crmvcsb.Domain.TestModels;
-
-    using crmvcsb.Domain.Interfaces;
-
-    using System.Threading.Tasks;
-
-    using crmvcsb.Infrastructure.Blogging.EF;
 
     public class BloggingContext : DbContext
     {

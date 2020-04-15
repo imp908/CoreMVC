@@ -1,6 +1,6 @@
 ﻿
 
-namespace crmvcsb.Infrastructure.Blogging.EF
+namespace crmvcsb.Infrastructure.EF.Blogging
 {
 
     using System;

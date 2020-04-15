@@ -20,21 +20,21 @@ namespace crmvcsb.Domain.NewOrder
 
         private static ILogger _logger;
 
-        private static INewOrderService NewOrderService  { get;set;}
+        private static INewOrderService _newOrderService  { get;set;}
 
-        static NewOrderManager()
+        public void BindService(INewOrderService newOrderService)
         {
-
+            _newOrderService = newOrderService;
         }
 
         public static void ReInitialize()
         {
-            NewOrderService.ReInitialize();
+            _newOrderService.ReInitialize();
         }
 
         public static void CleanUp()
         {
-            NewOrderService.CleanUp();
+            _newOrderService.CleanUp();
         }
     }
 }

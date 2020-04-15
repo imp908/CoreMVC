@@ -5,30 +5,23 @@ namespace crmvcsb.Default.Controllers
 
     using Microsoft.AspNetCore.Mvc;
 
-    using crmvcsb.Domain.Interfaces;
-
     using crmvcsb.Domain.IRepository;
     using crmvcsb.Domain.Blogging.API;
-    using crmvcsb.Infrastructure.Blogging.EF;
+    using crmvcsb.Infrastructure.EF.Blogging;
 
     [Route("api/[controller]")]
     [ApiController]
     public class BlogController : Controller
     {
-        IRepository _repo;
         ICQRSBloggingWrite _cqrs;
         
         ICQRSBloggingRead _cqrsRead;
 
-        public BlogController(ICQRSBloggingWrite cqrs,ICQRSBloggingRead cqrsRead, IRepository repo)
+        public BlogController(ICQRSBloggingWrite cqrs,ICQRSBloggingRead cqrsRead)
         {
             _cqrs = cqrs;
             _cqrsRead = cqrsRead;
-            _repo = repo;
         }
-
-
-
 
 
         [HttpPost("GetPostsByPerson")]

@@ -1,9 +1,10 @@
 ﻿
 
-namespace crmvcsb.Domain
+namespace crmvcsb.Infrastructure.EF
 {
     using AutoMapper;
-    using crmvcsb.Infrastructure.IRepositoryEF;
+    using crmvcsb.Domain;
+
     public class ServiceEF : IServiceEF
     {
 

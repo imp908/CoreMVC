@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 /// EF specific repository
 /// stays in infrastructure, uses domain Irepository interface
 /// </summary>
-namespace crmvcsb.Infrastructure.IRepositoryEF
+namespace crmvcsb.Infrastructure.EF
 {
     using crmvcsb.Domain.IRepository;
     using Microsoft.EntityFrameworkCore.Infrastructure;

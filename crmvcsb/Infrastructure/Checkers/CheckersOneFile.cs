@@ -10,7 +10,7 @@ namespace InfrastructureCheckers
 
     using AutoMapper;
 
-    using crmvcsb.Infrastructure.Blogging.EF;
+    using crmvcsb.Infrastructure.EF.Blogging;
 
     public static class RepoAndUOWCheck
     {

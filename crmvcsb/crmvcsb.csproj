@@ -28,4 +28,8 @@
     <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Infrastructure\EF\test\" />
+  </ItemGroup>
+
 </Project>

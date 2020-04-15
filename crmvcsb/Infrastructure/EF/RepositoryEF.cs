@@ -13,7 +13,6 @@ namespace crmvcsb.Infrastructure.EF
 
     using System.Linq;
 
-    using crmvcsb.Domain.Interfaces;
     using System.Reflection;
 
     using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -23,7 +22,7 @@ namespace crmvcsb.Infrastructure.EF
     /// <summary>
     /// Basic repository implementation
     /// </summary>
-    public class RepositoryEF : IRepository
+    public class RepositoryEF : IRepository, IRepositoryEF
     {
         DbContext _context;
 

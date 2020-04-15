@@ -2,7 +2,7 @@ namespace crmvcsb.Infrastructure.EF.NewOrder
 {
     using Microsoft.EntityFrameworkCore;
     using crmvcsb.Domain.NewOrder.DAL;
-    using crmvcsb.Domain.Currency.DAL;
+    
 
     public class ContextNewOrder : DbContext
     {
@@ -31,21 +31,10 @@ namespace crmvcsb.Infrastructure.EF.NewOrder
             //.HasDefaultValueSql("IDENTITY(1,1)")
             ;
 
-            builder.Entity<CurrencyRatesDAL>().HasOne(p => p.CurrencyFrom).WithMany(p => p.CurRatesFrom).HasForeignKey(p => p.CurrencyFromId).OnDelete(DeleteBehavior.Restrict);
-            builder.Entity<CurrencyRatesDAL>().HasOne(p => p.CurrencyTo).WithMany(p => p.CurRatesTo).HasForeignKey(p => p.CurrencyToId).OnDelete(DeleteBehavior.Restrict);
-            //builder.Entity<Currency>().HasMany(p => p.CurRatesFrom).WithOne(p => p.CurrencyFrom).HasForeignKey(k => k.CurrencyFromId).OnDelete(DeleteBehavior.Cascade);
-            //builder.Entity<Currency>().HasMany(p => p.CurRatesTo).WithOne(p => p.CurrencyTo).HasForeignKey(k => k.CurrencyToId).OnDelete(DeleteBehavior.Cascade);
-            builder.Entity<CurrencyDAL>().HasKey(k => k.Id);
-            builder.Entity<CurrencyDAL>().Property(p => p.Id).ValueGeneratedOnAdd();
-            builder.Entity<CurrencyRatesDAL>().HasKey(k => k.Id);
-            builder.Entity<CurrencyRatesDAL>().Property(k => k.Id).ValueGeneratedOnAdd();
+          
 
         }
-
-
-        public DbSet<CurrencyDAL> Currency { get; set; }
-        public DbSet<CurrencyRatesDAL> CurrencyRates { get; set; }
-
+     
 
         public DbSet<AddressDAL> Adresses { get; set; }
         public DbSet<RouteVertexDAL> RouteVertexes { get; set; }
