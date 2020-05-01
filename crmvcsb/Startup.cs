@@ -197,7 +197,7 @@ namespace crmvcsb
 
 
             //--------
-            autofacContainer.RegisterType<RepositoryEF>()
+            autofacContainer.RegisterType<RepositoryCurrency>()
             .WithParameter("context",
 
                 new CurrencyContext(new DbContextOptionsBuilder<CurrencyContext>()
@@ -208,7 +208,7 @@ namespace crmvcsb
 
 
             //--------
-            autofacContainer.RegisterType<RepositoryEF>()
+            autofacContainer.RegisterType<BloggingRepository>()
             .WithParameter("context",
 
                 new BloggingContext(new DbContextOptionsBuilder<BloggingContext>()
@@ -227,17 +227,19 @@ namespace crmvcsb
             .As<INewOrderService>()
             .InstancePerLifetimeScope();
 
-            autofacContainer.Register(ctx => new CurrencyService(ctx.Resolve<RepositoryEF>(), ctx.Resolve<IMapper>()))
+            autofacContainer.Register(ctx => new CurrencyService(ctx.Resolve<RepositoryCurrency>(), ctx.Resolve<IMapper>()))
             .As<ICurrencyService>()
             .InstancePerLifetimeScope();
 
-            //PropertyAccessMode registration of Iservice to Manger to static
+            //PropertyAccessMode registration of Iservice to Manager to static
             autofacContainer.Register(c=> {
-                var result = new NewOrderManager();
+                var result = new DomainManager();
                 var dep = c.Resolve<INewOrderService>();
-                result.BindService(dep);
+                var dep2 = c.Resolve<ICurrencyService>();
+                result.BindService(dep,dep2);
                 return result;
-            }) ;
+            })
+            .As<DomainManager>();
 
             return autofacContainer;
         }

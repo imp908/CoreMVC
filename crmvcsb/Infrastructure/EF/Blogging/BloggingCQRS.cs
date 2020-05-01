@@ -17,8 +17,8 @@ namespace crmvcsb.Infrastructure.EF
     public class BloggingCQRSWrite : BloggingRepository, ICQRSBloggingWrite
     {
 
-        public BloggingCQRSWrite(IRepositoryEF repository, IMapper mapper) 
-            : base(repository,mapper){}
+        public BloggingCQRSWrite(DbContext context, IRepositoryEF repository, IMapper mapper) 
+            : base(context, repository, mapper){}
 
         /*Adding object drom command, mapping and command->EF returning EF -> API*/
         public PostAPI PersonAdsPostToBlog(PersonAdsPostCommand command)
@@ -117,8 +117,8 @@ namespace crmvcsb.Infrastructure.EF
     public class BloggingCQRSRead : BloggingRepository, ICQRSBloggingRead
     {
 
-        public BloggingCQRSRead(IRepositoryEF repository, IMapper mapper)
-            : base(repository, mapper) { }
+        public BloggingCQRSRead(DbContext context, IRepositoryEF repository, IMapper mapper)
+            : base(context, repository, mapper) { }
 
 
         public IList<PostAPI> Get(GetPostsByPerson command)

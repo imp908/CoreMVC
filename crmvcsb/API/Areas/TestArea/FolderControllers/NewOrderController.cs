@@ -10,20 +10,27 @@ namespace crmvcsb.API.Areas.TestArea.FolderControllers
     using crmvcsb.Domain.NewOrder;
 
     using Microsoft.AspNetCore.Mvc;
+    using Autofac;
+    using Domain;
 
+    //No api, no newarea Url paths
+    //http://localhost:5002/NewOrder
     public class NewOrderController : Controller
     {
         private INewOrderService _service;
+        private DomainManager _manager;
 
-        public NewOrderController(INewOrderService service)
+        public NewOrderController(INewOrderService service, IComponentContext context)
         {
-            this._service = service;
+            this._service = service;   
+            _manager = context.Resolve<DomainManager>();
         }
 
         // GET: /<controller>/
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            DomainManager.ReInitialize();
+            return Ok();
         }
 
         [HttpGet("GetDbName")]

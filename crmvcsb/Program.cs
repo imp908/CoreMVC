@@ -16,9 +16,8 @@ namespace crmvcsb
         {
             try
             {
-                var bld = CreateWebHostBuilder(args).Build();
-                crmvcsb.Domain.NewOrder.NewOrderManager.ReInitialize();
-                bld.Run();                
+                var bld = CreateWebHostBuilder(args).Build();                
+                bld.Run();
             }
             catch (Exception e)
             {

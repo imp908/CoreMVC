@@ -41,17 +41,17 @@ NewOrderController ->
 //GET signature
 [ HttpGet("GetDefault/{IsoCode}") ] public async Task<IActionResult> Get( [ FromRoute ]string IsoCode)
 //URL
-http://localhost:49585/api/NewOrder/GetDefault/usd
+http://localhost:5002/NewOrder/GetDefault/usd
 
 //GET named
 [ HttpGet("GetCurrency") ] public async Task<IActionResult> GetCurrencyParam(string IsoCode)
 //URL
-http://localhost:49585/api/NewOrder/GetCurrency?IsoCode=usd
+http://localhost:5002/NewOrder/GetCurrency?IsoCode=usd
 
 //GET named
 [ HttpGet("GetCurrencyParam") ] public async Task<IActionResult> GetNoParam( [ FromQuery ]string IsoCode)
 //URL
-http://localhost:49585/api/NewOrder/GetCurrencyParam?IsoCode=asd
+http://localhost:5002/NewOrder/GetCurrencyParam?IsoCode=asd
 
 //POST
 Posts add,delete, posts and blog by person, get post by blog 
@@ -62,15 +62,15 @@ http://localhost:5000/api/blog/AddPostJSON
   "Title": "PostTitle",
   "Content": "PostContent"
 } 
-http://localhost:5000/api/blog/GetPostsByPerson
+http://localhost:5002/api/blog/GetPostsByPerson
 { "PersonId": "81A130D2-502F-4CF1-A376-63EDEB000E9F" } 
-http://localhost:5000/api/blog/GetPostsByBlog
+http://localhost:5002/api/blog/GetPostsByBlog
 { "BlogId": "1" } 
-http://localhost:5000/api/blog/GetBlogsByPerson
+http://localhost:5002/api/blog/GetBlogsByPerson
 { "PersonId": "81A130D2-502F-4CF1-A376-63EDEB000E9F" }
 
 //PUT
-http://localhost:5000/api/blog/UpdatePost
+http://localhost:5002/api/blog/UpdatePost
 {
   "PersonId": "81A130D2-502F-4CF1-A376-63EDEB000E9F",
   "Post": {
@@ -81,30 +81,30 @@ http://localhost:5000/api/blog/UpdatePost
 }
 
 //POST
-http://localhost:5000/api/blog/DeletePost
+http://localhost:5002/api/blog/DeletePost
 {
   "PersonId": "81A130D2-502F-4CF1-A376-63EDEB000E9F",
   "PostId": "1"
 } JScheckController ->
 //check Events in AppOne
 //uses function Bus,listener and amiter
-http://localhost:5000/TestArea/JScheck/CheckAppOne
+http://localhost:5002/TestArea/JScheck/CheckAppOne
 
 //check Events in AppTwo
 //uses class realization Bus,listener and amiter
-http://localhost:5000/TestArea/JScheck/CheckAppTwo
+http://localhost:5002/TestArea/JScheck/CheckAppTwo
 
 ReactController
 //react check
-http://localhost:5000/TestArea/React/CheckShoppingList
+http://localhost:5002/TestArea/React/CheckShoppingList
 
 SignalRcontroller (copypast to several browser windows to test) 
-http://localhost:5000/TestArea/SignalR/hub
+http://localhost:5002/TestArea/SignalR/hub
 
 
 API: [
-  http://localhost:5000/api/blog/AddPost -> returns Ok(result)
-  http://localhost:5000/api/blog/AddPostJSON -> retorns Json(result)
+  http://localhost:5002/api/blog/AddPost -> returns Ok(result)
+  http://localhost:5002/api/blog/AddPostJSON -> retorns Json(result)
 
   Body:
   {
@@ -125,19 +125,19 @@ API: [
 
   get posts by person personId ->
   List<Posts>
-  http://localhost:5000/api/blog/GetPostsByPerson
+  http://localhost:5002/api/blog/GetPostsByPerson
   { "PersonId": "81A130D2-502F-4CF1-A376-63EDEB000E9F" }
 
   get posts by blog personId -> List<blogs>
-  http://localhost:5000/api/blog/GetPostsByBlog
+  http://localhost:5002/api/blog/GetPostsByBlog
   { "BlogId": "1" }
 
   get blogs by person blogId -> List<Posts>
-  http://localhost:5000/api/blog/GetBlogsByPerson
+  http://localhost:5002/api/blog/GetBlogsByPerson
   { "PersonId": "81A130D2-502F-4CF1-A376-63EDEB000E9F" }
 
   person removes post 
-  http://localhost:5000/api/blog/UpdatePost
+  http://localhost:5002/api/blog/UpdatePost
   {
     "PersonId": "81A130D2-502F-4CF1-A376-63EDEB000E9F",
     "Post": {
@@ -148,7 +148,7 @@ API: [
   }
 
   person updates post
-  http://localhost:5000/api/blog/DeletePost
+  http://localhost:5002/api/blog/DeletePost
   {
     "PersonId": "81A130D2-502F-4CF1-A376-63EDEB000E9F",
     "PostId": "1"
@@ -257,15 +257,19 @@ DONE: [
 		<- 19.11.2019 3h 30m -> Autofac multiple Irepositories registration
 
 		<- 29.03.2020 3h -> Ilogger, Iserializer, variables classes with variable.json
-		
-		
+				
 	]
+	
 	TMPL
 	[
 		<- 10.04.2020  4h -> TMPL branch create and cleanup, warmup
 		<- 11.04.2020  3h45m -> TMPL namespaces refactor
 		<- 12.04.2020  50m -> TMPL Blogging namespaces refactor
+		<- 01.05.2020 2h30m -> 
+			registering multiple domainContexts for domainRepositories;
+			several domainServices to one domainManager;
+			and reinnitializing domain DBs (newOrer and Currencies) from controller Index;
 	]
-	~21h 50m in 12days
+	~24h 20m in 13days
 
 ]

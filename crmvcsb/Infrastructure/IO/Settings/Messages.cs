@@ -11,7 +11,7 @@ namespace crmvcsb.Infrastructure.IO.Settings
     using crmvcsb.Infrastructure.IO.Serialization;
 
     /// <summary>
-    /// Contains class hierarhy for varialbes JSOn serialization, deserialization
+    /// Contains class hierarhy for varialbes JSON serialization, deserialization
     /// and property chanining usage
     /// </summary>
     public class _variables
@@ -23,6 +23,7 @@ namespace crmvcsb.Infrastructure.IO.Settings
             public class _serviceMessages
             {
                 public string TestMessage;
+                public string ServiceIsNull;
             }
         }
     }
@@ -58,6 +59,7 @@ namespace crmvcsb.Infrastructure.IO.Settings
         void init()
         {
             Variables.Messages.SrviceMessages.TestMessage = @"inited test message";
+            Variables.Messages.SrviceMessages.ServiceIsNull = @"service is null";
         }
     }
 
