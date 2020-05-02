@@ -36,8 +36,12 @@ namespace crmvcsb
     using crmvcsb.Domain.DomainSpecific.Blogging.DAL;
     using crmvcsb.Infrastructure.EF.Blogging;
 
- 
-   
+    using crmvcsb.Domain.DomainSpecific.Currency.DAL;
+    using crmvcsb.Domain.DomainSpecific.Currency.API;
+    using crmvcsb.Infrastructure.EF.Currencies;
+    using crmvcsb.Infrastructure.EF.NewOrder;
+
+
     using crmvcsb.Domain.Universal;
     using order.Domain.Interfaces;
     using order.Infrastructure.EF;
