@@ -20,11 +20,11 @@ namespace order.Infrastructure.EF
 
     using order.Domain.Models;
     using order.Domain.Interfaces;
-    using crmvcsb.Domain.Interfaces;
+    using crmvcsb.Infrastructure.EF;
 
     public class OrdersManager
     {
-        internal IRepository _repository;
+        internal IRepositoryEF _repository;
         internal IMapper _mapper;
 
         public OrdersManager()
@@ -32,7 +32,7 @@ namespace order.Infrastructure.EF
 
         }
 
-        public OrdersManager(IRepository repository, IMapper mapper)
+        public OrdersManager(IRepositoryEF repository, IMapper mapper)
         {
             this._repository = repository;
             this._mapper = mapper;
@@ -43,7 +43,7 @@ namespace order.Infrastructure.EF
     public class OrdersManagerWrite : OrdersManager, IOrdersManagerWrite
     {
         public OrdersManagerWrite() : base() { }
-        public OrdersManagerWrite(IRepository repository, IMapper mapper)
+        public OrdersManagerWrite(IRepositoryEF repository, IMapper mapper)
             : base(repository, mapper)
         {
 
@@ -156,7 +156,7 @@ namespace order.Infrastructure.EF
 
     public class OrdersManagerRead : OrdersManager
     {
-        public OrdersManagerRead(IRepository repository, IMapper mapper)
+        public OrdersManagerRead(IRepositoryEF repository, IMapper mapper)
             : base(repository, mapper)
         {
 

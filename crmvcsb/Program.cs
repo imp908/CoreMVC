@@ -8,24 +8,33 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-
-
 namespace crmvcsb
 {
     public class Program
     {
         public static void Main(string[] args)
-        {      
-            //NewOrderInitializer.Initialize();
-            //NewOrderInitializer.CleanUp();
-            CreateWebHostBuilder(args).Build().Run();
+        {
+            try
+            {
+                var bld = CreateWebHostBuilder(args).Build();                
+                bld.Run();
+            }
+            catch (Exception e)
+            {
+                
+            }
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+            .ConfigureLogging(logging => {
+                logging.ClearProviders();
+                logging.AddConsole();
+                logging.AddDebug();
+            })
             //http host for Fidler http test
             .UseUrls("http://localhost:5002")
-                .UseStartup<Startup>();
+            .UseStartup<Startup>();
 
     }
 }

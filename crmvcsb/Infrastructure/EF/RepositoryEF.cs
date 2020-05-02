@@ -1,3 +1,4 @@
+
 namespace crmvcsb.Infrastructure.EF
 {
     using System.Threading.Tasks;
@@ -12,10 +13,16 @@ namespace crmvcsb.Infrastructure.EF
 
     using System.Linq;
 
-    using crmvcsb.Domain.Interfaces;
+    using System.Reflection;
 
+    using Microsoft.EntityFrameworkCore.Infrastructure;
 
-    public class RepositoryEF : IRepository
+    using crmvcsb.Domain.Universal.IRepository;
+
+    /// <summary>
+    /// Basic repository implementation
+    /// </summary>
+    public class RepositoryEF : IRepository, IRepositoryEF
     {
         DbContext _context;
 
@@ -110,8 +117,16 @@ namespace crmvcsb.Infrastructure.EF
         public void SaveIdentity<T>()
             where T : class
         {
-            string name = typeof(T).Name;
-            this.SaveIdentity(name);
+            var set = this._context.Set<T>();
+            var prop = this._context.GetType().GetProperties();
+            var t_ = typeof(T);
+   
+            PropertyInfo p = prop.Where(s => s.PropertyType.GenericTypeArguments[0].Equals(typeof(T))).FirstOrDefault();
+
+            if (p != null)
+            {
+                this.SaveIdentity(p.Name);
+            }
         }
 
         /*Provides identity column manual insert while testing */
@@ -125,6 +140,20 @@ namespace crmvcsb.Infrastructure.EF
             this._context.Database.ExecuteSqlCommand(cmd);
             this._context.Database.CloseConnection();
         }
+
+
+
+        public string GetConnectionString() 
+        { 
+            return this._context.Database.GetDbConnection().ConnectionString;
+        }
+        
+
+        public DatabaseFacade GetDatabase()
+        {
+            return this._context.Database;
+        }
+
     }
 
 }

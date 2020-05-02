@@ -1,42 +1,74 @@
+﻿
 
-using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-
-using Newtonsoft.Json;
-
-using crmvcsb.Infrastructure.EF;
-using crmvcsb.Infrastructure.EF.newOrder;
-using crmvcsb.Domain.Interfaces;
-using AutoMapper;
-using crmvcsb.Domain.NewOrder.API;
-
-using crmvcsb.Domain.NewOrder;
-
+// For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace crmvcsb.API.Areas.TestArea.FolderControllers
 {
-    [Area("NewOrder")]
-    [Route("Currency")]
-    public class NewOrderController : ControllerBase
+
+    using System;
+    using System.Threading.Tasks;
+    using crmvcsb.Domain.DomainSpecific.NewOrder;
+    using crmvcsb.Domain.DomainSpecific.Currency.API;
+
+    using Microsoft.AspNetCore.Mvc;
+    using Autofac;
+
+    //No api, no newarea Url paths
+    //http://localhost:5002/NewOrder
+    [Route("api/[controller]")]
+    [ApiController]
+    public class NewOrderController : Controller
     {
+        private INewOrderService _service;
+        private NewOrderManager _manager;
 
-        private INewOrdermanager _manager;
-
-        public NewOrderController(INewOrdermanager manager) {
-            _manager = manager;
+        public NewOrderController(INewOrderService service, IComponentContext context)
+        {
+            this._service = service;   
+            _manager = context.Resolve<NewOrderManager>();
         }
 
-        [HttpGet("Get")]
-        public async Task<IActionResult> GetCurrency(GetCurrencyCommand command){
-            try{
-                var result =  await _manager.GetCurrencyCrossRates(command);
+        // GET: /<controller>/
+        public async Task<IActionResult> Index()
+        {
+            return Ok();
+        }
+
+        // GET: /<controller>/
+        [HttpGet("ReInitialize")]
+        public IActionResult ReInitialize()
+        {
+            _manager.ReInitialize();
+            return Ok();
+        }
+
+
+        [HttpGet("GetDbName")]
+        public async Task<IActionResult> Get()
+        {
+            try
+            {
+                var result = this._service.GetDbName();                
                 return Ok(result);
-            }catch(Exception e){
+            }
+            catch (Exception e)
+            {
                 return BadRequest();
             }
         }
-        
+
+        [HttpPost("GetCrossRates")]
+        public async Task<IActionResult> GetCrossRates([FromBody] GetCurrencyCommand command)
+        {
+            try
+            {
+                var result = await this._manager.GetCurrencyCrossRatesAsync(command);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
+        }
     }
 }

@@ -4,13 +4,12 @@ namespace InfrastructureCheckers
     using System.Linq;
     
     using Microsoft.EntityFrameworkCore;
-    using crmvcsb.Infrastructure.EF;
 
     using System.Collections.Generic;
 
-    using crmvcsb.Domain.TestModels;
 
     using AutoMapper;
+
 
     public static class RepoAndUOWCheck
     {
@@ -19,59 +18,10 @@ namespace InfrastructureCheckers
         static string connectionStringSQL = "Server=AAAPC;Database=testdb;User Id=tl;Password=QwErT123;";
 
         public static void GO(){
-            DbWithRepoReinitCheck();
+           
         }
         
-        public static void DbWithRepoReinitCheck(){
-                      
-            using(TestContext context = new TestContext(
-                new DbContextOptionsBuilder<TestContext>()
-                    .UseSqlServer(connectionStringSQL).Options))
-            {
-                crmvcsb.Infrastructure.EF.RepositoryEF repo = new crmvcsb.Infrastructure.EF.RepositoryEF(context);
-
-                List<BlogEF> blogs = repo.QueryByFilter<BlogEF>(s => s.BlogId != null).ToList();
-                repo.DeleteRange(blogs);
-                repo.Save();
-
-                List<PersonEF> persons = repo.QueryByFilter<PersonEF>(s => s.Id != null).ToList();
-                repo.DeleteRange(persons);
-                repo.Save();
-
-                List<PostEF> posts = repo.QueryByFilter<PostEF>(s => s.PostId != null).ToList();
-                repo.DeleteRange(posts);
-                repo.Save();
-
-                BlogEF b = new BlogEF() { BlogId =1, Url = "url", Rating = 2 , Created = DateTime.Now };
-                PersonEF p = new PersonEF() { Id = Guid.Parse("81a130d2-502f-4cf1-a376-63edeb000e9f"), Name="Name", Surname ="sername" };
-              
-                repo.Add(b);
-                repo.Add(p);
-                try{                   
-                    repo.SaveIdentity("Blogs");
-                }catch(Exception e)
-                {
-
-                }
-
-                List<PostEF> post = new List<PostEF>()
-                {
-                    new PostEF(){PostId = 1, Title = "PostTestTitle", Content = "TestContent0",BlogId = b.BlogId, AuthorId = p.Id }
-                    ,new PostEF(){PostId = 2, Title = "PostTestTitle", Content = "TestContent1",BlogId = b.BlogId, AuthorId = p.Id }
-                };
-                repo.AddRange(post);
-                try
-                {
-                    repo.SaveIdentity("Posts");
-                }
-                catch (Exception e)
-                {
-
-                }
-
-
-            }
-        }
+       
       
     }
 }
@@ -1691,7 +1641,6 @@ System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMet
                 socket.Close();
 
             }
-            listener.Close();
         }
         
     }
@@ -1871,8 +1820,9 @@ namespace LINQtoObjectsCheck
         private Address addresPriv;
         public readonly Address addrRdn;
 
-        public void BindPrivAddr(string name){
-            this.addresPriv.name=name;
+        public void BindPrivAddr(string name)
+        {
+            this.addresPriv.name = name;
         }
     }
 
@@ -3994,9 +3944,7 @@ namespace Rewrite
     using System.Net;
     using System.Net.Sockets;
 
-    using System.Web.Http;
-
-
+    
     //custom linq
     using System.Linq.Expressions;
 
@@ -4844,7 +4792,6 @@ namespace Rewrite
     {
       ParameterExpression leftParamExpr;
       Type leftType_=null;
-      string memberName;
 
       ConstantExpression constExpr;    
 
@@ -4931,8 +4878,7 @@ namespace Rewrite
         double result = function(1, 2, 3, 4, 5); // 12
       }
       public void ExpressionBuild(){
-        double a = 2;
-        double b = 3;
+        
         BinaryExpression be = Expression.Power(Expression.Constant(2D), Expression.Constant(3D));
         Expression<Func<double>> fd = Expression.Lambda<Func<double>>(be);
         Func<double> ce = fd.Compile();

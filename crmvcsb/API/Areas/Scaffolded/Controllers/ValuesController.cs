@@ -41,5 +41,37 @@ namespace crmvcsb.Default.Controllers
         public void Delete(int id)
         {
         }
+
+
+
+        /// <summary>
+        /// Example of multiple Get with different params per controller
+        /// </summary>
+        /// <returns>OK</returns>
+        
+        //http://localhost:5002/api/Values/GetDbName
+        [HttpGet("GetDbName")]
+        public async Task<IActionResult> GetDbName()
+        {
+            return Ok();
+        }
+        //http://localhost:5002/api/Values/GetDefault/USD
+        [HttpGet("GetDefault/{IsoCode}")]
+        public async Task<IActionResult> Get([FromRoute]string IsoCode)
+        {
+            return Ok();
+        }
+        //http://localhost:5002/api/Values/GetCurrency?USD
+        [HttpGet("GetCurrency")]
+        public async Task<IActionResult> GetCurrencyParam(string IsoCode)
+        {
+            return Ok();
+        }
+        //http://localhost:5002/api/Values/GetCurrencyParam?USD
+        [HttpGet("GetCurrencyParam")]
+        public async Task<IActionResult> GetNoParam([FromQuery]string IsoCode)
+        {
+            return Ok();
+        }
     }
 }

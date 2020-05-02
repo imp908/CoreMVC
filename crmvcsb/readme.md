@@ -7,6 +7,7 @@ to test:
 - npx webpack to build JS
 - build net core
 - run
+(change ISS port in proj configs on IIS start profile)
 
 integration tests run:
 -------------------------------------------------------
@@ -16,6 +17,8 @@ integration tests run:
 test url after start:
 -------------------------------------------------------
 > http://localhost:5002/TestArea/SignalRwork/work
+> http://localhost:5002/TestArea/React/CheckShoppingList
+> http://localhost:5002/TestArea/Home
 
 
 Related files:
@@ -46,6 +49,7 @@ Related files:
 	dotnet add tests\integrationtests\integrationtests.csproj package AngleSharp --version 0.12.1
 	dotnet add tests\integrationtests\integrationtests.csproj package FluentAssertions --version 5.7.0
 	dotnet add tests\integrationtests\integrationtests.csproj package Microsoft.NET.Test.Sdk --version 16.2.0
+	dotnet add package Serilog.AspNetCore
 ```
 
 ## Pckages to build js:
@@ -133,9 +137,9 @@ AutoFact to Automapper registration added
 
 AutofacServiceProvider returned from ConfigureServices
 
+Autofac multiple Irepositories registration
+https://autofaccn.readthedocs.io/en/latest/faq/select-by-context.html
 
 -------------------------------------------------------
 Added http instead of https routing for Fiddler test to:
     .UseUrls("http://localhost:5002")
-
-
