@@ -233,13 +233,13 @@ namespace crmvcsb
 
             //PropertyAccessMode registration of Iservice to Manager to static
             autofacContainer.Register(c=> {
-                var result = new DomainManager();
+                var result = new NewOrderManager();
                 var dep = c.Resolve<INewOrderService>();
                 var dep2 = c.Resolve<ICurrencyService>();
                 result.BindService(dep,dep2);
                 return result;
             })
-            .As<DomainManager>();
+            .As<NewOrderManager>();
 
             return autofacContainer;
         }

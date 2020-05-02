@@ -26,7 +26,7 @@ namespace crmvcsb.Domain.DomainSpecific.Currency
             _mapper = mapper;
         }
 
-        public async Task<IList<ICrossCurrenciesAPI>> GetCurrencyCrossRates(IGetCurrencyCommand command)
+        public async Task<IList<ICrossCurrenciesAPI>> GetCurrencyCrossRatesAsync(IGetCurrencyCommand command)
         {
 
             IList<CrossCurrenciesAPI> result = new List<CrossCurrenciesAPI>();

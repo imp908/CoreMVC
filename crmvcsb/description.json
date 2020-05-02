@@ -38,20 +38,39 @@ http://localhost:5000/api/blog/{id}
 http://localhost:5000/api/blog/GetString/{id}
 
 NewOrderController ->
-//GET signature
-[ HttpGet("GetDefault/{IsoCode}") ] public async Task<IActionResult> Get( [ FromRoute ]string IsoCode)
-//URL
-http://localhost:5002/NewOrder/GetDefault/usd
+//NEW ORDER
 
-//GET named
-[ HttpGet("GetCurrency") ] public async Task<IActionResult> GetCurrencyParam(string IsoCode)
-//URL
-http://localhost:5002/NewOrder/GetCurrency?IsoCode=usd
+GET
+http://localhost:5002/api/NewOrder
+http://localhost:5002/api/NewOrder/ReInitialize
+http://localhost:5002/api/NewOrder/GetDbName
 
-//GET named
-[ HttpGet("GetCurrencyParam") ] public async Task<IActionResult> GetNoParam( [ FromQuery ]string IsoCode)
-//URL
-http://localhost:5002/NewOrder/GetCurrencyParam?IsoCode=asd
+POST
+http://localhost:5002/api/NewOrder/GetCrossRates
+
+
+Content-Type: application/json
+
+{
+  "FromCurrency": "USD",
+  "ToCurrency": "RUB",
+  "ThroughCurrency": "RUB",
+  "Date": "01.01.2019"
+}
+
+
+
+ValuesController->
+//VALUES
+//Example of multiple Get with different params per controller
+GET
+http://localhost:5002/api/Values/GetDbName
+http://localhost:5002/api/Values/GetDefault/USD
+http://localhost:5002/api/Values/GetCurrency?USD
+http://localhost:5002/api/Values/GetCurrencyParam?USD
+
+
+
 
 //POST
 Posts add,delete, posts and blog by person, get post by blog 
