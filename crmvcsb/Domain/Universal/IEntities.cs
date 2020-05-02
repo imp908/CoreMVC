@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
+﻿
 /// <summary>
 /// Interfaces for generic IRepository entities
 /// </summary>
-namespace crmvcsb.Domain.IEntities
+namespace crmvcsb.Domain.Universal.IEntities
 {
+    using System;
     public interface IEntityGuidIdDAL
     {
         Guid Id { get; set; }

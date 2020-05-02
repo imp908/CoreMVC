@@ -1,15 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-
+﻿
 
 /// <summary>
 /// Repository domain interface
 /// used by interface repositories for DB specific type operations
 /// </summary>
-namespace crmvcsb.Domain.IRepository
+namespace crmvcsb.Domain.Universal.IRepository
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Linq.Expressions;
+
     public interface IRepository
     {
         IQueryable<T> GetAll<T>(Expression<Func<T, bool>> expression = null)

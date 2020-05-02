@@ -11,7 +11,7 @@ namespace crmvcsb.Infrastructure.EF.Currencies
 
     using Microsoft.EntityFrameworkCore;
 
-    using crmvcsb.Domain.IRepository;
+    using crmvcsb.Domain.Universal.IRepository;
     using crmvcsb.Infrastructure.EF;
 
     public class RepositoryCurrency : RepositoryEF, IRepositoryEF, IRepository

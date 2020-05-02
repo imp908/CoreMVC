@@ -266,8 +266,8 @@ DONE: [
 		<- 11.04.2020  3h45m -> TMPL namespaces refactor
 		<- 12.04.2020  50m -> TMPL Blogging namespaces refactor
 		<- 01.05.2020 2h30m -> 
-			registering multiple domainContexts for domainRepositories;
-			several domainServices to one domainManager;
+			registering multiple domainContexts for domainRepositories; 
+			several domainServices to one domainManager; 
 			and reinnitializing domain DBs (newOrer and Currencies) from controller Index;
 	]
 	~24h 20m in 13days

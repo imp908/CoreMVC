@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-
+﻿
 /// <summary>
 /// reusable entities for repositories
 /// </summary>
-namespace crmvcsb.Domain.Entities
+namespace crmvcsb.Domain.Universal.Entities
 {
-    using crmvcsb.Domain.IEntities;
+    using crmvcsb.Domain.Universal.IEntities;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+
     public class EntityGuidIdDAL : IEntityGuidIdDAL
     {
         public Guid Id { get; set; }

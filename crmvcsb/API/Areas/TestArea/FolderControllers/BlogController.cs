@@ -5,7 +5,7 @@ namespace crmvcsb.Default.Controllers
 
     using Microsoft.AspNetCore.Mvc;
 
-    using crmvcsb.Domain.IRepository;
+    using crmvcsb.Domain.Universal.IRepository;
     using crmvcsb.Domain.Blogging.API;
     using crmvcsb.Infrastructure.EF.Blogging;
 

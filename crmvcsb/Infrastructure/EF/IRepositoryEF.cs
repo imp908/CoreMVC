@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 /// </summary>
 namespace crmvcsb.Infrastructure.EF
 {
-    using crmvcsb.Domain.IRepository;
+    using crmvcsb.Domain.Universal.IRepository;
     using Microsoft.EntityFrameworkCore.Infrastructure;
     public interface IRepositoryEF : IRepository
     {

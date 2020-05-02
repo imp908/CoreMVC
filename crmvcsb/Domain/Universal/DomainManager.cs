@@ -1,19 +1,21 @@
-namespace crmvcsb.Domain
+namespace crmvcsb.Domain.DomainSpecific
 {
 
     using Microsoft.Extensions.Configuration;
 
     using Microsoft.Extensions.Logging;
-    using crmvcsb.Domain.NewOrder;
-    using crmvcsb.Domain.Currency;
+    using crmvcsb.Domain.DomainSpecific.NewOrder;
+    using crmvcsb.Domain.DomainSpecific.Currency;
 
-    public class DomainManager
+    using crmvcsb.Domain.Universal;
+
+    public class DomainManager : IDomainManager
     {
         public static IConfigurationRoot configuration { get; set; }
 
         private static ILogger _logger;
 
-        private static INewOrderService _newOrderService  { get;set;}
+        private static INewOrderService _newOrderService { get; set; }
         private static ICurrencyService _currencyService { get; set; }
 
         public void BindService(INewOrderService newOrderService, ICurrencyService currencyService)
@@ -22,7 +24,7 @@ namespace crmvcsb.Domain
             _currencyService = currencyService;
         }
 
-        public static string GetDbName([System.Runtime.CompilerServices.CallerMemberName] string CallerMemberName = "")
+        public string GetDbName([System.Runtime.CompilerServices.CallerMemberName] string CallerMemberName = "")
         {
             if (_newOrderService == null)
             {
@@ -30,16 +32,16 @@ namespace crmvcsb.Domain
             }
             return _newOrderService.GetDbName();
         }
-        public static void ReInitialize([System.Runtime.CompilerServices.CallerMemberName] string CallerMemberName = "")
-        {            
-            if (_newOrderService == null) 
+        public void ReInitialize([System.Runtime.CompilerServices.CallerMemberName] string CallerMemberName = "")
+        {
+            if (_newOrderService == null)
             {
                 _logger.LogError(CallerMemberName + ": service is null");
             }
             _newOrderService.ReInitialize();
             _currencyService.ReInitialize();
         }
-        public static void CleanUp([System.Runtime.CompilerServices.CallerMemberName] string CallerMemberName = "")
+        public void CleanUp([System.Runtime.CompilerServices.CallerMemberName] string CallerMemberName = "")
         {
             if (_newOrderService == null)
             {

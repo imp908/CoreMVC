@@ -1,13 +1,11 @@
-﻿using System;
+﻿
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 
-namespace crmvcsb.Domain.NewOrder.DAL
+namespace crmvcsb.Domain.DomainSpecific.NewOrder.DAL
 {
-    using crmvcsb.Domain.IEntities;
-    using crmvcsb.Domain.Entities;
+    
+    using crmvcsb.Domain.Universal.Entities;
 
     public class PhysicalUnitConvertions : EntityIntIdDAL
     {

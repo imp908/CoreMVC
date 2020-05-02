@@ -27,26 +27,26 @@ namespace crmvcsb
     using crmvcsb.Infrastructure.SignalR;
 
     using crmvcsb.Infrastructure.EF;
-    using crmvcsb.Domain.IRepository;
+    using crmvcsb.Domain.Universal.IRepository;
 
     using crmvcsb.Infrastructure.EF.NewOrder;
 
-    using crmvcsb.Domain;
-    using crmvcsb.Domain.NewOrder;
+    using crmvcsb.Domain.DomainSpecific.NewOrder;
     using crmvcsb.Domain.Blogging.API;
     using crmvcsb.Domain.Blogging.BLL;
     using crmvcsb.Domain.Blogging.DAL;
     using crmvcsb.Infrastructure.EF.Blogging;
 
     using crmvcsb.Infrastructure.EF.Currencies;
-    using crmvcsb.Domain.Currency;
-    using crmvcsb.Domain.Currency.API;
-    using crmvcsb.Domain.Currency.DAL;
+    using crmvcsb.Domain.DomainSpecific.Currency;
+    using crmvcsb.Domain.DomainSpecific.Currency.API;
+    using crmvcsb.Domain.DomainSpecific.Currency.DAL;
+   
+    using crmvcsb.Domain.DomainSpecific;
+    using crmvcsb.Domain.Universal;
 
     /*Build in logging*/
     using Microsoft.Extensions.Logging;
-
-    
 
     enum ContextType
     {

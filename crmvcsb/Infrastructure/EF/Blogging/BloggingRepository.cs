@@ -5,7 +5,7 @@ namespace crmvcsb.Infrastructure.EF.Blogging
   
     using Microsoft.EntityFrameworkCore;
 
-    using crmvcsb.Domain.IRepository;
+    using crmvcsb.Domain.Universal.IRepository;
     using crmvcsb.Infrastructure.EF;
 
     public class BloggingRepository : RepositoryEF, IRepositoryEF, IRepository

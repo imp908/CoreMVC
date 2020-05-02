@@ -5,7 +5,7 @@ namespace crmvcsb.Infrastructure.EF.Currencies
 {
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
-    using crmvcsb.Domain.Currency.DAL;
+    using crmvcsb.Domain.DomainSpecific.Currency.DAL;
     public class CurrencyContext : DbContext
     {
         public CurrencyContext(DbContextOptions<CurrencyContext> options) : base(options)

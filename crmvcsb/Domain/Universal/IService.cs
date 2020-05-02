@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace crmvcsb.Domain
+﻿
+namespace crmvcsb.Domain.Universal
 {
     public interface IServiceEF
     {
         string GetDbName();
-
     
     }
 

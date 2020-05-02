@@ -1,5 +1,5 @@
 
-namespace crmvcsb.Domain.NewOrder
+namespace crmvcsb.Domain.DomainSpecific.NewOrder
 {
     using System;
     using System.Linq;
@@ -9,9 +9,9 @@ namespace crmvcsb.Domain.NewOrder
     using System.Threading.Tasks;
     using System.Collections.Generic;
 
-    using crmvcsb.Domain.Currency.DAL;
-    using crmvcsb.Domain.Currency.API;
-    using crmvcsb.Domain.NewOrder.DAL;
+    using crmvcsb.Domain.DomainSpecific.Currency.DAL;
+    using crmvcsb.Domain.DomainSpecific.Currency.API;
+    using crmvcsb.Domain.DomainSpecific.NewOrder.DAL;
     using crmvcsb.Infrastructure.EF;
 
     public class NewOrderService : ServiceEF, INewOrderService

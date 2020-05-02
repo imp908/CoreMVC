@@ -21,7 +21,7 @@ namespace crmvcsb.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("crmvcsb.Domain.NewOrder.DAL.AddressDAL", b =>
+            modelBuilder.Entity("crmvcsb.Domain.DomainSpecific.NewOrder.DAL.AddressDAL", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -44,7 +44,7 @@ namespace crmvcsb.Migrations
                     b.ToTable("Adresses");
                 });
 
-            modelBuilder.Entity("crmvcsb.Domain.NewOrder.DAL.ClientDAL", b =>
+            modelBuilder.Entity("crmvcsb.Domain.DomainSpecific.NewOrder.DAL.ClientDAL", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
@@ -56,7 +56,7 @@ namespace crmvcsb.Migrations
                     b.ToTable("Clients");
                 });
 
-            modelBuilder.Entity("crmvcsb.Domain.NewOrder.DAL.CurrencyDAL", b =>
+            modelBuilder.Entity("crmvcsb.Domain.DomainSpecific.NewOrder.DAL.CurrencyDAL", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -71,7 +71,7 @@ namespace crmvcsb.Migrations
                     b.ToTable("Currency");
                 });
 
-            modelBuilder.Entity("crmvcsb.Domain.NewOrder.DAL.CurrencyRatesDAL", b =>
+            modelBuilder.Entity("crmvcsb.Domain.DomainSpecific.NewOrder.DAL.CurrencyRatesDAL", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -94,7 +94,7 @@ namespace crmvcsb.Migrations
                     b.ToTable("CurrencyRates");
                 });
 
-            modelBuilder.Entity("crmvcsb.Domain.NewOrder.DAL.DeliveryItemDAL", b =>
+            modelBuilder.Entity("crmvcsb.Domain.DomainSpecific.NewOrder.DAL.DeliveryItemDAL", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
@@ -108,7 +108,7 @@ namespace crmvcsb.Migrations
                     b.ToTable("DeliveryItems");
                 });
 
-            modelBuilder.Entity("crmvcsb.Domain.NewOrder.DAL.GoodsDAL", b =>
+            modelBuilder.Entity("crmvcsb.Domain.DomainSpecific.NewOrder.DAL.GoodsDAL", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -121,7 +121,7 @@ namespace crmvcsb.Migrations
                     b.ToTable("Goods");
                 });
 
-            modelBuilder.Entity("crmvcsb.Domain.NewOrder.DAL.OrderDAL", b =>
+            modelBuilder.Entity("crmvcsb.Domain.DomainSpecific.NewOrder.DAL.OrderDAL", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
@@ -135,7 +135,7 @@ namespace crmvcsb.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("crmvcsb.Domain.NewOrder.DAL.PhysicalDimensionDAL", b =>
+            modelBuilder.Entity("crmvcsb.Domain.DomainSpecific.NewOrder.DAL.PhysicalDimensionDAL", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -154,7 +154,7 @@ namespace crmvcsb.Migrations
                     b.ToTable("PhysicalDimensions");
                 });
 
-            modelBuilder.Entity("crmvcsb.Domain.NewOrder.DAL.PhysicalUnitDAL", b =>
+            modelBuilder.Entity("crmvcsb.Domain.DomainSpecific.NewOrder.DAL.PhysicalUnitDAL", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -167,7 +167,7 @@ namespace crmvcsb.Migrations
                     b.ToTable("PhysicalUnits");
                 });
 
-            modelBuilder.Entity("crmvcsb.Domain.NewOrder.DAL.RouteDAL", b =>
+            modelBuilder.Entity("crmvcsb.Domain.DomainSpecific.NewOrder.DAL.RouteDAL", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -180,7 +180,7 @@ namespace crmvcsb.Migrations
                     b.ToTable("Routes");
                 });
 
-            modelBuilder.Entity("crmvcsb.Domain.NewOrder.DAL.RouteVertexDAL", b =>
+            modelBuilder.Entity("crmvcsb.Domain.DomainSpecific.NewOrder.DAL.RouteVertexDAL", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -209,44 +209,44 @@ namespace crmvcsb.Migrations
                     b.ToTable("RouteVertex");
                 });
 
-            modelBuilder.Entity("crmvcsb.Domain.NewOrder.DAL.CurrencyRatesDAL", b =>
+            modelBuilder.Entity("crmvcsb.Domain.DomainSpecific.NewOrder.DAL.CurrencyRatesDAL", b =>
                 {
-                    b.HasOne("crmvcsb.Domain.NewOrder.DAL.CurrencyDAL", "CurrencyFrom")
+                    b.HasOne("crmvcsb.Domain.DomainSpecific.NewOrder.DAL.CurrencyDAL", "CurrencyFrom")
                         .WithMany("CurRatesFrom")
                         .HasForeignKey("CurrencyFromId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("crmvcsb.Domain.NewOrder.DAL.CurrencyDAL", "CurrencyTo")
+                    b.HasOne("crmvcsb.Domain.DomainSpecific.NewOrder.DAL.CurrencyDAL", "CurrencyTo")
                         .WithMany("CurRatesTo")
                         .HasForeignKey("CurrencyToId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("crmvcsb.Domain.NewOrder.DAL.OrderDAL", b =>
+            modelBuilder.Entity("crmvcsb.Domain.DomainSpecific.NewOrder.DAL.OrderDAL", b =>
                 {
-                    b.HasOne("crmvcsb.Domain.NewOrder.DAL.ClientDAL", "Client")
+                    b.HasOne("crmvcsb.Domain.DomainSpecific.NewOrder.DAL.ClientDAL", "Client")
                         .WithMany()
                         .HasForeignKey("ClientId");
                 });
 
-            modelBuilder.Entity("crmvcsb.Domain.NewOrder.DAL.PhysicalDimensionDAL", b =>
+            modelBuilder.Entity("crmvcsb.Domain.DomainSpecific.NewOrder.DAL.PhysicalDimensionDAL", b =>
                 {
-                    b.HasOne("crmvcsb.Domain.NewOrder.DAL.PhysicalUnitDAL", "DimensionUnit")
+                    b.HasOne("crmvcsb.Domain.DomainSpecific.NewOrder.DAL.PhysicalUnitDAL", "DimensionUnit")
                         .WithMany()
                         .HasForeignKey("DimensionUnitId");
                 });
 
-            modelBuilder.Entity("crmvcsb.Domain.NewOrder.DAL.RouteVertexDAL", b =>
+            modelBuilder.Entity("crmvcsb.Domain.DomainSpecific.NewOrder.DAL.RouteVertexDAL", b =>
                 {
-                    b.HasOne("crmvcsb.Domain.NewOrder.DAL.AddressDAL", "From")
+                    b.HasOne("crmvcsb.Domain.DomainSpecific.NewOrder.DAL.AddressDAL", "From")
                         .WithMany()
                         .HasForeignKey("FromId");
 
-                    b.HasOne("crmvcsb.Domain.NewOrder.DAL.RouteDAL")
+                    b.HasOne("crmvcsb.Domain.DomainSpecific.NewOrder.DAL.RouteDAL")
                         .WithMany("RouteVertexes")
                         .HasForeignKey("RouteDALId");
 
-                    b.HasOne("crmvcsb.Domain.NewOrder.DAL.AddressDAL", "To")
+                    b.HasOne("crmvcsb.Domain.DomainSpecific.NewOrder.DAL.AddressDAL", "To")
                         .WithMany()
                         .HasForeignKey("ToId");
                 });

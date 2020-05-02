@@ -2,9 +2,9 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using crmvcsb.Domain.NewOrder;
-using crmvcsb.Domain.Currency;
-using crmvcsb.Domain.Currency.API;
+using crmvcsb.Domain.DomainSpecific.NewOrder;
+using crmvcsb.Domain.DomainSpecific.Currency;
+using crmvcsb.Domain.DomainSpecific.Currency.API;
 
 namespace crmvcsb.API.Areas.TestArea.FolderControllers
 {

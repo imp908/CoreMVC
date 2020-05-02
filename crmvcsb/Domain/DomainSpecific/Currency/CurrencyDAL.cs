@@ -1,12 +1,11 @@
 ﻿
-namespace crmvcsb.Domain.Currency.DAL
+namespace crmvcsb.Domain.DomainSpecific.Currency.DAL
 {
     using System;
     using System.Collections.Generic;
 
-    using crmvcsb.Domain.IEntities;
-    using crmvcsb.Domain.Entities;
-    
+    using crmvcsb.Domain.Universal.IEntities;
+    using crmvcsb.Domain.Universal.Entities;
     
     public class CurrencyDAL : EntityIntIdDAL
     {

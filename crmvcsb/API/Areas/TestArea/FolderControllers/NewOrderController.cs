@@ -7,11 +7,11 @@ namespace crmvcsb.API.Areas.TestArea.FolderControllers
 
     using System;
     using System.Threading.Tasks;
-    using crmvcsb.Domain.NewOrder;
+    using crmvcsb.Domain.DomainSpecific.NewOrder;
+    using crmvcsb.Domain.DomainSpecific;
 
     using Microsoft.AspNetCore.Mvc;
     using Autofac;
-    using Domain;
 
     //No api, no newarea Url paths
     //http://localhost:5002/NewOrder
@@ -29,7 +29,7 @@ namespace crmvcsb.API.Areas.TestArea.FolderControllers
         // GET: /<controller>/
         public async Task<IActionResult> Index()
         {
-            DomainManager.ReInitialize();
+            _manager.ReInitialize();
             return Ok();
         }
 
@@ -38,7 +38,7 @@ namespace crmvcsb.API.Areas.TestArea.FolderControllers
         {
             try
             {
-                var result = this._service.GetDbName();
+                var result = this._service.GetDbName();                
                 return Ok(result);
             }
             catch (Exception e)
