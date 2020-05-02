@@ -1,5 +1,5 @@
 ﻿
-namespace crmvcsb.Domain.Blogging.BLL
+namespace crmvcsb.Domain.DomainSpecific.Blogging.BLL
 {
     
     using System.Collections.Generic;

@@ -10,7 +10,7 @@ namespace crmvcsb.Infrastructure.EF
 
     using AutoMapper;
 
-    using crmvcsb.Domain.Blogging.API;
+    using crmvcsb.Domain.DomainSpecific.Blogging.API;
     using crmvcsb.Infrastructure.EF.Blogging;
     using crmvcsb.Infrastructure.EF;
 

@@ -1,5 +1,5 @@
 ﻿
-namespace crmvcsb.Domain.Blogging.DAL
+namespace crmvcsb.Domain.DomainSpecific.Blogging.DAL
 {
 
     using System.ComponentModel.DataAnnotations;

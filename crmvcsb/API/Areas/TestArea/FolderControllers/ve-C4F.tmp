@@ -6,7 +6,7 @@ namespace crmvcsb.Default.Controllers
     using Microsoft.AspNetCore.Mvc;
 
     using crmvcsb.Domain.Universal.IRepository;
-    using crmvcsb.Domain.DomainSpecific.Blogging.API;
+    using crmvcsb.Domain.Blogging.API;
     using crmvcsb.Infrastructure.EF.Blogging;
 
     [Route("api/[controller]")]

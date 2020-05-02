@@ -1,8 +1,8 @@
 ﻿
-namespace crmvcsb.Domain.Blogging.API
+namespace crmvcsb.Domain.DomainSpecific.Blogging.API
 {
 
-    using crmvcsb.Domain.Blogging.BLL;
+    using crmvcsb.Domain.DomainSpecific.Blogging.BLL;
 
     using System.Collections.Generic;
     using System;

@@ -6,7 +6,7 @@ namespace crmvcsb.Infrastructure.EF.Blogging
     using System;
     using System.Collections.Generic;    
     using System.ComponentModel.DataAnnotations;
-    using crmvcsb.Domain.Blogging.DAL;
+    using crmvcsb.Domain.DomainSpecific.Blogging.DAL;
 
     /**Specific EF concrete type realizations */
     //one-to-many 0->8

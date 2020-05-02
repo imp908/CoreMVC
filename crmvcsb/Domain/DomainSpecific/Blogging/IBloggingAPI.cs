@@ -1,5 +1,5 @@
 ﻿
-namespace crmvcsb.Domain.Blogging.API
+namespace crmvcsb.Domain.DomainSpecific.Blogging.API
 {
     using System;
    
@@ -7,7 +7,7 @@ namespace crmvcsb.Domain.Blogging.API
     using System.Linq;
     using System.Linq.Expressions;
 
-    using crmvcsb.Domain.Blogging.BLL;
+    using crmvcsb.Domain.DomainSpecific.Blogging.BLL;
 
     /*Commands layer */
     /*Object parameter / command object to pass to CQRRS */

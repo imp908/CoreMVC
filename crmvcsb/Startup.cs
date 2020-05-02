@@ -29,20 +29,14 @@ namespace crmvcsb
     using crmvcsb.Infrastructure.EF;
     using crmvcsb.Domain.Universal.IRepository;
 
-    using crmvcsb.Infrastructure.EF.NewOrder;
 
-    using crmvcsb.Domain.DomainSpecific.NewOrder;
-    using crmvcsb.Domain.Blogging.API;
-    using crmvcsb.Domain.Blogging.BLL;
-    using crmvcsb.Domain.Blogging.DAL;
+    using crmvcsb.Domain.DomainSpecific.Blogging.API;
+    using crmvcsb.Domain.DomainSpecific.Blogging.BLL;
+    using crmvcsb.Domain.DomainSpecific.Blogging.DAL;
     using crmvcsb.Infrastructure.EF.Blogging;
 
-    using crmvcsb.Infrastructure.EF.Currencies;
-    using crmvcsb.Domain.DomainSpecific.Currency;
-    using crmvcsb.Domain.DomainSpecific.Currency.API;
-    using crmvcsb.Domain.DomainSpecific.Currency.DAL;
+ 
    
-    using crmvcsb.Domain.DomainSpecific;
     using crmvcsb.Domain.Universal;
 
     /*Build in logging*/
@@ -184,28 +178,7 @@ namespace crmvcsb
             * For multiple SQL DBs in one project
             */
 
-            /*registering repository dummy clones, with EF concrete contexts to connection strings*/
-            //--------
-            autofacContainer.RegisterType<RepositoryNewOrder>()
-            .WithParameter("context",
-
-                new ContextNewOrder(new DbContextOptionsBuilder<ContextNewOrder>()
-                .UseSqlServer(Configuration.GetConnectionString("LocalNewOrderConnection")).Options)
-
-            ).As<IRepositoryEF>().AsSelf()
-            .InstancePerLifetimeScope();
-
-
-            //--------
-            autofacContainer.RegisterType<RepositoryCurrency>()
-            .WithParameter("context",
-
-                new CurrencyContext(new DbContextOptionsBuilder<CurrencyContext>()
-                .UseSqlServer(Configuration.GetConnectionString("LocalCurrenciesConnection")).Options))
-
-            .As<IRepositoryEF>().AsSelf()
-            .InstancePerLifetimeScope();
-
+          
 
             //--------
             autofacContainer.RegisterType<BloggingRepository>()
@@ -223,24 +196,6 @@ namespace crmvcsb
             .As<IServiceEF>()
             .InstancePerLifetimeScope();
 
-            autofacContainer.Register(ctx => new NewOrderService(ctx.Resolve<RepositoryNewOrder>(), ctx.Resolve<IMapper>()))
-            .As<INewOrderService>()
-            .InstancePerLifetimeScope();
-
-            autofacContainer.Register(ctx => new CurrencyService(ctx.Resolve<RepositoryCurrency>(), ctx.Resolve<IMapper>()))
-            .As<ICurrencyService>()
-            .InstancePerLifetimeScope();
-
-            //PropertyAccessMode registration of Iservice to Manager to static
-            autofacContainer.Register(c=> {
-                var result = new NewOrderManager();
-                var dep = c.Resolve<INewOrderService>();
-                var dep2 = c.Resolve<ICurrencyService>();
-                result.BindService(dep,dep2);
-                return result;
-            })
-            .As<NewOrderManager>();
-
             return autofacContainer;
         }
 
@@ -257,22 +212,13 @@ namespace crmvcsb
 
             /**EF, repo and UOW reg */
    
-            autofacContainer.RegisterType<ContextNewOrder>()
-                .As<DbContext>()
-                .WithParameter("options", new DbContextOptionsBuilder<ContextNewOrder>()
-                    .UseSqlite("Data Source=app.db").Options)
-                .WithMetadata("Name", "NewOrderContext")
-                .InstancePerLifetimeScope();
+         
 
             autofacContainer.RegisterType<RepositoryEF>()
                 .As<IRepository>()
                 .WithMetadata<AppendMetadata>(m => m.For(am => am.AppendName, "NewOrderContext"))
                 .InstancePerLifetimeScope();
-
-            autofacContainer.RegisterType<NewOrderService>()
-                .As<INewOrderService>()
-                .WithMetadata<AppendMetadata>(m => m.For(am => am.AppendName, "NewOrderContext"))
-                .InstancePerLifetimeScope();
+         
 
             return autofacContainer;
         }
@@ -288,23 +234,8 @@ namespace crmvcsb
                .WithMetadata("Name", "TestContext")
                .InstancePerLifetimeScope();          
 
-            autofacContainer.RegisterType<ContextNewOrder>()
-                .As<DbContext>()
-                .WithParameter("options", new DbContextOptionsBuilder<ContextNewOrder>()
-                    .UseInMemoryDatabase("NewOrderContext").Options)
-                .WithMetadata("Name", "NewOrderContext")
-                .InstancePerLifetimeScope();
-
-            autofacContainer.RegisterType<RepositoryEF>()
-                .As<IRepository>()
-                .WithMetadata<AppendMetadata>(m => m.For(am => am.AppendName, "NewOrderContext"))
-                .InstancePerLifetimeScope();
-
-            autofacContainer.RegisterType<NewOrderService>()
-                .As<INewOrderService>()
-                .WithMetadata<AppendMetadata>(m => m.For(am => am.AppendName, "NewOrderContext"))
-                .InstancePerLifetimeScope();
-
+       
+          
             return autofacContainer;
         }
         
@@ -343,13 +274,7 @@ namespace crmvcsb
                 cfg.CreateMap<PersonEF, PersonAPI>();
                 cfg.CreateMap<BlogEF, BlogAPI>();
                 cfg.CreateMap<PostEF, PostAPI>().ReverseMap();
-
-
-                cfg.CreateMap<CurrencyRatesDAL, CrossCurrenciesAPI>()
-                    .ForMember(d => d.From, m => m.MapFrom(src => src.CurrencyFrom.Name))
-                    .ForMember(d => d.To, m => m.MapFrom(src => src.CurrencyTo.Name))
-                    .ReverseMap().ForAllMembers(o => o.Ignore());
-
+           
             });
         }
 
