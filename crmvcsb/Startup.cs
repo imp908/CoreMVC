@@ -30,11 +30,12 @@ namespace crmvcsb
     using crmvcsb.Domain.Universal.IRepository;
 
 
-    using crmvcsb.Domain.DomainSpecific.NewOrder;
     using crmvcsb.Domain.DomainSpecific.Blogging.API;
     using crmvcsb.Domain.DomainSpecific.Blogging.BLL;
-    using crmvcsb.Domain.DomainSpecific.Blogging.DAL;
     using crmvcsb.Infrastructure.EF.Blogging;
+    using crmvcsb.Infrastructure.EF.Currencies;
+    using crmvcsb.Domain.DomainSpecific.Currency.DAL;
+    using crmvcsb.Domain.DomainSpecific.Currency.API;
 
     using crmvcsb.Domain.DomainSpecific.Currency.DAL;
     using crmvcsb.Domain.DomainSpecific.Currency.API;
