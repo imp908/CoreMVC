@@ -10,7 +10,6 @@ namespace InfrastructureCheckers
 
     using AutoMapper;
 
-    using crmvcsb.Infrastructure.EF.Blogging;
 
     public static class RepoAndUOWCheck
     {
@@ -19,59 +18,10 @@ namespace InfrastructureCheckers
         static string connectionStringSQL = "Server=AAAPC;Database=testdb;User Id=tl;Password=QwErT123;";
 
         public static void GO(){
-            DbWithRepoReinitCheck();
+           
         }
         
-        public static void DbWithRepoReinitCheck(){
-                      
-            using(BloggingContext context = new BloggingContext(
-                new DbContextOptionsBuilder<BloggingContext>()
-                    .UseSqlServer(connectionStringSQL).Options))
-            {
-                crmvcsb.Infrastructure.EF.RepositoryEF repo = new crmvcsb.Infrastructure.EF.RepositoryEF(context);
-
-                List<BlogEF> blogs = repo.QueryByFilter<BlogEF>(s => s.BlogId != 0).ToList();
-                repo.DeleteRange(blogs);
-                repo.Save();
-
-                List<PersonEF> persons = repo.QueryByFilter<PersonEF>(s => s.Id != Guid.Empty ).ToList();
-                repo.DeleteRange(persons);
-                repo.Save();
-
-                List<PostEF> posts = repo.QueryByFilter<PostEF>(s => s.PostId != 0).ToList();
-                repo.DeleteRange(posts);
-                repo.Save();
-
-                BlogEF b = new BlogEF() { BlogId =1, Url = "url", Rating = 2 , Created = DateTime.Now };
-                PersonEF p = new PersonEF() { Id = Guid.Parse("81a130d2-502f-4cf1-a376-63edeb000e9f"), Name="Name", Surname ="sername" };
-              
-                repo.Add(b);
-                repo.Add(p);
-                try {                   
-                    repo.SaveIdentity("Blogs");
-                } catch(Exception e)
-                {
-
-                }
-
-                List<PostEF> post = new List<PostEF>()
-                {
-                    new PostEF(){PostId = 1, Title = "PostTestTitle", Content = "TestContent0",BlogId = b.BlogId, AuthorId = p.Id }
-                    ,new PostEF(){PostId = 2, Title = "PostTestTitle", Content = "TestContent1",BlogId = b.BlogId, AuthorId = p.Id }
-                };
-                repo.AddRange(post);
-                try
-                {
-                    repo.SaveIdentity("Posts");
-                }
-                catch (Exception e)
-                {
-
-                }
-
-
-            }
-        }
+       
       
     }
 }

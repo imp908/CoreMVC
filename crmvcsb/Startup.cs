@@ -32,10 +32,6 @@ namespace crmvcsb
     using crmvcsb.Infrastructure.EF.NewOrder;
 
     using crmvcsb.Domain.DomainSpecific.NewOrder;
-    using crmvcsb.Domain.Blogging.API;
-    using crmvcsb.Domain.Blogging.BLL;
-    using crmvcsb.Domain.Blogging.DAL;
-    using crmvcsb.Infrastructure.EF.Blogging;
 
     using crmvcsb.Infrastructure.EF.Currencies;
     using crmvcsb.Domain.DomainSpecific.Currency;
@@ -207,17 +203,7 @@ namespace crmvcsb
             .InstancePerLifetimeScope();
 
 
-            //--------
-            autofacContainer.RegisterType<BloggingRepository>()
-            .WithParameter("context",
-
-                new BloggingContext(new DbContextOptionsBuilder<BloggingContext>()
-                .UseSqlServer(Configuration.GetConnectionString("LocalBloggingConnection")).Options))
-
-            .As<IRepositoryEF>().AsSelf()
-            .InstancePerLifetimeScope();
-
-
+           
             /*Register repository dummy clones for DB scope to services*/
             autofacContainer.Register(ctx => new ServiceEF(ctx.Resolve<RepositoryEF>(), ctx.Resolve<IMapper>()))
             .As<IServiceEF>()
@@ -247,13 +233,7 @@ namespace crmvcsb
         /* Db context configuration for test with SqlLite database */
         public ContainerBuilder ConfigureSqlLiteDbContexts(IServiceCollection services, ContainerBuilder autofacContainer)
         {
-            autofacContainer.RegisterType<BloggingContext>()
-               .As<DbContext>()
-               .WithParameter("options",
-                   new DbContextOptionsBuilder<BloggingContext>()
-                   .UseSqlite("Data Source=app.db").Options)
-               .WithMetadata("Name", "TestContext")
-               .InstancePerLifetimeScope();
+     
 
             /**EF, repo and UOW reg */
    
@@ -279,14 +259,7 @@ namespace crmvcsb
 
         /* Db context configuration for test with InMemmory database */
         public ContainerBuilder ConfigureInMemmoryDbContexts(IServiceCollection services, ContainerBuilder autofacContainer)
-        {
-            autofacContainer.RegisterType<BloggingContext>()
-               .As<DbContext>()
-               .WithParameter("options",
-                   new DbContextOptionsBuilder<BloggingContext>()
-                   .UseInMemoryDatabase("TestContext").Options)
-               .WithMetadata("Name", "TestContext")
-               .InstancePerLifetimeScope();          
+        {            
 
             autofacContainer.RegisterType<ContextNewOrder>()
                 .As<DbContext>()
@@ -312,12 +285,7 @@ namespace crmvcsb
         public ContainerBuilder ConfigureAutofac(IServiceCollection services, ContainerBuilder autofacContainer)
         {
             //*DAL->BLL reg */
-            autofacContainer.RegisterType<BlogEF>()
-                .As<IBlogDAL>().InstancePerLifetimeScope();
-            autofacContainer.RegisterType<BlogBLL>()
-                .As<IBlogBLL>().InstancePerLifetimeScope();
-            autofacContainer.RegisterType<PostBLL>()
-                .As<IPostBLL>().InstancePerLifetimeScope();
+          
 
             return autofacContainer;
         }
@@ -326,24 +294,7 @@ namespace crmvcsb
         {
             return new MapperConfiguration(cfg =>
             {
-                //cfg.AddProfiles(typeof(BlogEF), typeof(BlogBLL));
-                cfg.CreateMap<BlogEF, BlogBLL>()
-                    .ForMember(dest => dest.Id, m => m.MapFrom(src => src.BlogId))
-                    .ForMember(dest => dest.Posts, m => m.Ignore());
-
-                cfg.CreateMap<PostEF, PostBLL>(MemberList.None).ReverseMap();
-
-                cfg.CreateMap<PersonAdsPostCommand, PostEF>()
-                    .ForMember(dest => dest.AuthorId, m => m.MapFrom(src => src.PersonId));
-
-                cfg.CreateMap<AddPostAPI, PostEF>()
-                    .ForMember(dest => dest.AuthorId, m => m.MapFrom(src => src.PersonId))
-                    .ForMember(dest => dest.BlogId, m => m.MapFrom(src => src.BlogId));
-
-                cfg.CreateMap<PersonEF, PersonAPI>();
-                cfg.CreateMap<BlogEF, BlogAPI>();
-                cfg.CreateMap<PostEF, PostAPI>().ReverseMap();
-
+               
 
                 cfg.CreateMap<CurrencyRatesDAL, CrossCurrenciesAPI>()
                     .ForMember(d => d.From, m => m.MapFrom(src => src.CurrencyFrom.Name))
