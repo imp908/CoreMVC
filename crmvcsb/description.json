@@ -199,7 +199,7 @@ multiple SQL DBs in one project possible with Dummy Repository clones per DB sco
 registration of connection string to context to Repository to service with IRepository
 
 //////////////
-//Program.cs 
+//Program.cs
 Added http instead of https routing for Fiddler test to: .UseUrls("http://localhost:5002")
 
 
@@ -223,7 +223,7 @@ npx webpack
 
 
 //////////////
-//DDD decomposition->
+// decomposition->
 API: WebApi, Controllers Infrastructure: ORMs contexts : [ EF ]; Repo and UOW realizations; Application logic: [ Checkers ]; Repo: {
   contains EF
   context; EF
@@ -240,7 +240,45 @@ UOW: {
 } Domain: Entity interfaces and Models For layers : [ DAL, BLL, View ]; IRepo,IUOW interfaces;
 
 //////////////
-//DDD layers relation directions
+// Folder structure
+API:
+
+Domain:
+	DomainSpecific:
+		domainName:
+			domainNameAPI.cs; domainNameDAL.cs; IdomainNameService.cs; domainNameService.cs;
+			
+	domainManager.cs
+
+	Universal:
+		Entitiess.cs
+		IEntities.cs
+		IRepository.cs
+		Iservice.cs
+		IDomainManager.cs
+
+Infrastructure:
+	EF:
+		DomainName:
+			domainContext.cs
+			domainRepository.cs
+	
+	IRepoEF.cs
+	RepoEF.cs
+	ServiceEF.cs
+	
+	Inmemory:
+	
+	IO:
+		Logging:
+		Serialization:
+		Settings:
+	
+	SignalR:
+	
+	
+//////////////
+// layers relation directions
 API->Infrastructure API->Domain Infrastructure->Domain 
 
 TODO: [
