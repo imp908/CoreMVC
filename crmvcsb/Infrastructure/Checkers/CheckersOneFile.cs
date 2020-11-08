@@ -42,9 +42,7 @@ namespace InfrastructureCheckers
             }
         }
     }
-
-    
-
+   
 }
 
 
@@ -89,8 +87,8 @@ namespace NetPlatformCheckers
         }
     }
 
-    /*PatternMatching check */
 
+    /*PatternMatching check */
     /*--------------------------------------------- */
     public static class PatternMatching
     {
@@ -137,8 +135,8 @@ namespace NetPlatformCheckers
         }
     }
 
-    /*Abstract class initialization check */
 
+    /*Abstract class initialization check */
     /*--------------------------------------------- */
     public abstract class ABS{
         

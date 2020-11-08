@@ -402,28 +402,7 @@ DONE:[
     ]
     ~8h 15m in 7days
 
-    master:[
-        <- done 15.06.2019 12:35-16:02 3h30m -> git merge crmvcsb -> master, order -> master, cleanup master,crmvcsb,order
-        
-        <- done 01.07.2019 4h -> KATAs heapsort 
-        <- done 01.07.2019 1h -> test server project multiple build tasks, and integrate run
-        <- done 1h -> integration tests        
-        
-        <- done 02.07.2019 1h -> integration tests
-        <- done 02.07.2019 2h -> quicksort        
-        <- done 02.07.2019 1h10m -> heapsort
-        <- done 02.07.2019 1h45m -> linked nodes reverce, polindrome check
-
-        <- done 04.07.2019 2h30m -> merge sort
-        
-        <- done 05.07.2019 1h -> insertion sort 
-        <- done 05.07.2019 1h -> sorting tests
-
-        <- done 07.07.2019 2h insert sort rep ->
-        <- done 07.07.2019 2h heapsort above heapify ->
-
-    ]~ 23h in 6 days
-    	
+  
 	TMPL
 	[
 		<- 10.04.2020  4h -> TMPL branch create and cleanup, warmup
@@ -455,12 +434,35 @@ DONE:[
 				several domainServices to one domainManager; 
 				and reinnitializing domain DBs (newOrer and Currencies) from controller Index;
 			<- done 02.05.2020 3h30m -> move blogging to brunch, 
-				merge TMPL to master, merge blogging to master
-			<- 08.11.2020 4h -> migrate from net core 2.0 to 3.0
+				merge TMPL to master, merge blogging to master			
 		]
+        <- 08.11.2020 4h -> migrate from net core 2.0 to 3.0
 		~19h in 5days
 	]
 	~31h 50m in 15days
 
+    master:[
+        <- done 15.06.2019 12:35-16:02 3h30m -> git merge crmvcsb -> master, order -> master, cleanup master,crmvcsb,order
+        
+        <- done 01.07.2019 4h -> KATAs heapsort 
+        <- done 01.07.2019 1h -> test server project multiple build tasks, and integrate run
+        <- done 1h -> integration tests        
+        
+        <- done 02.07.2019 1h -> integration tests
+        <- done 02.07.2019 2h -> quicksort        
+        <- done 02.07.2019 1h10m -> heapsort
+        <- done 02.07.2019 1h45m -> linked nodes reverce, polindrome check
+
+        <- done 04.07.2019 2h30m -> merge sort
+        
+        <- done 05.07.2019 1h -> insertion sort 
+        <- done 05.07.2019 1h -> sorting tests
+
+        <- done 07.07.2019 2h insert sort rep ->
+        <- done 07.07.2019 2h heapsort above heapify ->
+        <- done 08.11.2020 3h merge and clean all branches, and fire up ->
+    ]~ 26h in 6 days
     
-]~126h:20m in 40d	
+
+    
+]~129h:20m in 40d	
