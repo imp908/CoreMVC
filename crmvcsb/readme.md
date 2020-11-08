@@ -41,6 +41,16 @@ Related files:
 	dotnet add package Serilog.AspNetCore
 ```
 
+## Migrate from net core 2.0 to 3.0
+-------------------------------------------------------
+```
+dotnet add G:\disk\Files\git\Core\crmvcsb\crmvcsb\crmvcsb.csproj package Microsoft.EntityFrameworkCore.SqlServer --version 3.0.0
+dotnet add G:\disk\Files\git\Core\crmvcsb\crmvcsb\crmvcsb.csproj package Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore --version 3.0.0
+dotnet add G:\disk\Files\git\Core\crmvcsb\crmvcsb\crmvcsb.csproj package Microsoft.EntityFrameworkCore.Abstractions --version 3.0.0
+dotnet add G:\disk\Files\git\Core\crmvcsb\crmvcsb\crmvcsb.csproj package Microsoft.EntityFrameworkCore.Analyzers --version 3.0.0
+dotnet add G:\disk\Files\git\Core\crmvcsb\crmvcsb\crmvcsb.csproj package Microsoft.EntityFrameworkCore.InMemory --version 3.0.0
+```
+
 ## Pckages to build js:
 -------------------------------------------------------
 ```

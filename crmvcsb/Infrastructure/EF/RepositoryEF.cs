@@ -50,10 +50,10 @@ namespace crmvcsb.Infrastructure.EF
             this._context.Set<T>().Add(item);
         }
 
-        public Task<EntityEntry<T>> AddAsync<T>(T item)
+        public async Task<EntityEntry<T>> AddAsync<T>(T item)
            where T : class
         {
-            return this._context.Set<T>().AddAsync(item);
+            return await this._context.Set<T>().AddAsync(item);
         }
 
         public void AddRange<T>(IList<T> items)

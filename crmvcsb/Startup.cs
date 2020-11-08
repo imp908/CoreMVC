@@ -44,7 +44,9 @@ namespace crmvcsb
     /*Build in logging*/
     using Microsoft.Extensions.Logging;
 
-    enum ContextType
+    using Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore;
+
+        enum ContextType
     {
         SQL, SQLLite, InMemmory
     }
