@@ -14,6 +14,10 @@ namespace crmvcsb.Infrastructure.EF
             _repository = repository;
             _mapper = mapper;
         }
+        public ServiceEF(IRepositoryEF repository)
+        {
+            _repository = repository;
+        }
 
         public string GetDbName()
         {

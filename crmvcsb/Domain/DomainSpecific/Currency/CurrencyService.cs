@@ -26,6 +26,12 @@ namespace crmvcsb.Domain.DomainSpecific.Currency
             _mapper = mapper;
         }
 
+        public CurrencyService(IRepositoryEF repository)
+        : base(repository)
+        {
+            _repository = repository;
+        }
+
         public async Task<IList<ICrossCurrenciesAPI>> GetCurrencyCrossRatesAsync(IGetCurrencyCommand command)
         {
 

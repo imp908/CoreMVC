@@ -14,22 +14,22 @@ namespace crmvcsb.Domain.DomainSpecific.NewOrder.DAL
         public double Coefficient { get; set; }
     }
 
-    /*Kg,Pnd,sm,meter etc*/
+    /*Kg,Pnd,sm,meter, m3 etc*/
     public class PhysicalUnitDAL : EntityIntIdDAL
     {
         public string Name { get; set; }
     }
 
-    /*Length,Height, Weight or density exmpl*/
+    /*Length, Height, Weight or density exmpl*/
     public class PhysicalDimensionDAL : EntityIntIdDAL
     {
-        /*Length goes here */
+        /*Length goes here*/
         public string ParameterName { get; set; }
 
-        /*Amount */
+        /*Amount*/
         public double Amount { get; set; }
 
-        /*And sm goes here */
+        /*And sm, kg, m/sq3 goes here*/
         public PhysicalUnitDAL DimensionUnit { get; set; }
     }
     public class GoodsDAL : EntityIntIdDAL
@@ -37,8 +37,8 @@ namespace crmvcsb.Domain.DomainSpecific.NewOrder.DAL
         public string ProductName { get; set; }
 
         /*
-            Can be a bulk of corn, and it hase only volume and wigth 
-            but t can be a pck of corn, with dimensions added to vlume and weight
+            Can be a bulk of corn, and it has only volume and weigth
+            but can be a pack of corn, with dimensions added to volume and weight
         */
         List<PhysicalDimensionDAL> Dimensions { get; set; }
     }

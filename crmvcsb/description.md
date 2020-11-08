@@ -51,13 +51,6 @@ http://localhost:5002/api/NewOrder/GetCrossRates
 
 Content-Type: application/json
 
-        ReactController
-            //react check
-            http://localhost:5000/TestArea/React/CheckShoppingList
-        
-        SignalRcontroller
-        (copypast to several browser windows to test)
-            http://localhost:5000/TestArea/SignalR/hub
 {
   "FromCurrency": "USD",
   "ToCurrency": "RUB",
@@ -65,25 +58,6 @@ Content-Type: application/json
   "Date": "01.01.2019"
 }
 
-        AccountController
-            http://localhost:5000/Identity/Account/Register
-        
-        ChatController
-            //public room
-                http://localhost:5000/Identity/Chat/room
-            //private room
-                http://localhost:5000/Identity/Chat/roomP
-
- API:[
-    http://localhost:5000/api/blog/AddPost -> returns Ok(result)
-    http://localhost:5000/api/blog/AddPostJSON -> retorns Json(result)
-    
-    Body:
-    {
-	    "PersonId":"81A130D2-502F-4CF1-A376-63EDEB000E9F",
-	    "BlogId":"1",	
-		"Title":"PostTitle","Content":"PostContent"
-    }
 
 
 ValuesController->
@@ -225,18 +199,9 @@ multiple SQL DBs in one project possible with Dummy Repository clones per DB sco
 registration of connection string to context to Repository to service with IRepository
 
 //////////////
-//Program.cs 
-Added http instead of https routing for Fiddler test to:
-    .UseUrls("http://localhost:5000")
+//Program.cs
 Added http instead of https routing for Fiddler test to: .UseUrls("http://localhost:5002")
 
-
-//////////////
-//integrationtests.csproj
-//to eleminate 
-//error CS0017: Program has more than one entry point defined.
-//https://andrewlock.net/fixing-the-error-program-has-more-than-one-entry-point-defined-for-console-apps-containing-xunit-tests/
-<GenerateProgramFile>false</GenerateProgramFile>
 
 //////////////
 //webpack for webpack conf
@@ -249,8 +214,6 @@ gulpfile.js
 
 //////////////
 //OrderContext DB migrations
-dotnet ef migrations add CreateIdentitySchema --context OrderContext
-dotnet ef database update --context OrderContext
 dotnet ef migrations add CreateIdentitySchema --context TestContext dotnet ef database update --context TestContext
 
 
@@ -260,7 +223,7 @@ npx webpack
 
 
 //////////////
-//DDD decomposition->
+// decomposition->
 API: WebApi, Controllers Infrastructure: ORMs contexts : [ EF ]; Repo and UOW realizations; Application logic: [ Checkers ]; Repo: {
   contains EF
   context; EF
@@ -277,17 +240,51 @@ UOW: {
 } Domain: Entity interfaces and Models For layers : [ DAL, BLL, View ]; IRepo,IUOW interfaces;
 
 //////////////
-//DDD layers relation directions
-    API -> Infrastructure
-    API -> Domain
-    Infrastructure -> Domain
+// Folder structure
+API:
+
+Domain:
+	DomainSpecific:
+		domainName:
+			domainNameAPI.cs; domainNameDAL.cs; IdomainNameService.cs; domainNameService.cs;
+			
+	domainManager.cs
+
+	Universal:
+		Entitiess.cs
+		IEntities.cs
+		IRepository.cs
+		Iservice.cs
+		IDomainManager.cs
+
+Infrastructure:
+	EF:
+		DomainName:
+			domainContext.cs
+			domainRepository.cs
+	
+	IRepoEF.cs
+	RepoEF.cs
+	ServiceEF.cs
+	
+	Inmemory:
+	
+	IO:
+		Logging:
+		Serialization:
+		Settings:
+	
+	SignalR:
+	
+	
+//////////////
+// layers relation directions
 API->Infrastructure API->Domain Infrastructure->Domain 
 
 TODO: [
 
-TODO:[ 
-
-]
+	
+	
 ] 
 
 BACKLOG/MILESTONES: [
@@ -304,7 +301,6 @@ DONE:[
         <- done 10.06.2019 01: 24 1h31m -> signalR work queued,started,finished moque
         <- done 10.06.2019 22: 52 1h12m -> signalR work queue and front edited
     ] ~2h 40m in 1d
-DONE: [
 
     orders: [
         <- done 13.06.2019 5h -> Ef core Orders model, migration and seed Many-to-many
@@ -378,7 +374,6 @@ DONE: [
 
     ] ~37h 15m in 7d
 
-   newOrder: [
 
 	newOrder :
 	[
@@ -398,6 +393,12 @@ DONE: [
         <- 24.07.2019 1h -> new order currencies manager
         
         <- 25.07.2019 1h 30m -> currencies manager API resp
+
+		<- 26.09.2019 1h 30m -> inmemmory, SQL, SQL, SQLlite conditional contexts
+
+		<- 19.11.2019 3h 30m -> Autofac multiple Irepositories registration
+
+		<- 29.03.2020 3h -> Ilogger, Iserializer, variables classes with variable.json
     ]
     ~8h 15m in 7days
 
@@ -422,23 +423,7 @@ DONE: [
         <- done 07.07.2019 2h heapsort above heapify ->
 
     ]~ 23h 
-
-    ~95h: 35m in 22d
-
-		<- 23.07.2019 1h -> new order currenciesDAL model
-
-		<- 24.07.2019 1h -> new order currencies manager
-
-		<- 25.07.2019 1h 30m -> currencies manager API resp
-
-		<- 26.09.2019 1h 30m -> inmemmory, SQL, SQL, SQLlite conditional contexts
-
-		<- 19.11.2019 3h 30m -> Autofac multiple Irepositories registration
-
-		<- 29.03.2020 3h -> Ilogger, Iserializer, variables classes with variable.json
-				
-	]
-	
+    	
 	TMPL
 	[
 		<- 10.04.2020  4h -> TMPL branch create and cleanup, warmup
@@ -448,7 +433,34 @@ DONE: [
 			registering multiple domainContexts for domainRepositories; 
 			several domainServices to one domainManager; 
 			and reinnitializing domain DBs (newOrer and Currencies) from controller Index;
+        <- done 10.04.2020 - 02.05.2020 p32h f15h in 4d -> refactor SB template to fire up state		
+		[
+			<- done p 10.04.2020 21:37 p8h->  create new TMPL from newOrder GIT branch with all infrastructure stuff
+				double repositories, loggers, mappers
+			<- done p 10.04.2020 21:37 p24h -> recreate All main project branches			
+				p8h Blogging (manyToMany tags and CQRS)
+				p8h NewOrder (volume recount)
+				p8h CrossCurrencies (curency to curency throught curency)
+			
+			<- done 11.04.2020 4h-> refactor AllInOneModels			
+			<- done 12.04.2020 4h -> refactor NewOrderModelsOneFile			
+			-> CostControlModels
+				G:\disk\Files\git\Core\crmvcsb\crmvcsb\Domain\TestModels\Models\CostControl\CostControlModels.cs
+			
+			<- 10.04.2020  4h -> TMPL branch create and cleanup, warmup
+			<- 11.04.2020  3h45m -> TMPL namespaces refactor
+			<- 12.04.2020  50m -> TMPL Blogging namespaces refactor
+			<- 01.05.2020 2h30m -> 
+				registering multiple domainContexts for domainRepositories; 
+				several domainServices to one domainManager; 
+				and reinnitializing domain DBs (newOrer and Currencies) from controller Index;
+			<- done 02.05.2020 3h30m -> move blogging to brunch, 
+				merge TMPL to master, merge blogging to master
+			<- 08.11.2020 4h -> migrate from net core 2.0 to 3.0
+		]
+		~19h in 5days
 	]
-	~24h 20m in 13days
+	~31h 50m in 15days
 
-]
+    
+]~99h: 35m in 23d	

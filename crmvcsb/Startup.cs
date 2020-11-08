@@ -37,9 +37,6 @@ namespace crmvcsb
     using crmvcsb.Domain.DomainSpecific.Currency.DAL;
     using crmvcsb.Domain.DomainSpecific.Currency.API;
 
-    using crmvcsb.Domain.DomainSpecific.Currency.DAL;
-    using crmvcsb.Domain.DomainSpecific.Currency.API;
-    using crmvcsb.Infrastructure.EF.Currencies;
     using crmvcsb.Infrastructure.EF.NewOrder;
 
 
@@ -53,7 +50,9 @@ namespace crmvcsb
     /*Build in logging*/
     using Microsoft.Extensions.Logging;
 
-    enum ContextType
+    using Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore;
+
+        enum ContextType
     {
         SQL, SQLLite, InMemmory
     }
@@ -105,8 +104,8 @@ namespace crmvcsb
             });
 
       
-            services.AddMvc();
-
+            services.AddMvc(options => options.EnableEndpointRouting = false);
+            
             /*SignalR registration*/
             services.AddSignalR();
 
@@ -154,9 +153,9 @@ namespace crmvcsb
                 this.ApplicationContainer = autofacContainer.Build();
                 r = new AutofacServiceProvider(this.ApplicationContainer);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-
+                throw;
             }
 
             try
@@ -269,7 +268,7 @@ namespace crmvcsb
                 .WithParameter(new TypedParameter(typeof(RepositoryEF),
                     new RepositoryEF(
                         new OrderContext(new DbContextOptionsBuilder<OrderContext>()
-                            .UseSqlServer(Configuration.GetConnectionString("LocalOrderConnection")).Options)
+                            .UseSqlServer(Configuration.GetConnectionString("LocalNewOrderConnection")).Options)
                     )
                 ))
                 .InstancePerLifetimeScope();
@@ -330,19 +329,13 @@ namespace crmvcsb
 
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
+            app.UseDeveloperExceptionPage();
+            app.UseDatabaseErrorPage();
+            app.UseExceptionHandler("/Home/Error");
+            // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+            app.UseHsts();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

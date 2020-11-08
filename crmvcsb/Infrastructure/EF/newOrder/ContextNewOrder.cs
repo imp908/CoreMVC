@@ -31,8 +31,6 @@ namespace crmvcsb.Infrastructure.EF.NewOrder
             //.HasDefaultValueSql("IDENTITY(1,1)")
             ;
 
-          
-
         }
      
 
