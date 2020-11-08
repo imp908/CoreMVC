@@ -10,7 +10,9 @@ namespace InfrastructureCheckers
 
     using AutoMapper;
 
-
+    using crmvcsb.Domain.DomainSpecific.Currency;
+    using crmvcsb.Domain.DomainSpecific.Currency.DAL;
+    using crmvcsb.Infrastructure.EF.Currencies;
     public static class RepoAndUOWCheck
     {
 
@@ -18,12 +20,31 @@ namespace InfrastructureCheckers
         static string connectionStringSQL = "Server=AAAPC;Database=testdb;User Id=tl;Password=QwErT123;";
 
         public static void GO(){
-           
+            DbWithRepoReinitCheck();
         }
-        
-       
-      
+
+        public static void DbWithRepoReinitCheck()
+        {
+
+            using (CurrencyContext context = new CurrencyContext(
+                new DbContextOptionsBuilder<CurrencyContext>()
+                    .UseSqlServer(connectionStringSQL).Options))
+            {
+                crmvcsb.Infrastructure.EF.RepositoryEF repo = new crmvcsb.Infrastructure.EF.RepositoryEF(context);
+
+                List<CurrencyDAL> currencies = repo.QueryByFilter<CurrencyDAL>(s => s.Id != 0).ToList();
+                repo.DeleteRange(currencies);
+                repo.Save();
+
+                CurrencyService currencyService = new CurrencyService(repo);
+                currencyService.ReInitialize();
+
+            }
+        }
     }
+
+    
+
 }
 
 
