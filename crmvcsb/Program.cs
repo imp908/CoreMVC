@@ -17,11 +17,11 @@ namespace crmvcsb
             try
             {
                 var bld = CreateWebHostBuilder(args).Build();                
-                bld.Run();
+                bld.Run();                
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                
+                throw;
             }
         }
 

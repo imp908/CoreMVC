@@ -9,6 +9,11 @@ to test:
 - run
 (change ISS port in proj configs on IIS start profile)
 
+integration tests run:
+-------------------------------------------------------
+- dotnet test tests\integrationtests\integrationtests.csproj
+
+
 test url after start:
 -------------------------------------------------------
 > http://localhost:5002/TestArea/SignalRwork/work
@@ -33,11 +38,17 @@ Related files:
 ## Pckages to build core:
 -------------------------------------------------------
 ```
-    dotnet add package Newtonsoft.Json --version 12.0.3
-    dotnet add package Autofac.Extensions.DependencyInjection --version 4.4.0
-    dotnet add package AutoMapper --version 8.1.0
-    dotnet add package AutoMapper.Extensions.Microsoft.DependencyInjection --version 6.1.0
-    dotnet add package Microsoft.AspNetCore.SignalR		
+    dotnet add crmvcsb\mvccoresb.csproj package Newtonsoft.Json --version 12.0.2
+    dotnet add crmvcsb\mvccoresb.csproj package Autofac.Extensions.DependencyInjection --version 4.4.0
+    dotnet add crmvcsb\mvccoresb.csproj package AutoMapper --version 8.1.0
+    dotnet add crmvcsb\mvccoresb.csproj package AutoMapper.Extensions.Microsoft.DependencyInjection --version 6.1.0
+    dotnet add crmvcsb\mvccoresb.csproj package Microsoft.AspNetCore.SignalR
+	
+	dotnet add tests\integrationtests\integrationtests.csproj package xunit --version 2.4.1
+	dotnet add tests\integrationtests\integrationtests.csproj package xunit.runner.visualstudio --version 2.4.1
+	dotnet add tests\integrationtests\integrationtests.csproj package AngleSharp --version 0.12.1
+	dotnet add tests\integrationtests\integrationtests.csproj package FluentAssertions --version 5.7.0
+	dotnet add tests\integrationtests\integrationtests.csproj package Microsoft.NET.Test.Sdk --version 16.2.0
 	dotnet add package Serilog.AspNetCore
 ```
 
@@ -49,6 +60,7 @@ dotnet add G:\disk\Files\git\Core\crmvcsb\crmvcsb\crmvcsb.csproj package Microso
 dotnet add G:\disk\Files\git\Core\crmvcsb\crmvcsb\crmvcsb.csproj package Microsoft.EntityFrameworkCore.Abstractions --version 3.0.0
 dotnet add G:\disk\Files\git\Core\crmvcsb\crmvcsb\crmvcsb.csproj package Microsoft.EntityFrameworkCore.Analyzers --version 3.0.0
 dotnet add G:\disk\Files\git\Core\crmvcsb\crmvcsb\crmvcsb.csproj package Microsoft.EntityFrameworkCore.InMemory --version 3.0.0
+dotnet add G:\disk\Files\git\Core\crmvcsb\crmvcsb\crmvcsb.csproj package Microsoft.AspNetCore.Identity.EntityFrameworkCore --version 3.0.0
 ```
 
 ## Pckages to build js:
