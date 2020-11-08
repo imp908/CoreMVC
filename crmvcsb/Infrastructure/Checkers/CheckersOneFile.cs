@@ -117,6 +117,45 @@ namespace NetPlatformCheckers
     }
 
 
+    public static class PatternMatching
+    {
+
+        public static void GO()
+        {
+
+        }
+
+        public static void Match() {
+            Stream s = new FileStream(string.Empty, FileMode.Open);
+            var message = string.Empty;
+            switch (s)
+            {
+                case FileStream c when s.CanRead :
+                    break;
+                case FileStream c: 
+                    break;
+                case MemoryStream c:
+                    break;
+                case null:
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public static void MatchExp() {
+            Stream s = new FileStream(string.Empty, FileMode.Open);
+            var message = s switch
+            {
+                FileStream c when s.CanRead => "FS can read"
+                , FileStream c => "FS"
+                , MemoryStream c => "MS"
+                , null => "null"
+                , _ => "default"
+            };
+        }
+    }
+
     /* overriding */
     /*--------------------------------------------- */
     public class parent
