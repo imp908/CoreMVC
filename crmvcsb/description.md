@@ -344,10 +344,11 @@ DONE: [
 				and reinnitializing domain DBs (newOrer and Currencies) from controller Index;
 			<- done 02.05.2020 3h30m -> move blogging to brunch, 
 				merge TMPL to master, merge blogging to master
+			<- 08.11.2020 4h -> migrate from net core 2.0 to 3.0
 		]
-		~15h in 4days
+		~19h in 5days
 	]
 	
-	~27h 50m in 14days
+	~31h 50m in 15days
 
 ]

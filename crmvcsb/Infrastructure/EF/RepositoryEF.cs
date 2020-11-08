@@ -134,10 +134,10 @@ namespace crmvcsb.Infrastructure.EF
         {
             string cmd = $"SET IDENTITY_INSERT {tableFullName} ON;";
             this._context.Database.OpenConnection();
-            this._context.Database.ExecuteSqlCommand(cmd);
+            this._context.Database.ExecuteSqlRaw(cmd);
             this._context.SaveChanges();
             cmd = $"SET IDENTITY_INSERT {tableFullName} OFF;";
-            this._context.Database.ExecuteSqlCommand(cmd);
+            this._context.Database.ExecuteSqlRaw(cmd);
             this._context.Database.CloseConnection();
         }
 
