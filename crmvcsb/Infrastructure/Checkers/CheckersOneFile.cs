@@ -1,3 +1,21 @@
+namespace crmvcsb
+{
+    public interface ICkeckerClass
+    {
+        void _GO() {
+            System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
+        }
+    }
+
+    public class CheckerBase : ICkeckerClass
+    {
+        public virtual void _GO()
+        {
+            System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
+        }
+    }
+}
+
 namespace InfrastructureCheckers
 {
     using System;
@@ -50,13 +68,13 @@ namespace NetPlatformCheckers
 {
 
     using System;
-    
+
     using System.Diagnostics;
 
     using System.Collections.Generic;
 
     using System.Text;
-        
+
     using System.Net;
     using System.Net.Sockets;
 
@@ -69,12 +87,15 @@ namespace NetPlatformCheckers
     using System.Linq;
 
     using System.Runtime.CompilerServices;
+    using System.Collections;
 
     public static class Check
     {
-      
+
         public static void GO()
         {
+            SandBox.GO();
+
             AbstractClassCheck.GO();
             //TasksToFuckupCPU.GO();
 
@@ -82,10 +103,99 @@ namespace NetPlatformCheckers
             OverrideCheck.GO();
             GenericSwapCheck.GO();
             DelegateCheck.GO();
-            EventsCheck.GO();            
+            EventsCheck.GO();
             ReflectionsCheck.GO();
         }
     }
+
+    public class SandBox : crmvcsb.CheckerBase
+    {
+        static SandBox item = new SandBox();
+        public static void GO()
+        {
+            SandBox.item._GO();
+        }
+        public override void _GO()
+        {
+            System.Diagnostics.Trace.WriteLine($"{ System.Reflection.MethodBase.GetCurrentMethod().DeclaringType };{System.Reflection.MethodBase.GetCurrentMethod().Name}");
+            SandBox.OwerflowException();
+        }       
+      
+
+        /// <summary>
+        /// Eternal lopp if unchecked
+        /// </summary>
+        static void OwerflowException() {
+            int max = 500;
+            checked
+            {
+                for (byte i = 0; i < max; i++)
+                {
+                    Console.WriteLine(i);
+                }
+            }
+        }
+    }
+
+    //Ienumerable Ienumerator 
+    public class Person 
+    {
+        public string Name;
+        public string SecondName;
+    }
+    public class Persons : IEnumerable
+    {
+        public Person[] _persons;
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return (IEnumerator) GetEnumerator();
+        }
+        public PersonEnum GetEnumerator()
+        {
+            return new PersonEnum(_persons);
+        }
+
+    }
+    public class PersonEnum : IEnumerator
+    {
+        int position = -1;
+        public Person[] _persons;
+        public PersonEnum(Person[] list)
+        {
+            _persons = list;
+        }
+
+        object IEnumerator.Current => Current;
+        public Person Current {
+            get
+            {
+                try
+                {
+                    return _persons[position];
+                }
+                catch (Exception) { throw; }                          
+            }
+        }
+                    
+
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool MoveNext()
+        {
+            position++;
+            return (position < _persons.Length);
+        }
+
+        public void Reset()
+        {
+            position = -1;
+        }
+    }
+
 
 
     /*PatternMatching check */
@@ -696,7 +806,6 @@ methodGfromChild.MethodG(); //from child
         {
             return "Int of str:" + i.ToString();
         }
-
 
     }
 
@@ -2020,12 +2129,12 @@ namespace LINQtoObjectsCheck
                 racers.Join(cups,r => r.Name, c => c.RacerName, (r , c) => new {
                     racer = r.Name, cup =c.Competition
                 });
-            
-    
+
+
             IEnumerable<string> racerNameIntersect = (from s in cups select s.RacerName).Intersect(from r in racers select r.Name);
             IEnumerable<string> racerNameExcept = (from r in racers select r.Name).Except(from s in cups select s.RacerName);
             IEnumerable<string> cupsZipRacers = (from s in cups select new { s.RacerName, s.Position })
-                .Zip(from r in racers select new { r.Car }, (z, x) => (z.RacerName + x.Car));       
+                .Zip(from r in racers select new { r.Car }, (z, x) => (z.RacerName + x.Car));
 
             IEnumerable<string> d =
                 from t in petownersWithPets
@@ -3085,9 +3194,9 @@ namespace KATAS
                     }
                     string resultTwo = new string(charsFromBiteString.ToArray());
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-
+                    throw;
                 }
             }
 
@@ -3771,7 +3880,7 @@ namespace KATAS
 
             IList<T> sortArr(IList<T> arrA, IList<T> arrB)
             {
-                IList <T> result = new List<T>();
+                IList<T> result = new List<T>();
                      
                 int i = 0, i2 = 0;
                 
@@ -3807,7 +3916,7 @@ namespace KATAS
             int compare(IList<T> arr, int idxLw, int idxHg)
             {                
                 return System.Collections.Generic.Comparer<T>.Default.Compare(arr[idxLw],arr[idxHg]);
-            }      
+            }
             IList<T> swap(IList<T> arr, int idxLw, int idxHg)
             {
                 return new List<T>(){arr[idxHg],arr[idxLw]};
