@@ -16,6 +16,7 @@ namespace crmvcsb
         {
             try
             {
+                NetPlatformCheckers.Check.GO();
                 var bld = CreateWebHostBuilder(args).Build();                
                 bld.Run();                
             }
