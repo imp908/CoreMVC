@@ -46,7 +46,7 @@ namespace crmvcsb
 
     using Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore;
 
-        enum ContextType
+    enum ContextType
     {
         SQL, SQLLite, InMemmory
     }

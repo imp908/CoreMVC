@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
+using KATAS;
+
 namespace crmvcsb.Default.Controllers
 {
     [Route("api/[controller]")]
@@ -13,9 +15,32 @@ namespace crmvcsb.Default.Controllers
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
-        {
+        {            
             return new string[] { "value1", "value2" };
         }
+
+        /// <summary>
+        /// Async controller methods to check async
+        /// </summary>
+        /// <returns></returns>
+        // GET api/values
+        // /api/values/GetAsync
+        [HttpGet("GetAsync")]
+        public async Task<ActionResult<string>> GetAsync()
+        {
+            await SandBox.GOasync();
+            return "Async executed";
+        }
+        // GET api/values
+        // api/values/GetasyncFromSinc
+        [HttpGet("GetasyncFromSinc")]
+        public ActionResult<string> GetasyncFromSinc()
+        {
+            SandBox.GOsync();
+            return "Sync from async executed";
+        }
+
+
 
         // GET api/values/5
         [HttpGet("{id}")]

@@ -1,18 +1,35 @@
 namespace crmvcsb
 {
-    public interface ICkeckerClass
-    {
-        void _GO() {
-            System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
-        }
-    }
+    using System.Threading.Tasks;
+    using System.Threading;
 
-    public class CheckerBase : ICkeckerClass
+    public class SandBox
     {
-        public virtual void _GO()
+        static SandBox item = new SandBox();
+        public static void GO()
         {
-            System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
+            SandBox.item._GO();
         }
+        public void _GO()
+        {
+            System.Diagnostics.Trace.WriteLine($"{ System.Reflection.MethodBase.GetCurrentMethod().DeclaringType };{System.Reflection.MethodBase.GetCurrentMethod().Name}");
+        }
+        
+        public static Task GOasync()
+        {
+            return item._GOasync();
+        }   
+        public static void GOsync()
+        {
+            item._GOasync();
+        }
+
+        public async Task _GOasync()
+        {
+            await Task.Delay(100);
+        }
+
+
     }
 }
 
@@ -61,8 +78,6 @@ namespace InfrastructureCheckers
         }
     }
 
-    
-
 }
 
 
@@ -96,7 +111,6 @@ namespace NetPlatformCheckers
 
         public static void GO()
         {
-            SandBox.GO();
 
             AbstractClassCheck.GO();
             //TasksToFuckupCPU.GO();
@@ -110,36 +124,6 @@ namespace NetPlatformCheckers
         }
     }
 
-<<<<<<< Updated upstream
-=======
-    public class SandBox : crmvcsb.CheckerBase
-    {
-        static SandBox item = new SandBox();
-        public static void GO()
-        {
-            SandBox.item._GO();
-        }
-        public override void _GO()
-        {
-            System.Diagnostics.Trace.WriteLine($"{ System.Reflection.MethodBase.GetCurrentMethod().DeclaringType };{System.Reflection.MethodBase.GetCurrentMethod().Name}");
-            SandBox.OwerflowException();
-        }       
-      
-
-        /// <summary>
-        /// Eternal lopp if unchecked
-        /// </summary>
-        static void OwerflowException() {
-            int max = 500;
-            checked
-            {
-                for (byte i = 0; i < max; i++)
-                {
-                    Console.WriteLine(i);
-                }
-            }
-        }
-    }
 
     //Ienumerable Ienumerator 
     public class Person 
@@ -201,7 +185,6 @@ namespace NetPlatformCheckers
     }
 
 
->>>>>>> Stashed changes
     /*PatternMatching check */
 
     /*--------------------------------------------- */
@@ -269,8 +252,9 @@ namespace NetPlatformCheckers
         public ABSchild():base() { }
         public ABSchild(int val){}
 
-        static ABSchild(){
-            //AbsChildProp="inited in child static constr";
+        static ABSchild()
+        {
+            AbsChildProp="inited in child static constr";
         }
     }
     public class AbstractClassCheck{
@@ -692,7 +676,7 @@ methodGfromChild.MethodG(); //from child
     }
 
 
-  
+
 
     /** generic delegate swap*/
     /*--------------------------------------------- */
@@ -737,13 +721,13 @@ methodGfromChild.MethodG(); //from child
         public static int desc<T>(T itm1, T itm2) where T : IEntityID
         {
             if (itm1.ID > itm2.ID) { return 1; }
-            if (itm1.ID < itm2.ID) { return -1; }            
+            if (itm1.ID < itm2.ID) { return -1; }
             return 0;
         }
         public static int asc<T>(T itm1, T itm2) where T : IEntityID
         {
             if (itm1.ID < itm2.ID) { return 1; }
-            if (itm1.ID > itm2.ID) { return -1; }            
+            if (itm1.ID > itm2.ID) { return -1; }
             return 0;
         }
     }
@@ -776,7 +760,6 @@ methodGfromChild.MethodG(); //from child
 
         }
     }
-
 
 
 
@@ -1703,7 +1686,7 @@ System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMet
             foreach (Type b in types_filtered)
             {
                 //defining non static type
-                if (b.IsClass && b.IsAbstract == false && b.IsSealed == false)
+                if (b.IsClass && b.IsAbstract == false && b.IsSealed == false && b.IsGenericType == false)
                 {
                     var constructor = b.GetConstructor(
                     BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, 
@@ -2635,6 +2618,21 @@ namespace TipsAndTricks
             System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
         }
 
+        /// <summary>
+        /// Eternal lopp if unchecked
+        /// </summary>
+        static void OwerflowException()
+        {
+            int max = 500;
+            checked
+            {
+                for (byte i = 0; i < max; i++)
+                {
+                    Console.WriteLine(i);
+                }
+            }
+        }
+
     }
 
     //hash from different collections compare check
@@ -2702,7 +2700,6 @@ namespace KATAS
 
     //custom linq
     using System.Linq.Expressions;
-
 
 
     public class TNine{
