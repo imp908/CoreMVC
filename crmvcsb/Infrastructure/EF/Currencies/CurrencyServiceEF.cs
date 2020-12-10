@@ -10,9 +10,9 @@ namespace crmvcsb.Infrastructure.EF.Currencies
     using System.Threading.Tasks;
     using System.Collections.Generic;
 
-    using crmvcsb.Domain.DomainSpecific.Currency;
-    using crmvcsb.Domain.DomainSpecific.Currency.DAL;
-    using crmvcsb.Domain.DomainSpecific.Currency.API;
+    using crmvcsb.Universal.DomainSpecific.Currency;
+    using crmvcsb.Universal.DomainSpecific.Currency.DAL;
+    using crmvcsb.Universal.DomainSpecific.Currency.API;
     
     public class CurrencyServiceEF : ServiceEF, ICurrencyService
     {

@@ -1,7 +1,7 @@
 namespace crmvcsb.Infrastructure.EF.NewOrder
 {
     using Microsoft.EntityFrameworkCore;
-    using crmvcsb.Domain.DomainSpecific.NewOrder.DAL;
+    using crmvcsb.Universal.DomainSpecific.NewOrder.DAL;
     
 
     public class ContextNewOrder : DbContext

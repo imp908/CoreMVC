@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 
 
-namespace crmvcsb.Domain.DomainSpecific.NewOrder.DAL
+namespace crmvcsb.Universal.DomainSpecific.NewOrder.DAL
 {
     
-    using crmvcsb.Domain.Universal;
+    using crmvcsb.Universal;
 
     public class PhysicalUnitConvertions : EntityIntIdDAL
     {

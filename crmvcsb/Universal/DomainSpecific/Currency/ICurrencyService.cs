@@ -1,13 +1,13 @@
 ﻿
 
-namespace crmvcsb.Domain.DomainSpecific.Currency
+namespace crmvcsb.Universal.DomainSpecific.Currency
 {
     
     using System.Collections.Generic;
     using System.Threading.Tasks;
     
-    using crmvcsb.Domain.Universal;
-    using crmvcsb.Domain.DomainSpecific.Currency.API;
+    using crmvcsb.Universal;
+    using crmvcsb.Universal.DomainSpecific.Currency.API;
    
     public interface ICurrencyService : IService
     {

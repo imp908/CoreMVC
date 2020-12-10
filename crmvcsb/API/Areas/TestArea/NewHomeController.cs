@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using crmvcsb.Domain.Models;
+using crmvcsb.Universal.Models;
 
 namespace crmvcsb.Areas.TestArea.Controllers
 {

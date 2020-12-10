@@ -4,7 +4,7 @@
 /// Repository domain interface
 /// used by interface repositories for DB specific type operations
 /// </summary>
-namespace crmvcsb.Domain.Universal
+namespace crmvcsb.Universal
 {
     using System;
     using System.Collections.Generic;

@@ -1,5 +1,5 @@
 ﻿
-namespace crmvcsb.Domain.DomainSpecific.NewOrder
+namespace crmvcsb.Universal.DomainSpecific.NewOrder
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
@@ -8,9 +8,9 @@ namespace crmvcsb.Domain.DomainSpecific.NewOrder
 
     using Microsoft.Extensions.Logging;
 
-    using crmvcsb.Domain.Universal;
-    using crmvcsb.Domain.DomainSpecific.Currency;
-    using crmvcsb.Domain.DomainSpecific.Currency.API;
+    using crmvcsb.Universal;
+    using crmvcsb.Universal.DomainSpecific.Currency;
+    using crmvcsb.Universal.DomainSpecific.Currency.API;
 
     public class NewOrderManager : IDomainManager
     {

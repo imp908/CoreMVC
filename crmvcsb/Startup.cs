@@ -27,19 +27,19 @@ namespace crmvcsb
     using crmvcsb.Infrastructure.SignalR;
 
     using crmvcsb.Infrastructure.EF;
-    using crmvcsb.Domain.Universal;
+    using crmvcsb.Universal;
 
     using crmvcsb.Infrastructure.EF.NewOrder;
 
-    using crmvcsb.Domain.DomainSpecific.NewOrder;
+    using crmvcsb.Universal.DomainSpecific.NewOrder;
 
     using crmvcsb.Infrastructure.EF.Currencies;
-    using crmvcsb.Domain.DomainSpecific.Currency;
-    using crmvcsb.Domain.DomainSpecific.Currency.API;
-    using crmvcsb.Domain.DomainSpecific.Currency.DAL;
+    using crmvcsb.Universal.DomainSpecific.Currency;
+    using crmvcsb.Universal.DomainSpecific.Currency.API;
+    using crmvcsb.Universal.DomainSpecific.Currency.DAL;
    
-    using crmvcsb.Domain.DomainSpecific;
-    using crmvcsb.Domain.Universal;
+    using crmvcsb.Universal.DomainSpecific;
+    using crmvcsb.Universal;
 
     /*Build in logging*/
     using Microsoft.Extensions.Logging;

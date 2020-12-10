@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace crmvcsb.Domain.DomainSpecific.Currency.API
+namespace crmvcsb.Universal.DomainSpecific.Currency.API
 {    
 
     public class GetCurrencyCommand : IGetCurrencyCommand

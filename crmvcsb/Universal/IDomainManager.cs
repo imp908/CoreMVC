@@ -1,5 +1,5 @@
 ﻿
-namespace crmvcsb.Domain.Universal
+namespace crmvcsb.Universal
 {
     using System.Runtime.CompilerServices;
     public interface IDomainManager

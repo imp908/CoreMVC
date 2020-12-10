@@ -1,5 +1,5 @@
 ﻿
-namespace crmvcsb.Domain.Universal
+namespace crmvcsb.Universal
 {
   
     public interface IService 

@@ -2,7 +2,8 @@
 namespace crmvcsb.Infrastructure.EF
 {
     using AutoMapper;    
-    using crmvcsb.Domain.Universal;
+    using crmvcsb.Universal;
+    using crmvcsb.Universal.Infrastructure;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Infrastructure;
 
@@ -11,7 +12,7 @@ namespace crmvcsb.Infrastructure.EF
 
         IRepositoryEF _repository;
         IMapper _mapper;
-
+        
         public ServiceEF(IRepositoryEF repository, IMapper mapper)
         {
             _repository = repository;

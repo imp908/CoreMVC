@@ -7,8 +7,8 @@ namespace crmvcsb.API.Areas.TestArea.FolderControllers
 
     using System;
     using System.Threading.Tasks;
-    using crmvcsb.Domain.DomainSpecific.NewOrder;
-    using crmvcsb.Domain.DomainSpecific.Currency.API;
+    using crmvcsb.Universal.DomainSpecific.NewOrder;
+    using crmvcsb.Universal.DomainSpecific.Currency.API;
 
     using Microsoft.AspNetCore.Mvc;
     using Autofac;

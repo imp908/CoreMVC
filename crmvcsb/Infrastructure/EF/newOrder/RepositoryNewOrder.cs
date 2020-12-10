@@ -4,7 +4,7 @@ namespace crmvcsb.Infrastructure.EF.NewOrder
 
     using Microsoft.EntityFrameworkCore;
   
-    using crmvcsb.Domain.Universal;
+    using crmvcsb.Universal;
     using crmvcsb.Infrastructure.EF;
 
     public class RepositoryNewOrder : RepositoryEF, IRepositoryEF, IRepository

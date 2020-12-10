@@ -7,7 +7,7 @@ using Serilog;
 
 namespace crmvcsb.Infrastructure.IO.Logging
 {
-    using crmvcsb.Domain.Infrastructure;
+    using crmvcsb.Universal.Infrastructure;
     public class SerilogLogging : ILogger
     {
         Serilog.Core.Logger log;

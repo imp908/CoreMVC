@@ -2,7 +2,7 @@
 /// <summary>
 /// reusable entities for repositories
 /// </summary>
-namespace crmvcsb.Domain.Universal
+namespace crmvcsb.Universal
 {
     using System;
 

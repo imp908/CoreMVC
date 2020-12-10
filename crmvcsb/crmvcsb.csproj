@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Infrastructure\EF\test\**" />
+    <Content Remove="Infrastructure\EF\test\**" />
+    <EmbeddedResource Remove="Infrastructure\EF\test\**" />
+    <None Remove="Infrastructure\EF\test\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="description.json" />
   </ItemGroup>
 
@@ -27,10 +34,6 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Infrastructure\EF\test\" />
   </ItemGroup>
 
 </Project>

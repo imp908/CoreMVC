@@ -1,6 +1,6 @@
 using System;
 
-namespace crmvcsb.Domain.Models
+namespace crmvcsb.Universal.Models
 {
     public class ErrorViewModel
     {

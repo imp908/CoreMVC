@@ -9,10 +9,10 @@ namespace crmvcsb.Infrastructure.EF.NewOrder
     using System.Threading.Tasks;
     using System.Collections.Generic;
 
-    using crmvcsb.Domain.DomainSpecific.Currency.DAL;
-    using crmvcsb.Domain.DomainSpecific.Currency.API;
-    using crmvcsb.Domain.DomainSpecific.NewOrder;
-    using crmvcsb.Domain.DomainSpecific.NewOrder.DAL;
+    using crmvcsb.Universal.DomainSpecific.Currency.DAL;
+    using crmvcsb.Universal.DomainSpecific.Currency.API;
+    using crmvcsb.Universal.DomainSpecific.NewOrder;
+    using crmvcsb.Universal.DomainSpecific.NewOrder.DAL;
     using crmvcsb.Infrastructure.EF;
 
     public class NewOrderServiceEF : ServiceEF, INewOrderService

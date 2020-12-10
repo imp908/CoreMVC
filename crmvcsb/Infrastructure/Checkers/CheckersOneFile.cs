@@ -45,8 +45,8 @@ namespace InfrastructureCheckers
 
     using AutoMapper;
 
-    using crmvcsb.Domain.DomainSpecific.Currency;
-    using crmvcsb.Domain.DomainSpecific.Currency.DAL;
+    using crmvcsb.Universal.DomainSpecific.Currency;
+    using crmvcsb.Universal.DomainSpecific.Currency.DAL;
     using crmvcsb.Infrastructure.EF.Currencies;
     public static class RepoAndUOWCheck
     {

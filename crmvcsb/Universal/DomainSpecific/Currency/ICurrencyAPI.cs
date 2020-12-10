@@ -1,6 +1,6 @@
 ﻿
 
-namespace crmvcsb.Domain.DomainSpecific.Currency.API
+namespace crmvcsb.Universal.DomainSpecific.Currency.API
 {
     using System;
 

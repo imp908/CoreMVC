@@ -5,7 +5,7 @@
 /// </summary>
 namespace crmvcsb.Infrastructure.EF
 {
-    using crmvcsb.Domain.Universal;
+    using crmvcsb.Universal;
     using Microsoft.EntityFrameworkCore.Infrastructure;
     using Microsoft.EntityFrameworkCore;
     public interface IRepositoryEF : IRepository

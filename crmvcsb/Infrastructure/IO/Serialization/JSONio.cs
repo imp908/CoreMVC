@@ -2,7 +2,7 @@
 namespace crmvcsb.Infrastructure.IO.Serialization
 {
 
-    using crmvcsb.Domain.Infrastructure;
+    using crmvcsb.Universal.Infrastructure;
     using Newtonsoft.Json;
 
     public class JSONio : ISerialization
