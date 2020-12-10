@@ -27,7 +27,7 @@ namespace crmvcsb
     using crmvcsb.Infrastructure.SignalR;
 
     using crmvcsb.Infrastructure.EF;
-    using crmvcsb.Domain.Universal.IRepository;
+    using crmvcsb.Domain.Universal;
 
     using crmvcsb.Infrastructure.EF.NewOrder;
 

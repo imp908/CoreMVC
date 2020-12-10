@@ -1,18 +1,16 @@
 ﻿
 namespace crmvcsb.Domain.Universal
 {
-    public interface IServiceEF
+  
+    public interface IService 
     {
-        string GetDbName();
-    
-    }
 
-    public interface IService : IServiceEF
-    {
+        string GetDbName();
 
         void ReInitialize();
 
-        void CleanUp();
+        void CleanUp();        
+
     }
 
 }

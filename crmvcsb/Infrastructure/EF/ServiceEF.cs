@@ -3,7 +3,7 @@ namespace crmvcsb.Infrastructure.EF
 {
     using AutoMapper;    
     using crmvcsb.Domain.Universal;
-    public class ServiceEF : IServiceEF
+    public class ServiceEF : IService
     {
 
         IRepositoryEF _repository;
@@ -23,6 +23,17 @@ namespace crmvcsb.Infrastructure.EF
         {
             return this._repository.GetConnectionString();
         }
-       
+
+        public virtual void ReInitialize()
+        {
+            _repository.GetDatabase().EnsureDeleted();
+            _repository.GetDatabase().EnsureCreated();
+        }
+
+        public virtual void CleanUp()
+        {
+            _repository.GetDatabase().EnsureDeleted();
+            _repository.GetDatabase().EnsureCreated();
+        }
     }
 }

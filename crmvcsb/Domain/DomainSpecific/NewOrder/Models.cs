@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace crmvcsb.Domain.DomainSpecific.NewOrder.DAL
 {
     
-    using crmvcsb.Domain.Universal.Entities;
+    using crmvcsb.Domain.Universal;
 
     public class PhysicalUnitConvertions : EntityIntIdDAL
     {

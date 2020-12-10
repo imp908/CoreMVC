@@ -4,7 +4,7 @@
 /// Repository domain interface
 /// used by interface repositories for DB specific type operations
 /// </summary>
-namespace crmvcsb.Domain.Universal.IRepository
+namespace crmvcsb.Domain.Universal
 {
     using System;
     using System.Collections.Generic;
@@ -27,12 +27,7 @@ namespace crmvcsb.Domain.Universal.IRepository
         IQueryable<T> QueryByFilter<T>(Expression<Func<T, bool>> expression)
             where T : class;
         void Save();
-
-        void SaveIdentity(string command);
-        void SaveIdentity<T>() where T : class;
-
-
-        string GetConnectionString();
+   
     }
 
 }

@@ -2,13 +2,9 @@
 /// <summary>
 /// reusable entities for repositories
 /// </summary>
-namespace crmvcsb.Domain.Universal.Entities
+namespace crmvcsb.Domain.Universal
 {
-    using crmvcsb.Domain.Universal.IEntities;
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
 
     public class EntityGuidIdDAL : IEntityGuidIdDAL
     {

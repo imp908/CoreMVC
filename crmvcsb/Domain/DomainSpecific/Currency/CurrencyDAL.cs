@@ -4,8 +4,7 @@ namespace crmvcsb.Domain.DomainSpecific.Currency.DAL
     using System;
     using System.Collections.Generic;
 
-    using crmvcsb.Domain.Universal.IEntities;
-    using crmvcsb.Domain.Universal.Entities;
+    using crmvcsb.Domain.Universal;
     
     public class CurrencyDAL : EntityIntIdDAL
     {

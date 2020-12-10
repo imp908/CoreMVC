@@ -2,7 +2,7 @@
 /// <summary>
 /// Interfaces for generic IRepository entities
 /// </summary>
-namespace crmvcsb.Domain.Universal.IEntities
+namespace crmvcsb.Domain.Universal
 {
     using System;
     public interface IEntityGuidIdDAL

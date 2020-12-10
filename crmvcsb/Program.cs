@@ -16,8 +16,7 @@ namespace crmvcsb
         {
             try
             {
-                NetPlatformCheckers.Check.GO();               
-                var bld = CreateWebHostBuilder(args).Build();                
+                var bld = CreateWebHostBuilder(args).Build();
                 bld.Run();                
             }
             catch (Exception)

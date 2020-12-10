@@ -100,7 +100,7 @@ namespace crmvcsb.Domain.DomainSpecific.Currency
             return result.Cast<ICrossCurrenciesAPI>().ToList();
         }
   
-        public void ReInitialize()
+        public override void ReInitialize()
         {
 
             _repository.GetDatabase().EnsureDeleted();
@@ -136,7 +136,7 @@ namespace crmvcsb.Domain.DomainSpecific.Currency
                 throw;
             }
         }
-        public void CleanUp() 
+        public override void CleanUp() 
         {
             _repository.GetDatabase().EnsureCreated();
             _repository.DeleteRange(_repository.GetAll<CurrencyRatesDAL>().ToList());

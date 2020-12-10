@@ -17,7 +17,7 @@ namespace crmvcsb.Infrastructure.EF
 
     using Microsoft.EntityFrameworkCore.Infrastructure;
 
-    using crmvcsb.Domain.Universal.IRepository;
+    using crmvcsb.Domain.Universal;
 
     /// <summary>
     /// Basic repository implementation
