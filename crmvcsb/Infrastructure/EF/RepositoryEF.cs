@@ -154,6 +154,13 @@ namespace crmvcsb.Infrastructure.EF
             return this._context.Database;
         }
 
+        public DbContext GetEFContext() {            
+            if(this._context is DbContext context)
+            {
+                return context;
+            }
+            return null;
+        }
     }
 
 }
