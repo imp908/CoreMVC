@@ -191,7 +191,7 @@ namespace crmvcsb
                 .UseSqlServer(Configuration.GetConnectionString("LocalNewOrderConnection")).Options)
 
             ).As<IRepositoryEF>().AsSelf()
-            .InstancePerRequest();
+            .InstancePerLifetimeScope();
 
 
             //--------
@@ -202,7 +202,7 @@ namespace crmvcsb
                 .UseSqlServer(Configuration.GetConnectionString("LocalCurrenciesConnection")).Options))
 
             .As<IRepositoryEF>().AsSelf()
-            .InstancePerRequest();
+            .InstancePerLifetimeScope();
 
 
            
