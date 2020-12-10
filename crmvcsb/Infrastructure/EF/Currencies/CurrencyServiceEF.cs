@@ -1,6 +1,6 @@
 ﻿
 
-namespace crmvcsb.Domain.DomainSpecific.Currency
+namespace crmvcsb.Infrastructure.EF.Currencies
 {
     using System;
     using System.Linq;
@@ -10,23 +10,23 @@ namespace crmvcsb.Domain.DomainSpecific.Currency
     using System.Threading.Tasks;
     using System.Collections.Generic;
 
+    using crmvcsb.Domain.DomainSpecific.Currency;
     using crmvcsb.Domain.DomainSpecific.Currency.DAL;
     using crmvcsb.Domain.DomainSpecific.Currency.API;
-    using crmvcsb.Infrastructure.EF;
     
-    public class CurrencyService : ServiceEF, ICurrencyService
+    public class CurrencyServiceEF : ServiceEF, ICurrencyService
     {
         IRepositoryEF _repository;
         IMapper _mapper;
-
-        public CurrencyService(IRepositoryEF repository, IMapper mapper)
+        
+        public CurrencyServiceEF(IRepositoryEF repository, IMapper mapper)
             : base(repository, mapper)
         {
             _repository = repository;
             _mapper = mapper;
         }
 
-        public CurrencyService(IRepositoryEF repository)
+        public CurrencyServiceEF(IRepositoryEF repository)
         : base(repository)
         {
             _repository = repository;

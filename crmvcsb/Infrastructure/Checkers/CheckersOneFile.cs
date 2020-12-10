@@ -71,7 +71,7 @@ namespace InfrastructureCheckers
                 repo.DeleteRange(currencies);
                 repo.Save();
 
-                CurrencyService currencyService = new CurrencyService(repo);
+                CurrencyServiceEF currencyService = new CurrencyServiceEF(repo);
                 currencyService.ReInitialize();
 
             }

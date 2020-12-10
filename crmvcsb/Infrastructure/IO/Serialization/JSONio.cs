@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-using crmvcsb.Infrastructure.IO.Serialization;
-using Newtonsoft.Json;
-
+﻿
 namespace crmvcsb.Infrastructure.IO.Serialization
 {
+
+    using crmvcsb.Domain.Infrastructure;
+    using Newtonsoft.Json;
+
     public class JSONio : ISerialization
     {
         public object DeSerialize(string input)

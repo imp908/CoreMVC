@@ -211,11 +211,11 @@ namespace crmvcsb
             .As<IServiceEF>()
             .InstancePerLifetimeScope();
 
-            autofacContainer.Register(ctx => new NewOrderService(ctx.Resolve<RepositoryNewOrder>(), ctx.Resolve<IMapper>()))
+            autofacContainer.Register(ctx => new NewOrderServiceEF(ctx.Resolve<RepositoryNewOrder>(), ctx.Resolve<IMapper>()))
             .As<INewOrderService>()
             .InstancePerLifetimeScope();
 
-            autofacContainer.Register(ctx => new CurrencyService(ctx.Resolve<RepositoryCurrency>(), ctx.Resolve<IMapper>()))
+            autofacContainer.Register(ctx => new CurrencyServiceEF(ctx.Resolve<RepositoryCurrency>(), ctx.Resolve<IMapper>()))
             .As<ICurrencyService>()
             .InstancePerLifetimeScope();
 
@@ -251,7 +251,7 @@ namespace crmvcsb
                 .WithMetadata<AppendMetadata>(m => m.For(am => am.AppendName, "NewOrderContext"))
                 .InstancePerLifetimeScope();
 
-            autofacContainer.RegisterType<NewOrderService>()
+            autofacContainer.RegisterType<NewOrderServiceEF>()
                 .As<INewOrderService>()
                 .WithMetadata<AppendMetadata>(m => m.For(am => am.AppendName, "NewOrderContext"))
                 .InstancePerLifetimeScope();
@@ -275,7 +275,7 @@ namespace crmvcsb
                 .WithMetadata<AppendMetadata>(m => m.For(am => am.AppendName, "NewOrderContext"))
                 .InstancePerLifetimeScope();
 
-            autofacContainer.RegisterType<NewOrderService>()
+            autofacContainer.RegisterType<NewOrderServiceEF>()
                 .As<INewOrderService>()
                 .WithMetadata<AppendMetadata>(m => m.For(am => am.AppendName, "NewOrderContext"))
                 .InstancePerLifetimeScope();

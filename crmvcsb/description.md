@@ -282,8 +282,6 @@ Infrastructure:
 API->Infrastructure API->Domain Infrastructure->Domain 
 
 TODO: [
-
-	
 	
 ] 
 
@@ -456,11 +454,10 @@ DONE:[
 				and reinnitializing domain DBs (newOrer and Currencies) from controller Index;
 			<- done 02.05.2020 3h30m -> move blogging to brunch, 
 				merge TMPL to master, merge blogging to master
-			<- 08.11.2020 4h -> migrate from net core 2.0 to 3.0
-		]
-		~19h in 5days
+			<- 08.11.2020 4h -> migrate from net core 2.0 to 3.0            
+		]~19h in 5days
+        <- 09.12.2020 2h45m -> rearrange Services and Context interfaces
 	]
-	~31h 50m in 15days
+	~34h 30m in 16days
 
-    
-]~126h:20m in 40d	
+]~128h:50m in 41d

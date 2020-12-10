@@ -1,5 +1,5 @@
 
-namespace crmvcsb.Domain.DomainSpecific.NewOrder
+namespace crmvcsb.Infrastructure.EF.NewOrder
 {
     using System;
     using System.Linq;
@@ -11,15 +11,16 @@ namespace crmvcsb.Domain.DomainSpecific.NewOrder
 
     using crmvcsb.Domain.DomainSpecific.Currency.DAL;
     using crmvcsb.Domain.DomainSpecific.Currency.API;
+    using crmvcsb.Domain.DomainSpecific.NewOrder;
     using crmvcsb.Domain.DomainSpecific.NewOrder.DAL;
     using crmvcsb.Infrastructure.EF;
 
-    public class NewOrderService : ServiceEF, INewOrderService
+    public class NewOrderServiceEF : ServiceEF, INewOrderService
     {
         IRepositoryEF _repository;
         IMapper _mapper;
 
-        public NewOrderService(IRepositoryEF repository, IMapper mapper) 
+        public NewOrderServiceEF(IRepositoryEF repository, IMapper mapper) 
             : base(repository, mapper)
         {
             _repository = repository;
@@ -27,7 +28,7 @@ namespace crmvcsb.Domain.DomainSpecific.NewOrder
         }
      
 
-        public void ReInitialize()
+        public override void ReInitialize()
         {
             
             _repository.GetDatabase().EnsureDeleted();
@@ -50,18 +51,14 @@ namespace crmvcsb.Domain.DomainSpecific.NewOrder
             {
 
             }
-
-          
-
-            
+                      
         }
-        public void CleanUp()
+        public override void CleanUp()
         {
             _repository.GetDatabase().EnsureCreated();
             var addressesExist = _repository.QueryByFilter<AddressDAL>(s => s.Id != 0).ToList();
             _repository.DeleteRange(addressesExist);
             try { _repository.Save(); } catch (Exception e) { throw; }
-
            
         }
     

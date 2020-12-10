@@ -3,7 +3,10 @@ namespace crmvcsb.Infrastructure.EF
 {
     using AutoMapper;    
     using crmvcsb.Domain.Universal;
-    public class ServiceEF : IService
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.Infrastructure;
+
+    public class ServiceEF : IServiceEF
     {
 
         IRepositoryEF _repository;
@@ -34,6 +37,21 @@ namespace crmvcsb.Infrastructure.EF
         {
             _repository.GetDatabase().EnsureDeleted();
             _repository.GetDatabase().EnsureCreated();
+        }
+
+        public string GetConnectionString()
+        {
+            return _repository.GetConnectionString();
+        }
+
+        public DatabaseFacade GetDatabase()
+        {
+            return _repository.GetDatabase();
+        }
+
+        public DbContext GetEFContext()
+        {
+            return _repository.GetEFContext();
         }
     }
 }
