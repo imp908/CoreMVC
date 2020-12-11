@@ -10,7 +10,7 @@ namespace crmvcsb.Universal
         Guid Id { get; set; }
     }
     public interface IEntityIntIdDAL
-    {
+    {        
         int Id { get; set; }
     }
     public interface IEntityStringIdDAL

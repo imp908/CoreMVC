@@ -16,6 +16,7 @@ namespace crmvcsb
         {
             try
             {
+                InfrastructureCheckers.RepoAndUOWCheck.GO();
                 var bld = CreateWebHostBuilder(args).Build();
                 bld.Run();                
             }

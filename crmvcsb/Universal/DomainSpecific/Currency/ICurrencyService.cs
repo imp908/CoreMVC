@@ -11,6 +11,7 @@ namespace crmvcsb.Universal.DomainSpecific.Currency
    
     public interface ICurrencyService : IService
     {
+        public void CleanUp();
         Task<IList<ICrossCurrenciesAPI>> GetCurrencyCrossRatesAsync(IGetCurrencyCommand command);
     }
 }

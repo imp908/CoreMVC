@@ -50,6 +50,8 @@ Related files:
 	dotnet add tests\integrationtests\integrationtests.csproj package FluentAssertions --version 5.7.0
 	dotnet add tests\integrationtests\integrationtests.csproj package Microsoft.NET.Test.Sdk --version 16.2.0
 	dotnet add package Serilog.AspNetCore
+	dotnet add package FluentValidation.AspNetCore
+
 ```
 
 ## Migrate from net core 2.0 to 3.0

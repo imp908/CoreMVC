@@ -13,8 +13,8 @@ namespace crmvcsb.Infrastructure.EF.Currencies
     using crmvcsb.Universal.DomainSpecific.Currency;
     using crmvcsb.Universal.DomainSpecific.Currency.DAL;
     using crmvcsb.Universal.DomainSpecific.Currency.API;
-    
-    public class CurrencyServiceEF : ServiceEF, ICurrencyService
+    using crmvcsb.Universal;
+    public class CurrencyServiceEF : Service, ICurrencyService
     {
         IRepositoryEF _repository;
         IMapper _mapper;
@@ -32,6 +32,15 @@ namespace crmvcsb.Infrastructure.EF.Currencies
             _repository = repository;
         }
 
+        
+        public async Task<CurrencyAPI> AddCurrency(CurrencyAPI currency)
+        {
+            var entityToAdd = _mapper.Map<CurrencyAPI, CurrencyDAL>(currency);
+            await _repository.AddAsync<CurrencyDAL>(entityToAdd);
+            var entityAdded = _mapper.Map<CurrencyDAL, CurrencyAPI>(entityToAdd);
+            return entityAdded;
+        }
+
         public async Task<IList<ICrossCurrenciesAPI>> GetCurrencyCrossRatesAsync(IGetCurrencyCommand command)
         {
 
@@ -46,7 +55,8 @@ namespace crmvcsb.Infrastructure.EF.Currencies
                 var pairFrom = await _repository
                     .QueryByFilter<CurrencyRatesDAL>(c => c.CurrencyFrom.IsoCode.ToLower() == command.FromCurrency.ToLower()
                     && c.CurrencyTo.IsoCode.ToLower() == command.ThroughCurrency.ToLower())
-                    .Include(s => s.CurrencyFrom).Include(s => s.CurrencyTo)
+                    .Include(s => s.CurrencyFrom)
+                    .Include(s => s.CurrencyTo)
                     .FirstOrDefaultAsync();
 
                 if (pairFrom == null)
@@ -103,8 +113,7 @@ namespace crmvcsb.Infrastructure.EF.Currencies
         public override void ReInitialize()
         {
 
-            _repository.GetDatabase().EnsureDeleted();
-            _repository.GetDatabase().EnsureCreated();
+            _repository.ReInitialize();
 
             _repository.Add<CurrencyDAL>(new CurrencyDAL() { Id = 1, Name = "USD", IsoCode = "USD" });
             _repository.Add<CurrencyDAL>(new CurrencyDAL() { Id = 2, Name = "EUR", IsoCode = "EUR" });
@@ -114,7 +123,7 @@ namespace crmvcsb.Infrastructure.EF.Currencies
             _repository.Add<CurrencyDAL>(new CurrencyDAL() { Id = 6, Name = "AUD", IsoCode = "AUD" });
             _repository.Add<CurrencyDAL>(new CurrencyDAL() { Id = 7, Name = "CAD", IsoCode = "CAD" });
             _repository.Add<CurrencyDAL>(new CurrencyDAL() { Id = 8, Name = "CHF", IsoCode = "CHF" });
-            try { _repository.SaveIdentity<CurrencyDAL>(); }
+            try { _repository.SaveIdentity< CurrencyDAL>(); }
             catch (Exception e)
             {
                 throw;
@@ -130,15 +139,15 @@ namespace crmvcsb.Infrastructure.EF.Currencies
             _repository.Add<CurrencyRatesDAL>(new CurrencyRatesDAL() { Id = 9, CurrencyFromId = 2, CurrencyToId = 6, Rate = 15M, Date = new DateTime(2019, 07, 23) });
             _repository.Add<CurrencyRatesDAL>(new CurrencyRatesDAL() { Id = 10, CurrencyFromId = 6, CurrencyToId = 3, Rate = 0.25M, Date = new DateTime(2019, 07, 23) });
 
-            try { _repository.SaveIdentity<CurrencyRatesDAL>(); }
+            try { _repository.SaveIdentity< CurrencyRatesDAL>(); }
             catch (Exception e)
             {
                 throw;
             }
         }
-        public override void CleanUp() 
+        public void CleanUp() 
         {
-            _repository.GetDatabase().EnsureCreated();
+            _repository.ReInitialize();
             _repository.DeleteRange(_repository.GetAll<CurrencyRatesDAL>().ToList());
             _repository.DeleteRange(_repository.GetAll<CurrencyDAL>().ToList());
             try { _repository.Save(); } catch (Exception e) { throw; }

@@ -5,6 +5,9 @@
 namespace crmvcsb.Universal
 {
     using System;
+    using System.ComponentModel.DataAnnotations.Schema;
+    using System.ComponentModel.DataAnnotations;
+    using Microsoft.EntityFrameworkCore;
 
     public class EntityGuidIdDAL : IEntityGuidIdDAL
     {
@@ -12,6 +15,7 @@ namespace crmvcsb.Universal
     }
     public class EntityIntIdDAL : IEntityIntIdDAL
     {
+        [Key]
         public int Id { get; set; }
     }
     public class EntityStringIdDAL : IEntityStringIdDAL

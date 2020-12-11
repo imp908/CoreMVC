@@ -2,7 +2,6 @@
 
 namespace crmvcsb
 {
-
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -37,14 +36,13 @@ namespace crmvcsb
     using crmvcsb.Universal.DomainSpecific.Currency;
     using crmvcsb.Universal.DomainSpecific.Currency.API;
     using crmvcsb.Universal.DomainSpecific.Currency.DAL;
-   
-    using crmvcsb.Universal.DomainSpecific;
-    using crmvcsb.Universal;
+
+    using FluentValidation.AspNetCore;
+
+    using crmvcsb.Infrastructure.Mapping;
 
     /*Build in logging*/
     using Microsoft.Extensions.Logging;
-
-    using Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore;
 
     enum ContextType
     {
@@ -165,9 +163,9 @@ namespace crmvcsb
                 // o.UseSqlServer(Configuration.GetConnectionString("CostControlDb")));
 
 			}
-			catch (Exception e)
+			catch (Exception)
             {
-
+                throw;
             }
    
             return r;
@@ -207,8 +205,8 @@ namespace crmvcsb
 
            
             /*Register repository dummy clones for DB scope to services*/
-            autofacContainer.Register(ctx => new ServiceEF(ctx.Resolve<RepositoryEF>(), ctx.Resolve<IMapper>()))
-            .As<IServiceEF>()
+            autofacContainer.Register(ctx => new Service(ctx.Resolve<RepositoryEF>(), ctx.Resolve<IMapper>()))
+            .As<IService>()
             .InstancePerLifetimeScope();
 
             autofacContainer.Register(ctx => new NewOrderServiceEF(ctx.Resolve<RepositoryNewOrder>(), ctx.Resolve<IMapper>()))
@@ -294,18 +292,16 @@ namespace crmvcsb
 
         public MapperConfiguration ConfigureAutoMapper()
         {
-            return new MapperConfiguration(cfg =>
-            {
-               
-
-                cfg.CreateMap<CurrencyRatesDAL, CrossCurrenciesAPI>()
-                    .ForMember(d => d.From, m => m.MapFrom(src => src.CurrencyFrom.Name))
-                    .ForMember(d => d.To, m => m.MapFrom(src => src.CurrencyTo.Name))
-                    .ReverseMap().ForAllMembers(o => o.Ignore());
-
-            });
+            return CurrenciesMapping.config();
         }
 
+        public void ConfigureFluentValidation(IServiceCollection services)
+        {
+            services.AddMvc(setup => {                
+            }).AddFluentValidation();
+
+            services.AddTransient<IValidator<CurrencyAPI>, CurrencyAPIValidator>();
+        }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

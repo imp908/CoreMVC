@@ -5,6 +5,7 @@ namespace crmvcsb.Infrastructure.EF
     using System.Linq.Expressions;
 
     using Microsoft.EntityFrameworkCore.ChangeTracking;
+    using Microsoft.EntityFrameworkCore.Infrastructure;
 
     using Microsoft.EntityFrameworkCore;
     using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace crmvcsb.Infrastructure.EF
 
     using System.Reflection;
 
-    using Microsoft.EntityFrameworkCore.Infrastructure;
+
 
     using crmvcsb.Universal;
 
@@ -95,6 +96,7 @@ namespace crmvcsb.Infrastructure.EF
         public IQueryable<T> QueryByFilter<T>(Expression<Func<T, bool>> expression)
             where T : class
         {
+            
             return this._context.Set<T>().Where(expression);
         }
 
@@ -112,6 +114,22 @@ namespace crmvcsb.Infrastructure.EF
         public Task<int> SaveAsync()
         {
             return this._context.SaveChangesAsync();
+        }
+
+        public string GetConnectionString()
+        {
+            return this._context.Database.GetDbConnection().ConnectionString;
+        }
+        public void ReInitialize()
+        {
+            this._context.Database.EnsureDeleted();
+            this._context.Database.EnsureCreated();
+        }
+
+        public void CleanUp()
+        {
+            this._context.Database.EnsureDeleted();
+            this._context.Database.EnsureCreated();
         }
 
         public void SaveIdentity<T>()
@@ -143,11 +161,7 @@ namespace crmvcsb.Infrastructure.EF
 
 
 
-        public string GetConnectionString() 
-        { 
-            return this._context.Database.GetDbConnection().ConnectionString;
-        }
-        
+  
 
         public DatabaseFacade GetDatabase()
         {

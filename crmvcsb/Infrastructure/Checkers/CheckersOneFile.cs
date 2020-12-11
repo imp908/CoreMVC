@@ -55,6 +55,7 @@ namespace InfrastructureCheckers
         static string connectionStringSQL = "Server=AAAPC;Database=currenciesDB;User Id=tl;Password=awsedrDRSEAW;";
 
         public static void GO(){
+            crmvcsb.Universal.ExpressionsPOC.GO();            
             DbWithRepoReinitCheck();
         }
 

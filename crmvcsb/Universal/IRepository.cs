@@ -16,7 +16,8 @@ namespace crmvcsb.Universal
         IQueryable<T> GetAll<T>(Expression<Func<T, bool>> expression = null)
             where T : class;
 
-        void Add<T>(T item) where T : class;
+        void Add<T>(T item) where T : class;        
+
         void AddRange<T>(IList<T> items) where T : class;
         void Delete<T>(T item) where T : class;
         void DeleteRange<T>(IList<T> items) where T : class;
@@ -25,9 +26,14 @@ namespace crmvcsb.Universal
         IQueryable<T> SkipTake<T>(int skip, int take)
             where T : class;
         IQueryable<T> QueryByFilter<T>(Expression<Func<T, bool>> expression)
-            where T : class;
+            where T : class;        
+
         void Save();
-   
+
+        void ReInitialize();
+        void CleanUp();
+        string GetConnectionString();
+
     }
 
 }

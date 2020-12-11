@@ -14,8 +14,9 @@ namespace crmvcsb.Infrastructure.EF.NewOrder
     using crmvcsb.Universal.DomainSpecific.NewOrder;
     using crmvcsb.Universal.DomainSpecific.NewOrder.DAL;
     using crmvcsb.Infrastructure.EF;
+    using crmvcsb.Universal;
 
-    public class NewOrderServiceEF : ServiceEF, INewOrderService
+    public class NewOrderServiceEF : Service, INewOrderService
     {
         IRepositoryEF _repository;
         IMapper _mapper;
@@ -30,9 +31,8 @@ namespace crmvcsb.Infrastructure.EF.NewOrder
 
         public override void ReInitialize()
         {
-            
-            _repository.GetDatabase().EnsureDeleted();
-            _repository.GetDatabase().EnsureCreated();
+
+            _repository.ReInitialize();
 
             List<AddressDAL> addresses = new List<AddressDAL>();
 
@@ -55,7 +55,7 @@ namespace crmvcsb.Infrastructure.EF.NewOrder
         }
         public override void CleanUp()
         {
-            _repository.GetDatabase().EnsureCreated();
+            _repository.CleanUp();
             var addressesExist = _repository.QueryByFilter<AddressDAL>(s => s.Id != 0).ToList();
             _repository.DeleteRange(addressesExist);
             try { _repository.Save(); } catch (Exception e) { throw; }

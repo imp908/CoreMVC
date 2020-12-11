@@ -243,7 +243,7 @@ UOW: {
 // Folder structure
 API:
 
-Domain:
+Universal:
 	DomainSpecific:
 		domainName:
 			domainNameAPI.cs; domainNameDAL.cs; IdomainNameService.cs; domainNameService.cs;
@@ -461,3 +461,15 @@ DONE:[
 	~34h 30m in 16days
 
 ]~128h:50m in 41d
+
+
+comments:
+pure generci Repository and Service
+    EFDbContext concrete realization and methods like
+		where, include, getdb - leak into service
+		and make service not purely generic
+			Now -> 
+				Repository and Repository EF 
+				Service and ServicePerDomainEF
+                Service duplicates repository crud methods
+			Then -> wrap aroung DbCpntext and include chain
