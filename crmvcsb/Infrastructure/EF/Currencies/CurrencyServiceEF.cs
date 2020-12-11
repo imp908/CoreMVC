@@ -14,11 +14,14 @@ namespace crmvcsb.Infrastructure.EF.Currencies
     using crmvcsb.Universal.DomainSpecific.Currency.DAL;
     using crmvcsb.Universal.DomainSpecific.Currency.API;
     using crmvcsb.Universal;
-    public class CurrencyServiceEF : Service, ICurrencyService
+
+    using crmvcsbs.Infrastructure.Validation;
+
+    public class CurrencyServiceEF : ServiceEF, ICurrencyServiceEF
     {
         IRepositoryEF _repository;
-        IMapper _mapper;
-        
+        IMapper _mapper;        
+
         public CurrencyServiceEF(IRepositoryEF repository, IMapper mapper)
             : base(repository, mapper)
         {
@@ -35,6 +38,8 @@ namespace crmvcsb.Infrastructure.EF.Currencies
         
         public async Task<CurrencyAPI> AddCurrency(CurrencyAPI currency)
         {
+            CurrenciesValidation cv = new CurrenciesValidation();
+            cv.Validate(currency);
             var entityToAdd = _mapper.Map<CurrencyAPI, CurrencyDAL>(currency);
             await _repository.AddAsync<CurrencyDAL>(entityToAdd);
             var entityAdded = _mapper.Map<CurrencyDAL, CurrencyAPI>(entityToAdd);
@@ -145,7 +150,7 @@ namespace crmvcsb.Infrastructure.EF.Currencies
                 throw;
             }
         }
-        public void CleanUp() 
+        public override void CleanUp() 
         {
             _repository.ReInitialize();
             _repository.DeleteRange(_repository.GetAll<CurrencyRatesDAL>().ToList());

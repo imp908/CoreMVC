@@ -9,7 +9,7 @@ namespace crmvcsb.API.Areas.TestArea.FolderControllers
     using System.Threading.Tasks;
     using crmvcsb.Universal.DomainSpecific.NewOrder;
     using crmvcsb.Universal.DomainSpecific.Currency.API;
-
+    using crmvcsb.Infrastructure.EF;    
     using Microsoft.AspNetCore.Mvc;
     using Autofac;
 
@@ -19,10 +19,10 @@ namespace crmvcsb.API.Areas.TestArea.FolderControllers
     [ApiController]
     public class NewOrderController : Controller
     {
-        private INewOrderService _service;
+        private INewOrderServiceEF _service;
         private NewOrderManager _manager;
 
-        public NewOrderController(INewOrderService service, IComponentContext context)
+        public NewOrderController(INewOrderServiceEF service, IComponentContext context)
         {
             this._service = service;   
             _manager = context.Resolve<NewOrderManager>();
@@ -48,7 +48,7 @@ namespace crmvcsb.API.Areas.TestArea.FolderControllers
         {
             try
             {
-                var result = this._service.GetDbName();                
+                var result = this._service.GetDatabaseName();                
                 return Ok(result);
             }
             catch (Exception e)
@@ -61,7 +61,7 @@ namespace crmvcsb.API.Areas.TestArea.FolderControllers
         public async Task<IActionResult> GetCrossRates([FromBody] GetCurrencyCommand command)
         {
             try
-            {
+            {                
                 var result = await this._manager.GetCurrencyCrossRatesAsync(command);
                 return Ok(result);
             }

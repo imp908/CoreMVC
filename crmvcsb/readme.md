@@ -43,6 +43,7 @@ Related files:
     dotnet add crmvcsb\mvccoresb.csproj package AutoMapper --version 8.1.0
     dotnet add crmvcsb\mvccoresb.csproj package AutoMapper.Extensions.Microsoft.DependencyInjection --version 6.1.0
     dotnet add crmvcsb\mvccoresb.csproj package Microsoft.AspNetCore.SignalR
+	dotnet add crmvcsb\mvccoresb.csproj package FluentValidation.AspNetCore
 	
 	dotnet add tests\integrationtests\integrationtests.csproj package xunit --version 2.4.1
 	dotnet add tests\integrationtests\integrationtests.csproj package xunit.runner.visualstudio --version 2.4.1
@@ -50,7 +51,7 @@ Related files:
 	dotnet add tests\integrationtests\integrationtests.csproj package FluentAssertions --version 5.7.0
 	dotnet add tests\integrationtests\integrationtests.csproj package Microsoft.NET.Test.Sdk --version 16.2.0
 	dotnet add package Serilog.AspNetCore
-	dotnet add package FluentValidation.AspNetCore
+	
 
 ```
 

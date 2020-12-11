@@ -10,13 +10,17 @@ namespace crmvcsb.Universal
     using System.Collections.Generic;
     using System.Linq;
     using System.Linq.Expressions;
+    using System.Threading.Tasks;
 
     public interface IRepository
     {
         IQueryable<T> GetAll<T>(Expression<Func<T, bool>> expression = null)
             where T : class;
 
-        void Add<T>(T item) where T : class;        
+        void Add<T>(T item) where T : class;
+        Task AddRangeAsync<T>(IList<T> items) where T : class;
+
+        Task<int> SaveAsync();
 
         void AddRange<T>(IList<T> items) where T : class;
         void Delete<T>(T item) where T : class;
@@ -32,6 +36,7 @@ namespace crmvcsb.Universal
 
         void ReInitialize();
         void CleanUp();
+        string GetDatabaseName();
         string GetConnectionString();
 
     }

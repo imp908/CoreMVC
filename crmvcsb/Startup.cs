@@ -36,13 +36,17 @@ namespace crmvcsb
     using crmvcsb.Universal.DomainSpecific.Currency;
     using crmvcsb.Universal.DomainSpecific.Currency.API;
     using crmvcsb.Universal.DomainSpecific.Currency.DAL;
-
-    using FluentValidation.AspNetCore;
+    
 
     using crmvcsb.Infrastructure.Mapping;
 
     /*Build in logging*/
     using Microsoft.Extensions.Logging;
+
+    using FluentValidation;
+    using FluentValidation.AspNetCore;
+
+    using crmvcsb.Infrastructure.IoC;
 
     enum ContextType
     {
@@ -95,16 +99,15 @@ namespace crmvcsb
                 options.AreaViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
             });
 
-      
+
             services.AddMvc(options => options.EnableEndpointRouting = false);
             
             /*SignalR registration*/
             services.AddSignalR();
 
             /*Autofac autofacContainer */
-            var autofacContainer = new ContainerBuilder();
-
-
+            //var autofacContainer = new ContainerBuilder();
+            
             /*Automapper Register */
             services.AddAutoMapper(typeof(Startup));
 
@@ -112,37 +115,38 @@ namespace crmvcsb
             var config = ConfigureAutoMapper();
             IMapper mapper = new Mapper(config);
 
-
             /*Autofac registrations */
-            autofacContainer.Populate(services);
+            //autofacContainer.Populate(services);
+            AutofacConfig.config(services);
 
             /*Registration of automapper with autofac Instance API */
-            autofacContainer.RegisterInstance(mapper).As<IMapper>();
+            //autofacContainer.RegisterInstance(mapper).As<IMapper>();
+            AutofacConfig.GetContainer().RegisterInstance(mapper).As<IMapper>();
 
             /* Chose registration of test sql lite or sql server*/
 
             if (Configuration.GetSection("RegistrationSettings").Get<RegistrationSettings>().ContextType == ContextType.SQL)
             {
-                ConfigureAutofacDbContexts(services, autofacContainer);
+                ConfigureAutofacDbContexts(services, AutofacConfig.GetContainer());
             }
             if (Configuration.GetSection("RegistrationSettings").Get<RegistrationSettings>().ContextType == ContextType.SQLLite)
             {
-                ConfigureSqlLiteDbContexts(services, autofacContainer);
+                ConfigureSqlLiteDbContexts(services, AutofacConfig.GetContainer());
             }
             if (Configuration.GetSection("RegistrationSettings").Get<RegistrationSettings>().ContextType == ContextType.InMemmory)
             {
-                ConfigureInMemmoryDbContexts(services, autofacContainer);
+                ConfigureInMemmoryDbContexts(services, AutofacConfig.GetContainer());
             }
 
-
-            ConfigureAutofac(services, autofacContainer);
-          
+            AutofacConfig.ConfigureAutofac(services);          
 
             AutofacServiceProvider r = null;
 
+            ConfigureFluentValidation(services);
+
             try
             {
-                this.ApplicationContainer = autofacContainer.Build();
+                this.ApplicationContainer = AutofacConfig.GetContainer().Build();
                 r = new AutofacServiceProvider(this.ApplicationContainer);
             }
             catch (Exception e)
@@ -210,18 +214,18 @@ namespace crmvcsb
             .InstancePerLifetimeScope();
 
             autofacContainer.Register(ctx => new NewOrderServiceEF(ctx.Resolve<RepositoryNewOrder>(), ctx.Resolve<IMapper>()))
-            .As<INewOrderService>()
+            .As<INewOrderServiceEF>()
             .InstancePerLifetimeScope();
 
             autofacContainer.Register(ctx => new CurrencyServiceEF(ctx.Resolve<RepositoryCurrency>(), ctx.Resolve<IMapper>()))
-            .As<ICurrencyService>()
+            .As<ICurrencyServiceEF>()
             .InstancePerLifetimeScope();
 
             //PropertyAccessMode registration of Iservice to Manager to static
             autofacContainer.Register(c=> {
                 var result = new NewOrderManager();
-                var dep = c.Resolve<INewOrderService>();
-                var dep2 = c.Resolve<ICurrencyService>();
+                var dep = c.Resolve<INewOrderServiceEF>();
+                var dep2 = c.Resolve<ICurrencyServiceEF>();
                 result.BindService(dep,dep2);
                 return result;
             })
@@ -234,7 +238,6 @@ namespace crmvcsb
         public ContainerBuilder ConfigureSqlLiteDbContexts(IServiceCollection services, ContainerBuilder autofacContainer)
         {
      
-
             /**EF, repo and UOW reg */
    
             autofacContainer.RegisterType<ContextNewOrder>()
@@ -250,7 +253,7 @@ namespace crmvcsb
                 .InstancePerLifetimeScope();
 
             autofacContainer.RegisterType<NewOrderServiceEF>()
-                .As<INewOrderService>()
+                .As<INewOrderServiceEF>()
                 .WithMetadata<AppendMetadata>(m => m.For(am => am.AppendName, "NewOrderContext"))
                 .InstancePerLifetimeScope();
 
@@ -274,7 +277,7 @@ namespace crmvcsb
                 .InstancePerLifetimeScope();
 
             autofacContainer.RegisterType<NewOrderServiceEF>()
-                .As<INewOrderService>()
+                .As<INewOrderServiceEF>()
                 .WithMetadata<AppendMetadata>(m => m.For(am => am.AppendName, "NewOrderContext"))
                 .InstancePerLifetimeScope();
 
@@ -282,13 +285,7 @@ namespace crmvcsb
         }
         
 
-        public ContainerBuilder ConfigureAutofac(IServiceCollection services, ContainerBuilder autofacContainer)
-        {
-            //*DAL->BLL reg */
-          
 
-            return autofacContainer;
-        }
 
         public MapperConfiguration ConfigureAutoMapper()
         {
@@ -297,10 +294,8 @@ namespace crmvcsb
 
         public void ConfigureFluentValidation(IServiceCollection services)
         {
-            services.AddMvc(setup => {                
-            }).AddFluentValidation();
+            services.AddMvc().AddFluentValidation();
 
-            services.AddTransient<IValidator<CurrencyAPI>, CurrencyAPIValidator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -348,7 +343,6 @@ namespace crmvcsb
             return this.Configuration;
         }
     }
-
 
     public class AppendMetadata {
         public string AppendName {get; set;}

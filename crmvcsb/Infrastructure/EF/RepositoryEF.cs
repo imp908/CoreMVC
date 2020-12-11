@@ -120,6 +120,11 @@ namespace crmvcsb.Infrastructure.EF
         {
             return this._context.Database.GetDbConnection().ConnectionString;
         }
+        public string GetDatabaseName()
+        {
+            return this._context.Database.GetDbConnection().ConnectionString;
+        }
+
         public void ReInitialize()
         {
             this._context.Database.EnsureDeleted();
@@ -161,7 +166,8 @@ namespace crmvcsb.Infrastructure.EF
 
 
 
-  
+
+       
 
         public DatabaseFacade GetDatabase()
         {

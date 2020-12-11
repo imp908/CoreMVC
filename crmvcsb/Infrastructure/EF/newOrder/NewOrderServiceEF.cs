@@ -16,7 +16,7 @@ namespace crmvcsb.Infrastructure.EF.NewOrder
     using crmvcsb.Infrastructure.EF;
     using crmvcsb.Universal;
 
-    public class NewOrderServiceEF : Service, INewOrderService
+    public class NewOrderServiceEF : ServiceEF, INewOrderServiceEF
     {
         IRepositoryEF _repository;
         IMapper _mapper;
@@ -53,7 +53,7 @@ namespace crmvcsb.Infrastructure.EF.NewOrder
             }
                       
         }
-        public override void CleanUp()
+        public void CleanUp()
         {
             _repository.CleanUp();
             var addressesExist = _repository.QueryByFilter<AddressDAL>(s => s.Id != 0).ToList();

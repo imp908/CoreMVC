@@ -11,6 +11,7 @@ namespace crmvcsb.Universal.DomainSpecific.NewOrder
     using crmvcsb.Universal;
     using crmvcsb.Universal.DomainSpecific.Currency;
     using crmvcsb.Universal.DomainSpecific.Currency.API;
+    using crmvcsb.Infrastructure.EF;
 
     public class NewOrderManager : IDomainManager
     {
@@ -19,10 +20,10 @@ namespace crmvcsb.Universal.DomainSpecific.NewOrder
 
         private static ILogger _logger;
 
-        private static INewOrderService _newOrderService { get; set; }
-        private static ICurrencyService _currencyService { get; set; }
+        private static INewOrderServiceEF _newOrderService { get; set; }
+        private static ICurrencyServiceEF _currencyService { get; set; }
 
-        public void BindService(INewOrderService newOrderService, ICurrencyService currencyService)
+        public void BindService(INewOrderServiceEF newOrderService, ICurrencyServiceEF currencyService)
         {
             _newOrderService = newOrderService;
             _currencyService = currencyService;
@@ -34,7 +35,7 @@ namespace crmvcsb.Universal.DomainSpecific.NewOrder
             {
                 _logger.LogError(CallerMemberName + ": service is null");
             }
-            return _newOrderService.GetDbName();
+            return _newOrderService.GetDatabaseName();
         }
         public void ReInitialize([System.Runtime.CompilerServices.CallerMemberName] string CallerMemberName = "")
         {

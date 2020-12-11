@@ -456,20 +456,15 @@ DONE:[
 				merge TMPL to master, merge blogging to master
 			<- 08.11.2020 4h -> migrate from net core 2.0 to 3.0            
 		]~19h in 5days
-        <- 09.12.2020 2h45m -> rearrange Services and Context interfaces
+        
+        <- 10.12.2020 2h45m -> rearrange Services and Context interfaces
+        
+        <- 11.12.2020 3h 10m-> rearrange Services and Context interfaces
+        <- 11.12.2020 1h 20m-> fluent validation init
+
 	]
-	~34h 30m in 16days
+	~39h 00m in 17days
 
-]~128h:50m in 41d
+]~133h:50m in 42d
 
 
-comments:
-pure generci Repository and Service
-    EFDbContext concrete realization and methods like
-		where, include, getdb - leak into service
-		and make service not purely generic
-			Now -> 
-				Repository and Repository EF 
-				Service and ServicePerDomainEF
-                Service duplicates repository crud methods
-			Then -> wrap aroung DbCpntext and include chain
