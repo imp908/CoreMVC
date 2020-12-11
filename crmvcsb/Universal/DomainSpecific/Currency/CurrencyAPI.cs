@@ -19,12 +19,10 @@ namespace crmvcsb.Universal.DomainSpecific.Currency.API
         public decimal Rate { get; set; }
     }
 
-    public class CurrencyAPI
+    public class CurrencyAPI : ICurrencyAPI
     {
         public string Name { get; set; }
         public string IsoCode { get; set; }
-        public bool IsMain { get; set; }
-
-  
+        public bool IsMain { get; set; }  
     }
 }

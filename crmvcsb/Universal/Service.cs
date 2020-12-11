@@ -14,7 +14,14 @@ namespace crmvcsb.Universal
 
         IRepository _repository;
         IMapper _mapper;
+        IValidatorCustom _validator;
 
+        public Service(IRepository repository, IMapper mapper, IValidatorCustom validator)
+        {
+            _repository = repository;
+            _mapper = mapper;
+            _validator = validator;
+        }
         public Service(IRepository repository, IMapper mapper)
         {
             _repository = repository;

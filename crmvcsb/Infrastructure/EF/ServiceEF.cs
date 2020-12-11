@@ -20,7 +20,15 @@ namespace crmvcsb.Infrastructure.EF
 
         IRepository _repository;
         IMapper _mapper;
+        IValidatorCustom _validator;
 
+        public ServiceEF(IRepository repository, IMapper mapper, IValidatorCustom validator)
+            : base(repository, mapper, validator)
+        {
+            _repository = repository;
+            _mapper = mapper;
+            _validator = validator;
+        }
         public ServiceEF(IRepository repository, IMapper mapper)
             : base(repository, mapper)
         {

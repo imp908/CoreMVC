@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 namespace crmvcsb.Universal
 {
 
-    public interface IValidator<T>
+    public interface IValidatorCustom
     {
-        dynamic Validate(T instance);
+        void Validate<T>(T instance);
     }
 }

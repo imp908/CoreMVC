@@ -19,6 +19,12 @@ namespace crmvcsb.Universal.DomainSpecific.Currency.API
         DateTime Date { get; set; }
     }
 
+    public interface ICurrencyAPI
+    {
+        public string Name { get; set; }
+        public string IsoCode { get; set; }
+        public bool IsMain { get; set; }
+    }
 
 }
 

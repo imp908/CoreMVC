@@ -20,8 +20,16 @@ namespace crmvcsb.Infrastructure.EF.Currencies
     public class CurrencyServiceEF : ServiceEF, ICurrencyServiceEF
     {
         IRepositoryEF _repository;
-        IMapper _mapper;        
+        IMapper _mapper;
+        IValidatorCustom _validator;
 
+        public CurrencyServiceEF(IRepositoryEF repository, IMapper mapper, IValidatorCustom validator)
+            : base(repository, mapper, validator)
+        {
+            _repository = repository;
+            _mapper = mapper;
+            _validator = validator;
+        }
         public CurrencyServiceEF(IRepositoryEF repository, IMapper mapper)
             : base(repository, mapper)
         {
@@ -38,8 +46,7 @@ namespace crmvcsb.Infrastructure.EF.Currencies
         
         public async Task<CurrencyAPI> AddCurrency(CurrencyAPI currency)
         {
-            CurrenciesValidation cv = new CurrenciesValidation();
-            cv.Validate(currency);
+            _validator.Validate(currency);
             var entityToAdd = _mapper.Map<CurrencyAPI, CurrencyDAL>(currency);
             await _repository.AddAsync<CurrencyDAL>(entityToAdd);
             var entityAdded = _mapper.Map<CurrencyDAL, CurrencyAPI>(entityToAdd);
