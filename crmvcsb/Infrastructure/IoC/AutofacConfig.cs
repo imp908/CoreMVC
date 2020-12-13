@@ -39,8 +39,7 @@ namespace crmvcsb.Infrastructure.IoC
     using crmvcsb.Universal.DomainSpecific.Currency;
     using crmvcsb.Universal.DomainSpecific.Currency.API;
     using crmvcsb.Universal.DomainSpecific.Currency.DAL;
-
-
+    using crmvcsbs.Infrastructure.Validation;
     using crmvcsb.Infrastructure.Mapping;
 
     /*Build in logging*/
@@ -64,7 +63,7 @@ namespace crmvcsb.Infrastructure.IoC
         public static ContainerBuilder ConfigureAutofac(IServiceCollection services)
         {
             //*DAL->BLL reg */
-
+            autofacContainer.RegisterType<ValidatorCustom>().As<IValidatorCustom>();
             return autofacContainer;
         }
 

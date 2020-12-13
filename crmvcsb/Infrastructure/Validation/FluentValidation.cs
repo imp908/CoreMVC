@@ -21,7 +21,7 @@ namespace crmvcsbs.Infrastructure.Validation
         }
     }
 
-    public class Validator : IValidatorCustom
+    public class ValidatorCustom : IValidatorCustom
     {
         CurrenciesValidation cv = new CurrenciesValidation();
         public void Validate<T>(T item)

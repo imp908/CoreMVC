@@ -12,6 +12,7 @@ namespace crmvcsb.Universal.DomainSpecific.Currency
    
     public interface ICurrencyServiceEF : IService, IServiceEF
     {
+        Task<CurrencyAPI> AddCurrency(CurrencyAPI currency);
         Task<IList<ICrossCurrenciesAPI>> GetCurrencyCrossRatesAsync(IGetCurrencyCommand command);
     }
 }

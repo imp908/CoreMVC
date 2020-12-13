@@ -28,6 +28,11 @@ namespace crmvcsb.Universal.DomainSpecific.NewOrder
             _newOrderService = newOrderService;
             _currencyService = currencyService;
         }
+        
+        public async Task<CurrencyAPI> AddCurrency(CurrencyAPI currency)
+        {
+            return await _currencyService.AddCurrency(currency);
+        }
 
         public string GetDbName([System.Runtime.CompilerServices.CallerMemberName] string CallerMemberName = "")
         {

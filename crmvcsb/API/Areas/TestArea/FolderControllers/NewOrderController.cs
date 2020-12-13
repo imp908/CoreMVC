@@ -70,5 +70,18 @@ namespace crmvcsb.API.Areas.TestArea.FolderControllers
                 return BadRequest();
             }
         }
+
+        [HttpPost("AddCurrency")]
+        public async Task<IActionResult> AddCurrency([FromBody] CurrencyAPI currency)
+        {
+            try {
+                var result = await this._manager.AddCurrency(currency);
+                return Ok(result);
+            }
+            catch(Exception e)
+            {
+                return BadRequest();
+            }
+        }
     }
 }

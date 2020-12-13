@@ -1,5 +1,4 @@
 ﻿
-
 namespace crmvcsb
 {
     using System;
@@ -295,7 +294,6 @@ namespace crmvcsb
         public void ConfigureFluentValidation(IServiceCollection services)
         {
             services.AddMvc().AddFluentValidation();
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
