@@ -35,7 +35,8 @@ namespace crmvcsb
     using crmvcsb.Universal.DomainSpecific.Currency;
     using crmvcsb.Universal.DomainSpecific.Currency.API;
     using crmvcsb.Universal.DomainSpecific.Currency.DAL;
-    
+    using crmvcsbs.Infrastructure.Validation;
+    using crmvcsb.Universal;
 
     using crmvcsb.Infrastructure.Mapping;
 
@@ -216,7 +217,7 @@ namespace crmvcsb
             .As<INewOrderServiceEF>()
             .InstancePerLifetimeScope();
 
-            autofacContainer.Register(ctx => new CurrencyServiceEF(ctx.Resolve<RepositoryCurrency>(), ctx.Resolve<IMapper>()))
+            autofacContainer.Register(ctx => new CurrencyServiceEF(ctx.Resolve<RepositoryCurrency>(), ctx.Resolve<IMapper>(), ctx.Resolve<IValidatorCustom>()))
             .As<ICurrencyServiceEF>()
             .InstancePerLifetimeScope();
 

@@ -63,7 +63,10 @@ namespace crmvcsb.Infrastructure.IoC
         public static ContainerBuilder ConfigureAutofac(IServiceCollection services)
         {
             //*DAL->BLL reg */
+
             autofacContainer.RegisterType<ValidatorCustom>().As<IValidatorCustom>();
+            autofacContainer.RegisterType<CurrencyServiceEF>().As<ICurrencyServiceEF>();
+            
             return autofacContainer;
         }
 

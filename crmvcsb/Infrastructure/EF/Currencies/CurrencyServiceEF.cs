@@ -49,6 +49,7 @@ namespace crmvcsb.Infrastructure.EF.Currencies
             _validator.Validate(currency);
             var entityToAdd = _mapper.Map<CurrencyAPI, CurrencyDAL>(currency);
             await _repository.AddAsync<CurrencyDAL>(entityToAdd);
+            await _repository.SaveAsync();
             var entityAdded = _mapper.Map<CurrencyDAL, CurrencyAPI>(entityToAdd);
             return entityAdded;
         }
