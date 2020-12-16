@@ -462,9 +462,13 @@ DONE:[
         <- 11.12.2020 3h 10m-> rearrange Services and Context interfaces
         <- 11.12.2020 1h 20m-> fluent validation init
 
-	]
-	~39h 00m in 17days
+        <- 
+            15.12.2020 8h 
+            16.12.2020 6h  -> read write, repositories to service autofac register; read write DBs reinitialization
 
-]~133h:50m in 42d
+	]
+	~53h 00m in 19days
+
+]~147h:50m in 44d
 
 
