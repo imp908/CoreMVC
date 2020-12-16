@@ -29,7 +29,7 @@ namespace crmvcsb.Infrastructure.EF
 
         public DbContext GetContext()
         {
-            return this._context;
+            return this._context;            
         }
 
         public RepositoryEF(DbContext context)
@@ -167,7 +167,6 @@ namespace crmvcsb.Infrastructure.EF
 
 
 
-       
 
         public DatabaseFacade GetDatabase()
         {

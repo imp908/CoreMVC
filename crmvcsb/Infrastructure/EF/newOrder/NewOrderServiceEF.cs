@@ -1,38 +1,52 @@
 
 namespace crmvcsb.Infrastructure.EF.NewOrder
 {
-    using System;
-    using System.Linq;
-
     using AutoMapper;
-    using Microsoft.EntityFrameworkCore;
-    using System.Threading.Tasks;
-    using System.Collections.Generic;
-
-    using crmvcsb.Universal.DomainSpecific.Currency.DAL;
-    using crmvcsb.Universal.DomainSpecific.Currency.API;
-    using crmvcsb.Universal.DomainSpecific.NewOrder;
-    using crmvcsb.Universal.DomainSpecific.NewOrder.DAL;
     using crmvcsb.Infrastructure.EF;
     using crmvcsb.Universal;
+    using crmvcsb.Universal.DomainSpecific.NewOrder.DAL;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
     public class NewOrderServiceEF : ServiceEF, INewOrderServiceEF
     {
-        IRepositoryEF _repository;
+        IRepositoryEF _repositoryRead;
+        IRepositoryEF _repositoryWrite;
         IMapper _mapper;
+        IValidatorCustom _validator;
 
-        public NewOrderServiceEF(IRepositoryEF repository, IMapper mapper) 
-            : base(repository, mapper)
+        public NewOrderServiceEF(IRepositoryEF repositoryRead, IRepositoryEF repositoryWrite, IMapper mapper, IValidatorCustom validator)
+           : base(repositoryRead, repositoryWrite, mapper, validator)
         {
-            _repository = repository;
+            _repositoryRead = repositoryRead;
+            _repositoryWrite = repositoryWrite;
+            _mapper = mapper;
+            _validator = validator;
+        }
+        public NewOrderServiceEF(IRepositoryEF repositoryRead, IRepositoryEF repositoryWrite, IMapper mapper)
+            : base(repositoryRead, repositoryWrite, mapper)
+        {
+            _repositoryRead = repositoryRead;
+            _repositoryWrite = repositoryWrite;
             _mapper = mapper;
         }
-     
-
+        public NewOrderServiceEF(IRepositoryEF repositoryRead, IRepositoryEF repositoryWrite)
+             : base(repositoryRead, repositoryWrite)
+        {
+            _repositoryRead = repositoryRead;
+            _repositoryWrite = repositoryWrite;
+        }
+        public NewOrderServiceEF(IRepositoryEF repositoryWrite)
+            : base(repositoryWrite)
+        {
+            _repositoryWrite = repositoryWrite;
+        }
         public override void ReInitialize()
         {
 
-            _repository.ReInitialize();
+            _repositoryWrite.ReInitialize();
+            _repositoryRead.ReInitialize();
 
             List<AddressDAL> addresses = new List<AddressDAL>();
 
@@ -41,25 +55,24 @@ namespace crmvcsb.Infrastructure.EF.NewOrder
                 addresses.Add(new AddressDAL() { Id = i + 1, StreetName = $"test street {i}", Code = i + 1 });
             };
 
-            _repository.AddRange(addresses);
+            _repositoryWrite.AddRange(addresses);
 
             try
             {
-                _repository.SaveIdentity("Adresses");
+                _repositoryWrite.SaveIdentity("Adresses");
             }
-            catch (Exception e)
+            catch (Exception)
             {
-
+                throw;
             }
                       
         }
-        public void CleanUp()
+        public override void CleanUp()
         {
-            _repository.CleanUp();
-            var addressesExist = _repository.QueryByFilter<AddressDAL>(s => s.Id != 0).ToList();
-            _repository.DeleteRange(addressesExist);
-            try { _repository.Save(); } catch (Exception e) { throw; }
-           
+            _repositoryWrite.CleanUp();
+            var addressesExist = _repositoryWrite.QueryByFilter<AddressDAL>(s => s.Id != 0).ToList();
+            _repositoryWrite.DeleteRange(addressesExist);
+            try { _repositoryWrite.Save(); } catch (Exception) { throw; }           
         }
     
     }

@@ -1,6 +1,7 @@
 ﻿
 namespace crmvcsb
 {
+
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -16,6 +17,7 @@ namespace crmvcsb
 
 
     using Autofac;
+    using Autofac.Core;
     using Autofac.Extensions.DependencyInjection;
 
     using AutoMapper;
@@ -36,7 +38,6 @@ namespace crmvcsb
     using crmvcsb.Universal.DomainSpecific.Currency.API;
     using crmvcsb.Universal.DomainSpecific.Currency.DAL;
     using crmvcsbs.Infrastructure.Validation;
-    using crmvcsb.Universal;
 
     using crmvcsb.Infrastructure.Mapping;
 
@@ -125,6 +126,8 @@ namespace crmvcsb
 
             /* Chose registration of test sql lite or sql server*/
 
+            AutofacConfig.ConfigureAutofac(services);
+
             if (Configuration.GetSection("RegistrationSettings").Get<RegistrationSettings>().ContextType == ContextType.SQL)
             {
                 ConfigureAutofacDbContexts(services, AutofacConfig.GetContainer());
@@ -138,7 +141,7 @@ namespace crmvcsb
                 ConfigureInMemmoryDbContexts(services, AutofacConfig.GetContainer());
             }
 
-            AutofacConfig.ConfigureAutofac(services);          
+                  
 
             AutofacServiceProvider r = null;
 
@@ -149,9 +152,9 @@ namespace crmvcsb
                 this.ApplicationContainer = AutofacConfig.GetContainer().Build();
                 r = new AutofacServiceProvider(this.ApplicationContainer);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-
+                throw;
             }
 
             try
@@ -178,58 +181,154 @@ namespace crmvcsb
         /* Db context registration with sql server for connection strings from appsettings.json */
         public ContainerBuilder ConfigureAutofacDbContexts(IServiceCollection services, ContainerBuilder autofacContainer)
         {
-  
+
             /*
             * Registering multiple IRepository clones with different connections trings
             * For multiple SQL DBs in one project
             */
 
-            /*registering repository dummy clones, with EF concrete contexts to connection strings*/
-            //--------
-            autofacContainer.RegisterType<RepositoryNewOrder>()
+
+
+            ///------------------
+            /////Keyed registration not work - write only
+
+            //autofacContainer.RegisterType<RepositoryNewOrderRead>()
+            //.WithParameter("context",
+
+            //    new ContextNewOrderRead(new DbContextOptionsBuilder<ContextNewOrderRead>()
+            //    .UseSqlServer(Configuration.GetConnectionString("LocalNewOrderConnection")).Options)
+
+            //)
+            //.As<IRepositoryEF>().AsSelf()
+            //.InstancePerLifetimeScope();
+            //autofacContainer.RegisterType<RepositoryNewOrderWrite>()
+            //.WithParameter("context",
+
+            //    new ContextNewOrderWrite(new DbContextOptionsBuilder<ContextNewOrderWrite>()
+            //    .UseSqlServer(Configuration.GetConnectionString("LocalNewOrderConnectionWrite")).Options)
+
+            //).As<IRepositoryEF>().AsSelf()
+            //.InstancePerLifetimeScope();
+
+
+            
+            ////--------
+            autofacContainer.RegisterType<RepositoryNewOrderRead>()
             .WithParameter("context",
-
-                new ContextNewOrder(new DbContextOptionsBuilder<ContextNewOrder>()
-                .UseSqlServer(Configuration.GetConnectionString("LocalNewOrderConnection")).Options)
-
-            ).As<IRepositoryEF>().AsSelf()
+                new ContextNewOrderRead(new DbContextOptionsBuilder<ContextNewOrderRead>()
+                .UseSqlServer(Configuration.GetConnectionString("LocalNewOrderConnection")).Options))
+            .As<IRepositoryEFRead>().AsSelf()
             .InstancePerLifetimeScope();
-
-
-            //--------
-            autofacContainer.RegisterType<RepositoryCurrency>()
+            autofacContainer.RegisterType<RepositoryNewOrderWrite>()
             .WithParameter("context",
-
-                new CurrencyContext(new DbContextOptionsBuilder<CurrencyContext>()
+                new ContextNewOrderWrite(new DbContextOptionsBuilder<ContextNewOrderWrite>()
+                .UseSqlServer(Configuration.GetConnectionString("LocalNewOrderConnectionWrite")).Options))
+            .As<IRepositoryEFWrite>().AsSelf()
+            .InstancePerLifetimeScope();
+            autofacContainer.RegisterType<RepositoryCurrencyRead>()
+            .WithParameter("context",
+                new CurrencyContextRead(new DbContextOptionsBuilder<CurrencyContextRead>()
                 .UseSqlServer(Configuration.GetConnectionString("LocalCurrenciesConnection")).Options))
-
-            .As<IRepositoryEF>().AsSelf()
+            .As<IRepositoryEFRead>().AsSelf()
+            .InstancePerLifetimeScope();
+            autofacContainer.RegisterType<RepositoryCurrencyWrite>()
+            .WithParameter("context",
+                new CurrencyContextWrite(new DbContextOptionsBuilder<CurrencyContextWrite>()
+                .UseSqlServer(Configuration.GetConnectionString("LocalCurrenciesConnectionWrite")).Options))
+            .As<IRepositoryEFWrite>().AsSelf()
             .InstancePerLifetimeScope();
 
-
-           
-            /*Register repository dummy clones for DB scope to services*/
-            autofacContainer.Register(ctx => new Service(ctx.Resolve<RepositoryEF>(), ctx.Resolve<IMapper>()))
-            .As<IService>()
-            .InstancePerLifetimeScope();
-
-            autofacContainer.Register(ctx => new NewOrderServiceEF(ctx.Resolve<RepositoryNewOrder>(), ctx.Resolve<IMapper>()))
+            autofacContainer.Register(ctx => new NewOrderServiceEF(
+                ctx.Resolve<RepositoryNewOrderRead>(),
+                ctx.Resolve<RepositoryNewOrderWrite>(),
+                ctx.Resolve<IMapper>(),
+                ctx.Resolve<IValidatorCustom>()))
             .As<INewOrderServiceEF>()
+            .AsSelf()
             .InstancePerLifetimeScope();
 
-            autofacContainer.Register(ctx => new CurrencyServiceEF(ctx.Resolve<RepositoryCurrency>(), ctx.Resolve<IMapper>(), ctx.Resolve<IValidatorCustom>()))
+            autofacContainer.Register(ctx => new CurrencyServiceEF(
+                ctx.Resolve<RepositoryCurrencyRead>(),
+                ctx.Resolve<RepositoryCurrencyWrite>(),
+                ctx.Resolve<IMapper>(),
+                ctx.Resolve<IValidatorCustom>()))
             .As<ICurrencyServiceEF>()
+            .AsSelf()
             .InstancePerLifetimeScope();
 
             //PropertyAccessMode registration of Iservice to Manager to static
-            autofacContainer.Register(c=> {
-                var result = new NewOrderManager();
-                var dep = c.Resolve<INewOrderServiceEF>();
-                var dep2 = c.Resolve<ICurrencyServiceEF>();
-                result.BindService(dep,dep2);
-                return result;
-            })
-            .As<NewOrderManager>();
+            //autofacContainer.Register(c =>
+            //{
+            //    var result = new NewOrderManager();
+            //    var dep = c.Resolve<INewOrderServiceEF>();
+            //    var dep2 = c.Resolve<ICurrencyServiceEF>();
+            //    result.BindService(dep, dep2);
+            //    return result;
+            //})
+            //.As<NewOrderManager>();
+
+
+
+
+
+            ///------------------
+            /////Keyed registration not work - write only
+
+            //autofacContainer.Register(c=> 
+            //new RepositoryNewOrderRead(new ContextNewOrderRead(new DbContextOptionsBuilder<ContextNewOrderRead>()
+            //    .UseSqlServer(Configuration.GetConnectionString("LocalNewOrderConnection")).Options)))
+            //    .As<IRepositoryEF>()
+            //    .Keyed<IRepositoryEF>("orederRead")
+            //    .InstancePerLifetimeScope();
+            //autofacContainer.Register(c =>
+            //new RepositoryNewOrderWrite(new ContextNewOrderWrite(new DbContextOptionsBuilder<ContextNewOrderWrite>()
+            //   .UseSqlServer(Configuration.GetConnectionString("LocalNewOrderConnectionWrite")).Options)))
+            //   .As<IRepositoryEF>()
+            //   .Keyed<IRepositoryEF>("orederWrite")
+            //   .InstancePerLifetimeScope();
+            //autofacContainer.Register(c =>
+            //new RepositoryCurrencyRead(new CurrencyContextRead(new DbContextOptionsBuilder<CurrencyContextRead>()
+            //    .UseSqlServer(Configuration.GetConnectionString("LocalCurrenciesConnection")).Options)))
+            //    .As<IRepositoryEF>()
+            //    .Keyed<IRepositoryEF>("currencyRead")
+            //    .InstancePerLifetimeScope();
+            //autofacContainer.Register(c =>
+            //new RepositoryCurrencyWrite(new CurrencyContextWrite(new DbContextOptionsBuilder<CurrencyContextWrite>()
+            //   .UseSqlServer(Configuration.GetConnectionString("LocalCurrenciesConnectionWrite")).Options)))
+            //   .As<IRepositoryEF>()
+            //   .Keyed<IRepositoryEF>("currencyWrite")
+            //   .InstancePerLifetimeScope();
+
+            //autofacContainer.RegisterType<NewOrderServiceEF>()
+            //    .WithParameter(new ResolvedParameter(
+            //           (pi, ctx) => pi.ParameterType == typeof(IRepositoryEF),
+            //           (pi, ctx) => ctx.ResolveKeyed<IRepositoryEF>("orederRead")))
+            //    .WithParameter(new ResolvedParameter(
+            //           (pi, ctx) => pi.ParameterType == typeof(IRepositoryEF),
+            //           (pi, ctx) => ctx.ResolveKeyed<IRepositoryEF>("orederWrite")))
+            //    .WithParameter(new TypedParameter(typeof(IMapper), "mapper"))
+            //    .WithParameter(new TypedParameter(typeof(IValidatorCustom), "validator"));
+
+            //autofacContainer.RegisterType<CurrencyServiceEF>()
+            //    .WithParameter(new ResolvedParameter(
+            //           (pi, ctx) => pi.ParameterType == typeof(IRepositoryEF),
+            //           (pi, ctx) => ctx.ResolveKeyed<IRepositoryEF>("currencyRead")))
+            //    .WithParameter(new ResolvedParameter(
+            //           (pi, ctx) => pi.ParameterType == typeof(IRepositoryEF),
+            //           (pi, ctx) => ctx.ResolveKeyed<IRepositoryEF>("currencyWrite")))
+            //    .WithParameter(new TypedParameter(typeof(IMapper), "mapper"))
+            //    .WithParameter(new TypedParameter(typeof(IValidatorCustom), "validator"));
+
+
+
+            autofacContainer.Register(ctx => new NewOrderManager(
+                ctx.Resolve<NewOrderServiceEF>()
+                , ctx.Resolve<CurrencyServiceEF>()
+                ))
+                .As<INewOrderManager>()
+                .InstancePerLifetimeScope();
+
+
 
             return autofacContainer;
         }

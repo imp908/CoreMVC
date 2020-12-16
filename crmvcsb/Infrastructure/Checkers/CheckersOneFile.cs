@@ -1,7 +1,6 @@
 namespace crmvcsb
 {
     using System.Threading.Tasks;
-    using System.Threading;
 
     public class SandBox
     {
@@ -35,25 +34,21 @@ namespace crmvcsb
 
 namespace InfrastructureCheckers
 {
-    using System;
-    using System.Linq;
-    
-    using Microsoft.EntityFrameworkCore;
-
-    using System.Collections.Generic;
-
-
-    using AutoMapper;
-
-    using crmvcsb.Universal.DomainSpecific.Currency;
-    using crmvcsb.Universal.DomainSpecific.Currency.DAL;
     using crmvcsb.Infrastructure.EF.Currencies;
+    using crmvcsb.Infrastructure.EF.NewOrder;
+    using crmvcsb.Universal.DomainSpecific.Currency.DAL;
+    using crmvcsb.Universal.DomainSpecific.NewOrder.DAL;
+    using Microsoft.EntityFrameworkCore;
+    using System.Collections.Generic;
+    using System.Linq;
+    using crmvcsb.Universal;
+    using crmvcsb.Infrastructure.EF;
+
     public static class RepoAndUOWCheck
     {
-
         //static string connectionStringSQL = "Server=HP-HP000114\\SQLEXPRESS02;Database=EFdb;Trusted_Connection=True;";
         static string connectionStringSQL = "Server=AAAPC;Database=currenciesDB;User Id=tl;Password=awsedrDRSEAW;";
-
+        static string connectionStringSQLnewOrder = "Server=AAAPC;Database=newOrderDB;User Id=tl;Password=awsedrDRSEAW;";
         public static void GO(){
             crmvcsb.Universal.ExpressionsPOC.GO();            
             DbWithRepoReinitCheck();
@@ -61,9 +56,9 @@ namespace InfrastructureCheckers
 
         public static void DbWithRepoReinitCheck()
         {
-
-            using (CurrencyContext context = new CurrencyContext(
-                new DbContextOptionsBuilder<CurrencyContext>()
+           
+            using (CurrencyContextWrite context = new CurrencyContextWrite(
+                new DbContextOptionsBuilder<CurrencyContextWrite>()
                     .UseSqlServer(connectionStringSQL).Options))
             {
                 crmvcsb.Infrastructure.EF.RepositoryEF repo = new crmvcsb.Infrastructure.EF.RepositoryEF(context);
@@ -72,11 +67,24 @@ namespace InfrastructureCheckers
                 repo.DeleteRange(currencies);
                 repo.Save();
 
-                CurrencyServiceEF currencyService = new CurrencyServiceEF(repo);
-                currencyService.ReInitialize();
+                repo.ReInitialize();                
 
             }
+
+            using (ContextNewOrder newOrderContext = new ContextNewOrder(new DbContextOptionsBuilder<ContextNewOrder>().UseSqlServer(connectionStringSQLnewOrder).Options))
+            {
+                crmvcsb.Infrastructure.EF.RepositoryEF repo = new crmvcsb.Infrastructure.EF.RepositoryEF(newOrderContext);
+
+                var addresses = repo.QueryByFilter<AddressDAL>(s => s.Id != 0).ToList();
+                repo.DeleteRange(addresses);
+                repo.Save();
+
+                NewOrderServiceEF service = new NewOrderServiceEF(repo);
+                service.ReInitialize();
+            }
+
         }
+
     }
 
 }
@@ -86,26 +94,17 @@ namespace NetPlatformCheckers
 {
 
     using System;
-
-    using System.Diagnostics;
-
+    using System.Collections;
     using System.Collections.Generic;
-
-    using System.Text;
-
+    using System.IO;
+    using System.Linq;
     using System.Net;
     using System.Net.Sockets;
-
+    using System.Reflection;
+    using System.Runtime.CompilerServices;
+    using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
-
-    using System.IO;
-
-    using System.Reflection;
-    using System.Linq;
-
-    using System.Runtime.CompilerServices;
-    using System.Collections;
 
     public static class Check
     {
@@ -1919,14 +1918,6 @@ namespace LINQtoObjectsCheck
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-
-    using System.Threading;
-    using System.Reflection;
-    using System.Diagnostics;
-
-    using System.IO;
 
     /*Models */
     public class Racer
@@ -2573,10 +2564,8 @@ namespace TipsAndTricks
 {
 
     using System;
-    using System.Collections.Generic;
-    using System.Text;
-
     using System.Security.Cryptography;
+    using System.Text;
 
     public static class TnT
     {
@@ -2675,32 +2664,13 @@ namespace KATAS
 
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Text;
-    using System.Threading.Tasks;
-
-    using System.Threading;
-    using System.Reflection;
-    using System.Diagnostics;
-
-    using System.IO;
-
-    using Newtonsoft.Json;
-
-    using System.ServiceProcess;
-
-    using System.ServiceModel;
-
-
-    using System.ComponentModel;
-
-    using System.Net;
-    using System.Net.Sockets;
 
 
 
     //custom linq
-    using System.Linq.Expressions;
 
 
     public class TNine{
@@ -4095,34 +4065,15 @@ System.Diagnostics.Trace.WriteLine($"Node: {node.Id}; In reference: {node.Previo
 
 namespace Rewrite
 {
-    
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-
-    using System.Threading;
-    using System.Reflection;
-    using System.Diagnostics;
-
-    using System.IO;
 
     using Newtonsoft.Json;
-
-    using System.ServiceProcess;
-
-    using System.ServiceModel;
-
-
-    using System.ComponentModel;
-
-    using System.Net;
-    using System.Net.Sockets;
-
-    
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
     //custom linq
     using System.Linq.Expressions;
+    using System.Text;
 
     /*StreamReadWrite */
     /*--------------------------------------------- */

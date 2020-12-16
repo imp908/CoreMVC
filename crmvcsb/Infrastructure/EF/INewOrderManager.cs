@@ -1,16 +1,12 @@
 ﻿
-
-namespace crmvcsb.Universal.DomainSpecific.Currency
+namespace crmvcsb.Infrastructure.EF
 {
-    
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    
-    using crmvcsb.Universal;
-    using crmvcsb.Infrastructure.EF;
     using crmvcsb.Universal.DomainSpecific.Currency.API;
-   
-    public interface ICurrencyServiceEF : IService
+    using crmvcsb.Universal;
+
+    public interface INewOrderManager : IDomainManager
     {
         Task<ICurrencyAPI> AddCurrency(ICurrencyAPI currency);
         Task<IList<ICrossCurrenciesAPI>> GetCurrencyCrossRatesAsync(IGetCurrencyCommand command);

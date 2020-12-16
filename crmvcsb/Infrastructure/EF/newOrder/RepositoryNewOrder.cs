@@ -15,4 +15,18 @@ namespace crmvcsb.Infrastructure.EF.NewOrder
         }
     }
 
+    public class RepositoryNewOrderRead : RepositoryNewOrder, IRepositoryEFRead
+    {
+        public RepositoryNewOrderRead(ContextNewOrderRead context) : base(context)
+        {
+
+        }
+    }
+    public class RepositoryNewOrderWrite: RepositoryNewOrder, IRepositoryEFWrite
+    {
+        public RepositoryNewOrderWrite(ContextNewOrderWrite context) : base(context)
+        {
+
+        }
+    }
 }

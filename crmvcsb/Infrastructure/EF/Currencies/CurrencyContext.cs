@@ -12,6 +12,10 @@ namespace crmvcsb.Infrastructure.EF.Currencies
         {
 
         }
+        protected CurrencyContext(DbContextOptions options) : base(options)
+        {
+
+        }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //registration in startup.cs
@@ -55,5 +59,15 @@ namespace crmvcsb.Infrastructure.EF.Currencies
         public DbSet<CurrencyDAL> Currency { get; set; }
         public DbSet<CurrencyRatesDAL> CurrencyRates { get; set; }
 
+    }
+
+    public class CurrencyContextRead : CurrencyContext {
+        public CurrencyContextRead(DbContextOptions<CurrencyContextRead> options)
+            : base(options) { }
+    }
+    public class CurrencyContextWrite : CurrencyContext
+    {
+        public CurrencyContextWrite(DbContextOptions<CurrencyContextWrite> options)
+            : base(options) { }
     }
 }

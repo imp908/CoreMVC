@@ -14,11 +14,20 @@ namespace crmvcsb.Infrastructure.EF.Currencies
     using crmvcsb.Universal;
     using crmvcsb.Infrastructure.EF;
 
-    public class RepositoryCurrency : RepositoryEF, IRepositoryEF, IRepository
+    public class RepositoryCurrencyRead : RepositoryEF, IRepositoryEFRead, IRepository
     {
-        public RepositoryCurrency(DbContext context) : base(context)
+        public RepositoryCurrencyRead(DbContext context) : base(context)
         {
 
         }
     }
+    public class RepositoryCurrencyWrite : RepositoryEF, IRepositoryEFWrite, IRepository
+    {
+        public RepositoryCurrencyWrite(DbContext context) : base(context)
+        {
+
+        }
+      
+    }
+
 }

@@ -13,25 +13,32 @@ namespace crmvcsb.Universal.DomainSpecific.NewOrder
     using crmvcsb.Universal.DomainSpecific.Currency.API;
     using crmvcsb.Infrastructure.EF;
 
-    public class NewOrderManager : IDomainManager
+    public class NewOrderManager : IDomainManager, INewOrderManager
     {
-
-        public static IConfigurationRoot configuration { get; set; }
 
         private static ILogger _logger;
 
         private static INewOrderServiceEF _newOrderService { get; set; }
         private static ICurrencyServiceEF _currencyService { get; set; }
 
+        public NewOrderManager(INewOrderServiceEF newOrderService, ICurrencyServiceEF currencyService)
+        {
+            _newOrderService = newOrderService;
+            _currencyService = currencyService;
+        }
         public void BindService(INewOrderServiceEF newOrderService, ICurrencyServiceEF currencyService)
         {
             _newOrderService = newOrderService;
             _currencyService = currencyService;
         }
         
-        public async Task<CurrencyAPI> AddCurrency(CurrencyAPI currency)
+        public async Task<ICurrencyAPI> AddCurrency(ICurrencyAPI currency)
         {
             return await _currencyService.AddCurrency(currency);
+        }
+        public async Task<IList<ICrossCurrenciesAPI>> GetCurrencyCrossRatesAsync(IGetCurrencyCommand command)
+        {
+            return await _currencyService.GetCurrencyCrossRatesAsync(command);
         }
 
         public string GetDbName([System.Runtime.CompilerServices.CallerMemberName] string CallerMemberName = "")
@@ -60,10 +67,5 @@ namespace crmvcsb.Universal.DomainSpecific.NewOrder
             _newOrderService.CleanUp();
         }
 
-
-        public async Task<IList<ICrossCurrenciesAPI>> GetCurrencyCrossRatesAsync(IGetCurrencyCommand command)
-        {
-            return await _currencyService.GetCurrencyCrossRatesAsync(command);
-        }
     }
 }

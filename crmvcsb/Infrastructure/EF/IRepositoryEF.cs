@@ -29,4 +29,7 @@ namespace crmvcsb.Infrastructure.EF
         DatabaseFacade GetDatabase();
         DbContext GetEFContext();
     }
+
+    public interface IRepositoryEFRead : IRepositoryEF { }
+    public interface IRepositoryEFWrite : IRepositoryEF { }
 }

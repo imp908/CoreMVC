@@ -17,40 +17,48 @@ namespace crmvcsb.Infrastructure.EF.Currencies
     
     
 
-    public class CurrencyServiceEF : ServiceEF, ICurrencyServiceEF
+    public class CurrencyServiceEF : Service, ICurrencyServiceEF
     {
-        IRepositoryEF _repository;
+        IRepositoryEFRead _repositoryRead;
+        IRepositoryEFWrite _repositoryWrite;
         IMapper _mapper;
         IValidatorCustom _validator;
 
-        public CurrencyServiceEF(IRepositoryEF repository, IMapper mapper, IValidatorCustom validator)
-            : base(repository, mapper, validator)
+        public CurrencyServiceEF(IRepositoryEFRead repositoryRead, IRepositoryEFWrite repositoryWrite, IMapper mapper, IValidatorCustom validator)
+           : base(repositoryRead, repositoryWrite, mapper, validator)
         {
-            _repository = repository;
+            _repositoryRead = repositoryRead;
+            _repositoryWrite = repositoryWrite;
             _mapper = mapper;
             _validator = validator;
         }
-        public CurrencyServiceEF(IRepositoryEF repository, IMapper mapper)
-            : base(repository, mapper)
+        public CurrencyServiceEF(IRepositoryEFRead repositoryRead, IRepositoryEFWrite repositoryWrite, IMapper mapper)
+            : base(repositoryRead, repositoryWrite, mapper)
         {
-            _repository = repository;
+            _repositoryRead = repositoryRead;
+            _repositoryWrite = repositoryWrite;
             _mapper = mapper;
         }
-
-        public CurrencyServiceEF(IRepositoryEF repository)
-        : base(repository)
+        public CurrencyServiceEF(IRepositoryEFRead repositoryRead, IRepositoryEFWrite repositoryWrite)
+             : base(repositoryRead, repositoryWrite)
         {
-            _repository = repository;
+            _repositoryRead = repositoryRead;
+            _repositoryWrite = repositoryWrite;
+        }
+        public CurrencyServiceEF(IRepositoryEFWrite repositoryWrite)
+            : base(repositoryWrite)
+        {
+            _repositoryWrite = repositoryWrite;
         }
 
-        
-        public async Task<CurrencyAPI> AddCurrency(CurrencyAPI currency)
+
+        public async Task<ICurrencyAPI> AddCurrency(ICurrencyAPI currency)
         {
             _validator.Validate(currency);
-            var entityToAdd = _mapper.Map<CurrencyAPI, CurrencyDAL>(currency);
-            await _repository.AddAsync<CurrencyDAL>(entityToAdd);
-            await _repository.SaveAsync();
-            var entityAdded = _mapper.Map<CurrencyDAL, CurrencyAPI>(entityToAdd);
+            var entityToAdd = _mapper.Map<ICurrencyAPI, CurrencyDAL>(currency);
+            await _repositoryWrite.AddAsync<CurrencyDAL>(entityToAdd);
+            await _repositoryWrite.SaveAsync(); 
+            var entityAdded = _mapper.Map<CurrencyDAL, ICurrencyAPI>(entityToAdd);
             return entityAdded;
         }
 
@@ -65,7 +73,7 @@ namespace crmvcsb.Infrastructure.EF.Currencies
                 decimal fromRate;
                 decimal toRate;
 
-                var pairFrom = await _repository
+                var pairFrom = await _repositoryWrite
                     .QueryByFilter<CurrencyRatesDAL>(c => c.CurrencyFrom.IsoCode.ToLower() == command.FromCurrency.ToLower()
                     && c.CurrencyTo.IsoCode.ToLower() == command.ThroughCurrency.ToLower())
                     .Include(s => s.CurrencyFrom)
@@ -74,7 +82,7 @@ namespace crmvcsb.Infrastructure.EF.Currencies
 
                 if (pairFrom == null)
                 {
-                    var pairFromReveresd = await _repository
+                    var pairFromReveresd = await _repositoryWrite
                     .QueryByFilter<CurrencyRatesDAL>(c => c.CurrencyTo.IsoCode.ToLower() == command.FromCurrency.ToLower()
                     && c.CurrencyFrom.IsoCode.ToLower() == command.ThroughCurrency.ToLower())
                     .Include(s => s.CurrencyFrom).Include(s => s.CurrencyTo)
@@ -90,7 +98,7 @@ namespace crmvcsb.Infrastructure.EF.Currencies
                 }
 
 
-                var pairTo = await _repository
+                var pairTo = await _repositoryWrite
                     .QueryByFilter<CurrencyRatesDAL>(c => c.CurrencyFrom.IsoCode.ToLower() == command.ToCurrency.ToLower()
                     && c.CurrencyTo.IsoCode.ToLower() == command.ThroughCurrency.ToLower())
                     .Include(s => s.CurrencyFrom).Include(s => s.CurrencyTo)
@@ -99,7 +107,7 @@ namespace crmvcsb.Infrastructure.EF.Currencies
                 if (pairTo == null)
                 {
 
-                    var pairToReversed = await _repository
+                    var pairToReversed = await _repositoryWrite
                         .QueryByFilter<CurrencyRatesDAL>(c => c.CurrencyFrom.IsoCode.ToLower() == command.ToCurrency.ToLower()
                         && c.CurrencyTo.IsoCode.ToLower() == command.ThroughCurrency.ToLower())
                         .Include(s => s.CurrencyFrom).Include(s => s.CurrencyTo)
@@ -123,47 +131,48 @@ namespace crmvcsb.Infrastructure.EF.Currencies
             return result.Cast<ICrossCurrenciesAPI>().ToList();
         }
   
-        public override void ReInitialize()
+        public void ReInitialize()
         {
 
-            _repository.ReInitialize();
+            _repositoryRead.ReInitialize();
+            _repositoryWrite.ReInitialize();
 
-            _repository.Add<CurrencyDAL>(new CurrencyDAL() { Id = 1, Name = "USD", IsoCode = "USD" });
-            _repository.Add<CurrencyDAL>(new CurrencyDAL() { Id = 2, Name = "EUR", IsoCode = "EUR" });
-            _repository.Add<CurrencyDAL>(new CurrencyDAL() { Id = 3, Name = "GBP", IsoCode = "GBP" });
-            _repository.Add<CurrencyDAL>(new CurrencyDAL() { Id = 4, Name = "RUB", IsoCode = "RUB" });
-            _repository.Add<CurrencyDAL>(new CurrencyDAL() { Id = 5, Name = "JPY", IsoCode = "JPY" });
-            _repository.Add<CurrencyDAL>(new CurrencyDAL() { Id = 6, Name = "AUD", IsoCode = "AUD" });
-            _repository.Add<CurrencyDAL>(new CurrencyDAL() { Id = 7, Name = "CAD", IsoCode = "CAD" });
-            _repository.Add<CurrencyDAL>(new CurrencyDAL() { Id = 8, Name = "CHF", IsoCode = "CHF" });
-            try { _repository.SaveIdentity< CurrencyDAL>(); }
+            _repositoryWrite.Add<CurrencyDAL>(new CurrencyDAL() { Id = 1, Name = "USD", IsoCode = "USD" });
+            _repositoryWrite.Add<CurrencyDAL>(new CurrencyDAL() { Id = 2, Name = "EUR", IsoCode = "EUR" });
+            _repositoryWrite.Add<CurrencyDAL>(new CurrencyDAL() { Id = 3, Name = "GBP", IsoCode = "GBP" });
+            _repositoryWrite.Add<CurrencyDAL>(new CurrencyDAL() { Id = 4, Name = "RUB", IsoCode = "RUB" });
+            _repositoryWrite.Add<CurrencyDAL>(new CurrencyDAL() { Id = 5, Name = "JPY", IsoCode = "JPY" });
+            _repositoryWrite.Add<CurrencyDAL>(new CurrencyDAL() { Id = 6, Name = "AUD", IsoCode = "AUD" });
+            _repositoryWrite.Add<CurrencyDAL>(new CurrencyDAL() { Id = 7, Name = "CAD", IsoCode = "CAD" });
+            _repositoryWrite.Add<CurrencyDAL>(new CurrencyDAL() { Id = 8, Name = "CHF", IsoCode = "CHF" });
+            try { _repositoryWrite.SaveIdentity< CurrencyDAL>(); }
             catch (Exception e)
             {
                 throw;
             }
 
-            _repository.Add<CurrencyRatesDAL>(new CurrencyRatesDAL() { Id = 4, CurrencyFromId = 1, CurrencyToId = 4, Rate = 63.18M, Date = new DateTime(2019, 07, 23) });
-            _repository.Add<CurrencyRatesDAL>(new CurrencyRatesDAL() { Id = 5, CurrencyFromId = 2, CurrencyToId = 4, Rate = 70.64M, Date = new DateTime(2019, 07, 23) });
-            _repository.Add<CurrencyRatesDAL>(new CurrencyRatesDAL() { Id = 6, CurrencyFromId = 3, CurrencyToId = 4, Rate = 78.67M, Date = new DateTime(2019, 07, 23) });
+            _repositoryWrite.Add<CurrencyRatesDAL>(new CurrencyRatesDAL() { Id = 4, CurrencyFromId = 1, CurrencyToId = 4, Rate = 63.18M, Date = new DateTime(2019, 07, 23) });
+            _repositoryWrite.Add<CurrencyRatesDAL>(new CurrencyRatesDAL() { Id = 5, CurrencyFromId = 2, CurrencyToId = 4, Rate = 70.64M, Date = new DateTime(2019, 07, 23) });
+            _repositoryWrite.Add<CurrencyRatesDAL>(new CurrencyRatesDAL() { Id = 6, CurrencyFromId = 3, CurrencyToId = 4, Rate = 78.67M, Date = new DateTime(2019, 07, 23) });
 
-            _repository.Add<CurrencyRatesDAL>(new CurrencyRatesDAL() { Id = 7, CurrencyFromId = 2, CurrencyToId = 5, Rate = 85.2M, Date = new DateTime(2019, 07, 23) });
-            _repository.Add<CurrencyRatesDAL>(new CurrencyRatesDAL() { Id = 8, CurrencyFromId = 3, CurrencyToId = 5, Rate = 95.2M, Date = new DateTime(2019, 07, 23) });
+            _repositoryWrite.Add<CurrencyRatesDAL>(new CurrencyRatesDAL() { Id = 7, CurrencyFromId = 2, CurrencyToId = 5, Rate = 85.2M, Date = new DateTime(2019, 07, 23) });
+            _repositoryWrite.Add<CurrencyRatesDAL>(new CurrencyRatesDAL() { Id = 8, CurrencyFromId = 3, CurrencyToId = 5, Rate = 95.2M, Date = new DateTime(2019, 07, 23) });
 
-            _repository.Add<CurrencyRatesDAL>(new CurrencyRatesDAL() { Id = 9, CurrencyFromId = 2, CurrencyToId = 6, Rate = 15M, Date = new DateTime(2019, 07, 23) });
-            _repository.Add<CurrencyRatesDAL>(new CurrencyRatesDAL() { Id = 10, CurrencyFromId = 6, CurrencyToId = 3, Rate = 0.25M, Date = new DateTime(2019, 07, 23) });
+            _repositoryWrite.Add<CurrencyRatesDAL>(new CurrencyRatesDAL() { Id = 9, CurrencyFromId = 2, CurrencyToId = 6, Rate = 15M, Date = new DateTime(2019, 07, 23) });
+            _repositoryWrite.Add<CurrencyRatesDAL>(new CurrencyRatesDAL() { Id = 10, CurrencyFromId = 6, CurrencyToId = 3, Rate = 0.25M, Date = new DateTime(2019, 07, 23) });
 
-            try { _repository.SaveIdentity< CurrencyRatesDAL>(); }
+            try { _repositoryWrite.SaveIdentity< CurrencyRatesDAL>(); }
             catch (Exception e)
             {
                 throw;
             }
         }
-        public override void CleanUp() 
+        public void CleanUp() 
         {
-            _repository.ReInitialize();
-            _repository.DeleteRange(_repository.GetAll<CurrencyRatesDAL>().ToList());
-            _repository.DeleteRange(_repository.GetAll<CurrencyDAL>().ToList());
-            try { _repository.Save(); } catch (Exception e) { throw; }
+            _repositoryWrite.ReInitialize();
+            _repositoryWrite.DeleteRange(_repositoryRead.GetAll<CurrencyRatesDAL>().ToList());
+            _repositoryWrite.DeleteRange(_repositoryRead.GetAll<CurrencyDAL>().ToList());
+            try { _repositoryWrite.Save(); } catch (Exception e) { throw; }
         }
 
     }

@@ -65,8 +65,12 @@ namespace crmvcsb.Infrastructure.IoC
             //*DAL->BLL reg */
 
             autofacContainer.RegisterType<ValidatorCustom>().As<IValidatorCustom>();
-            autofacContainer.RegisterType<CurrencyServiceEF>().As<ICurrencyServiceEF>();
-            
+
+            //autofacContainer.RegisterType<CurrencyServiceEF>().As<ICurrencyServiceEF>();
+            //autofacContainer.RegisterType<NewOrderServiceEF>().As<INewOrderServiceEF>();
+
+            //autofacContainer.RegisterType<NewOrderManager>().As<IDomainManager>();
+
             return autofacContainer;
         }
 

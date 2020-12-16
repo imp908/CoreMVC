@@ -2,7 +2,7 @@ namespace crmvcsb.Infrastructure.EF.NewOrder
 {
     using Microsoft.EntityFrameworkCore;
     using crmvcsb.Universal.DomainSpecific.NewOrder.DAL;
-    
+
 
     public class ContextNewOrder : DbContext
     {
@@ -10,6 +10,7 @@ namespace crmvcsb.Infrastructure.EF.NewOrder
         {
 
         }
+        protected ContextNewOrder(DbContextOptions options) : base(options) { }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //registration in startup.cs
@@ -50,5 +51,15 @@ namespace crmvcsb.Infrastructure.EF.NewOrder
         public DbSet<ClientDAL> Clients { get; set; }
         public DbSet<OrderDAL> Orders { get; set; }
 
+    }
+    public class ContextNewOrderRead : ContextNewOrder
+    {
+        public ContextNewOrderRead(DbContextOptions<ContextNewOrderRead> options)
+            : base(options) { }
+    }
+    public class ContextNewOrderWrite : ContextNewOrder
+    {
+        public ContextNewOrderWrite(DbContextOptions<ContextNewOrderWrite> options)
+            : base(options) { }
     }
 }

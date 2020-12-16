@@ -2,46 +2,48 @@
 
 namespace crmvcsb.Infrastructure.EF
 {
+    using AutoMapper;
     using crmvcsb.Universal;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.ChangeTracking;
     using Microsoft.EntityFrameworkCore.Infrastructure;
-    using System.Linq.Expressions;
-    using AutoMapper;
-    using crmvcsb.Universal;
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Linq.Expressions;
     using System.Threading.Tasks;
 
     public class ServiceEF : Service, IService, IServiceEF
     {
-
-        IRepository _repository;
+        IRepository _repositoryRead;
+        IRepository _repositoryWrite;
         IMapper _mapper;
         IValidatorCustom _validator;
 
-        public ServiceEF(IRepository repository, IMapper mapper, IValidatorCustom validator)
-            : base(repository, mapper, validator)
+        public ServiceEF(IRepositoryEF repositoryRead, IRepositoryEF repositoryWrite, IMapper mapper, IValidatorCustom validator)
+            : base(repositoryRead, repositoryWrite, mapper, validator)
         {
-            _repository = repository;
+            _repositoryRead = repositoryRead;
+            _repositoryWrite = repositoryWrite;
             _mapper = mapper;
             _validator = validator;
         }
-        public ServiceEF(IRepository repository, IMapper mapper)
-            : base(repository, mapper)
+        public ServiceEF(IRepositoryEF repositoryRead, IRepositoryEF repositoryWrite, IMapper mapper)
+            : base(repositoryRead, repositoryWrite, mapper)
         {
-            _repository = repository;
+            _repositoryRead = repositoryRead;
+            _repositoryWrite = repositoryWrite;
             _mapper = mapper;
         }
-        public ServiceEF(IRepository repository)
-            : base(repository)
+        public ServiceEF(IRepositoryEF repositoryRead, IRepositoryEF repositoryWrite)
+             : base(repositoryRead, repositoryWrite)
         {
-            _repository = repository;
+            _repositoryRead = repositoryRead;
+            _repositoryWrite = repositoryWrite;
+        }
+        public ServiceEF(IRepositoryEF repositoryWrite)
+            : base(repositoryWrite)
+        {
+            _repositoryWrite = repositoryWrite;
         }
 
-      
         public Task<EntityEntry<T>> AddAsync<T>(T item) where T : class
         {
             throw new NotImplementedException();

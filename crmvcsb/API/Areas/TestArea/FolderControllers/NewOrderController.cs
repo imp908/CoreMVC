@@ -9,7 +9,9 @@ namespace crmvcsb.API.Areas.TestArea.FolderControllers
     using System.Threading.Tasks;
     using crmvcsb.Universal.DomainSpecific.NewOrder;
     using crmvcsb.Universal.DomainSpecific.Currency.API;
-    using crmvcsb.Infrastructure.EF;    
+    using crmvcsb.Universal.DomainSpecific.Currency;
+    using crmvcsb.Infrastructure.EF;
+    using crmvcsb.Universal;
     using Microsoft.AspNetCore.Mvc;
     using Autofac;
 
@@ -17,15 +19,19 @@ namespace crmvcsb.API.Areas.TestArea.FolderControllers
     //http://localhost:5002/NewOrder
     [Route("api/[controller]")]
     [ApiController]
-    public class NewOrderController : Controller
+    public class NewOrderController : ControllerBase
     {
-        private INewOrderServiceEF _service;
-        private NewOrderManager _manager;
+        public ICurrencyServiceEF _currencyService;
+        public INewOrderServiceEF _newOrderService;
 
-        public NewOrderController(INewOrderServiceEF service, IComponentContext context)
+        public INewOrderManager _newOrderManager;
+
+        public NewOrderController(ICurrencyServiceEF currencyService, INewOrderServiceEF newOrderService, INewOrderManager newOrderManager)
         {
-            this._service = service;   
-            _manager = context.Resolve<NewOrderManager>();
+            this._currencyService = currencyService;
+            this._newOrderService = newOrderService;
+
+            this._newOrderManager = newOrderManager;
         }
 
         // GET: /<controller>/
@@ -38,7 +44,7 @@ namespace crmvcsb.API.Areas.TestArea.FolderControllers
         [HttpGet("ReInitialize")]
         public IActionResult ReInitialize()
         {
-            _manager.ReInitialize();
+            _newOrderManager.ReInitialize();
             return Ok();
         }
 
@@ -48,7 +54,7 @@ namespace crmvcsb.API.Areas.TestArea.FolderControllers
         {
             try
             {
-                var result = this._service.GetDatabaseName();                
+                var result = this._newOrderManager.GetDbName();                
                 return Ok(result);
             }
             catch (Exception e)
@@ -62,7 +68,7 @@ namespace crmvcsb.API.Areas.TestArea.FolderControllers
         {
             try
             {                
-                var result = await this._manager.GetCurrencyCrossRatesAsync(command);
+                var result = await this._currencyService.GetCurrencyCrossRatesAsync(command);
                 return Ok(result);
             }
             catch (Exception e)
@@ -75,7 +81,7 @@ namespace crmvcsb.API.Areas.TestArea.FolderControllers
         public async Task<IActionResult> AddCurrency([FromBody] CurrencyAPI currency)
         {
             try {
-                var result = await this._manager.AddCurrency(currency);
+                var result = await this._currencyService.AddCurrency(currency);
                 return Ok(result);
             }
             catch(Exception e)
