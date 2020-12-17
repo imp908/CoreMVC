@@ -14,6 +14,7 @@ namespace crmvcsb.API.Areas.TestArea.FolderControllers
     using crmvcsb.Universal;
     using Microsoft.AspNetCore.Mvc;
     using Autofac;
+    using Microsoft.AspNetCore.Http;
 
     //No api, no newarea Url paths
     //http://localhost:5002/NewOrder
@@ -82,7 +83,10 @@ namespace crmvcsb.API.Areas.TestArea.FolderControllers
         {
             try {
                 var result = await this._currencyService.AddCurrency(currency);
-                return Ok(result);
+                if(result == null) {
+                    return StatusCode(StatusCodes.Status403Forbidden,this._currencyService.actualStatus);
+                }
+                return StatusCode(StatusCodes.Status201Created, result);
             }
             catch(Exception e)
             {

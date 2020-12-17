@@ -4,13 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 
 
-namespace crmvcsbs.Infrastructure.Validation
+namespace crmvcsb.Infrastructure.Validation
 {
 
     using FluentValidation;
     using crmvcsb.Universal;
     using crmvcsb.Universal.DomainSpecific.Currency.API;
     using crmvcsb.Universal.DomainSpecific.Currency.DAL;
+    using crmvcsb.Universal.Infrastructure;
 
     public class CurrenciesValidation
         : AbstractValidator<ICurrencyAPI>

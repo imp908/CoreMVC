@@ -11,6 +11,8 @@ namespace crmvcsb.Universal
     {
         IRepository GetRepositoryRead();
         IRepository GetRepositoryWrite();
+
+        string actualStatus { get; }
     }
 
 }

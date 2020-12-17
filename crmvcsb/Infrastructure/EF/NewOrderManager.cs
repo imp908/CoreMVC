@@ -47,7 +47,7 @@ namespace crmvcsb.Universal.DomainSpecific.NewOrder
             {
                 _logger.LogError(CallerMemberName + ": service is null");
             }
-            return _newOrderService.GetDatabaseName();
+            return _newOrderService.GetRepositoryRead().GetDatabaseName();
         }
         public void ReInitialize([System.Runtime.CompilerServices.CallerMemberName] string CallerMemberName = "")
         {
@@ -55,8 +55,8 @@ namespace crmvcsb.Universal.DomainSpecific.NewOrder
             {
                 _logger.LogError(CallerMemberName + ": service is null");
             }
-            _newOrderService.ReInitialize();
-            _currencyService.ReInitialize();
+            _newOrderService.GetRepositoryWrite().ReInitialize();
+            _currencyService.GetRepositoryWrite().ReInitialize();
         }
         public void CleanUp([System.Runtime.CompilerServices.CallerMemberName] string CallerMemberName = "")
         {
@@ -64,7 +64,7 @@ namespace crmvcsb.Universal.DomainSpecific.NewOrder
             {
                 _logger.LogError(CallerMemberName + ": service is null");
             }
-            _newOrderService.CleanUp();
+            _newOrderService.GetRepositoryWrite().CleanUp();
         }
 
     }

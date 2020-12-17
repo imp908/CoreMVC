@@ -20,7 +20,6 @@ namespace crmvcsb.Infrastructure.EF
 
     public interface IRepositoryEF : IRepository
     {
-
         void SaveIdentity(string command);
         void SaveIdentity<T>() where T : class;
 

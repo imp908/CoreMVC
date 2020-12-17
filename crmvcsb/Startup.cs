@@ -92,6 +92,7 @@ namespace crmvcsb
             /*Automapper Register */
             services.AddAutoMapper(typeof(Startup));
 
+            //>> move to autofacConfig
             /*Mapper initialize with Instance API initialization */
             var config = ConfigureAutoMapper();
             IMapper mapper = new Mapper(config);
@@ -222,7 +223,8 @@ namespace crmvcsb
                 ctx.Resolve<RepositoryNewOrderRead>(),
                 ctx.Resolve<RepositoryNewOrderWrite>(),
                 ctx.Resolve<IMapper>(),
-                ctx.Resolve<IValidatorCustom>()))
+                ctx.Resolve<IValidatorCustom>()
+                ))
             .As<INewOrderServiceEF>()
             .AsSelf()
             .InstancePerLifetimeScope();
@@ -231,7 +233,9 @@ namespace crmvcsb
                 ctx.Resolve<RepositoryCurrencyRead>(),
                 ctx.Resolve<RepositoryCurrencyWrite>(),
                 ctx.Resolve<IMapper>(),
-                ctx.Resolve<IValidatorCustom>()))
+                ctx.Resolve<IValidatorCustom>(),
+                ctx.Resolve<ILoggerCustom>()
+                ))
             .As<ICurrencyServiceEF>()
             .AsSelf()
             .InstancePerLifetimeScope();

@@ -1,26 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-using Serilog;
-
+﻿
 namespace crmvcsb.Infrastructure.IO.Logging
 {
     using crmvcsb.Universal.Infrastructure;
-    public class SerilogLogging : ILogger
+    using Serilog;
+
+    public class SerilogLogging 
     {
-        Serilog.Core.Logger log;
+        public Serilog.Core.Logger log;
         public SerilogLogging()
         {
             this.log = new LoggerConfiguration()
-            .WriteTo.Console()
+            .WriteTo.Debug()
             .CreateLogger();
         }
 
+    }
+
+    public class LoggerCustom : ILoggerCustom
+    {
+        SerilogLogging logger = new SerilogLogging();
         public void Information(string input)
         {
-            this.log.Information(input);
+            this.logger.log.Information(input);
         }
     }
 }

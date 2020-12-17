@@ -16,7 +16,7 @@ namespace crmvcsb.Infrastructure.EF.Currencies
     using crmvcsb.Universal;
     using crmvcsb.Universal.Infrastructure;
 
-
+    using crmvcsb.Infrastructure.IO.Settings;
 
     public class CurrencyServiceEF : Service, ICurrencyServiceEF
     {
@@ -24,42 +24,49 @@ namespace crmvcsb.Infrastructure.EF.Currencies
         IRepositoryEFWrite _repositoryWrite;
         IMapper _mapper;
         IValidatorCustom _validator;
+        ILoggerCustom _logger;
 
-        public CurrencyServiceEF(IRepositoryEFRead repositoryRead, IRepositoryEFWrite repositoryWrite, IMapper mapper, IValidatorCustom validator)
-           : base(repositoryRead, repositoryWrite, mapper, validator)
+        public CurrencyServiceEF(IRepositoryEFRead repositoryRead, IRepositoryEFWrite repositoryWrite, IMapper mapper = null, IValidatorCustom validator = null, ILoggerCustom logger = null)
+           : base(repositoryRead, repositoryWrite, mapper, validator, logger)
         {
             _repositoryRead = repositoryRead;
             _repositoryWrite = repositoryWrite;
+
             _mapper = mapper;
             _validator = validator;
+            _logger = logger;
         }
-        public CurrencyServiceEF(IRepositoryEFRead repositoryRead, IRepositoryEFWrite repositoryWrite, IMapper mapper)
-            : base(repositoryRead, repositoryWrite, mapper)
+        public CurrencyServiceEF(IRepositoryEFWrite repositoryWrite, IMapper mapper = null, IValidatorCustom validator = null, ILoggerCustom logger = null)
+           : base(repositoryWrite, mapper, validator, logger)
         {
-            _repositoryRead = repositoryRead;
             _repositoryWrite = repositoryWrite;
+
             _mapper = mapper;
-        }
-        public CurrencyServiceEF(IRepositoryEFRead repositoryRead, IRepositoryEFWrite repositoryWrite)
-             : base(repositoryRead, repositoryWrite)
-        {
-            _repositoryRead = repositoryRead;
-            _repositoryWrite = repositoryWrite;
-        }
-        public CurrencyServiceEF(IRepositoryEFWrite repositoryWrite)
-            : base(repositoryWrite)
-        {
-            _repositoryWrite = repositoryWrite;
+            _validator = validator;
+            _logger = logger;
         }
 
 
         public async Task<ICurrencyAPI> AddCurrency(ICurrencyAPI currency)
         {
-            _validator.Validate(currency);
+            _validator.Validate(currency);            
+
+            var currencyExists = _repositoryWrite.QueryByFilter<CurrencyDAL>(s => s.IsoCode == currency.IsoCode).FirstOrDefault();
+            if (currencyExists != null) {
+                this.actualStatus = MessagesConposite.EntityAllreadyExists(currency.GetType().Name, this._repositoryWrite.GetDatabaseName());
+                _logger.Information(this.actualStatus);
+                return null;
+            }
+
             var entityToAdd = _mapper.Map<ICurrencyAPI, CurrencyDAL>(currency);
             await _repositoryWrite.AddAsync<CurrencyDAL>(entityToAdd);
-            await _repositoryWrite.SaveAsync(); 
-            var entityAdded = _mapper.Map<CurrencyDAL, ICurrencyAPI>(entityToAdd);
+            await _repositoryWrite.SaveAsync();
+            if (entityToAdd != null && entityToAdd.Id > 0) {
+                this.actualStatus = MessagesConposite.EntitySuccessfullyCreated(currency.GetType().Name, this._repositoryWrite.GetDatabaseName());
+                _logger.Information(this.actualStatus);
+            }
+
+            var entityAdded = _mapper.Map<CurrencyDAL, ICurrencyAPI>(entityToAdd);            
             return entityAdded;
         }
 

@@ -1,6 +1,6 @@
 ﻿
 namespace crmvcsb.Universal.Infrastructure { 
-    public interface ILogger
+    public interface ILoggerCustom
     {
         void Information(string input);
     }

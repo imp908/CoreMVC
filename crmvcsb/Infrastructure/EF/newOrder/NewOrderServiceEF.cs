@@ -5,10 +5,11 @@ namespace crmvcsb.Infrastructure.EF.NewOrder
     using crmvcsb.Infrastructure.EF;
     using crmvcsb.Universal.DomainSpecific.NewOrder.DAL;
     using crmvcsb.Universal.Infrastructure;
+    using crmvcsb.Universal;
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    public class NewOrderServiceEF : ServiceEF, INewOrderServiceEF
+    public class NewOrderServiceEF : Service, INewOrderServiceEF
     {
         IRepositoryEF _repositoryRead;
         IRepositoryEF _repositoryWrite;
@@ -41,7 +42,7 @@ namespace crmvcsb.Infrastructure.EF.NewOrder
         {
             _repositoryWrite = repositoryWrite;
         }
-        public override void ReInitialize()
+        public void ReInitialize()
         {
 
             _repositoryWrite.ReInitialize();
@@ -66,7 +67,7 @@ namespace crmvcsb.Infrastructure.EF.NewOrder
             }
                       
         }
-        public override void CleanUp()
+        public void CleanUp()
         {
             _repositoryWrite.CleanUp();
             var addressesExist = _repositoryWrite.QueryByFilter<AddressDAL>(s => s.Id != 0).ToList();

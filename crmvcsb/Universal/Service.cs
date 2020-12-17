@@ -9,25 +9,32 @@ namespace crmvcsb.Universal
      
         IRepository _repositoryRead;
         IRepository _repositoryWrite;
+
         IMapper _mapper;
         IValidatorCustom _validator;
-        
-        public Service(IRepository repositoryRead, IRepository repositoryWrite, IMapper mapper = null, IValidatorCustom validator = null)
+        ILoggerCustom _logger;
+
+        public string actualStatus { get; set; }
+
+        public Service(IRepository repositoryRead, IRepository repositoryWrite, IMapper mapper = null, IValidatorCustom validator = null, ILoggerCustom logger = null)
         {
             _repositoryRead = repositoryRead;
             _repositoryWrite = repositoryWrite;
+            
             _mapper = mapper;
             _validator = validator;
+            _logger = logger;
         }
-        public Service( IRepository repositoryWrite, IMapper mapper = null, IValidatorCustom validator = null)
+        public Service( IRepository repositoryWrite, IMapper mapper = null, IValidatorCustom validator = null, ILoggerCustom logger = null)
         {
             _repositoryWrite = repositoryWrite;
             _mapper = mapper;
             _validator = validator;
+            _logger = logger;
         }
        
 
-
+       
         public IRepository GetRepositoryRead()
         {
             return this._repositoryRead;
