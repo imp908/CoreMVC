@@ -2,52 +2,32 @@
 namespace crmvcsb
 {
 
+    using Autofac;
+    using Autofac.Extensions.DependencyInjection;
+    using AutoMapper;
+    using crmvcsb.Infrastructure.EF;
+    using crmvcsb.Infrastructure.EF.Currencies;
+    using crmvcsb.Infrastructure.EF.NewOrder;
+    using crmvcsb.Infrastructure.IoC;
+    using crmvcsb.Infrastructure.Mapping;
+    using crmvcsb.Infrastructure.SignalR;
+    using crmvcsb.Universal;
+    using crmvcsb.Universal.DomainSpecific.Currency;
+    using crmvcsb.Universal.DomainSpecific.NewOrder;
+    using crmvcsb.Universal.Infrastructure;
+    using FluentValidation.AspNetCore;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc.Razor;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    /*Build in logging*/
+    using Microsoft.Extensions.Logging;
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Microsoft.AspNetCore.Builder;
-
-    using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Http;
-
-    using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.DependencyInjection;
-
-    using Microsoft.AspNetCore.Mvc.Razor;
-
-
-    using Autofac;
-    using Autofac.Core;
-    using Autofac.Extensions.DependencyInjection;
-
-    using AutoMapper;
-
-    using Microsoft.EntityFrameworkCore;
-
-    using crmvcsb.Infrastructure.SignalR;
-
-    using crmvcsb.Infrastructure.EF;
-    using crmvcsb.Universal;
-
-    using crmvcsb.Infrastructure.EF.NewOrder;
-
-    using crmvcsb.Universal.DomainSpecific.NewOrder;
-
-    using crmvcsb.Infrastructure.EF.Currencies;
-    using crmvcsb.Universal.DomainSpecific.Currency;
-    using crmvcsb.Universal.DomainSpecific.Currency.API;
-    using crmvcsb.Universal.DomainSpecific.Currency.DAL;
-    using crmvcsbs.Infrastructure.Validation;
-
-    using crmvcsb.Infrastructure.Mapping;
-
-    /*Build in logging*/
-    using Microsoft.Extensions.Logging;
-
-    using FluentValidation;
-    using FluentValidation.AspNetCore;
-
-    using crmvcsb.Infrastructure.IoC;
 
     enum ContextType
     {
@@ -61,7 +41,7 @@ namespace crmvcsb
     public class Startup
     {
         /*Build in logging*/
-        private static ILogger _logger;
+        private static Microsoft.Extensions.Logging.ILogger _logger;
 
         public IContainer ApplicationContainer { get; private set; }
 

@@ -16,8 +16,6 @@ namespace crmvcsb.Infrastructure.EF
 
     using System.Reflection;
 
-
-
     using crmvcsb.Universal;
 
     /// <summary>

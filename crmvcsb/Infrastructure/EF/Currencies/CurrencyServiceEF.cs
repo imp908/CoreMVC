@@ -14,8 +14,9 @@ namespace crmvcsb.Infrastructure.EF.Currencies
     using crmvcsb.Universal.DomainSpecific.Currency.DAL;
     using crmvcsb.Universal.DomainSpecific.Currency.API;
     using crmvcsb.Universal;
-    
-    
+    using crmvcsb.Universal.Infrastructure;
+
+
 
     public class CurrencyServiceEF : Service, ICurrencyServiceEF
     {

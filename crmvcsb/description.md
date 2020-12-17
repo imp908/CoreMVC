@@ -465,6 +465,10 @@ DONE:[
         <- 
             15.12.2020 8h 
             16.12.2020 6h  -> read write, repositories to service autofac register; read write DBs reinitialization
+                            dividing to read and write leead to register as Irepository problem
+
+        -> currencyrates CRUD
+        -> sync from write db to read
 
 	]
 	~53h 00m in 19days

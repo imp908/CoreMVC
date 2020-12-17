@@ -1,13 +1,8 @@
 ﻿
 namespace crmvcsb.Universal
 {
-    using AutoMapper;    
-    using crmvcsb.Universal;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Linq.Expressions;
-    using System.Threading.Tasks;
+    using AutoMapper;
+    using crmvcsb.Universal.Infrastructure;
 
     public class Service : IService
     {
@@ -17,47 +12,29 @@ namespace crmvcsb.Universal
         IMapper _mapper;
         IValidatorCustom _validator;
         
-        public Service(IRepository repositoryRead, IRepository repositoryWrite, IMapper mapper, IValidatorCustom validator)
+        public Service(IRepository repositoryRead, IRepository repositoryWrite, IMapper mapper = null, IValidatorCustom validator = null)
         {
             _repositoryRead = repositoryRead;
             _repositoryWrite = repositoryWrite;
             _mapper = mapper;
             _validator = validator;
         }
-        public Service(IRepository repositoryRead, IRepository repositoryWrite, IMapper mapper)
+        public Service( IRepository repositoryWrite, IMapper mapper = null, IValidatorCustom validator = null)
         {
-            _repositoryRead = repositoryRead;
             _repositoryWrite = repositoryWrite;
             _mapper = mapper;
+            _validator = validator;
         }
-        public Service(IRepository repositoryRead, IRepository repositoryWrite)
-        {
-            _repositoryRead = repositoryRead;
-            _repositoryWrite = repositoryWrite;
-        }
-        public Service(IRepository repositoryWrite)
-        {
-            _repositoryWrite = repositoryWrite;
-        }
+       
 
 
-        public virtual void ReInitialize()
+        public IRepository GetRepositoryRead()
         {
-            _repositoryWrite.ReInitialize();
+            return this._repositoryRead;
         }
-
-        public virtual void CleanUp()
+        public IRepository GetRepositoryWrite()
         {
-            _repositoryWrite.CleanUp();
-        }
-
-        public virtual string GetConnectionString()
-        {
-            return _repositoryRead.GetConnectionString();
-        }
-        public string GetDatabaseName()
-        {
-            return _repositoryRead.GetDatabaseName();
+            return this._repositoryWrite;
         }
     }
 }

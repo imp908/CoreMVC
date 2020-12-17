@@ -3,12 +3,11 @@ namespace crmvcsb.Infrastructure.EF.NewOrder
 {
     using AutoMapper;
     using crmvcsb.Infrastructure.EF;
-    using crmvcsb.Universal;
     using crmvcsb.Universal.DomainSpecific.NewOrder.DAL;
+    using crmvcsb.Universal.Infrastructure;
     using System;
     using System.Collections.Generic;
     using System.Linq;
-
     public class NewOrderServiceEF : ServiceEF, INewOrderServiceEF
     {
         IRepositoryEF _repositoryRead;

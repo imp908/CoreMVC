@@ -9,6 +9,7 @@ namespace crmvcsb.Infrastructure.EF
     using Microsoft.EntityFrameworkCore.Infrastructure;
     using System;
     using System.Threading.Tasks;
+    using crmvcsb.Universal.Infrastructure;
 
     public class ServiceEF : Service, IService, IServiceEF
     {
@@ -17,7 +18,7 @@ namespace crmvcsb.Infrastructure.EF
         IMapper _mapper;
         IValidatorCustom _validator;
 
-        public ServiceEF(IRepositoryEF repositoryRead, IRepositoryEF repositoryWrite, IMapper mapper, IValidatorCustom validator)
+        public ServiceEF(IRepository repositoryRead, IRepository repositoryWrite, IMapper mapper = null, IValidatorCustom validator = null)
             : base(repositoryRead, repositoryWrite, mapper, validator)
         {
             _repositoryRead = repositoryRead;
@@ -25,23 +26,12 @@ namespace crmvcsb.Infrastructure.EF
             _mapper = mapper;
             _validator = validator;
         }
-        public ServiceEF(IRepositoryEF repositoryRead, IRepositoryEF repositoryWrite, IMapper mapper)
-            : base(repositoryRead, repositoryWrite, mapper)
+        public ServiceEF(IRepository repositoryWrite, IMapper mapper = null, IValidatorCustom validator = null)
+            : base(repositoryWrite, mapper, validator)
         {
-            _repositoryRead = repositoryRead;
             _repositoryWrite = repositoryWrite;
             _mapper = mapper;
-        }
-        public ServiceEF(IRepositoryEF repositoryRead, IRepositoryEF repositoryWrite)
-             : base(repositoryRead, repositoryWrite)
-        {
-            _repositoryRead = repositoryRead;
-            _repositoryWrite = repositoryWrite;
-        }
-        public ServiceEF(IRepositoryEF repositoryWrite)
-            : base(repositoryWrite)
-        {
-            _repositoryWrite = repositoryWrite;
+            _validator = validator;
         }
 
         public Task<EntityEntry<T>> AddAsync<T>(T item) where T : class

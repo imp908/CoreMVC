@@ -8,13 +8,9 @@ namespace crmvcsb.Universal
     using System.Threading.Tasks;
 
     public interface IService 
-    {     
-
-        void ReInitialize();
-        void CleanUp();
-        string GetConnectionString();
-        string GetDatabaseName();
-
+    {
+        IRepository GetRepositoryRead();
+        IRepository GetRepositoryWrite();
     }
 
 }
