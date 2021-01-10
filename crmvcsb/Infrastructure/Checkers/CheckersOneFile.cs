@@ -105,6 +105,7 @@ namespace NetPlatformCheckers
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
+    using System.Security.Cryptography;
 
     public static class Check
     {
@@ -1909,6 +1910,198 @@ System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMet
     }
 
 
+
+    /*--------------------------------------------- */
+    /*Overriding comparer and gethashcode methods*/
+    public class ComparerOverride
+    {
+        public class InstrumentComparerCheck
+        {
+            public static void GO()
+            {
+                Instrumnent i0 = new Instrumnent() { };
+                i0.AddCode("cd1");
+                i0.AddCode("cd2");
+                Instrumnent i2 = new Instrumnent() { };
+                i2.AddCode("cd1");
+                i2.AddCode("cd2");
+                Instrumnent i3 = new Instrumnent() { };
+                i3.AddCode("cd1");
+                i3.AddCode("cd3");
+                Instrumnent i4 = new Instrumnent() { };
+                i4.AddCode("cd2");
+                i4.AddCode("cd1");
+
+                var a0 = i0.Equals(i2);
+                var a1 = i0.Equals(i3);
+                var a2 = i0.Equals(i4);
+
+                InstrumentComparer ic = new InstrumentComparer();
+                var b0 = ic.Equals(i0, i2);
+                var b1 = ic.Equals(i0, i3);
+                var b2 = ic.Equals(i0, i4);
+
+            }
+        }
+
+        //Equals GetHashCode overide
+        public class Instrumnent
+        {
+            private List<string> instrumentCodes = new List<string>();
+            public List<string> InstrumentCodes
+            {
+                get
+                {
+                    return instrumentCodes;
+                }
+            }
+
+            public void AddCode(string code)
+            {
+                instrumentCodes.Add(code);
+            }
+
+            public override bool Equals(object obj)
+            {
+                return Equals(obj as Instrumnent);
+            }
+            public bool Equals(Instrumnent item)
+            {
+                if (item.instrumentCodes.Where(s => item.instrumentCodes.Contains(s)).Any())
+                {
+                    return true;
+                }
+                return false;
+            }
+
+            public override int GetHashCode()
+            {
+                var hashCode = 13;
+                unchecked
+                {
+                    foreach (string i in this.InstrumentCodes)
+                    {
+                        hashCode = (hashCode * 397) ^ i.GetHashCode();
+                    }
+
+                    return hashCode;
+                }
+            }
+        }
+
+        //Equlas and GetHashcode basic realization
+        public class InstrumentComparer : IEqualityComparer<Instrumnent>
+        {
+
+            public bool Equals(Instrumnent i1, Instrumnent i2)
+            {
+                if (i1.InstrumentCodes.SequenceEqual(i2.InstrumentCodes))
+                {
+                    return true;
+                }
+                return false;
+            }
+
+            public int GetHashCode(Instrumnent ic)
+            {
+                return ic.GetHashCode();
+            }
+
+        }
+
+        public static class HashCodeCheck
+        {
+            public static void GO()
+            {
+
+                //all return different hashes 
+
+                char[] ch1 = new char[] { 'a' };
+                char[] ch2 = new char[] { 'a' };
+                string s1 = string.Join("", ch1);
+                string s2 = string.Join("", ch2);
+                int h1 = ch1.GetHashCode();
+                int h2 = ch2.GetHashCode();
+                int h21 = s1.GetHashCode();
+                int h22 = s2.GetHashCode();
+
+                byte[] bt1 = Encoding.UTF8.GetBytes(ch1);
+                byte[] bt2 = Encoding.UTF8.GetBytes(ch2);
+                int h31 = bt1.GetHashCode();
+                int h32 = bt2.GetHashCode();
+
+                using (MD5 m = MD5.Create())
+                {
+                    byte[] h41 = m.ComputeHash(bt1);
+                    byte[] h42 = m.ComputeHash(bt2);
+                }
+
+            }
+        }
+
+        public class GenericHashComparer<T>
+        : IEqualityComparer<T> where T : class, IEnumerable<T>
+        {
+            public bool Equals(T x, T y)
+            {
+                HashSet<T> t1 = x as HashSet<T>;
+                HashSet<T> t2 = y as HashSet<T>;
+                if (t1.Intersect(t2).Any())
+                {
+                    return true;
+                }
+                return false;
+            }
+
+            public int GetHashCode(T obj)
+            {
+                var hashCode = 13;
+                unchecked
+                {
+                    foreach (T i in obj)
+                    {
+                        hashCode = (hashCode * 397) ^ i.GetHashCode();
+                    }
+                }
+                return hashCode;
+            }
+        }
+
+    }
+
+
+    //hash from different collections compare check
+    //---------------------------------------------
+    public static class HashCodeCheck
+    {
+        public static void GO()
+        {
+
+            //all return different hashes 
+
+            char[] ch1 = new char[] { 'a' };
+            char[] ch2 = new char[] { 'a' };
+            string s1 = string.Join("", ch1);
+            string s2 = string.Join("", ch2);
+            int h1 = ch1.GetHashCode();
+            int h2 = ch2.GetHashCode();
+            int h21 = s1.GetHashCode();
+            int h22 = s2.GetHashCode();
+
+            byte[] bt1 = Encoding.UTF8.GetBytes(ch1);
+            byte[] bt2 = Encoding.UTF8.GetBytes(ch2);
+            int h31 = bt1.GetHashCode();
+            int h32 = bt2.GetHashCode();
+
+            using (MD5 m = MD5.Create())
+            {
+                byte[] h41 = m.ComputeHash(bt1);
+                byte[] h42 = m.ComputeHash(bt2);
+            }
+
+        }
+    }
+
 }
 
 
@@ -1941,15 +2134,33 @@ namespace LINQtoObjectsCheck
         public List<string> PetsStr { get; set; }
         public List<Pet> Pets {get;set;}
     }
-
     public class Pet {
         public Guid Id {get;set;}
         public string Name {get;set;}
 
         public PetOwners Owner {get;set;}
     }
-    
-    
+
+
+    public class Instrument
+    {
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public Instrument Underlying { get; set; }
+    }
+    public class Position
+    {
+        public Instrument instrument { get; set; }
+        public decimal Quantity { get; set; }
+    }
+    public class Price
+    {
+        public int InstrumentID { get; set; }
+        public decimal Value { get; set; }
+    }
+
+
+
     public interface Iid{
         int ID{get;set;}
     }
@@ -2553,6 +2764,76 @@ System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMet
                 System.Diagnostics.Trace.WriteLine(i.Name);
                 //nm2 nm4
             };
+        }
+
+
+        public static void LinqSumGroupByNew()
+        {
+            var under1 = new Instrument() { ID = 5, Name = "Eq1" };
+            var under2 = new Instrument() { ID = 6, Name = "Eq2" };
+
+            var instr1 = new Instrument() { Underlying = under1 };
+            var instr2 = new Instrument() { Underlying = under1 };
+            var instr3 = new Instrument() { Underlying = under2 };
+
+            var prices = new[]{
+                    new Price {InstrumentID =5, Value = 2},
+                    new Price {InstrumentID =6, Value = 10}
+                };
+
+            var positions = new[]{
+                    new Position {instrument = instr1, Quantity=10}
+                    ,new Position {instrument = instr2, Quantity=90}
+                    ,new Position {instrument = instr3, Quantity=200}
+                };
+
+            //eq1 , amt=200
+            //eq2 , amt=2000
+            //amt=sum(quant)*price
+
+            var qt =
+            from s2 in (from s in (from z in new List<Instrument>() { under1, under2 } select z).ToList() select new { ID = s.ID })
+            join c2 in (from c in positions select new { ID = c.instrument.Underlying.ID, Qnt = c.Quantity, Name = c.instrument.Underlying.Name }) on s2.ID equals c2.ID
+            group c2 by new
+            {
+                c2.Name,
+                c2.ID
+            } into g
+            select new
+            {
+                Name = g.Key.Name,
+                ID = g.Key.ID,
+                Amt = g.Sum(t => t.Qnt)
+            };
+
+            var pr =
+            (from s2 in (from s in (from z in new List<Instrument>() { instr1, instr2, instr3 } select z).ToList() select new { ID = s.Underlying.ID })
+             join c2 in (from c in prices select new { ID = c.InstrumentID, Val = c.Value }) on s2.ID equals c2.ID
+             select new { s2.ID, c2.Val }).GroupBy(x => x.ID).Select(s => s.First());
+
+            var qt2 = from q in (
+            from s2 in (from s in (from z in new List<Instrument>() { under1, under2 } select z).ToList() select new { ID = s.ID })
+            join c2 in (from c in positions select new { ID = c.instrument.Underlying.ID, Qnt = c.Quantity, Name = c.instrument.Underlying.Name }) on s2.ID equals c2.ID
+            group c2 by new
+            {
+                c2.Name,
+                c2.ID
+            } into g
+            select new
+            {
+                Name = g.Key.Name,
+                ID = g.Key.ID,
+                Amt = g.Sum(t => t.Qnt)
+            }
+            )
+                      join p in
+                      (from s2 in (from s in (from z in new List<Instrument>() { instr1, instr2, instr3 } select z).ToList() select new { ID = s.Underlying.ID })
+                       join c2 in (from c in prices select new { ID = c.InstrumentID, Val = c.Value }) on s2.ID equals c2.ID
+                       select new { s2.ID, c2.Val }).GroupBy(x => x.ID).Select(s => s.First())
+                      on q.ID equals p.ID
+                      select new { Name = q.Name, Amt = q.Amt * p.Val }
+            ;
+
         }
 
     }

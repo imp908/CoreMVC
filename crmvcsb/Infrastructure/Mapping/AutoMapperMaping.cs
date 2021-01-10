@@ -22,6 +22,12 @@
                     .ForMember(d => d.IsoCode, m => m.MapFrom(src => src.IsoCode))
                     .ForMember(d => d.Name, m => m.MapFrom(src => src.Name))
                     .ReverseMap().ForAllOtherMembers(o => o.Ignore());
+
+                cfg.CreateMap<CurrencyUpdateAPI, CurrencyDAL>()
+                   .ForMember(d => d.IsMain, m => m.MapFrom(src => src.IsMain))
+                   .ForMember(d => d.Name, m => m.MapFrom(src => src.Name))
+                   .ReverseMap().ForAllOtherMembers(o => o.Ignore());
+                
             });
         }
     }

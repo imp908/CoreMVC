@@ -53,7 +53,7 @@ namespace crmvcsb.Infrastructure.EF.Currencies
 
             var currencyExists = _repositoryWrite.QueryByFilter<CurrencyDAL>(s => s.IsoCode == currency.IsoCode).FirstOrDefault();
             if (currencyExists != null) {
-                this.actualStatus = MessagesConposite.EntityAllreadyExists(currency.GetType().Name, this._repositoryWrite.GetDatabaseName());
+                this.actualStatus = MessagesComposite.EntityAllreadyExists(currency.GetType().Name, this._repositoryWrite.GetDatabaseName());
                 _logger.Information(this.actualStatus);
                 return null;
             }
@@ -62,12 +62,44 @@ namespace crmvcsb.Infrastructure.EF.Currencies
             await _repositoryWrite.AddAsync<CurrencyDAL>(entityToAdd);
             await _repositoryWrite.SaveAsync();
             if (entityToAdd != null && entityToAdd.Id > 0) {
-                this.actualStatus = MessagesConposite.EntitySuccessfullyCreated(currency.GetType().Name, this._repositoryWrite.GetDatabaseName());
+                this.actualStatus = MessagesComposite.EntitySuccessfullyCreated(currency.GetType().Name, this._repositoryWrite.GetDatabaseName());
                 _logger.Information(this.actualStatus);
             }
 
             var entityAdded = _mapper.Map<CurrencyDAL, ICurrencyAPI>(entityToAdd);            
             return entityAdded;
+        }
+        public string UpdateCurrency(ICurrencyAPI currency)
+        {
+            _validator.Validate(currency);
+            var currencyExists = _repositoryWrite.QueryByFilter<CurrencyDAL>(s => s.IsoCode == currency.IsoCode).FirstOrDefault();
+            if (currencyExists == null)
+            {
+                this.actualStatus = MessagesComposite.EntityNotFoundOnUpdate(currency.GetType().Name, this._repositoryWrite.GetDatabaseName());
+                _logger.Information(this.actualStatus);
+                return this.actualStatus;
+            }
+
+            var currencyUpdate = (CurrencyUpdateAPI)currency;
+            currencyExists = _mapper.Map<CurrencyDAL>(currencyUpdate);
+            _repositoryWrite.Update<CurrencyDAL>(currencyExists);
+            this.actualStatus = MessagesComposite.EntityModified(currency.GetType().Name, this._repositoryWrite.GetDatabaseName());
+            return this.actualStatus;
+        }
+        public string DeleteCurrency(ICurrencyAPI currency)
+        {
+            _validator.Validate(currency);
+            var currencyExists = _repositoryWrite.QueryByFilter<CurrencyDAL>(s => s.IsoCode == currency.IsoCode).FirstOrDefault();
+            if(currencyExists == null)
+            {
+                this.actualStatus = MessagesComposite.EntityNotFoundOnDelete(currency.GetType().Name, this._repositoryWrite.GetDatabaseName());
+                _logger.Information(this.actualStatus);
+                return this.actualStatus;
+            }
+
+            _repositoryWrite.Delete<CurrencyDAL>(currencyExists);
+            this.actualStatus = MessagesComposite.EntityDeleted(currency.GetType().Name, this._repositoryWrite.GetDatabaseName());
+            return this.actualStatus;
         }
 
         public async Task<IList<ICrossCurrenciesAPI>> GetCurrencyCrossRatesAsync(IGetCurrencyCommand command)

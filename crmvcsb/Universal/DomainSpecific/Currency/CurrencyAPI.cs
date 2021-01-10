@@ -25,4 +25,11 @@ namespace crmvcsb.Universal.DomainSpecific.Currency.API
         public string IsoCode { get; set; }
         public bool IsMain { get; set; }  
     }
+
+    public class CurrencyUpdateAPI : ICurrencyAPI
+    {
+        public string Name { get; set; }
+        public string IsoCode { get; set; }
+        public bool IsMain { get; set; }
+    }
 }

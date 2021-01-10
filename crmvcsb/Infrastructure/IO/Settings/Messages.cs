@@ -94,7 +94,7 @@ namespace crmvcsb.Infrastructure.IO.Settings
         }
     }
 
-    public class MessagesConposite
+    public class MessagesComposite
     {
 
         //message examples
@@ -132,18 +132,48 @@ namespace crmvcsb.Infrastructure.IO.Settings
 
         public static string EntityAllreadyExists(string type, string database)
         {
-            return MessagesConposite.messageActionTypeDb(
+            return MessagesComposite.messageActionTypeDb(
                     MessagesInitialization.Variables.Messages.InfoMessageTypes.EntityAllreadyExistFound,
                     MessagesInitialization.Variables.Messages.ActionTypes.onCreation, type,
                    database);
         }
         public static string EntitySuccessfullyCreated(string type, string database)
         {
-            return MessagesConposite.messageActionTypeDb(
+            return MessagesComposite.messageActionTypeDb(
                     MessagesInitialization.Variables.Messages.InfoMessageTypes.Success,
                     MessagesInitialization.Variables.Messages.ActionTypes.onCreation, type,
                    database);
         }
+        public static string EntityNotFoundOnDelete(string type, string database)
+        {
+            return MessagesComposite.messageActionTypeDb(
+                    MessagesInitialization.Variables.Messages.InfoMessageTypes.EntityNotFound,
+                    MessagesInitialization.Variables.Messages.ActionTypes.onDelete, type,
+                   database);
+        }
+        public static string EntityNotFoundOnUpdate(string type, string database)
+        {
+            return MessagesComposite.messageActionTypeDb(
+                    MessagesInitialization.Variables.Messages.InfoMessageTypes.EntityNotFound,
+                    MessagesInitialization.Variables.Messages.ActionTypes.onUpdate, type,
+                   database);
+        }
+
+        public static string EntityDeleted(string type, string database)
+        {
+            return MessagesComposite.messageActionTypeDb(
+                    MessagesInitialization.Variables.Messages.InfoMessageTypes.Success,
+                    MessagesInitialization.Variables.Messages.ActionTypes.onDelete, type,
+                   database);
+        }
+        public static string EntityModified(string type, string database)
+        {
+            return MessagesComposite.messageActionTypeDb(
+                    MessagesInitialization.Variables.Messages.InfoMessageTypes.Success,
+                    MessagesInitialization.Variables.Messages.ActionTypes.onUpdate, type,
+                   database);
+        }
+
     }
 
 }
