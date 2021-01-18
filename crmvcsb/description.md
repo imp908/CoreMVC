@@ -130,7 +130,7 @@ npx webpack
 
 
  Decomposition:
- --------------------------------------------- 
+ -------------------------------------------------------
  > folder
  files
 
@@ -171,8 +171,63 @@ npx webpack
         >Infrastructure
             ILogger, IMapper, IValidator
 
- layers relation directions
+Layers relation directions
 API->Infrastructure->Universal
+
+
+Target Decomposition:
+-------------------------------------------------------
+> folder
+files
+
+API:
+	WebAPI, MVC API, MVC Views
+
+INF (Infrastructure):
+	Logger:ILogger,Mapper:IMapper,Validattor:IValidation
+	>IO
+		Serialization, Settings, Logging
+	>IoC
+	>SignalR
+	
+	> EF
+		RepositoryEF: IRepository
+		
+	+> Bus, Broker
+	
+	+> Mongo 
+		RepositoryMongo: IRepository
+	
+DMN (domain specific):
+		IDomainService : IService
+			{IRepository}
+		DomainService: IDomainService
+			{IRepository}
+			
+UNV (universal):
+	IEntity
+	IRepository
+	IService
+	
+	//no external ref
+	Entity: IEntity
+	Service: IService {IRepository}
+	
+	~UNV INF (Universal for infrastructure)
+	ILogger
+	+ ISerialization
+	
+	~UNV Domain (Universal or domain)
+	IMapper
+	IValidation
+	
+	IServiceBus
+	
+Layers relation directions
+API->DMN
+API->INF
+    DMN->UNV
+    INF->UNV
 
 TODO: [
 	

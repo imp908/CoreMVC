@@ -1,6 +1,6 @@
 ﻿
 
-namespace crmvcsb.Infrastructure.EF.Currencies
+namespace crmvcsb.Infrastructure.EF.DomainSpecific.Currencies
 {
     using System;
     using System.Collections.Generic;

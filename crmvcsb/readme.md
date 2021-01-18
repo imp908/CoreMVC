@@ -75,63 +75,13 @@ dotnet add G:\disk\Files\git\Core\crmvcsb\crmvcsb\crmvcsb.csproj package Microso
     npm install --save-dev @babel/core @babel/cli @babel/plugin-proposal-class-properties @babel/preset-env @babel/preset-react @babel/plugin-transform-arrow-functions @babel/plugin-transform-classes @babel/plugin-proposal-function-bind
 ```
 
-## Files
+## Decomposition
 -------------------------------------------------------
-All models in:
-- Domain\Models\Ordering\InterfacesOneFile.cs
-all interfaces in:
-- Domain\Models\Ordering\InterfacesOneFile.cs
 
-controller:
-- API\Areas\TestArea\FolderControllers\OrderController.cs
-
-deliverer wrapper aggregate root:
-- Domain\Services\Ordering\Deliverer.cs
-accounting service, contains price and dates behaviour
-- Domain\Services\Ordering\Accounter.cs
-
-EF cqrs layer
-- Infrastructure\EF\RepositoryCQRSonefile.cs
 
 
 ### API (for fiddler test method,url,attribute,body)
-
 -------------------------------------------------------
-- POST
-- http://localhost:5002/api/Order/AddOrder
-- Content-Type: application/json; charset=utf-8
-
-- > Body:
--------------------------------------------------------
-{
-    "ServiceType":"Bird",
-	"AdressFrom":"Some address one"
-	,"AdressTo":"Some address two"
-	,"DelivertyItemName":"Item1"
-	,"Dimensions":[
-		{"Description":"","Name":"kg"}
-		,{"Description":"","Name":"sm"}
-	]
-}
-
-
--------------------------------------------------------
-- POST
-- http://localhost:5002/api/Order/AddOrder
-- Content-Type: application/json; charset=utf-8
-
-- > Body:
--------------------------------------------------------
-{
-    "ServiceType":"Tortise",
-	"AdressFrom":"Some address one"
-	,"AdressTo":"Some address two"
-	,"DelivertyItemName":"Item1"
-	,"Dimensions":[
-		{"Description":"","Name":"kg"}
-		,{"Description":"","Name":"sm"}
-	]
-}
 
 
 
