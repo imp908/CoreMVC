@@ -360,14 +360,15 @@ DONE:[
             16.12.2020 6h  -> read write, repositories to service autofac register; read write DBs reinitialization
                             dividing to read and write leead to register as Irepository problem
 
-        -> currencyrates CRUD
-        -> sync from write db to read
-        
+        <- 
+            18.12.2021 3h 20m 
         -> Domain CRUD, REST API
-
+       
+        -> sync from write db to read
+       
 	]
-	~53h 00m in 19days
+	~56h 20m in 20days
 
-]~147h:50m in 44d
+]~151h:10m in 45d
 
 
