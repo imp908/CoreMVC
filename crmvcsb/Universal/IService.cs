@@ -1,11 +1,7 @@
 ﻿
 namespace crmvcsb.Universal
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Linq.Expressions;
-    using System.Threading.Tasks;
+
 
     public interface IService 
     {
@@ -13,6 +9,15 @@ namespace crmvcsb.Universal
         IRepository GetRepositoryWrite();
 
         string actualStatus { get; }
+
+        IServiceStatus _status { get; }        
+
     }
+
+    public interface IServiceStatus
+    {
+        public string Message { get; set; }        
+    }
+   
 
 }

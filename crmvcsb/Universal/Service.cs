@@ -6,7 +6,7 @@ namespace crmvcsb.Universal
 
     public class Service : IService
     {
-     
+
         IRepository _repositoryRead;
         IRepository _repositoryWrite;
 
@@ -14,27 +14,36 @@ namespace crmvcsb.Universal
         IValidatorCustom _validator;
         ILoggerCustom _logger;
 
+        public IServiceStatus _status { get; set; }
+        //public ServiceStatus _status { get { return _status; } set { status = value; } }
+
         public string actualStatus { get; set; }
+
 
         public Service(IRepository repositoryRead, IRepository repositoryWrite, IMapper mapper = null, IValidatorCustom validator = null, ILoggerCustom logger = null)
         {
             _repositoryRead = repositoryRead;
             _repositoryWrite = repositoryWrite;
-            
+
             _mapper = mapper;
             _validator = validator;
             _logger = logger;
+
+            _status = new ServiceStatus();
+
         }
-        public Service( IRepository repositoryWrite, IMapper mapper = null, IValidatorCustom validator = null, ILoggerCustom logger = null)
+        public Service(IRepository repositoryWrite, IMapper mapper = null, IValidatorCustom validator = null, ILoggerCustom logger = null)
         {
             _repositoryWrite = repositoryWrite;
             _mapper = mapper;
             _validator = validator;
             _logger = logger;
-        }
-       
 
-       
+            _status = new ServiceStatus();
+        }
+
+
+
         public IRepository GetRepositoryRead()
         {
             return this._repositoryRead;
@@ -43,5 +52,25 @@ namespace crmvcsb.Universal
         {
             return this._repositoryWrite;
         }
+
+        internal void statusChangeAndLog(IServiceStatus newStatus,string message)
+        {
+            this._status = (ServiceStatus)newStatus;
+            var rtTp = this._status.GetType();
+            this._status.Message = message;
+            _logger.Information(this._status.Message);
+        }
     }
+
+    public class ServiceStatus : IServiceStatus
+    {
+        public string Message { get; set; }
+    }
+
+    public class Success : ServiceStatus { }
+    public class Failure: ServiceStatus { }    
+    public class Error : ServiceStatus { }
+    public class Info : ServiceStatus { }
+    public class OK : ServiceStatus { }
+
 }

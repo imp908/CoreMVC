@@ -6,7 +6,7 @@
     using crmvcsb.Universal.DomainSpecific.Currency.DAL;
     using System.Collections.Generic;
 
-    /*Build in logging*/
+    
     public class CurrenciesMapping
     {
         public static MapperConfiguration config()

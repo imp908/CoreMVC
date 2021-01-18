@@ -19,6 +19,8 @@ namespace crmvcsb.Universal.DomainSpecific.Currency.API
         DateTime Date { get; set; }
     }
 
+
+
     public interface ICurrencyAPI
     {
         public string Name { get; set; }
@@ -26,5 +28,27 @@ namespace crmvcsb.Universal.DomainSpecific.Currency.API
         public bool IsMain { get; set; }
     }
 
+    public interface ICurrencyUpdateAPI
+    {
+        public string IsoCode { get; set; }
+    }
+
+
+    public interface ICommandType { }
+    public interface IPayload { }
+    public interface ICommand {
+        public ICommandType commandType { get; set; }
+        public IPayload payload { get; set; }
+    }
+
+    public class BasicCommand: ICommand {
+        public ICommandType commandType { get; set; }
+        public IPayload payload { get; set; }
+    }
+    public class CreateCommand : ICommandType { }
+    public class UpdateCommand : ICommandType { }
+    public class DeleteCommand : ICommandType { }
+    
+   
 }
 

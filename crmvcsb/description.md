@@ -1,285 +1,178 @@
-//////////////
-///MVC WebApi Folders, routing and URLs:
+Framework test APIs and urls (MVC value, core API, views, signalR, react):
+-------------------------------------------------------
+MVC WebApi Folders, routing and URLs:
 Folders:
-//scaffolded vews for MVC and WebApi
+scaffolded vews for MVC and WebApi
 Areas/Scaffolded
-//conventional structure but not name
+conventional structure but not name
 Areas/TestArea/FolderControllers/Homecontroller.cs
-//custom controller placement
+custom controller placement
 Areas/TestArea/NewHomecontroller.cs
 
-//controller to check JS bundles
+controller to check JS bundles
 Areas/TestArea/FolderControllers/JScheckController.cs
-//view
+view
 Areas/TestArea/Views/JScgeck/CheckAppOne.cshtml
 
-//conventional views
+conventional views
 Areas/TestArea/Views/Home/Index.cshtml Areas/TestArea/Views/NewHome/Index.cshtml
 
-//React view check
-Areas/TestArea/Views/ReactCheck/ReactCheck.cshtml Routes: Added http routing for Fiddler test to: program.cs -> IWebHostBuilder CreateWebHostBuilder -> UseUrls("http://localhost:5000") scaffolded controllers: HomeControllers -> https: //localhost:5001/Scaffolded/home/index
-ValuesController -> https: //localhost:5001/api/values
+React view check
+Areas/TestArea/Views/ReactCheck/ReactCheck.cshtml Routes: Added http routing for Fiddler test to: program.cs -> IWebHostBuilder CreateWebHostBuilder -> UseUrls("http:localhost:5000") scaffolded controllers: HomeControllers -> https: localhost:5001/Scaffolded/home/index
+ValuesController -> https: localhost:5001/api/values
 added controllers: HomeController ->
-//conventional view
-https://localhost:5001/TestArea/Home/
-//another folder view
-https://localhost:5001/TestArea/Home/NewHomeIndex
+conventional view
+https:localhost:5001/TestArea/Home/
+another folder view
+https:localhost:5001/TestArea/Home/NewHomeIndex
 NewHomeController ->
-//conventional view
-https://localhost:5001/TestArea/NewHome/
-//another folder view
-https://localhost:5001/TestArea/NewHome/OldHomeIndex
+conventional view
+https:localhost:5001/TestArea/NewHome/
+another folder view
+https:localhost:5001/TestArea/NewHome/OldHomeIndex
 BlogController ->
-//hardcoded string blog collection
-https://localhost:5001/api/blog
-//blog object
-http://localhost:5000/api/blog/{id}
-//get Newtonsoft Jsonized string
-http://localhost:5000/api/blog/GetString/{id}
-
-NewOrderController ->
-//NEW ORDER
-
-GET
-http://localhost:5002/api/NewOrder
-http://localhost:5002/api/NewOrder/ReInitialize
-http://localhost:5002/api/NewOrder/GetDbName
-
-POST
-http://localhost:5002/api/NewOrder/GetCrossRates
-
-
-Content-Type: application/json
-
-{
-  "FromCurrency": "USD",
-  "ToCurrency": "RUB",
-  "ThroughCurrency": "RUB",
-  "Date": "01.01.2019"
-}
-
+hardcoded string blog collection
+https:localhost:5001/api/blog
+blog object
+http:localhost:5000/api/blog/{id}
+get Newtonsoft Jsonized string
+http:localhost:5000/api/blog/GetString/{id}
 
 
 ValuesController->
-//VALUES
-//Example of multiple Get with different params per controller
+VALUES
+Example of multiple Get with different params per controller
 GET
-http://localhost:5002/api/Values/GetDbName
-http://localhost:5002/api/Values/GetDefault/USD
-http://localhost:5002/api/Values/GetCurrency?USD
-http://localhost:5002/api/Values/GetCurrencyParam?USD
+http:localhost:5002/api/Values/GetDbName
+http:localhost:5002/api/Values/GetDefault/USD
+http:localhost:5002/api/Values/GetCurrency?USD
+http:localhost:5002/api/Values/GetCurrencyParam?USD
 
 
+http:localhost:5002/TestArea/JScheck/CheckAppOne
 
-
-//POST
-Posts add,delete, posts and blog by person, get post by blog 
-http://localhost:5000/api/blog/AddPostJSON
-{
-  "PersonId": "81A130D2-502F-4CF1-A376-63EDEB000E9F",
-  "BlogId": "1",
-  "Title": "PostTitle",
-  "Content": "PostContent"
-} 
-http://localhost:5002/api/blog/GetPostsByPerson
-{ "PersonId": "81A130D2-502F-4CF1-A376-63EDEB000E9F" } 
-http://localhost:5002/api/blog/GetPostsByBlog
-{ "BlogId": "1" } 
-http://localhost:5002/api/blog/GetBlogsByPerson
-{ "PersonId": "81A130D2-502F-4CF1-A376-63EDEB000E9F" }
-
-//PUT
-http://localhost:5002/api/blog/UpdatePost
-{
-  "PersonId": "81A130D2-502F-4CF1-A376-63EDEB000E9F",
-  "Post": {
-    "PostId": "1",
-    "Title": "UpdatedTitle",
-    "Content": "UpdatedContent"
-  }
-}
-
-//POST
-http://localhost:5002/api/blog/DeletePost
-{
-  "PersonId": "81A130D2-502F-4CF1-A376-63EDEB000E9F",
-  "PostId": "1"
-} JScheckController ->
-//check Events in AppOne
-//uses function Bus,listener and amiter
-http://localhost:5002/TestArea/JScheck/CheckAppOne
-
-//check Events in AppTwo
-//uses class realization Bus,listener and amiter
-http://localhost:5002/TestArea/JScheck/CheckAppTwo
+check Events in AppTwo
+uses class realization Bus,listener and amiter
+http:localhost:5002/TestArea/JScheck/CheckAppTwo
 
 ReactController
-//react check
-http://localhost:5002/TestArea/React/CheckShoppingList
+react check
+http:localhost:5002/TestArea/React/CheckShoppingList
 
 SignalRcontroller (copypast to several browser windows to test) 
-http://localhost:5002/TestArea/SignalR/hub
+http:localhost:5002/TestArea/SignalR/hub
 
 
-API: [
-  http://localhost:5002/api/blog/AddPost -> returns Ok(result)
-  http://localhost:5002/api/blog/AddPostJSON -> retorns Json(result)
+DomainSpecific Currencies API urls and fiddler payload:
+-------------------------------------------------------
 
-  Body:
-  {
-    "PersonId": "81A130D2-502F-4CF1-A376-63EDEB000E9F",
-    "BlogId": "1",
-    "Title": "PostTitle",
-    "Content": "PostContent"
-  }
+http:localhost:5002/api/currency/Get?iso=usd
 
-  PersonAddsPost
-  http: /localhost:5000/api/blog/AddPostJSON
-  {
-    "PersonId": "81A130D2-502F-4CF1-A376-63EDEB000E9F",
-    "BlogId": "1",
-    "Title": "PostTitle",
-    "Content": "PostContent"
-  }
+http:localhost:5002/api/currency/
 
-  get posts by person personId ->
-  List<Posts>
-  http://localhost:5002/api/blog/GetPostsByPerson
-  { "PersonId": "81A130D2-502F-4CF1-A376-63EDEB000E9F" }
+Accept: application/json; charset=UTF-8
+Content-Type: application/json
 
-  get posts by blog personId -> List<blogs>
-  http://localhost:5002/api/blog/GetPostsByBlog
-  { "BlogId": "1" }
+POST
+{
+"Name" : "testCur", "IsoCode":"TestIso", "IsMain": false
+}
 
-  get blogs by person blogId -> List<Posts>
-  http://localhost:5002/api/blog/GetBlogsByPerson
-  { "PersonId": "81A130D2-502F-4CF1-A376-63EDEB000E9F" }
+PUT
+{
+"Name" : "changednameCur3", "IsoCode":"TestIso", "IsMain": false
+}
 
-  person removes post 
-  http://localhost:5002/api/blog/UpdatePost
-  {
-    "PersonId": "81A130D2-502F-4CF1-A376-63EDEB000E9F",
-    "Post": {
-      "PostId": "1",
-      "Title": "UpdatedTitle",
-      "Content": "UpdatedContent"
-    }
-  }
+DELETE
+http:localhost:5002/api/currency/TestIso
 
-  person updates post
-  http://localhost:5002/api/blog/DeletePost
-  {
-    "PersonId": "81A130D2-502F-4CF1-A376-63EDEB000E9F",
-    "PostId": "1"
-  }
 
-]
 
-//////////////
+Project specific features:
+-------------------------------------------------------
 attribute vs named area routing OR -> controller routing attribute [ Area("TestArea") ] public class NewHomeController : Controller with template route routes.MapRoute( name:"areas", template:"{area}/{controller}/{action}" ); OR -> NAMED routing in startup.cs wihtout attributes routes.MapAreaRoute( name: "TestArea", areaName: "TestArea", template: "TestArea/{controller=Home}/{action=Index}");
 
-
-//////////////
-Default Views folder rename http://jackhiston.com/2017/10/24/extending-the-razor-view-engine-with-view-location-expanders/
+Default Views folder rename http:jackhiston.com/2017/10/24/extending-the-razor-view-engine-with-view-location-expanders/
 View -> ViewsNew CustomViewLocations.cs registered in statup.cs => services.Configure<RazorViewEngineOptions>( options => options.ViewLocationExpanders.Add( new CustomViewLocation()));
 
 
 
 
 
-//////////////
-//Configs
 
-//////////////
-//startup.cs
+Configs:
+-------------------------------------------------------
+
+startup.cs
 custom default MVC Area location folder in API/Areas in startup.cs rerouted through RazorViewEngineOptions Autofac container registration added AutoMapper service added, one coniguration two types of initialization - static and instance API AutoFact to Automapper registration added AutofacServiceProvider returned from ConfigureServices SignalR use and hub routing added Authentication registration: Authentication EF db context Identity core for user managment Added authentication with cookies Added conditional registration for SQL, SQLlite and InMemmory databases Condition is enum class from appsettings.json
 
 ConfigureAutofacDbContexts
 multiple SQL DBs in one project possible with Dummy Repository clones per DB scope
 registration of connection string to context to Repository to service with IRepository
 
-//////////////
-//Program.cs
-Added http instead of https routing for Fiddler test to: .UseUrls("http://localhost:5002")
+Program.cs
+Added http instead of https routing for Fiddler test to: .UseUrls("http:localhost:5002")
 
-
-//////////////
-//webpack for webpack conf
+webpack for webpack conf
 webpack.config.js
-//custom webpack to run from gulp
+custom webpack to run from gulp
 webpack.custom.js
-//gulp default and webpack via gulp 
+gulp default and webpack via gulp 
 gulpfile.js
 
 
-//////////////
-//OrderContext DB migrations
+OrderContext DB migrations
 dotnet ef migrations add CreateIdentitySchema --context TestContext dotnet ef database update --context TestContext
 
-
-//////////////
-//npm
+npm
 npx webpack
 
 
-//////////////
-// decomposition->
-API: WebApi, Controllers Infrastructure: ORMs contexts : [ EF ]; Repo and UOW realizations; Application logic: [ Checkers ]; Repo: {
-  contains EF
-  context; EF
-  repo uses
-  DAL concrete
-  classes
-} 
-UOW: {
-  Contains IRepository<ConcreteRealization>,
-  maps DAL
-  to BLL,
-  returns View
-  models
-} Domain: Entity interfaces and Models For layers : [ DAL, BLL, View ]; IRepo,IUOW interfaces;
 
-//////////////
-// Folder structure
-API:
+ Decomposition:
+ --------------------------------------------- 
+ > folder
+ files
 
-Universal:
-	DomainSpecific:
-		domainName:
-			domainNameAPI.cs; domainNameDAL.cs; IdomainNameService.cs; domainNameService.cs;
-			
-	domainManager.cs
+>API
+    WebApi, 
+    Controllers,
+    MVC Views
 
-	Universal:
-		Entitiess.cs
-		IEntities.cs
-		IRepository.cs
-		Iservice.cs
-		IDomainManager.cs
+>Infrastructure
+    >EF
+        >Domain
+        DomainContextEF
+        DomainRepositoryEF
+        DomainServiceEF        
+    IRepositoryEF
+    RepositoryEF
+    
+    >IO
+        >Logging
+        >Servialization
+        >Settings
+    
+    >IoC
 
-Infrastructure:
-	EF:
-		DomainName:
-			domainContext.cs
-			domainRepository.cs
-	
-	IRepoEF.cs
-	RepoEF.cs
-	ServiceEF.cs
-	
-	Inmemory:
-	
-	IO:
-		Logging:
-		Serialization:
-		Settings:
-	
-	SignalR:
-	
-	
-//////////////
-// layers relation directions
-API->Infrastructure API->Domain Infrastructure->Domain 
+    >DomainMapping
+    >DomainValidation
+
+>Universal:
+    IRepository;
+    IService;
+    IEntities;
+
+    Entities;
+    Service;
+        
+        >DomainSpesific:
+            DAL,API, IAPI
+        >Infrastructure
+            ILogger, IMapper, IValidator
+
+ layers relation directions
+API->Infrastructure->Universal
 
 TODO: [
 	
@@ -340,7 +233,7 @@ DONE:[
                 => add areas 
                     options.AreaViewLocationFormats.Add("API/Areas/{2}/Views/{1}/{0}.cshtml");
                 => remove compatibility 
-                    //.SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+                    .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
                 => move MVC v,c folders
                 => include 
                     @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
@@ -469,6 +362,8 @@ DONE:[
 
         -> currencyrates CRUD
         -> sync from write db to read
+        
+        -> Domain CRUD, REST API
 
 	]
 	~53h 00m in 19days

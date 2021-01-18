@@ -1,5 +1,5 @@
 ﻿
-namespace crmvcsb.Infrastructure.EF
+namespace crmvcsb.Infrastructure.EF.NewOrder
 {
     using crmvcsb.Universal;    
     public interface INewOrderServiceEF : IService
