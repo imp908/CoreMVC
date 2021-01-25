@@ -1,11 +1,10 @@
 ﻿
 namespace crmvcsb.Universal.DomainSpecific.Currency.DAL
 {
+    using crmvcsb.Universal;
     using System;
     using System.Collections.Generic;
 
-    using crmvcsb.Universal;
-    
     public class CurrencyDAL : EntityIntIdDAL
     {
         public string Name { get; set; }

@@ -3,21 +3,21 @@ namespace crmvcsb.Universal
 {
 
 
-    public interface IService 
+    public interface IService
     {
         IRepository GetRepositoryRead();
         IRepository GetRepositoryWrite();
 
         string actualStatus { get; }
 
-        IServiceStatus _status { get; }        
+        IServiceStatus _status { get; }
 
     }
 
     public interface IServiceStatus
     {
-        public string Message { get; set; }        
+        public string Message { get; set; }
     }
-   
+
 
 }

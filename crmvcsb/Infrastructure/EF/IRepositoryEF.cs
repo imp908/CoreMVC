@@ -5,18 +5,11 @@
 /// </summary>
 namespace crmvcsb.Infrastructure.EF
 {
-    using AutoMapper;
-    using Microsoft.EntityFrameworkCore;
-    using System.Threading.Tasks;
-    using System.Collections.Generic;
-
     using crmvcsb.Universal;
-    using Microsoft.EntityFrameworkCore.Infrastructure;
+    using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.ChangeTracking;
-
-    using System;
-    using System.Linq;
-    using System.Linq.Expressions;
+    using Microsoft.EntityFrameworkCore.Infrastructure;
+    using System.Threading.Tasks;
 
     public interface IRepositoryEF : IRepository
     {
@@ -24,7 +17,7 @@ namespace crmvcsb.Infrastructure.EF
         void SaveIdentity<T>() where T : class;
 
         Task<EntityEntry<T>> AddAsync<T>(T item) where T : class;
-  
+
         DatabaseFacade GetDatabase();
         DbContext GetEFContext();
     }

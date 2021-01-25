@@ -1,11 +1,10 @@
 ﻿
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace crmvcsb.Infrastructure.EF.DomainSpecific.Currencies
+namespace crmvcsb.DomainSpecific.Infrastructure.EF
 {
-    using System;
-    using Microsoft.EntityFrameworkCore;
     using crmvcsb.Universal.DomainSpecific.Currency.DAL;
+    using Microsoft.EntityFrameworkCore;
     public class CurrencyContext : DbContext
     {
         public CurrencyContext(DbContextOptions<CurrencyContext> options) : base(options)
@@ -42,7 +41,7 @@ namespace crmvcsb.Infrastructure.EF.DomainSpecific.Currencies
             //    new CurrencyDAL() { Id = 7, Name = "CAD", IsoCode = "CAD" },
             //    new CurrencyDAL() { Id = 8, Name = "CHF", IsoCode = "CHF" }
             //);
-            
+
             //builder.Entity<CurrencyRatesDAL>().HasData(
             //    new CurrencyRatesDAL() { Id = 4, CurrencyFromId = 1, CurrencyToId = 4, Rate = 63.18M, Date = new DateTime(2019, 07, 23) },
             //    new CurrencyRatesDAL() { Id = 5, CurrencyFromId = 2, CurrencyToId = 4, Rate = 70.64M, Date = new DateTime(2019, 07, 23) },
@@ -61,7 +60,8 @@ namespace crmvcsb.Infrastructure.EF.DomainSpecific.Currencies
 
     }
 
-    public class CurrencyContextRead : CurrencyContext {
+    public class CurrencyContextRead : CurrencyContext
+    {
         public CurrencyContextRead(DbContextOptions<CurrencyContextRead> options)
             : base(options) { }
     }

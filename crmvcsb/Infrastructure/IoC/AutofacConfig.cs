@@ -2,11 +2,10 @@
 {
     using Autofac;
     using Autofac.Extensions.DependencyInjection;
-    using crmvcsb.Infrastructure.Validation;
+    using crmvcsb.DomainSpecific.Validation;
     using crmvcsb.Universal.Infrastructure;
     using Microsoft.Extensions.DependencyInjection;
     using crmvcsb.Infrastructure.IO.Logging;
-    using crmvcsb.Universal.Infrastructure;
     using crmvcsb.Infrastructure.IO.Serialization;
 
     /*Build in logging*/

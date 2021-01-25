@@ -1,22 +1,16 @@
 
 namespace crmvcsb.Infrastructure.EF
 {
-    using System.Threading.Tasks;
-    using System.Linq.Expressions;
-
+    using crmvcsb.Universal;
+    using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.ChangeTracking;
     using Microsoft.EntityFrameworkCore.Infrastructure;
-
-    using Microsoft.EntityFrameworkCore;
-    using System.Collections.Generic;
-
     using System;
-
+    using System.Collections.Generic;
     using System.Linq;
-
+    using System.Linq.Expressions;
     using System.Reflection;
-
-    using crmvcsb.Universal;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Basic repository implementation
@@ -27,7 +21,7 @@ namespace crmvcsb.Infrastructure.EF
 
         public DbContext GetContext()
         {
-            return this._context;            
+            return this._context;
         }
 
         public RepositoryEF(DbContext context)
@@ -94,7 +88,7 @@ namespace crmvcsb.Infrastructure.EF
         public IQueryable<T> QueryByFilter<T>(Expression<Func<T, bool>> expression)
             where T : class
         {
-            
+
             return this._context.Set<T>().Where(expression);
         }
 
@@ -141,7 +135,7 @@ namespace crmvcsb.Infrastructure.EF
             var set = this._context.Set<T>();
             var prop = this._context.GetType().GetProperties();
             var t_ = typeof(T);
-   
+
             PropertyInfo p = prop.Where(s => s.PropertyType.GenericTypeArguments[0].Equals(typeof(T))).FirstOrDefault();
 
             if (p != null)
@@ -171,8 +165,9 @@ namespace crmvcsb.Infrastructure.EF
             return this._context.Database;
         }
 
-        public DbContext GetEFContext() {            
-            if(this._context is DbContext context)
+        public DbContext GetEFContext()
+        {
+            if (this._context is DbContext context)
             {
                 return context;
             }

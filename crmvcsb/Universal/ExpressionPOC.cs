@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using System.Linq.Expressions;
-using System.Reflection;
 
 namespace crmvcsb.Universal
 {
@@ -161,7 +156,7 @@ namespace crmvcsb.Universal
             ParameterExpression pe = Expression.Parameter(typeof(TestEntity), "te");
             ConstantExpression ce = Expression.Constant(new TestEntity() { Id = 0 }, typeof(TestEntity));
             BinaryExpression be = Expression.Equal(pe, ce);
-            
+
             Expression<Func<TestEntity, bool>> lmb1 =
               Expression.Lambda<Func<TestEntity, bool>>(
               be, new ParameterExpression[] { pe }

@@ -1,7 +1,7 @@
 ﻿using System;
 
 namespace crmvcsb.Universal.DomainSpecific.Currency.API
-{    
+{
 
     public class GetCurrencyCommand : IGetCurrencyCommand
     {
@@ -23,7 +23,7 @@ namespace crmvcsb.Universal.DomainSpecific.Currency.API
     {
         public string Name { get; set; }
         public string IsoCode { get; set; }
-        public bool IsMain { get; set; }  
+        public bool IsMain { get; set; }
     }
 
     public class CurrencyUpdateAPI : ICurrencyUpdateAPI

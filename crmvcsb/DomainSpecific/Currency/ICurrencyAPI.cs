@@ -36,19 +36,21 @@ namespace crmvcsb.Universal.DomainSpecific.Currency.API
 
     public interface ICommandType { }
     public interface IPayload { }
-    public interface ICommand {
+    public interface ICommand
+    {
         public ICommandType commandType { get; set; }
         public IPayload payload { get; set; }
     }
 
-    public class BasicCommand: ICommand {
+    public class BasicCommand : ICommand
+    {
         public ICommandType commandType { get; set; }
         public IPayload payload { get; set; }
     }
     public class CreateCommand : ICommandType { }
     public class UpdateCommand : ICommandType { }
     public class DeleteCommand : ICommandType { }
-    
-   
+
+
 }
 

@@ -2,9 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 
 
-using Newtonsoft.Json;
-
-
 namespace crmvcsb.TestArea.Controllers
 {
     /** while mapping in startup.completionlist exists no custom attribute needed */
@@ -17,8 +14,8 @@ namespace crmvcsb.TestArea.Controllers
         }
 
         public JsonResult FakeCurrentUser()
-        {            
-            return Json(new { userName ="FakeUserName"});
+        {
+            return Json(new { userName = "FakeUserName" });
         }
     }
 }

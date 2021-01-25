@@ -1,22 +1,20 @@
 ﻿
 
-namespace crmvcsb.Infrastructure.EF.DomainSpecific.Currencies
+namespace crmvcsb.DomainSpecific.Infrastructure.EF
 {
-    using System;
-    using System.Linq;
-
     using AutoMapper;
-    using Microsoft.EntityFrameworkCore;
-    using System.Threading.Tasks;
-    using System.Collections.Generic;
-
-    using crmvcsb.Universal.DomainSpecific.Currency;
-    using crmvcsb.Universal.DomainSpecific.Currency.DAL;
-    using crmvcsb.Universal.DomainSpecific.Currency.API;
-    using crmvcsb.Universal;
-    using crmvcsb.Universal.Infrastructure;
-
+    using crmvcsb.Infrastructure.EF;
     using crmvcsb.Infrastructure.IO.Settings;
+    using crmvcsb.Universal;
+    using crmvcsb.Universal.DomainSpecific.Currency;
+    using crmvcsb.Universal.DomainSpecific.Currency.API;
+    using crmvcsb.Universal.DomainSpecific.Currency.DAL;
+    using crmvcsb.Universal.Infrastructure;
+    using Microsoft.EntityFrameworkCore;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
 
     public class CurrencyServiceEF : Service, ICurrencyServiceEF
     {
@@ -49,10 +47,11 @@ namespace crmvcsb.Infrastructure.EF.DomainSpecific.Currencies
 
         public async Task<ICurrencyAPI> AddCurrency(ICurrencyAPI currency)
         {
-            _validator.Validate(currency);            
+            _validator.Validate(currency);
 
             var currencyExists = _repositoryWrite.QueryByFilter<CurrencyDAL>(s => s.IsoCode == currency.IsoCode).FirstOrDefault();
-            if (currencyExists != null) {
+            if (currencyExists != null)
+            {
                 base.statusChangeAndLog(new Failure(), MessagesComposite.EntityAllreadyExists(currency.GetType().Name, this._repositoryWrite.GetDatabaseName()));
                 //this._status = new Failure();
                 //this._status.Message = MessagesComposite.EntityAllreadyExists(currency.GetType().Name, this._repositoryWrite.GetDatabaseName());
@@ -63,14 +62,15 @@ namespace crmvcsb.Infrastructure.EF.DomainSpecific.Currencies
             var entityToAdd = _mapper.Map<ICurrencyAPI, CurrencyDAL>(currency);
             await _repositoryWrite.AddAsync<CurrencyDAL>(entityToAdd);
             await _repositoryWrite.SaveAsync();
-            if (entityToAdd != null && entityToAdd.Id > 0) {
+            if (entityToAdd != null && entityToAdd.Id > 0)
+            {
                 base.statusChangeAndLog(new Success(), MessagesComposite.EntitySuccessfullyCreated(currency.GetType().Name, this._repositoryWrite.GetDatabaseName()));
                 //this._status = new Success();
                 //this._status.Message = MessagesComposite.EntitySuccessfullyCreated(currency.GetType().Name, this._repositoryWrite.GetDatabaseName());
                 //_logger.Information(this.actualStatus);
             }
 
-            var entityAdded = _mapper.Map<CurrencyDAL, ICurrencyAPI>(entityToAdd);            
+            var entityAdded = _mapper.Map<CurrencyDAL, ICurrencyAPI>(entityToAdd);
             return entityAdded;
         }
         public ICurrencyUpdateAPI UpdateCurrency(ICurrencyUpdateAPI currency)
@@ -105,7 +105,7 @@ namespace crmvcsb.Infrastructure.EF.DomainSpecific.Currencies
         {
             _validator.Validate(currency);
             var currencyExists = _repositoryWrite.QueryByFilter<CurrencyDAL>(s => s.IsoCode == currency.IsoCode).FirstOrDefault();
-            if(currencyExists == null)
+            if (currencyExists == null)
             {
                 base.statusChangeAndLog(new Failure(), MessagesComposite.EntityNotFoundOnDelete(currency.GetType().Name, this._repositoryWrite.GetDatabaseName()));
                 //this._status = new Failure();
@@ -122,7 +122,7 @@ namespace crmvcsb.Infrastructure.EF.DomainSpecific.Currencies
             return this._status;
         }
 
-        
+
         public async Task<IList<ICrossCurrenciesAPI>> GetCurrencyCrossRatesAsync(IGetCurrencyCommand command)
         {
 
@@ -191,7 +191,7 @@ namespace crmvcsb.Infrastructure.EF.DomainSpecific.Currencies
 
             return result.Cast<ICrossCurrenciesAPI>().ToList();
         }
-  
+
         public void ReInitialize()
         {
 
@@ -206,7 +206,7 @@ namespace crmvcsb.Infrastructure.EF.DomainSpecific.Currencies
             _repositoryWrite.Add<CurrencyDAL>(new CurrencyDAL() { Id = 6, Name = "AUD", IsoCode = "AUD" });
             _repositoryWrite.Add<CurrencyDAL>(new CurrencyDAL() { Id = 7, Name = "CAD", IsoCode = "CAD" });
             _repositoryWrite.Add<CurrencyDAL>(new CurrencyDAL() { Id = 8, Name = "CHF", IsoCode = "CHF" });
-            try { _repositoryWrite.SaveIdentity< CurrencyDAL>(); }
+            try { _repositoryWrite.SaveIdentity<CurrencyDAL>(); }
             catch (Exception e)
             {
                 throw;
@@ -222,13 +222,13 @@ namespace crmvcsb.Infrastructure.EF.DomainSpecific.Currencies
             _repositoryWrite.Add<CurrencyRatesDAL>(new CurrencyRatesDAL() { Id = 9, CurrencyFromId = 2, CurrencyToId = 6, Rate = 15M, Date = new DateTime(2019, 07, 23) });
             _repositoryWrite.Add<CurrencyRatesDAL>(new CurrencyRatesDAL() { Id = 10, CurrencyFromId = 6, CurrencyToId = 3, Rate = 0.25M, Date = new DateTime(2019, 07, 23) });
 
-            try { _repositoryWrite.SaveIdentity< CurrencyRatesDAL>(); }
+            try { _repositoryWrite.SaveIdentity<CurrencyRatesDAL>(); }
             catch (Exception e)
             {
                 throw;
             }
         }
-        public void CleanUp() 
+        public void CleanUp()
         {
             _repositoryWrite.ReInitialize();
             _repositoryWrite.DeleteRange(_repositoryRead.GetAll<CurrencyRatesDAL>().ToList());

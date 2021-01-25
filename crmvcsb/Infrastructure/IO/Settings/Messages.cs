@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.IO;
+﻿using System.IO;
 
 
 namespace crmvcsb.Infrastructure.IO.Settings
 {
-    using Microsoft.AspNetCore.Hosting;
     using crmvcsb.Infrastructure.IO.Serialization;
 
     /// <summary>
@@ -63,17 +58,17 @@ namespace crmvcsb.Infrastructure.IO.Settings
         }
         public MessagesInitialization()
         {
-            
+
             if (File.Exists(path))
             {
                 string text = File.ReadAllText(path);
                 Variables = serialization.DeSerialize<_variables>(text);
             }
-            else 
+            else
             {
                 init();
                 File.WriteAllText($"{Directory.GetCurrentDirectory()}\\variables.json", serialization.Serialize(Variables));
-            }            
+            }
         }
 
         void init()

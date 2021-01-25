@@ -13,11 +13,11 @@ namespace crmvcsb
         {
             System.Diagnostics.Trace.WriteLine($"{ System.Reflection.MethodBase.GetCurrentMethod().DeclaringType };{System.Reflection.MethodBase.GetCurrentMethod().Name}");
         }
-        
+
         public static Task GOasync()
         {
             return item._GOasync();
-        }   
+        }
         public static void GOsync()
         {
             item._GOasync();
@@ -34,29 +34,28 @@ namespace crmvcsb
 
 namespace InfrastructureCheckers
 {
-    using crmvcsb.Infrastructure.EF.Currencies;
+    using crmvcsb.DomainSpecific.Infrastructure.EF;
     using crmvcsb.Infrastructure.EF.NewOrder;
     using crmvcsb.Universal.DomainSpecific.Currency.DAL;
     using crmvcsb.Universal.DomainSpecific.NewOrder.DAL;
     using Microsoft.EntityFrameworkCore;
     using System.Collections.Generic;
     using System.Linq;
-    using crmvcsb.Universal;
-    using crmvcsb.Infrastructure.EF;
 
     public static class RepoAndUOWCheck
     {
         //static string connectionStringSQL = "Server=HP-HP000114\\SQLEXPRESS02;Database=EFdb;Trusted_Connection=True;";
         static string connectionStringSQL = "Server=AAAPC;Database=currenciesDB;User Id=tl;Password=awsedrDRSEAW;";
         static string connectionStringSQLnewOrder = "Server=AAAPC;Database=newOrderDB;User Id=tl;Password=awsedrDRSEAW;";
-        public static void GO(){
-            crmvcsb.Universal.ExpressionsPOC.GO();            
+        public static void GO()
+        {
+            crmvcsb.Universal.ExpressionsPOC.GO();
             DbWithRepoReinitCheck();
         }
 
         public static void DbWithRepoReinitCheck()
         {
-           
+
             using (CurrencyContextWrite context = new CurrencyContextWrite(
                 new DbContextOptionsBuilder<CurrencyContextWrite>()
                     .UseSqlServer(connectionStringSQL).Options))
@@ -67,7 +66,7 @@ namespace InfrastructureCheckers
                 repo.DeleteRange(currencies);
                 repo.Save();
 
-                repo.ReInitialize();                
+                repo.ReInitialize();
 
             }
 
@@ -102,10 +101,10 @@ namespace NetPlatformCheckers
     using System.Net.Sockets;
     using System.Reflection;
     using System.Runtime.CompilerServices;
+    using System.Security.Cryptography;
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
-    using System.Security.Cryptography;
 
     public static class Check
     {
@@ -127,7 +126,7 @@ namespace NetPlatformCheckers
 
 
     //Ienumerable Ienumerator 
-    public class Person 
+    public class Person
     {
         public string Name;
         public string SecondName;
@@ -138,7 +137,7 @@ namespace NetPlatformCheckers
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return (IEnumerator) GetEnumerator();
+            return (IEnumerator)GetEnumerator();
         }
         public PersonEnum GetEnumerator()
         {
@@ -156,17 +155,18 @@ namespace NetPlatformCheckers
         }
 
         object IEnumerator.Current => Current;
-        public Person Current {
+        public Person Current
+        {
             get
             {
                 try
                 {
                     return _persons[position];
                 }
-                catch (Exception) { throw; }                          
+                catch (Exception) { throw; }
             }
         }
-                    
+
 
         public void Dispose()
         {
@@ -237,30 +237,34 @@ namespace NetPlatformCheckers
     /*Abstract class initialization check */
 
     /*--------------------------------------------- */
-    public abstract class ABS{
-        
-        public static string ParentProp {get;set;} = "inited from autoprop in abs";
-        public ABS(){}
+    public abstract class ABS
+    {
+
+        public static string ParentProp { get; set; } = "inited from autoprop in abs";
+        public ABS() { }
         //private ABS(){}
-        static ABS(){
+        static ABS()
+        {
             ParentProp = "inited in parent static const";
         }
     }
 
     public class ABSchild : ABS
     {
-        public static string AbsChildProp {get;set;} = "inited in child autoprop";
-        public ABSchild():base() { }
-        public ABSchild(int val){}
+        public static string AbsChildProp { get; set; } = "inited in child autoprop";
+        public ABSchild() : base() { }
+        public ABSchild(int val) { }
 
         static ABSchild()
         {
-            AbsChildProp="inited in child static constr";
+            AbsChildProp = "inited in child static constr";
         }
     }
-    public class AbstractClassCheck{
+    public class AbstractClassCheck
+    {
         static AbstractClassCheck acch;
-        public static void GO(){
+        public static void GO()
+        {
             acch = new AbstractClassCheck();
             acch._GO();
         }
@@ -277,12 +281,12 @@ namespace NetPlatformCheckers
 
 
     /* overriding */
-    
+
     // not falls to base but overrides in cases
     // base as child override
     // base as childlvlN override
     // interface of base as child
-     
+
     /*--------------------------------------------- */
 
 
@@ -310,7 +314,7 @@ namespace NetPlatformCheckers
     {
         public static void GO()
         {
-           System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
+            System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
 
             parent parent = new parent();
             parent parentAsChild1 = new child1();
@@ -318,21 +322,22 @@ namespace NetPlatformCheckers
             child1 child = new child1();
 
 
-           System.Diagnostics.Trace.WriteLine(parent.printV()); //base
-           System.Diagnostics.Trace.WriteLine(parent.log()); //base
-           System.Diagnostics.Trace.WriteLine(parentAsChild1.printV()); //child1
-           System.Diagnostics.Trace.WriteLine(parentAsChild1.log()); //base
-           System.Diagnostics.Trace.WriteLine(parentAsChild2.printV()); //base
-           System.Diagnostics.Trace.WriteLine(parentAsChild2.log()); //base
-           System.Diagnostics.Trace.WriteLine(child.printV()); //child1
-           System.Diagnostics.Trace.WriteLine(child.log()); //child1
+            System.Diagnostics.Trace.WriteLine(parent.printV()); //base
+            System.Diagnostics.Trace.WriteLine(parent.log()); //base
+            System.Diagnostics.Trace.WriteLine(parentAsChild1.printV()); //child1
+            System.Diagnostics.Trace.WriteLine(parentAsChild1.log()); //base
+            System.Diagnostics.Trace.WriteLine(parentAsChild2.printV()); //base
+            System.Diagnostics.Trace.WriteLine(parentAsChild2.log()); //base
+            System.Diagnostics.Trace.WriteLine(child.printV()); //child1
+            System.Diagnostics.Trace.WriteLine(child.log()); //child1
         }
     }
     public static class EqualIsCheck
     {
-        public static void GO(){
-            
-           System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
+        public static void GO()
+        {
+
+            System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
 
             parent parent = new parent();
             parent parentAsChild1 = new child1();
@@ -342,15 +347,15 @@ namespace NetPlatformCheckers
             bool parentAsChild2IsEqualsParentAsChild1 = parentAsChild2.Equals(parentAsChild1);
 
             bool parentAsChild1IsParent = parentAsChild1 is parent;
-            bool parentAsChild1IsChild1= parentAsChild1 is child1;
+            bool parentAsChild1IsChild1 = parentAsChild1 is child1;
 
             bool childIsParent = child is parent;
 
-           System.Diagnostics.Trace.WriteLine($"parentAsChild2IsEqualsParentAsChild1: {parentAsChild2IsEqualsParentAsChild1}");
+            System.Diagnostics.Trace.WriteLine($"parentAsChild2IsEqualsParentAsChild1: {parentAsChild2IsEqualsParentAsChild1}");
 
-           System.Diagnostics.Trace.WriteLine($"parentAsChild1IsParent: {parentAsChild1IsParent}");
-           System.Diagnostics.Trace.WriteLine($"parentAsChild1IsChild1: {parentAsChild1IsChild1}");
-           System.Diagnostics.Trace.WriteLine($"childIsParent: {childIsParent}");
+            System.Diagnostics.Trace.WriteLine($"parentAsChild1IsParent: {parentAsChild1IsParent}");
+            System.Diagnostics.Trace.WriteLine($"parentAsChild1IsChild1: {parentAsChild1IsChild1}");
+            System.Diagnostics.Trace.WriteLine($"childIsParent: {childIsParent}");
         }
     }
 
@@ -402,18 +407,23 @@ namespace NetPlatformCheckers
 
 
     //Multiple Interfaces and childs of childs
-    public interface ia{
+    public interface ia
+    {
         void mA();
     }
-    public interface ib{
+    public interface ib
+    {
         void mB();
     }
 
-    public class A : ia, ib{
-        public void mA(){
+    public class A : ia, ib
+    {
+        public void mA()
+        {
             System.Diagnostics.Trace.WriteLine("a in A");
         }
-        public virtual void mB(){
+        public virtual void mB()
+        {
             System.Diagnostics.Trace.WriteLine("b in A");
         }
     }
@@ -421,15 +431,19 @@ namespace NetPlatformCheckers
 
     public class B : A
     {
-        public void mA(){
+        public void mA()
+        {
             System.Diagnostics.Trace.WriteLine("a in B");
         }
-        public void mB(){
+        public void mB()
+        {
             System.Diagnostics.Trace.WriteLine("b in B");
         }
     }
-    public class C: A, ia{
-        public void mA(){
+    public class C : A, ia
+    {
+        public void mA()
+        {
             System.Diagnostics.Trace.WriteLine("a in C");
         }
         public new void mB()
@@ -437,7 +451,8 @@ namespace NetPlatformCheckers
             System.Diagnostics.Trace.WriteLine("b in C");
         }
     }
-    public class D:A{
+    public class D : A
+    {
         public void mA()
         {
             System.Diagnostics.Trace.WriteLine("a in D");
@@ -447,7 +462,8 @@ namespace NetPlatformCheckers
             System.Diagnostics.Trace.WriteLine("b in D");
         }
     }
-    public class E:A, ib{
+    public class E : A, ib
+    {
         public void mA()
         {
             System.Diagnostics.Trace.WriteLine("a in E");
@@ -457,13 +473,15 @@ namespace NetPlatformCheckers
             System.Diagnostics.Trace.WriteLine("b in E");
         }
     }
-    public class Eo : A, ib{
+    public class Eo : A, ib
+    {
 
         public void mA()
         {
             System.Diagnostics.Trace.WriteLine("a in E");
         }
-        public override void mB(){
+        public override void mB()
+        {
             System.Diagnostics.Trace.WriteLine("b in Eo");
         }
     }
@@ -472,17 +490,19 @@ namespace NetPlatformCheckers
     {
 
     }
-    public class D2 : D{
+    public class D2 : D
+    {
         public override void mB()
         {
             System.Diagnostics.Trace.WriteLine("b in D2");
-        } 
+        }
     }
 
-    public static class InheritanceOverridingWithInterfaces {
+    public static class InheritanceOverridingWithInterfaces
+    {
         public static void GO()
         {
-System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
+            System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
             A aFromB = new B();
             A aFormC = new C();
             A aFromD = new D();
@@ -506,11 +526,11 @@ System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMet
             //all others to base a in A and b in A
             aFromB.mA();
             aFromB.mB();
-            aFormC.mA(); 
-            aFormC.mB(); 
-            aFromD.mA(); 
+            aFormC.mA();
+            aFormC.mB();
+            aFromD.mA();
             aFromD.mB(); // b in D
-            aFromE.mA(); 
+            aFromE.mA();
             aFromE.mB();
             aFromD1.mA();
             aFromD1.mB(); // b in D
@@ -539,7 +559,7 @@ System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMet
         public static void GO()
         {
 
-System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
+            System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
 
             D1 d1 = new D1();
             A dfromA = new D1();
@@ -553,16 +573,16 @@ System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMet
             int i = 1;
             object o = i;
             var oRtTp = o.GetType().ToString();
-            
+
             int i2 = (int)o;
-                        
+
         }
     }
 
 
     /* Inheritance with interfaces */
 
-    
+
     public interface IMethodD
     {
         void MethodD();
@@ -651,29 +671,29 @@ System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMet
         public static void Go()
         {
 
-System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
+            System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
 
-ParentClass parentFromChild = new ChildClass();
+            ParentClass parentFromChild = new ChildClass();
 
-parentFromChild.MethodD(); //from child
-parentFromChild.MethodE(); //from parent
+            parentFromChild.MethodD(); //from child
+            parentFromChild.MethodE(); //from parent
 
-parentFromChild.MethodF(); //from child
-parentFromChild.MethodG(); //from parent
+            parentFromChild.MethodF(); //from child
+            parentFromChild.MethodG(); //from parent
 
-IMethodD methodDfromChild = new ChildClass();
-IMethodE methodEfromChild = new ChildClass();
-IMethodF methodFfromChild = new ChildClass();
-IMethodG methodGfromChild = new ChildClass();
+            IMethodD methodDfromChild = new ChildClass();
+            IMethodE methodEfromChild = new ChildClass();
+            IMethodF methodFfromChild = new ChildClass();
+            IMethodG methodGfromChild = new ChildClass();
 
-methodDfromChild.MethodD(); //from child
-methodEfromChild.MethodE(); //from parent
+            methodDfromChild.MethodD(); //from child
+            methodEfromChild.MethodE(); //from parent
 
-methodFfromChild.MethodF(); //from child
-methodGfromChild.MethodG(); //from child
+            methodFfromChild.MethodF(); //from child
+            methodGfromChild.MethodG(); //from child
 
         }
-    
+
     }
 
 
@@ -683,11 +703,11 @@ methodGfromChild.MethodG(); //from child
     /*--------------------------------------------- */
     public interface IEntityID
     {
-         int ID {get;set;}
+        int ID { get; set; }
     }
     public class EntityForSwap : IEntityID
     {
-        public int ID {get;set;}
+        public int ID { get; set; }
     }
     public static class SwapG
     {
@@ -699,7 +719,7 @@ methodGfromChild.MethodG(); //from child
                 sort = false;
                 for (int i = 0; i < arr.Count - 1; i++)
                 {
-                    if (cmpr(arr[i], arr[i + 1])>0)
+                    if (cmpr(arr[i], arr[i + 1]) > 0)
                     {
                         sort = true;
                         SwapG.swap<T>(arr, arr.IndexOf(arr[i]), arr.IndexOf(arr[i + 1]));
@@ -737,7 +757,7 @@ methodGfromChild.MethodG(); //from child
         public static void GO()
         {
             System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
-            List<EntityForSwap> arr = 
+            List<EntityForSwap> arr =
             new List<EntityForSwap>(){
                 new EntityForSwap(){ID=0},
                 new EntityForSwap(){ID=3},
@@ -776,18 +796,18 @@ methodGfromChild.MethodG(); //from child
         {
             //named method instance
             Del1 d11 = print;
-           System.Diagnostics.Trace.WriteLine(d11.Invoke(2));
-           System.Diagnostics.Trace.WriteLine(d11(3));
+            System.Diagnostics.Trace.WriteLine(d11.Invoke(2));
+            System.Diagnostics.Trace.WriteLine(d11(3));
 
             //anonimous method instance
             Del1 d12 = delegate (int i) { return "Anonimous to str: " + i.ToString(); };
-           System.Diagnostics.Trace.WriteLine(d12.Invoke(4));
-           System.Diagnostics.Trace.WriteLine(d12(5));
+            System.Diagnostics.Trace.WriteLine(d12.Invoke(4));
+            System.Diagnostics.Trace.WriteLine(d12(5));
 
             //lambda instance
             Del1 d13 = s => "Lambd to str:" + s.ToString();
-           System.Diagnostics.Trace.WriteLine(d13.Invoke(6));
-           System.Diagnostics.Trace.WriteLine(d13(7));
+            System.Diagnostics.Trace.WriteLine(d13.Invoke(6));
+            System.Diagnostics.Trace.WriteLine(d13(7));
 
         }
 
@@ -835,17 +855,17 @@ methodGfromChild.MethodG(); //from child
         string print2(int i)
         {
             string ret = "Print2 of str:" + i.ToString();
-           System.Diagnostics.Trace.WriteLine(ret);
+            System.Diagnostics.Trace.WriteLine(ret);
             return ret;
         }
         string print3(int i)
         {
             string ret = "Print3 of str:" + i.ToString();
-           System.Diagnostics.Trace.WriteLine(ret);
+            System.Diagnostics.Trace.WriteLine(ret);
             return ret;
         }
     }
-   
+
 
     public class DelegatesArray
     {
@@ -1081,7 +1101,7 @@ methodGfromChild.MethodG(); //from child
             if (cr_.GetType().Equals(typeof(Car)))
             {
                 Car cr = (Car)cr_;
-               System.Diagnostics.Trace.WriteLine($"Speed changed: { cr.name}  {e.speed}");
+                System.Diagnostics.Trace.WriteLine($"Speed changed: { cr.name}  {e.speed}");
             }
         }
     }
@@ -1092,7 +1112,7 @@ methodGfromChild.MethodG(); //from child
             if (o.GetType().Equals(typeof(Car)))
             {
                 Car cr = (Car)o;
-               System.Diagnostics.Trace.WriteLine($"Car broke: { cr.name}  {e.broken}");
+                System.Diagnostics.Trace.WriteLine($"Car broke: { cr.name}  {e.broken}");
             }
         }
     }
@@ -1122,7 +1142,7 @@ methodGfromChild.MethodG(); //from child
     {
         public void lsiten(object e, PrintOrCancell args)
         {
-           System.Diagnostics.Trace.WriteLine(args.toPrint);
+            System.Diagnostics.Trace.WriteLine(args.toPrint);
             if (args.toPrint.Length > 6) { args.stop = true; }
         }
     }
@@ -1154,7 +1174,7 @@ methodGfromChild.MethodG(); //from child
             {
                 Console.Write(i);
             }
-           
+
             if (e.toCount > 2) { e.stop = true; }
         }
     }
@@ -1208,7 +1228,7 @@ methodGfromChild.MethodG(); //from child
                 int i = await Countlarge(args.arr);
                 args.sum = i;
             }
-            catch (Exception e) {System.Diagnostics.Trace.WriteLine(e.Message); }
+            catch (Exception e) { System.Diagnostics.Trace.WriteLine(e.Message); }
         }
         async Task<int> Countlarge(List<int> amt)
         {
@@ -1260,7 +1280,7 @@ methodGfromChild.MethodG(); //from child
 
         static void SampleEventCheck()
         {
-           System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
+            System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
             Car car0 = new Car() { name = "car0" };
             Car car1 = new Car() { name = "car1" };
             SpeedListener sl = new SpeedListener();
@@ -1275,7 +1295,7 @@ methodGfromChild.MethodG(); //from child
         }
         static void CancelationCheck()
         {
-           System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
+            System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
             List<string> strs = new List<string>() { "a", "aa", "aaa", "aaaa", "aaaaa", "aaaaaa" };
             PrinterEmitter pe = new PrinterEmitter();
             PrintListener pl = new PrintListener();
@@ -1284,7 +1304,7 @@ methodGfromChild.MethodG(); //from child
         }
         static void UpdatedCoreEventCheck()
         {
-           System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
+            System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
             CountEmitter ce = new CountEmitter();
             CountListener cl = new CountListener();
             List<int> cnt = new List<int>() { 1, 2, 3, 4, 5, 6 };
@@ -1293,7 +1313,7 @@ methodGfromChild.MethodG(); //from child
         }
         static void AsyncEventsCheck()
         {
-            System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");            
+            System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
             CountAsync ca = new CountAsync();
             ListenerAsync la = new ListenerAsync();
             ca.onCnt += la.Listen;
@@ -1309,8 +1329,9 @@ methodGfromChild.MethodG(); //from child
             //arr implementation, need to e.arr_ change
             //ca.toCount(intArr);
         }
-    
-        static void NamedEventsCheck(){
+
+        static void NamedEventsCheck()
+        {
             System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
             Receiver rc = new Receiver();
             Emitter em = new Emitter();
@@ -1323,7 +1344,7 @@ methodGfromChild.MethodG(); //from child
 
     /*Interfaces */
     /*--------------------------------------------- */
-    /*Explicit Initialization */    
+    /*Explicit Initialization */
     interface IPrintInt
     {
         void Print(int i);
@@ -1558,11 +1579,11 @@ methodGfromChild.MethodG(); //from child
     }
 
 
-    
+
     /*--------------------------------------------- */
     public class StringBuilderChecker
     {
-        
+
     }
 
 
@@ -1570,18 +1591,20 @@ methodGfromChild.MethodG(); //from child
     /*Async,Multithreading,Parallell*/
     /*--------------------------------------------- */
     //ADD new
-    
+
     public class AsyncCheck
     {
         static string result = string.Empty;
 
-        public async static void GO(){
-System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
+        public async static void GO()
+        {
+            System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
             AsyncCheck asCheck = new AsyncCheck();
             await asCheck.SumResultOfCollectionOfTasks();
         }
 
-        public async Task<int> GO_async(){
+        public async Task<int> GO_async()
+        {
             System.Diagnostics.Trace.WriteLine("GO async started");
             System.Diagnostics.Trace.WriteLine($"result = {AsyncCheck.result}");
             var r = await GetStringAsync();
@@ -1590,7 +1613,7 @@ System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMet
             System.Diagnostics.Trace.WriteLine($"r = {r}");
             return 1;
         }
-        public async Task<string> GetStringAsync ()
+        public async Task<string> GetStringAsync()
         {
             await ChangeStringAsync();
             return result;
@@ -1598,7 +1621,7 @@ System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMet
         public async Task<int> ChangeStringAsync()
         {
             await Task.Delay(200);
-            result="finished";
+            result = "finished";
             return 1;
         }
 
@@ -1609,9 +1632,9 @@ System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMet
 
             List<Task<int>> tasks = new List<Task<int>>()
             {
-                DoSomeDelayedrWork(1000) 
+                DoSomeDelayedrWork(1000)
                 , DoSomeDelayedrWork(1000)
-                , DoSomeDelayedrWork(500)  
+                , DoSomeDelayedrWork(500)
             };
 
             var awaitedresult = await Task.WhenAll(tasks);
@@ -1639,12 +1662,15 @@ System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMet
         }
     }
 
-    public class TasksToFuckupCPU{
-        public static void GO(){
-System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
+    public class TasksToFuckupCPU
+    {
+        public static void GO()
+        {
+            System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
 
-            for(int i=0;i<2000;i++){
-                new Thread(o=>{Thread.Sleep(100);}).Start();
+            for (int i = 0; i < 2000; i++)
+            {
+                new Thread(o => { Thread.Sleep(100); }).Start();
             }
         }
         public async Task FakeLongRunningTask()
@@ -1656,15 +1682,17 @@ System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMet
 
     /*Reflections */
     /*--------------------------------------------- */
-    public class ModelForReflectionOne{
-        public Guid Id {get;set;}
-        public string Name {get;set;}
+    public class ModelForReflectionOne
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
     }
-    public class ModelForReflectionTwo{
-        public Guid Id {get;set;}
-        public string Name {get;set;}
+    public class ModelForReflectionTwo
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
         [New(AttrType = true)]
-        public string Sername {get;set;}
+        public string Sername { get; set; }
     }
     //custom attribute class
     public class NewAttribute : Attribute
@@ -1681,7 +1709,7 @@ System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMet
 
             Assembly asm = Assembly.GetCallingAssembly();
             Type[] types_ = asm.GetTypes();
-            List<Type> types_filtered = types_.Where(s=>s.IsAbstract == false && s.IsSealed == false)
+            List<Type> types_filtered = types_.Where(s => s.IsAbstract == false && s.IsSealed == false)
             .Where(t => !t.GetTypeInfo().IsDefined(typeof(CompilerGeneratedAttribute), true)).ToList();
 
             foreach (Type b in types_filtered)
@@ -1690,10 +1718,11 @@ System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMet
                 if (b.IsClass && b.IsAbstract == false && b.IsSealed == false && b.IsGenericType == false)
                 {
                     var constructor = b.GetConstructor(
-                    BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, 
+                    BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
                     null, Type.EmptyTypes, null);
 
-                    if(constructor!=null){
+                    if (constructor != null)
+                    {
                         var c = Activator.CreateInstance(b);
                         System.Diagnostics.Trace.WriteLine($"TypeName instatiated from asm: {c.GetType()}");
                     }
@@ -1727,7 +1756,7 @@ System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMet
                 System.Diagnostics.Trace.WriteLine(c.Name);
                 foreach (ModelForReflectionTwo item in ClassCollection)
                 {
-                    var d = item.GetType().GetProperty(c.Name).GetValue(item);                    
+                    var d = item.GetType().GetProperty(c.Name).GetValue(item);
                     System.Diagnostics.Trace.WriteLine($"Property Name, Value: {c.Name}, {d}");
                 }
             }
@@ -1738,7 +1767,7 @@ System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMet
     {
         public static void GO()
         {
-System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
+            System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
 
             Reflections r = new Reflections();
             r.LoopThroughtAssemblyReflections();
@@ -1757,26 +1786,27 @@ System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMet
 
             Socket listener = new Socket(AddressFamily.InterNetworkV6, SocketType.Stream, ProtocolType.Tcp);
             listener.Bind(new IPEndPoint(IPAddress.IPv6Any, 2112));
-            listener.Listen(10);                      
-            
-            while(true)
+            listener.Listen(10);
+
+            while (true)
             {
                 Console.WriteLine(@"Waiting...");
                 Socket socket = listener.Accept();
                 string receive = string.Empty;
                 string reply = string.Empty;
 
-                while(true)
+                while (true)
                 {
                     try
                     {
                         byte[] bytes = new byte[1024];
                         int numBytes = socket.Receive(bytes);
-                        
+
                         Console.WriteLine(@"Receiving");
-                        receive += Encoding.ASCII.GetString(bytes, 0, numBytes);                       
-                        
-                    }catch(Exception e)
+                        receive += Encoding.ASCII.GetString(bytes, 0, numBytes);
+
+                    }
+                    catch (Exception e)
                     {
                         System.Diagnostics.Trace.WriteLine(e.Message);
                     }
@@ -1785,8 +1815,8 @@ System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMet
                     {
                         break;
                     }
-                   
-                   
+
+
                 }
 
                 reply = @"Received: " + receive;
@@ -1805,7 +1835,7 @@ System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMet
 
             }
         }
-        
+
     }
 
     public class SocketClient
@@ -2132,13 +2162,14 @@ namespace LINQtoObjectsCheck
         public string OwnerName { get; set; }
         public int OwnerInt { get; set; }
         public List<string> PetsStr { get; set; }
-        public List<Pet> Pets {get;set;}
+        public List<Pet> Pets { get; set; }
     }
-    public class Pet {
-        public Guid Id {get;set;}
-        public string Name {get;set;}
+    public class Pet
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
 
-        public PetOwners Owner {get;set;}
+        public PetOwners Owner { get; set; }
     }
 
 
@@ -2161,26 +2192,27 @@ namespace LINQtoObjectsCheck
 
 
 
-    public interface Iid{
-        int ID{get;set;}
+    public interface Iid
+    {
+        int ID { get; set; }
     }
 
     public static class Log
     {
-        public static void ToLog(IEnumerable<object> item) 
+        public static void ToLog(IEnumerable<object> item)
         {
-            foreach(var i in item)
+            foreach (var i in item)
             {
                 Console.WriteLine(i);
             }
         }
     }
-    
-    public class User 
+
+    public class User
     {
-        public int ID {get;set;}
-        public string name {get;set;}
-        public Address Address {get;set;}
+        public int ID { get; set; }
+        public string name { get; set; }
+        public Address Address { get; set; }
 
         private Address addresPriv;
         public readonly Address addrRdn;
@@ -2193,33 +2225,33 @@ namespace LINQtoObjectsCheck
 
     public class Address : Iid
     {
-        public int ID {get;set;}
-        public string name {get;set;}
+        public int ID { get; set; }
+        public string name { get; set; }
 
     }
 
     public class Facility
     {
-        public int ID {get;set;}
-        public string Name {get;set;}
-        public IEnumerable<ServiceTypes> Services {get;set;}
-        
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public IEnumerable<ServiceTypes> Services { get; set; }
+
     }
 
 
 
 
-    public class ServiceTypes :Iid
+    public class ServiceTypes : Iid
     {
-        public int ID {get;set;}
-        public string Name {get;set;}
+        public int ID { get; set; }
+        public string Name { get; set; }
     }
 
     public class Item
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public DateTime SomeDate { get; set; }        
+        public DateTime SomeDate { get; set; }
     };
 
 
@@ -2262,7 +2294,7 @@ namespace LINQtoObjectsCheck
 
 
             List<PetOwners> petownersWithPets = new List<PetOwners>() {
-                new PetOwners {OwnerName=@"Owner1",OwnerInt=0,PetsStr= new List<string>() { @"Pet1",@"Pet2"} 
+                new PetOwners {OwnerName=@"Owner1",OwnerInt=0,PetsStr= new List<string>() { @"Pet1",@"Pet2"}
                 , Pets = new List<Pet>(){ new Pet(){Name=@"Pet1"}, new Pet() { Name = @"Pet2" }}},
                 new PetOwners {OwnerName=@"Owner2",OwnerInt=1,PetsStr= new List<string>() { @"Pet3",@"Pet4", @"Pet5" }
                  , Pets = new List<Pet>(){ new Pet(){Name=@"Pet3"}, new Pet() { Name = @"Pet4" }, new Pet() { Name = @"Pet5" }}},
@@ -2281,7 +2313,7 @@ namespace LINQtoObjectsCheck
             List<Pet> petsWithOwners = new List<Pet>(){
                 new Pet(){Name = "Pet20", Owner = petownersWithPets[0]}
                 ,new Pet(){Name = "Pet21", Owner = petownersWithPets[0]}
-                
+
                 ,new Pet(){Name = "Pet22", Owner = petownersWithPets[1]}
 
                 ,new Pet(){Name = "Pet23", Owner = petownersWithPets[2]}
@@ -2289,24 +2321,26 @@ namespace LINQtoObjectsCheck
                 ,new Pet(){Name = "Pet25", Owner = petownersWithPets[2]}
             };
 
-            var ownersOfPets = 
+            var ownersOfPets =
                 from s in petownersWithPets
                 join c in petsWithOwners on s equals c.Owner into t
                 from c in t.DefaultIfEmpty()
-                select new {
+                select new
+                {
                     Owner = s?.OwnerName ?? "",
                     Pet = c?.Name ?? ""
                 };
 
-            var owersOfPetsAPI = 
-                petownersWithPets.Join(petsWithOwners, petowner => petowner, pet => pet.Owner, (petowner,pet)=>new{ 
+            var owersOfPetsAPI =
+                petownersWithPets.Join(petsWithOwners, petowner => petowner, pet => pet.Owner, (petowner, pet) => new
+                {
                     Owner = petowner.OwnerName,
                     Pet = pet.Name
                 });
 
             //where Any
-            var petOwnersWithPetsInList = 
-                petownersWithPets.Where(s => s.Pets.Any( x => petsWithoutOwners.Any(c => c.Name == x.Name )))
+            var petOwnersWithPetsInList =
+                petownersWithPets.Where(s => s.Pets.Any(x => petsWithoutOwners.Any(c => c.Name == x.Name)))
                 .ToList();
 
             //where exists
@@ -2316,9 +2350,11 @@ namespace LINQtoObjectsCheck
 
 
             //Join 
-            var joinRacerCups = 
-                racers.Join(cups,r => r.Name, c => c.RacerName, (r , c) => new {
-                    racer = r.Name, cup =c.Competition
+            var joinRacerCups =
+                racers.Join(cups, r => r.Name, c => c.RacerName, (r, c) => new
+                {
+                    racer = r.Name,
+                    cup = c.Competition
                 });
 
 
@@ -2336,14 +2372,17 @@ namespace LINQtoObjectsCheck
 
             var cupsByYearQuery =
             from t in cups
-            group t by new {t.Year} into g
-            select new {
+            group t by new { t.Year } into g
+            select new
+            {
                 Year = g.Key.Year,
                 Cnt = g.Count()
             };
 
-            var cupsByYearAPI = cups.GroupBy( p=> p.Year,(z , x)=> new {
-                Year = z, Cnt = x.Count()
+            var cupsByYearAPI = cups.GroupBy(p => p.Year, (z, x) => new
+            {
+                Year = z,
+                Cnt = x.Count()
             });
 
             //group by several columns
@@ -2353,42 +2392,44 @@ namespace LINQtoObjectsCheck
                 orderby t2.Key.Year, t2.Key.Competition descending
                 select new { Comp = t2.Key.Competition, Racer = t2.Key.Year, Count = t2.Count() };
 
-            var RacersCountByCar = 
+            var RacersCountByCar =
                 from s in racers
-                group s by new {s.Car} into g
-                select new {
-                    Car = g.Key.Car, RacersCountAll = g.Count()
+                group s by new { s.Car } into g
+                select new
+                {
+                    Car = g.Key.Car,
+                    RacersCountAll = g.Count()
                 };
 
-            var RacersCountByCarAndYear = 
-                from s in racers 
-                group s by new {s.Year,s.Car} into g
+            var RacersCountByCarAndYear =
+                from s in racers
+                group s by new { s.Year, s.Car } into g
                 select new { Car = g.Key.Car, Year = g.Key.Year, Racers = g.Count() };
 
 
             //Aggregate
             var MaxPetsInOnerCnt =
-            petownersWithPets.Aggregate<PetOwners,int,int>(0,(s, next) => 
-                next.PetsStr.Count() > s ? next.PetsStr.Count() : s
+            petownersWithPets.Aggregate<PetOwners, int, int>(0, (s, next) =>
+                   next.PetsStr.Count() > s ? next.PetsStr.Count() : s
             , cp => cp);
 
             //seed is temprary store
             //next is iteratable item
             var MaxPetsPetOwner =
-                petownersWithPets.Aggregate<PetOwners,PetOwners,PetOwners>(new PetOwners(),
-                    (seed , next) => 
-                    (seed?.PetsStr?.Any() != true) 
-                        ? next 
+                petownersWithPets.Aggregate<PetOwners, PetOwners, PetOwners>(new PetOwners(),
+                    (seed, next) =>
+                    (seed?.PetsStr?.Any() != true)
+                        ? next
                         :
-                            next.PetsStr.Count() > seed?.PetsStr?.Count() ? next : seed, 
-                po => po );
+                            next.PetsStr.Count() > seed?.PetsStr?.Count() ? next : seed,
+                po => po);
 
             // var g =
             //     from t in cups
             //     group t by new { t.Competition } into t2
             //     select new {Cup = t2.Key, Count = t2.Key.Count(), 
             //Racer = from s in t2 select s.RacerName };
-           
+
 
             //join from different sources            
             var h = from s in racers select s;
@@ -2407,17 +2448,17 @@ namespace LINQtoObjectsCheck
 
             var leftJoin =
             (from s in cups
-            join c in racers on s.RacerName equals c.Name into t
-            from c in t.DefaultIfEmpty()
-            select new
-            {
-                Cup = s?.Competition ?? "",
-                Name = s?.RacerName ?? "",
+             join c in racers on s.RacerName equals c.Name into t
+             from c in t.DefaultIfEmpty()
+             select new
+             {
+                 Cup = s?.Competition ?? "",
+                 Name = s?.RacerName ?? "",
 
-                NameRigth = c?.Name ?? "",
-                CarRigth = c?.Car ?? ""
-            }).ToList();
-            
+                 NameRigth = c?.Name ?? "",
+                 CarRigth = c?.Car ?? ""
+             }).ToList();
+
 
             //???
             var k =
@@ -2461,24 +2502,25 @@ namespace LINQtoObjectsCheck
             UpdateCheck();
             UpdateNestedCheck();
             MaxDateCheck();
-        }   
+        }
 
-        
-        public static void bulkCheck(){
 
-            List<Address> addresses = new List<Address> (){
-		    new Address(){ID=0,name="Name_0"},
-		    new Address(){ID=1,name="Name_1"},
+        public static void bulkCheck()
+        {
+
+            List<Address> addresses = new List<Address>(){
+            new Address(){ID=0,name="Name_0"},
+            new Address(){ID=1,name="Name_1"},
             new Address(){ID=4,name="Name_4"},
             new Address(){ID=5,name="Name_4"},
-	        };
-	
-	        List<User> users = new List<User> (){
+            };
+
+            List<User> users = new List<User>(){
             new User(){ID=0,name="User_0",Address=addresses[0]},
             new User(){ID=1,name="User_1",Address=addresses[1]},
             new User(){ID=2,name="User_2",Address=null}
-	        };
-	
+            };
+
             var query =
                 addresses.Join(users,
                             u => u.ID,
@@ -2487,92 +2529,99 @@ namespace LINQtoObjectsCheck
                                 new { OwnerName = u.name, Pet = a.name });
 
             List<Address> usersNUll = null;
-            if(usersNUll?.ToList().Any()==true)
+            if (usersNUll?.ToList().Any() == true)
             {
 
             }
             usersNUll = new List<Address>();
-            if(usersNUll?.ToList().Any()==true)
+            if (usersNUll?.ToList().Any() == true)
             {
 
             }
-            if(addresses?.ToList().Any()==true)
+            if (addresses?.ToList().Any() == true)
             {
 
             }
 
             //testListA.Where(a => !testListB.Any(b => a.ProductID == b.ProductID && a.Category == b.Category));
-            
+
             List<Address> intersect = addresses.Where(a => users.Any(b => b.ID == a.ID)).ToList();
             List<Address> all = addresses.Where(a => users.Any(b => b.ID == a.ID)).ToList();
             List<Address> except = addresses.Where(a => !users.Any(b => b.ID == a.ID)).ToList();
-            
+
             Log.ToLog(query);
         }
 
-        public static void UpdateCheck(){
+        public static void UpdateCheck()
+        {
 
-            List<Address> addrLess = new List<Address> (){
+            List<Address> addrLess = new List<Address>(){
                 new Address(){ID=0,name="Name_0"},
                 new Address(){ID=1,name="Name_1"},
                 new Address(){ID=2,name="Name_2"},
                 new Address(){ID=3,name="Name_3"},
-	        };
-            List<Address> addrMore= new List<Address> (){             
+            };
+            List<Address> addrMore = new List<Address>(){
                 new Address(){ID=3,name="Name_3"},
                 new Address(){ID=4,name="Name_4"},
                 new Address(){ID=5,name="Name_5"},
                 new Address(){ID=6,name="Name_6"}
-	        };
-            
-            var upd = lc.UpdateExceptAdd<Address>(addrMore,addrLess);
+            };
+
+            var upd = lc.UpdateExceptAdd<Address>(addrMore, addrLess);
         }
-        
-        public static void UpdateNestedCheck(){
+
+        public static void UpdateNestedCheck()
+        {
             List<Facility> fac = lc.GenFacilities(5);
-            
+
             List<ServiceTypes> serv = new List<ServiceTypes>(){
                 new ServiceTypes(){ID=4,Name="name 4"}
                 ,new ServiceTypes(){ID=5,Name="name 5"}
                 ,new ServiceTypes(){ID=6,Name="name 6"}
             };
 
-            fac.ForEach(s=> 
-                s.Services=lc.UpdateExceptAdd<ServiceTypes>(serv,s.Services)
+            fac.ForEach(s =>
+                s.Services = lc.UpdateExceptAdd<ServiceTypes>(serv, s.Services)
             );
 
         }
 
-        public List<ServiceTypes> GenServices(int num){
+        public List<ServiceTypes> GenServices(int num)
+        {
             List<ServiceTypes> ret = new List<ServiceTypes>();
-            for (int i=0;i<num;i++){
-                ret.Add(new ServiceTypes(){ID=i, Name=i.ToString()});
+            for (int i = 0; i < num; i++)
+            {
+                ret.Add(new ServiceTypes() { ID = i, Name = i.ToString() });
             }
             return ret;
         }
-        public List<Facility> GenFacilities(int num){
-             List<Facility> ret = new List<Facility>();
-            for (int i=0;i<num;i++){
-                ret.Add(new Facility(){ID=i, Name=i.ToString(), Services = GenServices(i)});
+        public List<Facility> GenFacilities(int num)
+        {
+            List<Facility> ret = new List<Facility>();
+            for (int i = 0; i < num; i++)
+            {
+                ret.Add(new Facility() { ID = i, Name = i.ToString(), Services = GenServices(i) });
             }
             return ret;
         }
-      
+
         public IEnumerable<T> UpdateExceptAdd<T>(IEnumerable<T> from, IEnumerable<T> into)
          where T : class, Iid
-         {
+        {
             var ret = new List<T>();
-            var toDelete = into.Where(c => !from.Any(s => c.ID==s.ID)).ToList();
-            var toAdd = from.Where(c => !into.Any(s => c.ID==s.ID)).ToList();
+            var toDelete = into.Where(c => !from.Any(s => c.ID == s.ID)).ToList();
+            var toAdd = from.Where(c => !into.Any(s => c.ID == s.ID)).ToList();
 
-            into = into.Except(into.Where(c => !from.Any(s => c.ID==s.ID))).ToList();
+            into = into.Except(into.Where(c => !from.Any(s => c.ID == s.ID))).ToList();
             into.ToList().AddRange(toAdd.ToList());
 
             return into;
         }
 
-        public class MaxDateByName{
-            public string Name{get;set;}
+        public class MaxDateByName
+        {
+            public string Name { get; set; }
             public DateTime MaxDate { get; set; }
         }
         public static void MaxDateCheck()
@@ -2582,7 +2631,7 @@ namespace LINQtoObjectsCheck
                 ,new Item(){Name="Name0", SomeDate = new DateTime(2019,01,01)}
                 ,new Item(){Name="Name0", SomeDate = new DateTime(2019,02,01)}
                 ,new Item(){Name="Name0", SomeDate = new DateTime(2019,01,01)}
-                
+
                 ,new Item(){Name="Name1", SomeDate = new DateTime(2019,02,01)}
                 ,new Item(){Name="Name1", SomeDate = new DateTime(2019,03,01)}
             };
@@ -2591,19 +2640,21 @@ namespace LINQtoObjectsCheck
             var maxDate = items.OrderByDescending(c => c.SomeDate).First().SomeDate;
 
             //select max date by group
-            var maxDateByName = 
+            var maxDateByName =
             items
-            .Where(v => v.SomeDate!=null && v.Name != null)
+            .Where(v => v.SomeDate != null && v.Name != null)
             .GroupBy(s => s.Name)
-            .Select(c => new {
-                c.Key, LastDate = c.OrderByDescending(z=>z.SomeDate)
-                .Select(x=>x.SomeDate)
+            .Select(c => new
+            {
+                c.Key,
+                LastDate = c.OrderByDescending(z => z.SomeDate)
+                .Select(x => x.SomeDate)
                 .FirstOrDefault()
             });
-            
+
             //selecting name from annonimous
-            var Name = maxDateByName.Where(s => s.Key !=null && s.LastDate != null).OrderByDescending(c =>c.LastDate).FirstOrDefault()?.Key;
-         
+            var Name = maxDateByName.Where(s => s.Key != null && s.LastDate != null).OrderByDescending(c => c.LastDate).FirstOrDefault()?.Key;
+
         }
 
         //if a?.Any() == true  
@@ -2722,7 +2773,8 @@ namespace LINQtoObjectsCheck
 
         }
 
-        public static void WhereAnyContains(){
+        public static void WhereAnyContains()
+        {
 
             List<Item> allIds = new List<Item>(){
                 new Item(){Id=0, Name = "Nm0"}
@@ -2744,15 +2796,16 @@ namespace LINQtoObjectsCheck
             };
 
             var res = allIds.Where(x =>
-                servicesIds.Where(s => 
+                servicesIds.Where(s =>
                 parentIds.Exists(c => c.Id == s.Id)).ToList()
-                    .Exists(z => x.Id==z.Id)
+                    .Exists(z => x.Id == z.Id)
             );
 
         }
 
-        public static void DeferredCheck(){
-System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
+        public static void DeferredCheck()
+        {
+            System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
             List<Item> items = new List<Item>(){
                 new Item(){Id=0, Name="nm1"},new Item(){Id=1,Name="nm2"},new Item(){Id=2,Name="nm3"},new Item(){Id=1,Name="nm4"}
             };
@@ -2760,7 +2813,8 @@ System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMet
             var itemById = items.Where(s => s.Id == id);
 
             id = 1;
-            foreach(var i in itemById){
+            foreach (var i in itemById)
+            {
                 System.Diagnostics.Trace.WriteLine(i.Name);
                 //nm2 nm4
             };
@@ -2885,7 +2939,8 @@ namespace TipsAndTricks
         }
 
         /*Prints current executing class and method names */
-        public static void PrintCurrentMethodAndClassName(){
+        public static void PrintCurrentMethodAndClassName()
+        {
             System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
         }
 
@@ -2954,7 +3009,8 @@ namespace KATAS
     //custom linq
 
 
-    public class TNine{
+    public class TNine
+    {
         //https://code.google.com/codejam/contest/351101/dashboard#s=p2
         //T9  
 
@@ -2974,7 +3030,7 @@ namespace KATAS
 
                 foreach (CaseList cl_ in cl)
                 {
-                    cl_.Act=tNineChecks.GO(new KeyPadStrait(), cl_.Case);
+                    cl_.Act = tNineChecks.GO(new KeyPadStrait(), cl_.Case);
                     cl_.check();
                 }
             }
@@ -3003,16 +3059,16 @@ namespace KATAS
             public string Act { get; set; } = null;
             public bool? isOK { get; private set; } = null;
         }
-        
+
         //key presser interface handler
         public static class tNineChecks
-        {       
-            public static string GO(IKeyPresser kp_,string case_)
-            {            
-                return kp_.print(case_);            
+        {
+            public static string GO(IKeyPresser kp_, string case_)
+            {
+                return kp_.print(case_);
             }
         }
-                
+
         //key presser interface with base realization
         public interface IKeyPresser
         {
@@ -3040,22 +3096,22 @@ namespace KATAS
             };
             public static List<char> presser(char[] str_)
             {
-            
+
                 //"".ToCharArray().First();
                 char?[] foundPrev = null;
 
                 List<char> res = new List<char>();
-                for(int i = 0; i < str_.Count(); i++)
+                for (int i = 0; i < str_.Count(); i++)
                 {
                     char?[] found = null;
-                    if(keyPad.ContainsKey(str_[i]))
+                    if (keyPad.ContainsKey(str_[i]))
                     {
                         keyPad.TryGetValue(str_[i], out found);
                         if (foundPrev != null)
                         {
-                            if(foundPrev[0] == found[0]){ res.Add(' '); }
+                            if (foundPrev[0] == found[0]) { res.Add(' '); }
                         }
-                    
+
                         foreach (char ch in found)
                         {
                             res.Add(ch);
@@ -3065,15 +3121,15 @@ namespace KATAS
                 }
                 return res;
             }
-            
+
             public string print(string input_)
             {
                 return string.Join(string.Empty, KeyPadStrait.presser(input_.ToCharArray()));
-                
+
             }
         }
 
-    }    
+    }
 
 
     public class Miscellaneous
@@ -3089,7 +3145,7 @@ namespace KATAS
                 Stack<char> st = new Stack<char>();
                 Stack<char> st2 = new Stack<char>();
 
-                for (int i =0;i<input_.ToArray().Length;i++)
+                for (int i = 0; i < input_.ToArray().Length; i++)
                 {
                     char ch = input_.ToArray()[i];
 
@@ -3105,7 +3161,7 @@ namespace KATAS
                             {
                                 arr.Add(st.Pop());
                             }
-                        
+
                         }
                         else
                         {
@@ -3117,7 +3173,7 @@ namespace KATAS
                             {
                                 arr.Add(st2.Pop());
                             }
-                            
+
                         }
                         arr.Add(' ');
                     }
@@ -3129,7 +3185,7 @@ namespace KATAS
                     {
                         arr.Add(st.Pop());
                     }
-                    
+
                 }
                 else
                 {
@@ -3141,7 +3197,7 @@ namespace KATAS
                     {
                         arr.Add(st2.Pop());
                     }
-                
+
                 }
 
                 return string.Join(null, arr);
@@ -3154,11 +3210,11 @@ namespace KATAS
             {
                 byte[] arr = Encoding.ASCII.GetBytes(input);
                 char result = ' ';
-                for (int i =0; i< arr.Length-1; i++)
+                for (int i = 0; i < arr.Length - 1; i++)
                 {
-                    if(arr[i]+1<arr[i+1])
+                    if (arr[i] + 1 < arr[i + 1])
                     {
-                        result = (char)(arr[i]+1);
+                        result = (char)(arr[i] + 1);
                         break;
                     }
                 }
@@ -3168,11 +3224,12 @@ namespace KATAS
 
         }
 
-        public static class DivideKATA {
+        public static class DivideKATA
+        {
             public static int[] Divisors(int n)
             {
                 if (n < 2) { return null; }
-                        
+
 
                 List<int> divisors = new List<int>();
 
@@ -3188,10 +3245,10 @@ namespace KATAS
                 {
                     return divisors.ToArray();
                 }
-            
+
             }
         }
-        
+
         public static class FormatRearrange
         {
             public static void GO()
@@ -3200,9 +3257,9 @@ namespace KATAS
             }
 
             static void StringsCheck()
-            {          
+            {
 
-                string input = "{0}{1} {2}";        
+                string input = "{0}{1} {2}";
                 string r1 = Rearrange(input);
             }
 
@@ -3211,30 +3268,30 @@ namespace KATAS
                 string result = input_;
                 char[] chr = input_.ToCharArray();
                 int lng = chr.Length;
-                char[] prevDigit=null;
+                char[] prevDigit = null;
                 char[] currDigit = null;
 
-                for (int i =0;i<lng;i++)
+                for (int i = 0; i < lng; i++)
                 {
 
                     int i2 = i;
 
                     if (char.IsDigit(chr[i2]))
-                    {     
+                    {
 
-                        if ( i2+1 < lng)
+                        if (i2 + 1 < lng)
                         {
-                            while(char.IsDigit(chr[i2+1]))
+                            while (char.IsDigit(chr[i2 + 1]))
                             {
                                 i2++;
                             }
-                        
+
                         }
-                
+
 
                         if (prevDigit == null)
                         {
-                            prevDigit = ChArrFill(i, i2, chr);                  
+                            prevDigit = ChArrFill(i, i2, chr);
                         }
                         else
                         {
@@ -3261,8 +3318,9 @@ namespace KATAS
 
                                 result = charArrToInteger(chrN).ToString();
                             }
-                            else {
-                                prevDigit = intToCharArr(charArrToInteger(currDigit));                        
+                            else
+                            {
+                                prevDigit = intToCharArr(charArrToInteger(currDigit));
                             }
 
                         }
@@ -3277,9 +3335,9 @@ namespace KATAS
             static int charArrToInteger(char[] arr_)
             {
                 int res = 0;
-                int i = 1;            
-                for(int i2 = arr_.Length-1;i2>=0;i2--)
-                {               
+                int i = 1;
+                for (int i2 = arr_.Length - 1; i2 >= 0; i2--)
+                {
                     res += (int)(char.GetNumericValue(arr_[i2]) * i);
                     i *= 10;
                 }
@@ -3287,11 +3345,11 @@ namespace KATAS
             }
             static char[] intToCharArr(int i_)
             {
-                return i_.ToString().ToCharArray();   
+                return i_.ToString().ToCharArray();
             }
-            static char[] intRecount(char[] currDig_,char[] prevDigit_)
+            static char[] intRecount(char[] currDig_, char[] prevDigit_)
             {
-                if(charArrToInteger(currDig_) == charArrToInteger(prevDigit_)+1)
+                if (charArrToInteger(currDig_) == charArrToInteger(prevDigit_) + 1)
                 {
                     return currDig_;
                 }
@@ -3311,9 +3369,9 @@ namespace KATAS
                     return false;
                 }
             }
-            static char[] ChArrFill(int i_,int i2_, char[] chFrom_)
+            static char[] ChArrFill(int i_, int i2_, char[] chFrom_)
             {
-                char[] chTo_ = new char[(i2_ - i_)+1];
+                char[] chTo_ = new char[(i2_ - i_) + 1];
 
                 for (int i3_ = 0; i3_ <= (i2_ - i_); i3_++)
                 {
@@ -3607,7 +3665,7 @@ namespace KATAS
         {
             public List<T> Arrange { get; set; }
             public List<T> Expected { get; set; }
-     
+
             public string MethodName { get; set; }
             public long Elapsed { get; set; }
             public bool result
@@ -3625,61 +3683,64 @@ namespace KATAS
         {
             public List<T> Arrange { get; set; }
             public List<T> Expected { get; set; }
-            public bool result 
-            { 
+            public bool result
+            {
                 get
                 {
-                    if(this.Arrange == null || this.Expected == null){return false;}
+                    if (this.Arrange == null || this.Expected == null) { return false; }
                     return this.Arrange.SequenceEqual(this.Expected);
                 }
-                private set{value = false;}
-            } 
+                private set { value = false; }
+            }
         }
 
         public class AlgorithmTest<T>
             where T : struct, IComparable
         {
-            public AlgorithmTest(List<TestListsStructs<T>> testArr, SortingDelegate m )
+            public AlgorithmTest(List<TestListsStructs<T>> testArr, SortingDelegate m)
             {
                 this.TestLists = new List<TestListsStructs<T>>();
 
-                foreach(var item in testArr){
+                foreach (var item in testArr)
+                {
                     this.TestLists.Add(new TestListsStructs<T>()
-                        { Arrange = item?.Arrange?.Select(c => c).ToList(), Expected = item?.Expected?.Select(c => c).ToList() }
+                    { Arrange = item?.Arrange?.Select(c => c).ToList(), Expected = item?.Expected?.Select(c => c).ToList() }
                     );
                 }
-                this.SortingMethod = m;                       
+                this.SortingMethod = m;
                 this.MethodName = $"{m.Method.DeclaringType.Name} {m.Method.Name}";
             }
 
             public List<TestListsStructs<T>> TestLists { get; set; }
 
             public delegate IList<T> SortingDelegate(IList<T> arr);
-            public SortingDelegate SortingMethod{get;set;}
-            public string MethodName {get;set;}
-            
-        }      
+            public SortingDelegate SortingMethod { get; set; }
+            public string MethodName { get; set; }
+
+        }
 
         public class SortingTests
         {
             List<AlgorithmTest<int>> test;
             Random rnd = new Random();
 
-            public static void GO(){
-                                
+            public static void GO()
+            {
+
                 SortingTests st = new SortingTests();
                 st.insertionSortTest();
             }
-   
-            List<TestListsStructs<int>> createGeneratedIntCollection()                 
+
+            List<TestListsStructs<int>> createGeneratedIntCollection()
             {
-                
+
                 List<int> longList = new List<int>(10000);
-                for(int i =0;i<10000;i++){
+                for (int i = 0; i < 10000; i++)
+                {
                     longList.Add(rnd.Next(0, 10000));
-                    
+
                 }
-                List<int> longListSorted = longList.Select(s=>s).ToList();
+                List<int> longListSorted = longList.Select(s => s).ToList();
                 longListSorted.Sort();
 
                 return new List<TestListsStructs<int>>()
@@ -3693,7 +3754,7 @@ namespace KATAS
 
             List<TestListsStructs<int>> createManualIntCollection()
             {
-          
+
                 return new List<TestListsStructs<int>>(){
                     new TestListsStructs<int>(){Arrange = new List<int>(){3,1,2,1,3,1,2}, Expected = new List<int>(){1,1,1,2,2,3,3}},
                     new TestListsStructs<int>(){Arrange = new List<int>(){1,3,3,2,1}, Expected = new List<int>{1,1,2,3,3}},
@@ -3707,7 +3768,8 @@ namespace KATAS
                 };
             }
 
-            TestListsStructs<int> getLongCollection(int count,int maxRandomGap){
+            TestListsStructs<int> getLongCollection(int count, int maxRandomGap)
+            {
                 List<int> longList = new List<int>(count);
                 for (int i = 0; i < count; i++)
                 {
@@ -3723,7 +3785,7 @@ namespace KATAS
                 InsertionSort<int> insertionSort = new InsertionSort<int>();
                 QuickSort<int> quickSort = new QuickSort<int>();
                 HeapSort<int> heapSort = new HeapSort<int>();
-                MergeSort<int> mergeSort = new MergeSort<int>();                
+                MergeSort<int> mergeSort = new MergeSort<int>();
 
                 List<TestListsStructs<int>> lists = createManualIntCollection(); //createIntCollection();
 
@@ -3734,35 +3796,37 @@ namespace KATAS
                     new AlgorithmTest<int>(lists,mergeSort.Sort),
                     new AlgorithmTest<int>(lists,heapSort.Sort),
                 };
-                
-                foreach(var t in test)
+
+                foreach (var t in test)
                 {
-                    foreach(var array in t.TestLists)
+                    foreach (var array in t.TestLists)
                     {
                         var watch = System.Diagnostics.Stopwatch.StartNew();
-                            array.MethodName = t.MethodName;
-                            array.Arrange = t.SortingMethod(array.Arrange).ToList();
+                        array.MethodName = t.MethodName;
+                        array.Arrange = t.SortingMethod(array.Arrange).ToList();
                         watch.Stop();
-                        array.Elapsed=watch.ElapsedMilliseconds;
-                        
+                        array.Elapsed = watch.ElapsedMilliseconds;
+
                         System.Diagnostics.Trace.WriteLine($"{array.MethodName}: {array.Arrange.Count} : {array.Elapsed} : {array.result}");
                     }
-                     
+
                 }
             }
         }
 
 
 
-        public class InsertionSort<T> where T: struct, IComparable
+        public class InsertionSort<T> where T : struct, IComparable
         {
             public IList<T> Sort(IList<T> arr)
             {
                 IList<T> result = new List<T>();
-                if(arr == null || arr?.Count == 0){
+                if (arr == null || arr?.Count == 0)
+                {
                     return result;
                 }
-                if(arr.Count == 1){
+                if (arr.Count == 1)
+                {
                     result.Add(arr[0]);
                 }
 
@@ -3770,19 +3834,19 @@ namespace KATAS
             }
             IList<T> sort(IList<T> arr)
             {
-                
-                for(int i = 1; i<=arr.Count-1;i++)
+
+                for (int i = 1; i <= arr.Count - 1; i++)
                 {
                     T pivot = arr[i];
 
-                    int j = i-1;
+                    int j = i - 1;
 
-                    while (j>=0 && Comparer<T>.Default.Compare(pivot,arr[j])<1)
+                    while (j >= 0 && Comparer<T>.Default.Compare(pivot, arr[j]) < 1)
                     {
-                        arr[j+1] = arr[j];
+                        arr[j + 1] = arr[j];
                         j--;
                     }
-                    arr[j+1] = pivot;
+                    arr[j + 1] = pivot;
                 }
 
                 return arr;
@@ -3793,7 +3857,8 @@ namespace KATAS
 
         public class QuickSortTest
         {
-            public static void GO(){
+            public static void GO()
+            {
                 QuickSortTest qt = new QuickSortTest();
                 qt.QuickSortGenericTest();
             }
@@ -3806,40 +3871,41 @@ namespace KATAS
                     new TestListsStructs<int>(){Arrange =  new List<int>(){1,5,3,4,2,7}, Expected = new List<int>() { 1, 2, 3, 4, 5, 7 } },
                     new TestListsStructs<int>(){Arrange =  new List<int>(){15, 25, 3, 9, 34, 8, 18, 6, 16 }, Expected = new List<int>() { 3,6,8,9,15,16,18,25,34} }
                 };
-                
-                foreach(var item in array){
+
+                foreach (var item in array)
+                {
                     qs.Sort(item.Arrange);
                 }
             }
         }
-        public class QuickSort<T> where T: struct, IComparable
+        public class QuickSort<T> where T : struct, IComparable
         {
             public IList<T> Sort(IList<T> arr)
             {
-                return sort(arr,0,arr.Count-1);
+                return sort(arr, 0, arr.Count - 1);
             }
             IList<T> sort(IList<T> arr, int idxLw, int idxHg)
-            {                
-                if(idxHg > 0 && idxLw < idxHg)
-                {                
-                    int p = partition(arr,idxLw, idxHg);
+            {
+                if (idxHg > 0 && idxLw < idxHg)
+                {
+                    int p = partition(arr, idxLw, idxHg);
 
                     sort(arr, idxLw, p - 1);
                     sort(arr, p + 1, idxHg);
                 }
                 return arr;
             }
-            int partition(IList<T> arr,int idxLw, int idxHg)
+            int partition(IList<T> arr, int idxLw, int idxHg)
             {
                 T pivot = arr[idxHg];
-                int i = idxLw -1;
-                
-                for(int j=idxLw; j<=idxHg-1; j++)
+                int i = idxLw - 1;
+
+                for (int j = idxLw; j <= idxHg - 1; j++)
                 {
-                    if(Comparer<T>.Default.Compare(pivot,arr[j])>0)
+                    if (Comparer<T>.Default.Compare(pivot, arr[j]) > 0)
                     {
                         i++;
-                        Swap(arr,i,j);
+                        Swap(arr, i, j);
                     }
                 }
 
@@ -3857,7 +3923,8 @@ namespace KATAS
 
 
 
-        public class HeapSortTest{
+        public class HeapSortTest
+        {
             protected class TestLists
             {
                 public List<int> Arrange { get; set; }
@@ -3872,7 +3939,8 @@ namespace KATAS
                 HeapSortTest.HeapSortGenericCheckChars();
 
             }
-            static void HeapSortIntCheck(){
+            static void HeapSortIntCheck()
+            {
                 HeapSortInt hs = new HeapSortInt();
 
                 List<TestLists> arrange = new List<TestLists>(){
@@ -3881,7 +3949,7 @@ namespace KATAS
                     ,new TestLists(){ Arrange = new List<int>() {1, 3, 5, 4, 6, 13, 10, 9, 8, 15, 17}, Expected = new List<int>() {17,15,13,9,6,5,10,4,8,3,1}}
                     };
 
-                foreach(var list in arrange)
+                foreach (var list in arrange)
                 {
                     hs.Sort(list.Arrange);
                     list.result = list.Arrange.SequenceEqual(list.Expected);
@@ -3889,7 +3957,8 @@ namespace KATAS
 
             }
 
-            static void HeapSortGenericCheckInt(){
+            static void HeapSortGenericCheckInt()
+            {
                 HeapSort<int> hsInt = new HeapSort<int>();
                 List<TestListsStructs<int>> arrange = new List<TestListsStructs<int>>(){
                     new TestListsStructs<int>(){Arrange = new List<int>(){4,5,3,2,1}, Expected = new List<int>(){1,2,3,4,5} }
@@ -3897,65 +3966,71 @@ namespace KATAS
                     ,new TestListsStructs<int>(){ Arrange = new List<int>() {1, 3, 5, 4, 6, 13, 10, 9, 8, 15, 17}, Expected = new List<int>() {1,3,4,5,6,8,9,10,13,15,17}}
                 };
 
-                foreach(var list in arrange){
+                foreach (var list in arrange)
+                {
                     hsInt.Sort(list.Arrange);
                 }
-                
+
             }
             static void HeapSortGenericCheckChars()
             {
                 HeapSort<char> hsInt = new HeapSort<char>();
                 List<TestListsStructs<char>> arrange = new List<TestListsStructs<char>>(){
-                    new TestListsStructs<char>(){Arrange = "adfbec".ToArray().ToList(), Expected = "abcdef".ToArray().ToList() }                    
+                    new TestListsStructs<char>(){Arrange = "adfbec".ToArray().ToList(), Expected = "abcdef".ToArray().ToList() }
                 };
 
                 foreach (var list in arrange)
                 {
-                    hsInt.Sort(list.Arrange);                    
+                    hsInt.Sort(list.Arrange);
                 }
 
             }
-        
-        }
-        public class HeapSortInt{
-            
-            public void Sort(List<int> arr){
-                int lastNotLeafNode = arr.Count/2-1;
-                
-                for(int i = lastNotLeafNode;i>=0;i--){
 
-                    ChechChildsAndSwap(arr,i);
+        }
+        public class HeapSortInt
+        {
+
+            public void Sort(List<int> arr)
+            {
+                int lastNotLeafNode = arr.Count / 2 - 1;
+
+                for (int i = lastNotLeafNode; i >= 0; i--)
+                {
+
+                    ChechChildsAndSwap(arr, i);
                 }
             }
             void ChechChildsAndSwap(List<int> arr, int i)
             {
                 var maxChildIdx = GetMaxNodeIndex(arr, i * 2 + 1, i * 2 + 2);
-                if (maxChildIdx>=0 && arr[maxChildIdx] > arr[i])
+                if (maxChildIdx >= 0 && arr[maxChildIdx] > arr[i])
                 {
                     Swap(arr, maxChildIdx, i);
-                    ChechChildsAndSwap(arr,maxChildIdx);
+                    ChechChildsAndSwap(arr, maxChildIdx);
                 }
             }
-            int GetMaxNodeIndex(List<int> arr,int idxSt,int idxFn)
+            int GetMaxNodeIndex(List<int> arr, int idxSt, int idxFn)
             {
-                int result=0;
-                int idx=-1;
-                for(int i =idxSt;i<=idxFn;i++){
-                    if(i<= (arr.Count-1) && arr[i]>result){
-                        result=arr[i];
-                        idx=i;
+                int result = 0;
+                int idx = -1;
+                for (int i = idxSt; i <= idxFn; i++)
+                {
+                    if (i <= (arr.Count - 1) && arr[i] > result)
+                    {
+                        result = arr[i];
+                        idx = i;
                     }
                 }
                 return idx;
             }
-            List<int> Swap(List<int> arr,int a,int b)
+            List<int> Swap(List<int> arr, int a, int b)
             {
                 var item = arr[a];
-                arr[a]=arr[b];
-                arr[b]=item;
+                arr[a] = arr[b];
+                arr[b] = item;
                 return arr;
             }
-            
+
         }
         public class HeapSort<T> where T : struct, IComparable
         {
@@ -3963,14 +4038,14 @@ namespace KATAS
 
             public IList<T> Sort(IList<T> arr)
             {
-                for(int i = 0; i< arr.Count; i++)
+                for (int i = 0; i < arr.Count; i++)
                 {
-                    int newIdxHg = (arr.Count - i)-1;
+                    int newIdxHg = (arr.Count - i) - 1;
                     heapify(arr, 0, newIdxHg);
-                    
-                    if(Comparer<T>.Default.Compare(arr[0],arr[newIdxHg])>0)
+
+                    if (Comparer<T>.Default.Compare(arr[0], arr[newIdxHg]) > 0)
                     {
-                        Swap(arr,0,newIdxHg);
+                        Swap(arr, 0, newIdxHg);
                     }
                 }
 
@@ -3978,15 +4053,15 @@ namespace KATAS
             }
             public IList<T> heapify(IList<T> arr, int idxLw, int idxHg)
             {
-                if(arr != null && idxHg-idxLw>=0)
+                if (arr != null && idxHg - idxLw >= 0)
                 {
                     int lastNotLeafNodeIndex = (idxHg - idxLw) / nodesPerLvlv - 1;
 
-                    for(int i = lastNotLeafNodeIndex; i>=idxLw; i--)
+                    for (int i = lastNotLeafNodeIndex; i >= idxLw; i--)
                     {
-                        siftDown(arr,i,idxHg);
+                        siftDown(arr, i, idxHg);
                     }
-                  
+
                 }
                 return arr;
             }
@@ -3997,27 +4072,28 @@ namespace KATAS
                 if (maxParentOrChildIndex >= 0 && maxParentOrChildIndex > index)
                 {
                     Swap(arr, maxParentOrChildIndex, index);
-                    siftDown(arr,maxParentOrChildIndex,maxBorder);
+                    siftDown(arr, maxParentOrChildIndex, maxBorder);
                 }
             }
             int GetMaxNodesIndex(IList<T> arr, int idx, int maxBorder)
             {
-                int resultindex=-1;
-                
-                if(
+                int resultindex = -1;
+
+                if (
                     idx < (arr.Count - 1)
                     &&
                     //There are childs in array with lowerbound index
                     ((arr.Count - 1) - (idx * nodesPerLvlv + 1) > 0)
-                ){
+                )
+                {
                     int nodesLwInds = idx * nodesPerLvlv + 1;
                     int nodesHgIdx = idx * (nodesPerLvlv) + nodesPerLvlv;
                     nodesHgIdx = nodesHgIdx <= maxBorder ? nodesHgIdx : maxBorder;
 
                     T tempResult = arr[idx];
-                    for(int nodesIndex = nodesLwInds; nodesIndex <= nodesHgIdx;nodesIndex++ )
+                    for (int nodesIndex = nodesLwInds; nodesIndex <= nodesHgIdx; nodesIndex++)
                     {
-                        if(Comparer<T>.Default.Compare(arr[nodesIndex], tempResult) > 0)
+                        if (Comparer<T>.Default.Compare(arr[nodesIndex], tempResult) > 0)
                         {
                             tempResult = arr[nodesIndex];
                             resultindex = nodesIndex;
@@ -4027,20 +4103,21 @@ namespace KATAS
 
                 return resultindex;
             }
-            void Swap(IList<T> arr,int idxLw,int idxHg)
+            void Swap(IList<T> arr, int idxLw, int idxHg)
             {
                 T item = arr[idxLw];
                 arr[idxLw] = arr[idxHg];
                 arr[idxHg] = item;
             }
-           
+
         }
 
 
 
         public class MergeSortTest
         {
-            public static void GO(){
+            public static void GO()
+            {
                 MergeSortTest mst = new MergeSortTest();
                 mst.MergeSortIntTest();
             }
@@ -4053,14 +4130,15 @@ namespace KATAS
                     ,new TestListsStructs<int>(){Arrange = new List<int>(){ 3,1 } ,Expected = new List<int>() { 1, 3 }}
                     ,new TestListsStructs<int>(){Arrange = new List<int>(){ 3,1,4,2 } ,Expected = new List<int>() { 1, 2, 3,4 }}
                     ,new TestListsStructs<int>(){Arrange = new List<int>(){ 3,1,2 } ,Expected = new List<int>() { 1, 2, 3 }}
-                    
+
                 };
-                
+
                 MergeSort<int> ms = new MergeSort<int>();
-                foreach(var i in arr){
+                foreach (var i in arr)
+                {
                     i.Arrange = ms.Sort(i.Arrange).ToList();
                 }
-                
+
             }
         }
         public class MergeSort<T> where T : struct, IComparable
@@ -4068,7 +4146,8 @@ namespace KATAS
             public IList<T> Sort(IList<T> arr)
             {
                 IList<T> result = new List<T>(arr.Count);
-                if (arr?.Count == 1){
+                if (arr?.Count == 1)
+                {
                     return arr;
                 }
                 if (arr?.Count > 1)
@@ -4076,7 +4155,7 @@ namespace KATAS
                     //result = split(arr, 0, arr.Count-1);
                     result = splitNoConditions(arr, 0, arr.Count - 1);
                 }
-                return result;                
+                return result;
             }
 
             /* Conditional split  */
@@ -4096,17 +4175,20 @@ namespace KATAS
                     rightPart = split(arr, (idxNewHg + 1), idxHg);
                 }
                 /* one element in arr*/
-                if(gap==0)
+                if (gap == 0)
                 {
-                    return new List<T>(){arr[idxHg]};
-                }               
+                    return new List<T>() { arr[idxHg] };
+                }
                 /* two elements in arr */
                 if (gap == 1)
                 {
-                    if(compare(arr, idxLw, idxHg) > 0){
+                    if (compare(arr, idxLw, idxHg) > 0)
+                    {
                         return swap(arr, idxLw, idxHg);
-                    }else{
-                        return arr.Skip(idxLw).Take((idxHg-idxLw)+1).ToList();
+                    }
+                    else
+                    {
+                        return arr.Skip(idxLw).Take((idxHg - idxLw) + 1).ToList();
                     }
                 }
 
@@ -4116,17 +4198,18 @@ namespace KATAS
             /* Less if switches, no swap and sorting down to arrays of 1 element*/
             IList<T> splitNoConditions(IList<T> arr, int idxLw, int idxHg)
             {
-                IList<T> result = new List<T>(){};
-                if(idxHg==idxLw){
+                IList<T> result = new List<T>() { };
+                if (idxHg == idxLw)
+                {
                     return arr.Skip(idxLw).Take(1).ToList();
                 }
-                if(idxHg > idxLw)
+                if (idxHg > idxLw)
                 {
-                    int p = idxLw+(idxHg-idxLw)/2;
-                    var left = splitNoConditions(arr, idxLw,p);
-                    var right = splitNoConditions(arr, p+1, idxHg);
+                    int p = idxLw + (idxHg - idxLw) / 2;
+                    var left = splitNoConditions(arr, idxLw, p);
+                    var right = splitNoConditions(arr, p + 1, idxHg);
 
-                    result =  sortArr(left,right);
+                    result = sortArr(left, right);
                 }
 
                 return result;
@@ -4135,10 +4218,11 @@ namespace KATAS
             IList<T> sortArr(IList<T> arrA, IList<T> arrB)
             {
                 IList<T> result = new List<T>();
-                     
+
                 int i = 0, i2 = 0;
-                
-                while(i<arrA.Count && i2< arrB.Count){
+
+                while (i < arrA.Count && i2 < arrB.Count)
+                {
 
                     if (Comparer<T>.Default.Compare(arrA[i], arrB[i2]) >= 0)
                     {
@@ -4150,31 +4234,31 @@ namespace KATAS
                         result.Add(arrA[i]);
                         i++;
                     }
-                        
+
                 }
 
-                while(i < arrA.Count)
+                while (i < arrA.Count)
                 {
                     result.Add(arrA[i]);
                     i++;
                 }
 
-                while(i2 < arrB.Count)
+                while (i2 < arrB.Count)
                 {
                     result.Add(arrB[i2]);
                     i2++;
-                }              
+                }
 
                 return result;
-            }           
+            }
             int compare(IList<T> arr, int idxLw, int idxHg)
-            {                
-                return System.Collections.Generic.Comparer<T>.Default.Compare(arr[idxLw],arr[idxHg]);
+            {
+                return System.Collections.Generic.Comparer<T>.Default.Compare(arr[idxLw], arr[idxHg]);
             }
             IList<T> swap(IList<T> arr, int idxLw, int idxHg)
             {
-                return new List<T>(){arr[idxHg],arr[idxLw]};
-            }          
+                return new List<T>() { arr[idxHg], arr[idxLw] };
+            }
 
         }
 
@@ -4182,7 +4266,8 @@ namespace KATAS
 
         public class LinkedListSortTest
         {
-            public static void GO(){
+            public static void GO()
+            {
                 LinkedListSortTest ls = new LinkedListSortTest();
                 ls.ReverseAndPrintCheck();
             }
@@ -4196,7 +4281,7 @@ namespace KATAS
                 var node4 = new Node<int>() { Id = 5, Value = 'b', Previous = node3, Next = null };
                 var node5 = new Node<int>() { Id = 6, Value = 'a', Previous = node4, Next = null };
 
-                node0.Next=node1;                
+                node0.Next = node1;
                 node1.Next = node2;
                 node2.Next = node3;
                 node3.Next = node4;
@@ -4205,7 +4290,7 @@ namespace KATAS
                 List<Node<int>> LkdList = new List<Node<int>>(){
                     node0,node1,node2,node3,node4,node5
                 };
-                
+
                 LinkedListSort<int> ls = new LinkedListSort<int>();
 
                 ls.PrintLine(LkdList);
@@ -4220,7 +4305,7 @@ namespace KATAS
                 var pn2 = new Node<int>() { Id = 3, Value = 'b', Previous = pn1, Next = null };
                 var pn3 = new Node<int>() { Id = 4, Value = 'b', Previous = pn2, Next = null };
                 var pn4 = new Node<int>() { Id = 5, Value = 'a', Previous = pn3, Next = null };
-                
+
                 pn0.Next = pn1;
                 pn1.Next = pn2;
                 pn2.Next = pn3;
@@ -4229,7 +4314,7 @@ namespace KATAS
                 List<Node<int>> LkdListp = new List<Node<int>>(){
                     pn0,pn1,pn2,pn3,pn4
                 };
-                
+
 
                 bool isPolindrome = ls.PolindromeCheck(LkdListp);
                 ls.PrintLine(LkdListp);
@@ -4241,14 +4326,14 @@ namespace KATAS
         public class Node<T> where T : struct, IComparable
         {
             public T Id { get; set; }
-            public char Value {get;set;}
+            public char Value { get; set; }
 
             public Node<T> Previous { get; set; }
             public Node<T> Next { get; set; }
         }
         public class LinkedListSort<T> where T : struct, IComparable
         {
-          
+
             public static void GO()
             {
 
@@ -4261,29 +4346,33 @@ namespace KATAS
 
             public void Reverse(IList<Node<T>> list)
             {
-                foreach(Node<T> node in list)
+                foreach (Node<T> node in list)
                 {
                     Node<T> prev = node.Previous;
-                    node.Previous=node.Next;
+                    node.Previous = node.Next;
                     node.Next = prev;
                 }
             }
 
             public bool PolindromeCheck(IList<Node<T>> list)
             {
-                Node<T> st = list.Where(s => s.Previous==null).FirstOrDefault();
-                Node<T> fn = list.Where(s => s.Next==null).FirstOrDefault();
+                Node<T> st = list.Where(s => s.Previous == null).FirstOrDefault();
+                Node<T> fn = list.Where(s => s.Next == null).FirstOrDefault();
 
-                while(fn != null){
-                    if(st.Value != fn.Value){return false;}
-                                        
-                    if(st != fn.Previous && fn!= st.Next){
+                while (fn != null)
+                {
+                    if (st.Value != fn.Value) { return false; }
+
+                    if (st != fn.Previous && fn != st.Next)
+                    {
                         st = st.Next;
                         fn = fn.Previous;
-                    }else{
-                        fn=null;
                     }
-                    
+                    else
+                    {
+                        fn = null;
+                    }
+
                 }
 
                 return true;
@@ -4293,20 +4382,21 @@ namespace KATAS
             {
                 foreach (Node<T> node in list)
                 {
-System.Diagnostics.Trace.WriteLine($"Node: {node.Id}; In reference: {node.Previous?.Id}-{node.Id}->{node.Next?.Id};");
+                    System.Diagnostics.Trace.WriteLine($"Node: {node.Id}; In reference: {node.Previous?.Id}-{node.Id}->{node.Next?.Id};");
                 }
             }
-            public string PrintLine(IList<Node<T>> list){
-                
-                string result = String.Empty;
-                Node<T> item = list.Where(s=>s.Previous == null).FirstOrDefault();
+            public string PrintLine(IList<Node<T>> list)
+            {
 
-                while(item!=null)
+                string result = String.Empty;
+                Node<T> item = list.Where(s => s.Previous == null).FirstOrDefault();
+
+                while (item != null)
                 {
                     result += $"-{item?.Id}-";
-                    item=item.Next;                    
+                    item = item.Next;
                 }
-                System.Diagnostics.Trace.WriteLine(result);          
+                System.Diagnostics.Trace.WriteLine(result);
                 return result;
             }
             public string PrintValue(IList<Node<T>> list)
@@ -4338,7 +4428,7 @@ System.Diagnostics.Trace.WriteLine($"Node: {node.Id}; In reference: {node.Previo
 
         }
 
-    }    
+    }
 
 }
 
@@ -4801,7 +4891,7 @@ namespace Rewrite
 
     public delegate string encodeStringCodePageDel(byte[] arr, int codepage_);
     public delegate byte[] encodeArrCodePageDel(string input_, int codepage_);
-   
+
     public static class StreamTesting
     {
         static string FilePathIn { get; set; }
@@ -5172,206 +5262,219 @@ namespace Rewrite
     }
 
 
-    
 
 
 
-    /*CutomLinq */    
+
+    /*CutomLinq */
     /*--------------------------------------------- */
     public static class LinqToContextCheck
     {
-      static TestContext ts = new TestContext();
-      public static void GO()
-      {
-        ts.ExpressionBuild();
+        static TestContext ts = new TestContext();
+        public static void GO()
+        {
+            ts.ExpressionBuild();
 
-        string st0=ts.TraverseExpression<TestEntity>(s=>s.tp.isTrue==true);
+            string st0 = ts.TraverseExpression<TestEntity>(s => s.tp.isTrue == true);
 
-        string st4=ts.VisitLeftRightFromExpressionTypes<TestEntity>(s=>s.tp.isTrue==false);
-        string st1=ts.VisitLeftRightFromExpressionTypes<TestEntity>(s=>s.Id>=1);      
+            string st4 = ts.VisitLeftRightFromExpressionTypes<TestEntity>(s => s.tp.isTrue == false);
+            string st1 = ts.VisitLeftRightFromExpressionTypes<TestEntity>(s => s.Id >= 1);
 
-        string st2=ts.VisitLeftRightFromExpressionTypes<TestEntity>(s=>s.name=="test name");
-        string st3=ts.VisitLeftRightFromExpressionTypes<TestEntity>(s=>s.intrinsicIsTrue==true); 
-           
-      }
+            string st2 = ts.VisitLeftRightFromExpressionTypes<TestEntity>(s => s.name == "test name");
+            string st3 = ts.VisitLeftRightFromExpressionTypes<TestEntity>(s => s.intrinsicIsTrue == true);
+
+        }
     }
     //check Linq to context
     public class TestContext
     {
-      ParameterExpression leftParamExpr;
-      Type leftType_=null;
+        ParameterExpression leftParamExpr;
+        Type leftType_ = null;
 
-      ConstantExpression constExpr;    
+        ConstantExpression constExpr;
 
-      public TestContext(){
-      
-      }
-      public string VisitLeftRightFromExpressionTypes<T>(Expression<Func<T,bool>> expr_)
-        where T:TestEntity{
-        var b = expr_;
-        var c = b.Body;
-        var gtp = c.GetType();
-        var nt = c.NodeType;
-        var pm = expr_.Parameters;
-        var nm = expr_.Name;
-        var tp = expr_.Type;
-        var typeName = typeof(T);
+        public TestContext()
+        {
 
-        //straight convertsion
-        string straight=expr_.ToString();     
-        BinaryExpression binaryE=(BinaryExpression)expr_.Body;
-
-        //conversion from nested class
-        string straightNested=binaryE.ToString();
-
-        if(binaryE.Left!=null){VisitConditional(binaryE.Left);}
-        if(binaryE.Right!=null){VisitConditional(binaryE.Right);}
-
-        Expression leftParameter=Expression.Parameter(leftType_,leftType_.Name);         
-        Type tp0=leftParameter.GetType();     
-        Expression leftExpr=Expression.Property(leftParameter,leftParamExpr.Name);
-        Type tp1=leftExpr.GetType();
-        ExpressionType nodeType=c.NodeType;
-        Expression rightParameter=Expression.Constant(constExpr.Value,constExpr.Type);
-        Type tp2=rightParameter.GetType();
-        Expression e0=Expression.Assign(leftExpr,rightParameter);
-        Type tp3=e0.GetType();
-
-        string ets=e0.ToString();
-      
-        string lb=this.VisitBinary((MemberExpression)binaryE.Left,"oper",binaryE);
-        string lb2=this.VisitBinary(binaryE,"converted",leftExpr,nodeType,rightParameter);
-
-        //variable not invoked
-        //var a = Expression.Lambda(e0).Compile().DynamicInvoke();
-
-        return ets;
-      }   
-      public Expression VisitConditional(Expression expr){
-        Type type_=expr.GetType().BaseType;
-        if(type_==typeof(MemberExpression)){
-          MemberExpression memberExpr=(MemberExpression)expr;
-          leftType_=memberExpr.Expression.Type;
-          /*
-          MemberExpression mn=(MemberExpression)memberExpr.Expression;
-          memberName=mn.Member.Name;
-          */
-          leftParamExpr=Expression.Parameter(memberExpr.Type,memberExpr.Member.Name);
         }
-        if(type_==typeof(ConstantExpression)||type_==typeof(Expression)){
-          constExpr=(ConstantExpression)expr;
-          Expression rightExpr=Expression.Constant(constExpr.Value,constExpr.Type);
+        public string VisitLeftRightFromExpressionTypes<T>(Expression<Func<T, bool>> expr_)
+          where T : TestEntity
+        {
+            var b = expr_;
+            var c = b.Body;
+            var gtp = c.GetType();
+            var nt = c.NodeType;
+            var pm = expr_.Parameters;
+            var nm = expr_.Name;
+            var tp = expr_.Type;
+            var typeName = typeof(T);
+
+            //straight convertsion
+            string straight = expr_.ToString();
+            BinaryExpression binaryE = (BinaryExpression)expr_.Body;
+
+            //conversion from nested class
+            string straightNested = binaryE.ToString();
+
+            if (binaryE.Left != null) { VisitConditional(binaryE.Left); }
+            if (binaryE.Right != null) { VisitConditional(binaryE.Right); }
+
+            Expression leftParameter = Expression.Parameter(leftType_, leftType_.Name);
+            Type tp0 = leftParameter.GetType();
+            Expression leftExpr = Expression.Property(leftParameter, leftParamExpr.Name);
+            Type tp1 = leftExpr.GetType();
+            ExpressionType nodeType = c.NodeType;
+            Expression rightParameter = Expression.Constant(constExpr.Value, constExpr.Type);
+            Type tp2 = rightParameter.GetType();
+            Expression e0 = Expression.Assign(leftExpr, rightParameter);
+            Type tp3 = e0.GetType();
+
+            string ets = e0.ToString();
+
+            string lb = this.VisitBinary((MemberExpression)binaryE.Left, "oper", binaryE);
+            string lb2 = this.VisitBinary(binaryE, "converted", leftExpr, nodeType, rightParameter);
+
+            //variable not invoked
+            //var a = Expression.Lambda(e0).Compile().DynamicInvoke();
+
+            return ets;
         }
-        return expr;
-      }
+        public Expression VisitConditional(Expression expr)
+        {
+            Type type_ = expr.GetType().BaseType;
+            if (type_ == typeof(MemberExpression))
+            {
+                MemberExpression memberExpr = (MemberExpression)expr;
+                leftType_ = memberExpr.Expression.Type;
+                /*
+                MemberExpression mn=(MemberExpression)memberExpr.Expression;
+                memberName=mn.Member.Name;
+                */
+                leftParamExpr = Expression.Parameter(memberExpr.Type, memberExpr.Member.Name);
+            }
+            if (type_ == typeof(ConstantExpression) || type_ == typeof(Expression))
+            {
+                constExpr = (ConstantExpression)expr;
+                Expression rightExpr = Expression.Constant(constExpr.Value, constExpr.Type);
+            }
+            return expr;
+        }
 
-      public string VisitBinary(MemberExpression binary,string @operator,BinaryExpression expression) =>
-        $"{@operator}({binary},{expression})";
-      public string VisitBinary(BinaryExpression expression,string op,Expression left,ExpressionType nt,Expression right) =>
-        $"{expression}({op}),{left}|{nt}|{right}";
-    
-      public string TraverseExpression<T>(Expression<Func<T,bool>> expr_){
-        //traversing expression
-        Pv pv=new Pv();
-        string traversed=pv.VisitBody(expr_);
-        return traversed;
-      }
+        public string VisitBinary(MemberExpression binary, string @operator, BinaryExpression expression) =>
+          $"{@operator}({binary},{expression})";
+        public string VisitBinary(BinaryExpression expression, string op, Expression left, ExpressionType nt, Expression right) =>
+          $"{expression}({op}),{left}|{nt}|{right}";
 
-      //build in function compile
-      internal static void BuiltInCompile()
-      {
-        Expression<Func<double, double, double, double, double, double>> infix =
-            (a, b, c, d, e) => a + b - c * d / 2 + e * 3;
-        Func<double, double, double, double, double, double> function = infix.Compile();
-        double result = function(1, 2, 3, 4, 5); // 12
-      }
-      public void ExpressionBuild(){
-        
-        BinaryExpression be = Expression.Power(Expression.Constant(2D), Expression.Constant(3D));
-        Expression<Func<double>> fd = Expression.Lambda<Func<double>>(be);
-        Func<double> ce = fd.Compile();
-        double res = ce();
-      }
+        public string TraverseExpression<T>(Expression<Func<T, bool>> expr_)
+        {
+            //traversing expression
+            Pv pv = new Pv();
+            string traversed = pv.VisitBody(expr_);
+            return traversed;
+        }
+
+        //build in function compile
+        internal static void BuiltInCompile()
+        {
+            Expression<Func<double, double, double, double, double, double>> infix =
+                (a, b, c, d, e) => a + b - c * d / 2 + e * 3;
+            Func<double, double, double, double, double, double> function = infix.Compile();
+            double result = function(1, 2, 3, 4, 5); // 12
+        }
+        public void ExpressionBuild()
+        {
+
+            BinaryExpression be = Expression.Power(Expression.Constant(2D), Expression.Constant(3D));
+            Expression<Func<double>> fd = Expression.Lambda<Func<double>>(be);
+            Func<double> ce = fd.Compile();
+            double res = ce();
+        }
 
     }
 
     public class TestEntity
     {
-      public string name {get;set;}
-      static int id {get;set;}=0;
-      public ToggleProp tp {get;set;}
-      public int Id{
-        get{
-          if(id==0){id += 1;}
-          return id; 
+        public string name { get; set; }
+        static int id { get; set; } = 0;
+        public ToggleProp tp { get; set; }
+        public int Id
+        {
+            get
+            {
+                if (id == 0) { id += 1; }
+                return id;
+            }
+            set { id = value; }
         }
-        set{ id=value;}
-      }
-      public bool intrinsicIsTrue {get;set;}
+        public bool intrinsicIsTrue { get; set; }
     }
     public class ToggleProp
     {
-      public bool isTrue {get;set;}
+        public bool isTrue { get; set; }
     }
 
     //https://weblogs.asp.net/dixin/functional-csharp-function-as-data-and-expression-tree
-    internal abstract class Ba<TResult>{
+    internal abstract class Ba<TResult>
+    {
 
-      internal virtual TResult VisitBody(LambdaExpression expression) => this.VisitNode(expression.Body, expression);
+        internal virtual TResult VisitBody(LambdaExpression expression) => this.VisitNode(expression.Body, expression);
 
-      protected TResult VisitNode(Expression node, LambdaExpression expression){
+        protected TResult VisitNode(Expression node, LambdaExpression expression)
+        {
 
-        switch (node.NodeType){
+            switch (node.NodeType)
+            {
 
-          case ExpressionType.Equal:
-            return this.VisitEqual((BinaryExpression)node, expression);
+                case ExpressionType.Equal:
+                    return this.VisitEqual((BinaryExpression)node, expression);
 
-          case ExpressionType.GreaterThanOrEqual:
-            return this.VisitGreaterorEqual((BinaryExpression)node, expression);
+                case ExpressionType.GreaterThanOrEqual:
+                    return this.VisitGreaterorEqual((BinaryExpression)node, expression);
 
-          case ExpressionType.MemberAccess:
-            return this.VisitMemberAccess((MemberExpression)node, expression);
+                case ExpressionType.MemberAccess:
+                    return this.VisitMemberAccess((MemberExpression)node, expression);
 
-          case ExpressionType.Constant:
-            return this.VisitConstatnt((ConstantExpression)node, expression);
+                case ExpressionType.Constant:
+                    return this.VisitConstatnt((ConstantExpression)node, expression);
 
-          default:
-            throw new ArgumentOutOfRangeException(nameof(node));
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(node));
+            }
+
         }
 
-      }
-
-      protected abstract TResult VisitEqual(BinaryExpression equal, LambdaExpression expression);
-      protected abstract TResult VisitGreaterorEqual(BinaryExpression equal, LambdaExpression expression);
-      protected abstract TResult VisitMemberAccess(MemberExpression equal, LambdaExpression expression);
-      protected abstract TResult VisitConstatnt(ConstantExpression equal, LambdaExpression expression);
+        protected abstract TResult VisitEqual(BinaryExpression equal, LambdaExpression expression);
+        protected abstract TResult VisitGreaterorEqual(BinaryExpression equal, LambdaExpression expression);
+        protected abstract TResult VisitMemberAccess(MemberExpression equal, LambdaExpression expression);
+        protected abstract TResult VisitConstatnt(ConstantExpression equal, LambdaExpression expression);
     }
-    internal class Pv : Ba<string>{
-	
-      protected override string VisitEqual
-        (BinaryExpression add, LambdaExpression expression) => this.VisitBinary(add, "Equal", expression);
+    internal class Pv : Ba<string>
+    {
 
-      protected override string VisitGreaterorEqual
-        (BinaryExpression add, LambdaExpression expression) => this.VisitBinary(add, "Greater", expression);
+        protected override string VisitEqual
+          (BinaryExpression add, LambdaExpression expression) => this.VisitBinary(add, "Equal", expression);
 
-      protected override string VisitMemberAccess
-        (MemberExpression add, LambdaExpression expression) => this.VisitBinary(add, "Member", expression);
+        protected override string VisitGreaterorEqual
+          (BinaryExpression add, LambdaExpression expression) => this.VisitBinary(add, "Greater", expression);
 
-      protected override string VisitConstatnt
-        (ConstantExpression add, LambdaExpression expression) => this.VisitBinary(add, "Constant", expression);
+        protected override string VisitMemberAccess
+          (MemberExpression add, LambdaExpression expression) => this.VisitBinary(add, "Member", expression);
 
-      private string VisitBinary( // Recursion: operator(left, right)
-        BinaryExpression binary, string @operator,LambdaExpression expression) =>
-        $"{@operator}({this.VisitNode(binary.Left, expression)},{this.VisitNode(binary.Right, expression)})";
+        protected override string VisitConstatnt
+          (ConstantExpression add, LambdaExpression expression) => this.VisitBinary(add, "Constant", expression);
 
-      private string VisitBinary( // Recursion: operator(left, right)
-        MemberExpression binary,string @operator,LambdaExpression expression) =>
-        $"{binary}";
+        private string VisitBinary( // Recursion: operator(left, right)
+          BinaryExpression binary, string @operator, LambdaExpression expression) =>
+          $"{@operator}({this.VisitNode(binary.Left, expression)},{this.VisitNode(binary.Right, expression)})";
 
-      private string VisitBinary( // Recursion: operator(left, right)
-        ConstantExpression binary,string @operator,LambdaExpression expression) =>
-        $"{binary}";
+        private string VisitBinary( // Recursion: operator(left, right)
+          MemberExpression binary, string @operator, LambdaExpression expression) =>
+          $"{binary}";
+
+        private string VisitBinary( // Recursion: operator(left, right)
+          ConstantExpression binary, string @operator, LambdaExpression expression) =>
+          $"{binary}";
     }
 
-    
+
 }

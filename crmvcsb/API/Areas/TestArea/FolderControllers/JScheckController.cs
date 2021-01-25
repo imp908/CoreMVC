@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-
-
-using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace crmvcsb.TestArea.Controllers
 {
@@ -18,7 +11,8 @@ namespace crmvcsb.TestArea.Controllers
             return View("../JScheck/CheckAppOne");
         }
 
-        public IActionResult CheckAppTwo(){
+        public IActionResult CheckAppTwo()
+        {
             return View("../JScheck/CheckAppTwo");
         }
     }

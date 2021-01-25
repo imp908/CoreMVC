@@ -1,18 +1,11 @@
 ﻿
 
-namespace crmvcsb.Infrastructure.EF.DomainSpecific.Currencies
+namespace crmvcsb.DomainSpecific.Infrastructure.EF
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
 
-    using AutoMapper;
-
-    using Microsoft.EntityFrameworkCore;
-
-    using crmvcsb.Universal;
     using crmvcsb.Infrastructure.EF;
+    using crmvcsb.Universal;
+    using Microsoft.EntityFrameworkCore;
 
     public class RepositoryCurrencyRead : RepositoryEF, IRepositoryEFRead, IRepository
     {
@@ -27,7 +20,7 @@ namespace crmvcsb.Infrastructure.EF.DomainSpecific.Currencies
         {
 
         }
-      
+
     }
 
 }

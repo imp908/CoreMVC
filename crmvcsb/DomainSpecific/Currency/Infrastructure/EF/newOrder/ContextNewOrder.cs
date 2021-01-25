@@ -1,7 +1,7 @@
 namespace crmvcsb.Infrastructure.EF.NewOrder
 {
-    using Microsoft.EntityFrameworkCore;
     using crmvcsb.Universal.DomainSpecific.NewOrder.DAL;
+    using Microsoft.EntityFrameworkCore;
 
 
     public class ContextNewOrder : DbContext
@@ -19,8 +19,8 @@ namespace crmvcsb.Infrastructure.EF.NewOrder
         protected override void OnModelCreating(ModelBuilder builder)
         {
             /*Mark key */
-            builder.Entity<AddressDAL>().HasKey(s=>s.Id);
-            
+            builder.Entity<AddressDAL>().HasKey(s => s.Id);
+
             /*rename property */
             //builder.Entity<AddressDAL>().Property(s => s.Id).HasColumnName("AddressId");
 
@@ -33,17 +33,17 @@ namespace crmvcsb.Infrastructure.EF.NewOrder
             ;
 
         }
-     
+
 
         public DbSet<AddressDAL> Adresses { get; set; }
         public DbSet<RouteVertexDAL> RouteVertexes { get; set; }
         public DbSet<RouteDAL> Routes { get; set; }
-        
-        
+
+
         public DbSet<PhysicalUnitDAL> PhysicalUnits { get; set; }
         public DbSet<PhysicalDimensionDAL> PhysicalDimensions { get; set; }
-        
-        
+
+
         public DbSet<GoodsDAL> Goods { get; set; }
 
 

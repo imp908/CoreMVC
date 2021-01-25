@@ -4,7 +4,7 @@ namespace crmvcsb.Infrastructure.IO.Logging
     using crmvcsb.Universal.Infrastructure;
     using Serilog;
 
-    public class SerilogLogging 
+    public class SerilogLogging
     {
         public Serilog.Core.Logger log;
         public SerilogLogging()

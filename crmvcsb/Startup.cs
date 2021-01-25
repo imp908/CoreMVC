@@ -3,17 +3,17 @@ namespace crmvcsb
 {
 
     using Autofac;
+    using crmvcsb.Universal.Infrastructure;
+    using crmvcsb.Infrastructure.IoC;
     using Autofac.Extensions.DependencyInjection;
     using AutoMapper;
+    using crmvcsb.DomainSpecific.Infrastructure.EF;
+    using crmvcsb.DomainSpecific.Mapping;
     using crmvcsb.Infrastructure.EF;
-    using crmvcsb.Infrastructure.EF.DomainSpecific.Currencies;
     using crmvcsb.Infrastructure.EF.NewOrder;
-    using crmvcsb.Infrastructure.IoC;
-    using crmvcsb.Infrastructure.Mapping;
     using crmvcsb.Infrastructure.SignalR;
     using crmvcsb.Universal;
     using crmvcsb.Universal.DomainSpecific.Currency;
-    using crmvcsb.Universal.DomainSpecific.NewOrder;
     using crmvcsb.Universal.Infrastructure;
     using FluentValidation.AspNetCore;
     using Microsoft.AspNetCore.Builder;
@@ -82,13 +82,13 @@ namespace crmvcsb
 
 
             services.AddMvc(options => options.EnableEndpointRouting = false);
-            
+
             /*SignalR registration*/
             services.AddSignalR();
 
             /*Autofac autofacContainer */
             //var autofacContainer = new ContainerBuilder();
-            
+
             /*Automapper Register */
             services.AddAutoMapper(typeof(Startup));
 
@@ -122,7 +122,7 @@ namespace crmvcsb
                 ConfigureInMemmoryDbContexts(services, AutofacConfig.GetContainer());
             }
 
-                  
+
 
             AutofacServiceProvider r = null;
 
@@ -150,12 +150,12 @@ namespace crmvcsb
                 // services.AddDbContext<CostControllContext>(o =>
                 // o.UseSqlServer(Configuration.GetConnectionString("CostControlDb")));
 
-			}
-			catch (Exception)
+            }
+            catch (Exception)
             {
                 throw;
             }
-   
+
             return r;
         }
 
@@ -168,7 +168,7 @@ namespace crmvcsb
             * For multiple SQL DBs in one project
             */
 
-            
+
             ////--------
             autofacContainer.RegisterType<RepositoryNewOrderRead>()
             .WithParameter("context",
@@ -215,16 +215,16 @@ namespace crmvcsb
             .As<ICurrencyServiceEF>()
             .AsSelf()
             .InstancePerLifetimeScope();
-          
+
             return autofacContainer;
         }
 
         /* Db context configuration for test with SqlLite database */
         public ContainerBuilder ConfigureSqlLiteDbContexts(IServiceCollection services, ContainerBuilder autofacContainer)
         {
-     
+
             /**EF, repo and UOW reg */
-   
+
             autofacContainer.RegisterType<ContextNewOrder>()
                 .As<DbContext>()
                 .WithParameter("options", new DbContextOptionsBuilder<ContextNewOrder>()
@@ -247,7 +247,7 @@ namespace crmvcsb
 
         /* Db context configuration for test with InMemmory database */
         public ContainerBuilder ConfigureInMemmoryDbContexts(IServiceCollection services, ContainerBuilder autofacContainer)
-        {            
+        {
 
             autofacContainer.RegisterType<ContextNewOrder>()
                 .As<DbContext>()
@@ -268,7 +268,7 @@ namespace crmvcsb
 
             return autofacContainer;
         }
-        
+
 
 
 
@@ -328,8 +328,9 @@ namespace crmvcsb
         }
     }
 
-    public class AppendMetadata {
-        public string AppendName {get; set;}
+    public class AppendMetadata
+    {
+        public string AppendName { get; set; }
     }
 
     public class CustomViewLocation : IViewLocationExpander

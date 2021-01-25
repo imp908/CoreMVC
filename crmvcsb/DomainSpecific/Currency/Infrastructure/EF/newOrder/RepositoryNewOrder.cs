@@ -2,10 +2,9 @@
 namespace crmvcsb.Infrastructure.EF.NewOrder
 {
 
-    using Microsoft.EntityFrameworkCore;
-  
-    using crmvcsb.Universal;
     using crmvcsb.Infrastructure.EF;
+    using crmvcsb.Universal;
+    using Microsoft.EntityFrameworkCore;
 
     public class RepositoryNewOrder : RepositoryEF, IRepositoryEF, IRepository
     {
@@ -22,7 +21,7 @@ namespace crmvcsb.Infrastructure.EF.NewOrder
 
         }
     }
-    public class RepositoryNewOrderWrite: RepositoryNewOrder, IRepositoryEFWrite
+    public class RepositoryNewOrderWrite : RepositoryNewOrder, IRepositoryEFWrite
     {
         public RepositoryNewOrderWrite(ContextNewOrderWrite context) : base(context)
         {

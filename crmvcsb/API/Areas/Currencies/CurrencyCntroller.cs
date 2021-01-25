@@ -2,17 +2,9 @@
 
 namespace crmvcsb.Areas.TestArea.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using Microsoft.AspNetCore.Mvc;
-    using crmvcsb.Universal.Models;
-    using crmvcsb.Universal.DomainSpecific.Currency.API;
-
     using crmvcsb.Universal.DomainSpecific.Currency;
-    using crmvcsb.Universal.DomainSpecific.Currency.DAL;
+    using crmvcsb.Universal.DomainSpecific.Currency.API;
+    using Microsoft.AspNetCore.Mvc;
 
     //while named routing in startup.cs 
     //attribute can be omitted

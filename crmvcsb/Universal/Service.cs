@@ -53,7 +53,7 @@ namespace crmvcsb.Universal
             return this._repositoryWrite;
         }
 
-        internal void statusChangeAndLog(IServiceStatus newStatus,string message)
+        internal void statusChangeAndLog(IServiceStatus newStatus, string message)
         {
             this._status = (ServiceStatus)newStatus;
             var rtTp = this._status.GetType();
@@ -68,7 +68,7 @@ namespace crmvcsb.Universal
     }
 
     public class Success : ServiceStatus { }
-    public class Failure: ServiceStatus { }    
+    public class Failure : ServiceStatus { }
     public class Error : ServiceStatus { }
     public class Info : ServiceStatus { }
     public class OK : ServiceStatus { }

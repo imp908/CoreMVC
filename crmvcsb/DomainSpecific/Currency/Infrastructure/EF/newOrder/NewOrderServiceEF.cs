@@ -3,9 +3,9 @@ namespace crmvcsb.Infrastructure.EF.NewOrder
 {
     using AutoMapper;
     using crmvcsb.Infrastructure.EF;
+    using crmvcsb.Universal;
     using crmvcsb.Universal.DomainSpecific.NewOrder.DAL;
     using crmvcsb.Universal.Infrastructure;
-    using crmvcsb.Universal;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -65,15 +65,15 @@ namespace crmvcsb.Infrastructure.EF.NewOrder
             {
                 throw;
             }
-                      
+
         }
         public void CleanUp()
         {
             _repositoryWrite.CleanUp();
             var addressesExist = _repositoryWrite.QueryByFilter<AddressDAL>(s => s.Id != 0).ToList();
             _repositoryWrite.DeleteRange(addressesExist);
-            try { _repositoryWrite.Save(); } catch (Exception) { throw; }           
+            try { _repositoryWrite.Save(); } catch (Exception) { throw; }
         }
-    
+
     }
 }
