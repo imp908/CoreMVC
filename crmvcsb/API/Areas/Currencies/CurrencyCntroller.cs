@@ -10,7 +10,7 @@ namespace crmvcsb.Areas.TestArea.Controllers
     using Microsoft.AspNetCore.Mvc;
     using crmvcsb.Universal.Models;
     using crmvcsb.Universal.DomainSpecific.Currency.API;
-
+    
     using crmvcsb.Universal.DomainSpecific.Currency;
     using crmvcsb.Universal.DomainSpecific.Currency.DAL;
 
@@ -34,10 +34,14 @@ namespace crmvcsb.Areas.TestArea.Controllers
             return $"Get: {iso}";
         }
         [HttpPost]
-        public ActionResult<string> Post(CurrencyAPI currency)
+        public async Task<IActionResult> Post(CurrencyAPI currency)
         {
-            _Currencyservice.AddCurrency(currency);
-            return $"Post: {currency.Name}";
+            var item = await _Currencyservice.AddCurrency(currency);
+            if(item == null)
+            {
+                return StatusCode(500,"Object not created");
+            }
+            return Created("Object created", item);
         }
         [HttpPut]
         public ActionResult<string> Put(CurrencyUpdateAPI currency)
@@ -69,6 +73,12 @@ namespace crmvcsb.Areas.TestArea.Controllers
         public ActionResult<string> HealthCheck()
         {
             return "HealthCheck";
+        }
+
+        [HttpGet("HttpResponse")]
+        public ActionResult HttpResponse()
+        {
+            return Created("",1);
         }
     }
 }

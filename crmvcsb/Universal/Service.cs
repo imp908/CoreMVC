@@ -55,7 +55,7 @@ namespace crmvcsb.Universal
 
         internal void statusChangeAndLog(IServiceStatus newStatus,string message)
         {
-            this._status = (ServiceStatus)newStatus;
+            this._status = newStatus;
             var rtTp = this._status.GetType();
             this._status.Message = message;
             _logger.Information(this._status.Message);

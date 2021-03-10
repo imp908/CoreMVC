@@ -294,32 +294,45 @@ namespace crmvcsb
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+            app.UseRouting();
 
-            try
+
+            app.UseEndpoints(routes =>
             {
+                routes.MapControllerRoute(
+                   name: "areas",
+                   pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
-                app.UseMvc(routes =>
-                {
-                    routes.MapRoute(
-                       name: "areas",
-                       template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+                routes.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
 
-                    routes.MapRoute(
-                        name: "default",
-                        template: "{controller=Home}/{action=Index}/{id?}");
-
-                });
-            }
-            catch (Exception e)
-            {
-
-            }
-
-            /* must be added after use mvc */
-            app.UseSignalR(routes =>
-            {
                 routes.MapHub<SignalRhub>("/rHub");
             });
+
+            //try
+            //{
+
+            //    //app.UseMvc(routes =>
+            //    //{
+            //    //    routes.MapRoute(
+            //    //       name: "areas",
+            //    //       template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+            //    //    routes.MapRoute(
+            //    //        name: "default",
+            //    //        template: "{controller=Home}/{action=Index}/{id?}");
+
+            //    //});
+            //    /* must be added after use mvc */
+
+            //}
+            //catch (Exception e)
+            //{
+
+            //}
+
+        
         }
 
         public IConfiguration GetConfig()

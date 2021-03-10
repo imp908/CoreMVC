@@ -419,6 +419,8 @@ DONE:[
             18.12.2021 3h 20m 
         -> Domain CRUD, REST API
        
+        <- 10.03.2021 2h migrate from net 3.1 to net 5.0 ->
+
         -> sync from write db to read
        
 	]

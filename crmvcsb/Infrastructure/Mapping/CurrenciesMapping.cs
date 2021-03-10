@@ -4,9 +4,9 @@
     using AutoMapper;
     using crmvcsb.Universal.DomainSpecific.Currency.API;
     using crmvcsb.Universal.DomainSpecific.Currency.DAL;
-    using System.Collections.Generic;
+    using crmvcsb.Universal;
+    using Microsoft.AspNetCore.Mvc;
 
-    
     public class CurrenciesMapping
     {
         public static MapperConfiguration config()
@@ -27,7 +27,7 @@
                    .ForMember(d => d.IsMain, m => m.MapFrom(src => src.IsMain))
                    .ForMember(d => d.Name, m => m.MapFrom(src => src.Name))
                    .ReverseMap().ForAllOtherMembers(o => o.Ignore());
-                
+                                
             });
         }
     }

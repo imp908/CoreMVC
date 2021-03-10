@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace crmvcsb.Universal
+namespace InfrastructureCheckers
 {
 
     /// <summary>
