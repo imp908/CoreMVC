@@ -30,7 +30,7 @@ namespace crmvcsb.Universal
         IQueryable<T> SkipTake<T>(int skip, int take)
             where T : class;
         IQueryable<T> QueryByFilter<T>(Expression<Func<T, bool>> expression)
-            where T : class;        
+            where T : class;
 
         void Save();
 

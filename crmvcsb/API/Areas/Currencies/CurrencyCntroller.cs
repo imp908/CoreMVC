@@ -2,12 +2,10 @@
 
 namespace crmvcsb.Areas.TestArea.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Linq;
-    using System.Threading.Tasks;
+    using crmvcsb.Universal.DomainSpecific.Currency;
+    using crmvcsb.Universal.DomainSpecific.Currency.API;
     using Microsoft.AspNetCore.Mvc;
+    using System.Threading.Tasks;
     using crmvcsb.Universal.Models;
     using crmvcsb.Universal.DomainSpecific.Currency.API;
     

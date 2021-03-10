@@ -1,5 +1,3 @@
-using System;
-
 namespace crmvcsb.Universal.Models
 {
     public class ErrorViewModel

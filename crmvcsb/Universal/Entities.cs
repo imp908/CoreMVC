@@ -5,9 +5,7 @@
 namespace crmvcsb.Universal
 {
     using System;
-    using System.ComponentModel.DataAnnotations.Schema;
     using System.ComponentModel.DataAnnotations;
-    using Microsoft.EntityFrameworkCore;
 
     public class EntityGuidIdDAL : IEntityGuidIdDAL
     {

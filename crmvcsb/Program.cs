@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore;
+﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace crmvcsb
 {
@@ -18,7 +13,7 @@ namespace crmvcsb
             {
                 //InfrastructureCheckers.RepoAndUOWCheck.GO();
                 var bld = CreateWebHostBuilder(args).Build();
-                bld.Run();                
+                bld.Run();
             }
             catch (Exception)
             {
@@ -28,7 +23,8 @@ namespace crmvcsb
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-            .ConfigureLogging(logging => {
+            .ConfigureLogging(logging =>
+            {
                 logging.ClearProviders();
                 logging.AddConsole();
                 logging.AddDebug();

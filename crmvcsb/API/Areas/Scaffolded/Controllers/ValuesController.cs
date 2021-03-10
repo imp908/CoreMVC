@@ -1,10 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-
-using KATAS;
 
 namespace crmvcsb.Default.Controllers
 {
@@ -15,7 +11,7 @@ namespace crmvcsb.Default.Controllers
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
-        {            
+        {
             return new string[] { "value1", "value2" };
         }
 
@@ -73,7 +69,7 @@ namespace crmvcsb.Default.Controllers
         /// Example of multiple Get with different params per controller
         /// </summary>
         /// <returns>OK</returns>
-        
+
         //http://localhost:5002/api/Values/GetDbName
         [HttpGet("GetDbName")]
         public async Task<IActionResult> GetDbName()
@@ -82,7 +78,7 @@ namespace crmvcsb.Default.Controllers
         }
         //http://localhost:5002/api/Values/GetDefault/USD
         [HttpGet("GetDefault/{IsoCode}")]
-        public async Task<IActionResult> Get([FromRoute]string IsoCode)
+        public async Task<IActionResult> Get([FromRoute] string IsoCode)
         {
             return Ok();
         }
@@ -94,7 +90,7 @@ namespace crmvcsb.Default.Controllers
         }
         //http://localhost:5002/api/Values/GetCurrencyParam?USD
         [HttpGet("GetCurrencyParam")]
-        public async Task<IActionResult> GetNoParam([FromQuery]string IsoCode)
+        public async Task<IActionResult> GetNoParam([FromQuery] string IsoCode)
         {
             return Ok();
         }
