@@ -26,7 +26,7 @@
 
             autofacContainer.RegisterType<ValidatorCustom>().As<IValidatorCustom>();
             autofacContainer.RegisterType<LoggerCustom>().As<ILoggerCustom>();
-            autofacContainer.RegisterType<JSONio>().As<ISerialization>();
+            autofacContainer.RegisterType<JSONNewtonsoft>().As<ISerialization>();
 
             return autofacContainer;
         }

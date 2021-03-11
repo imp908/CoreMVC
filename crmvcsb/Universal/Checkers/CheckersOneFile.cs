@@ -3007,6 +3007,10 @@ namespace KATAS
     using System.Text;
 
 
+    using System.Net.Http;
+    using System.Text.Json;
+    
+    using System.Threading.Tasks;
 
     //custom linq
 
@@ -4432,6 +4436,46 @@ namespace KATAS
 
     }
 
+    public class HTTPserializeSave
+    {
+        public class Country
+        {
+            public string id { get; set; }
+            public string name { get; set; }
+        }
+
+        public static async Task<IEnumerable<Country>> GO()
+        {
+            var httpClient = new HttpClient();
+            var response = await httpClient.GetAsync("https://api.worldremit.com/api/countries");
+            var content = await response.Content.ReadAsStringAsync();
+
+            var countries = JsonSerializer.Deserialize<IEnumerable<Country>>(content);
+            var filtered = countries.Where(s => s.name != "Austria").OrderBy(s => s.name);
+            var str = JsonSerializer.Serialize(filtered);
+
+            await File.WriteAllTextAsync($"{Directory.GetCurrentDirectory()}\\countries.json", str);
+            return filtered;
+        }
+
+        public static async Task<IEnumerable<Country>> GetHttpresponse()
+        {
+
+            var httpClient = new HttpClient();
+            var response = await httpClient.GetAsync("https://api.worldremit.com/api/countries");
+            var content = await response.Content.ReadAsStringAsync();
+
+            var str = JsonSerializer.Deserialize<IEnumerable<Country>>(content);
+            var filtered = str.Where(s => s.name != "Austria").OrderBy(s => s.name);
+
+            var result = JsonSerializer.Serialize(filtered);
+            
+            await File.WriteAllTextAsync($"{Directory.GetCurrentDirectory()}\\ctr2.json", result);
+
+            return filtered;
+        }
+
+    }
 }
 
 

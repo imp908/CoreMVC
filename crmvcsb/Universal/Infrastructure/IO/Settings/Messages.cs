@@ -49,7 +49,7 @@ namespace crmvcsb.Infrastructure.IO.Settings
     public class MessagesInitialization
     {
         public static MessagesInitialization _this;
-        static JSONio serialization = new JSONio();
+        static JSONNewtonsoft serialization = new JSONNewtonsoft();
         public static _variables Variables = new _variables();
         string path = $"{Directory.GetCurrentDirectory()}\\variables.json";
         public static void Init()

@@ -63,6 +63,12 @@ namespace crmvcsb.Default.Controllers
         {
         }
 
+        [HttpGet("GetCountries")]
+        public async Task<IActionResult> GetCountries()
+        {
+            var result = await KATAS.HTTPserializeSave.GO();
+            return Ok(result);
+        }
 
 
         /// <summary>

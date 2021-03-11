@@ -80,6 +80,8 @@ namespace crmvcsb
                 options.AreaViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
             });
 
+            /*Net http client for IHttpClient factory*/
+            services.AddHttpClient();
 
             services.AddMvc(options => options.EnableEndpointRouting = false);
 
