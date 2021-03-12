@@ -4,7 +4,7 @@ namespace crmvcsb.DomainSpecific.Validation
 {
 
     using crmvcsb.Universal.DomainSpecific.Currency.API;
-    using crmvcsb.Universal.Infrastructure;
+    using crmvcsb.Universal;
     using FluentValidation;
 
     public class CurrenciesValidation

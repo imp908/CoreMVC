@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Net.Http;
 
-namespace crmvcsb.Universal.Infrastructure
+namespace crmvcsb.Universal
 {
 
     public interface IHttpClient

@@ -1,7 +1,7 @@
 ﻿
 namespace crmvcsb.Universal.Infrastructure.IO.Serialization
 {
-    using crmvcsb.Universal.Infrastructure;
+    using crmvcsb.Universal;
     using System.Text.Json;
 
     public class JSONnet : ISerialization

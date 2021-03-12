@@ -3,7 +3,7 @@
     using Autofac;
     using Autofac.Extensions.DependencyInjection;
     using crmvcsb.DomainSpecific.Validation;
-    using crmvcsb.Universal.Infrastructure;
+    using crmvcsb.Universal;
     using Microsoft.Extensions.DependencyInjection;
     using crmvcsb.Infrastructure.IO.Logging;
     using crmvcsb.Infrastructure.IO.Serialization;

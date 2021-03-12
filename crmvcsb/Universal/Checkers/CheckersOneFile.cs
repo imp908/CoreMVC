@@ -4458,23 +4458,6 @@ namespace KATAS
             return filtered;
         }
 
-        public static async Task<IEnumerable<Country>> GetHttpresponse()
-        {
-
-            var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync("https://api.worldremit.com/api/countries");
-            var content = await response.Content.ReadAsStringAsync();
-
-            var str = JsonSerializer.Deserialize<IEnumerable<Country>>(content);
-            var filtered = str.Where(s => s.name != "Austria").OrderBy(s => s.name);
-
-            var result = JsonSerializer.Serialize(filtered);
-            
-            await File.WriteAllTextAsync($"{Directory.GetCurrentDirectory()}\\ctr2.json", result);
-
-            return filtered;
-        }
-
     }
 }
 

@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
+﻿
 namespace crmvcsb.Default.Controllers
 {
+    using Microsoft.AspNetCore.Mvc;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+
     [Route("api/[controller]")]
     [ApiController]
     public class ValuesController : ControllerBase
@@ -61,14 +62,7 @@ namespace crmvcsb.Default.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-        }
-
-        [HttpGet("GetCountries")]
-        public async Task<IActionResult> GetCountries()
-        {
-            var result = await KATAS.HTTPserializeSave.GO();
-            return Ok(result);
-        }
+        }    
 
 
         /// <summary>

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace crmvcsb.Universal.Infrastructure
+namespace crmvcsb.Universal
 {
     public interface ISerialization
     {

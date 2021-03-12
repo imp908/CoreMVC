@@ -1,9 +1,10 @@
 ﻿
-using Microsoft.Extensions.Configuration;
-using System.IO;
 
 namespace crmvcsb.Infrastructure.InMemmory
 {
+
+    using Microsoft.Extensions.Configuration;
+    using System.IO;
     public class InMemmoryDbInitializer
     {
         public static IConfigurationRoot configuration { get; set; }
