@@ -424,6 +424,7 @@ DONE:[
         <- 11.03.2021 30m folder namespaces rearrange->
 
         <- 12.03.2021 30m folder namespaces rearrange->
+        <- 2h 20m 12.03.2021 13:00 14:20 -> net core exception handling
 
         -> currency dictionary CRUD
         -> currency cross rates CRUD
@@ -431,8 +432,8 @@ DONE:[
         -> sync from write db to read
        
 	]
-	~57h 20m in 22days
+	~59h 40m in 22days
 
-]~152h:10m in 47d
+]~154h 30m in 47d
 
 
