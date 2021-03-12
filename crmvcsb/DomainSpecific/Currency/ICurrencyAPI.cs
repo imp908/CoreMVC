@@ -19,8 +19,6 @@ namespace crmvcsb.Universal.DomainSpecific.Currency.API
         DateTime Date { get; set; }
     }
 
-
-
     public interface ICurrencyAPI
     {
         public string Name { get; set; }

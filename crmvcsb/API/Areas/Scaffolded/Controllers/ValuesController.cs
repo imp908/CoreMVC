@@ -1,4 +1,23 @@
 ﻿
+/*
+    net core responses to http codes
+    https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.controllerbase?view=aspnetcore-5.0
+    https://docs.microsoft.com/en-us/dotnet/api/system.net.httpstatuscode?view=net-5.0
+    https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.http.statuscodes?view=aspnetcore-5.0
+
+    return Accepted(); //202
+    return BadRequest(); //400
+    return Conflict(); //409
+    return Created("Object created", item); //201
+    return File("","",""); //200 OK
+    return Forbid(); //403
+    return NoContent();  //204
+    return Ok() //200
+    return NotFound(); //404
+                
+    return StatusCode(500,"Object not created");
+*/
+
 namespace crmvcsb.Default.Controllers
 {
     using Microsoft.AspNetCore.Mvc;

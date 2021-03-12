@@ -6,6 +6,7 @@ namespace crmvcsb.Areas.TestArea.Controllers
     using crmvcsb.Universal.DomainSpecific.Currency.API;
     using Microsoft.AspNetCore.Mvc;
     using System.Threading.Tasks;
+    using System;
     using crmvcsb.Universal.Models;
     using crmvcsb.Universal.DomainSpecific.Currency.API;
     
@@ -76,6 +77,7 @@ namespace crmvcsb.Areas.TestArea.Controllers
         [HttpGet("HttpResponse")]
         public ActionResult HttpResponse()
         {
+            throw new InvalidOperationException("Test exception");
             return Created("",1);
         }
     }

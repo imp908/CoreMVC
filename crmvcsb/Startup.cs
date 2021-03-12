@@ -1,9 +1,8 @@
 ﻿
 namespace crmvcsb
 {
-
+    
     using Autofac;
-    using crmvcsb.Universal.Infrastructure;
     using crmvcsb.Infrastructure.IoC;
     using Autofac.Extensions.DependencyInjection;
     using AutoMapper;
@@ -14,13 +13,13 @@ namespace crmvcsb
     using crmvcsb.Infrastructure.SignalR;
     using crmvcsb.Universal;
     using crmvcsb.Universal.DomainSpecific.Currency;
-    using crmvcsb.Universal.Infrastructure;
     using FluentValidation.AspNetCore;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc.Razor;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     /*Build in logging*/
@@ -287,17 +286,26 @@ namespace crmvcsb
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseDeveloperExceptionPage();
-            app.UseDatabaseErrorPage();
-            app.UseExceptionHandler("/Home/Error");
-            // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-            app.UseHsts();
+            if (env.IsDevelopment())
+            {
+                //unused for clean Web API with no MVC 
+                //app.UseDeveloperExceptionPage();
+
+                app.UseExceptionHandler("/errordev");
+            }
+            else
+            {
+                app.UseExceptionHandler("/errorprod");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
+            app.UseDatabaseErrorPage();            
+          
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseRouting();
-
 
             app.UseEndpoints(routes =>
             {
@@ -312,29 +320,6 @@ namespace crmvcsb
                 routes.MapHub<SignalRhub>("/rHub");
             });
 
-            //try
-            //{
-
-            //    //app.UseMvc(routes =>
-            //    //{
-            //    //    routes.MapRoute(
-            //    //       name: "areas",
-            //    //       template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
-
-            //    //    routes.MapRoute(
-            //    //        name: "default",
-            //    //        template: "{controller=Home}/{action=Index}/{id?}");
-
-            //    //});
-            //    /* must be added after use mvc */
-
-            //}
-            //catch (Exception e)
-            //{
-
-            //}
-
-        
         }
 
         public IConfiguration GetConfig()

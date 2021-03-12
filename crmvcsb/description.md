@@ -412,20 +412,27 @@ DONE:[
 
         <- 
             15.12.2020 8h 
-            16.12.2020 6h  -> read write, repositories to service autofac register; read write DBs reinitialization
+            16.12.2020 6h -> read write, repositories to service autofac register; read write DBs reinitialization
                             dividing to read and write leead to register as Irepository problem
 
         <- 
-            18.12.2021 3h 20m 
+            18.12.2021 3h 20m
         -> Domain CRUD, REST API
        
         <- 10.03.2021 2h migrate from net 3.1 to net 5.0 ->
+        
+        <- 11.03.2021 30m folder namespaces rearrange->
 
+        <- 12.03.2021 30m folder namespaces rearrange->
+
+        -> currency dictionary CRUD
+        -> currency cross rates CRUD
+        -> currency cross rates recount from curency changes via rabbit mq
         -> sync from write db to read
        
 	]
-	~56h 20m in 20days
+	~57h 20m in 22days
 
-]~151h:10m in 45d
+]~152h:10m in 47d
 
 
