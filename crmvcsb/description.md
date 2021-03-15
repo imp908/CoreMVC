@@ -414,17 +414,16 @@ DONE:[
             15.12.2020 8h 
             16.12.2020 6h -> read write, repositories to service autofac register; read write DBs reinitialization
                             dividing to read and write leead to register as Irepository problem
-
         <- 
             18.12.2021 3h 20m
         -> Domain CRUD, REST API
        
         <- 10.03.2021 2h migrate from net 3.1 to net 5.0 ->
         
-        <- 11.03.2021 30m folder namespaces rearrange->
+        <- 11.03.2021 30m folder namespaces rearrange ->
 
-        <- 12.03.2021 30m folder namespaces rearrange->
-        <- 2h 20m 12.03.2021 13:00 14:20 -> net core exception handling
+        <- 12.03.2021 30m folder namespaces rearrange ->
+        <- 12.03.2021 13:00 14:20 2h 20m net core exception handling ->
 
         -> currency dictionary CRUD
         -> currency cross rates CRUD

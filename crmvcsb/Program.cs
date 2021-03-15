@@ -11,7 +11,7 @@ namespace crmvcsb
         {
             try
             {
-                //InfrastructureCheckers.RepoAndUOWCheck.GO();
+                LINQtoObjectsCheck.LinqCheck.GO();
                 var bld = CreateWebHostBuilder(args).Build();
                 bld.Run();
             }
