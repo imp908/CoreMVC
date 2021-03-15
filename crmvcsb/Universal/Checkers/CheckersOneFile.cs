@@ -115,6 +115,8 @@ namespace NetPlatformCheckers
         public static void GO()
         {
 
+            StringsCheck.GO();
+
             AbstractClassCheck.GO();
             //TasksToFuckupCPU.GO();
 
@@ -127,6 +129,43 @@ namespace NetPlatformCheckers
         }
     }
 
+
+    /* strings check */
+
+    /*--------------------------------------------- */
+    public class StringsCheck
+    {
+
+        /*
+         * str + char - str
+         * 
+         * sum only +
+         * str + int -> str
+         * int + str -> int concat with str
+         * 
+         * char int -> char int codes to int
+         * 
+         * sum only + 
+         * str and char and int -> str
+         * 
+         * */
+
+        public static void GO()
+        {
+
+            var strAndChar = "1" + '2'; // 1 + code of 2
+            
+            var strAndInt = "1" + 2 + 3; // 123
+            var intAndStr = 1 + 2 + "3";  // 33
+
+            var charAndInt1 = '1' + 2 + 3; //codes to int 
+            var charAndInt2 = 1 + 2 + '3'; //codes to int
+            var charAndInt3 = 1 + '2' - 3; //codes to int
+
+            var cahrsAndStrAndInt1 = "1" + "2" + '3' + 4 + 5; // to str 12345
+            var cahrsAndStrAndInt2 = 0 + "1" + "2" + '3' + 4 + 5; // to str 012345
+        }
+    }
 
     //Ienumerable Ienumerator 
     public class Person
@@ -2165,9 +2204,9 @@ namespace LINQtoObjectsCheck
         public string OwnerName { get; set; }
         public int OwnerInt { get; set; }
         public List<string> PetsStr { get; set; }
-        public List<Pet> Pets { get; set; }
+        public List<PetForOwner> Pets { get; set; }
     }
-    public class Pet
+    public class PetForOwner
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
@@ -2258,7 +2297,16 @@ namespace LINQtoObjectsCheck
     };
 
 
+    class Person
+    {
+        public string Name { get; set; }
+    }
 
+    class Pet
+    {
+        public string Name { get; set; }
+        public Person Owner { get; set; }
+    }
     public class LinqCheck
     {
         public static List<Racer> racers = new List<Racer>();
@@ -2266,6 +2314,8 @@ namespace LINQtoObjectsCheck
 
         static LinqCheck lc = new LinqCheck();
 
+
+     
         public static void GO()
         {
             System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
@@ -2295,33 +2345,93 @@ namespace LINQtoObjectsCheck
             cups.Add(new Cup { Competition = @"Cup6", Year = 1985, Position = 1, RacerName = @"Racer10" });
             cups.Add(new Cup { Competition = @"Cup7", Year = 1991, Position = 1, RacerName = @"Racer11" });
 
+            var txt = @"aa b c das asdaa sd aa s aas";
+            string src = "aa";
+            var schcnt = txt.Split().Where(s => s.ToLowerInvariant() == src.ToLowerInvariant()).Count();
+
+
+
+
+
+            /* Group by count on join of Anonymous dynamic 
+             left join */
+            var adventures = new List<dynamic>() { 
+                new { Id = 1, Name = "nm1" }, new { Id = 2, Name = "nm2" }, new { Id = 3, Name = "nm3" }
+            };
+            var events = new List<dynamic>() {
+                new { Id = 0, Evnt = "evnt1", adventurerId = 1 }, 
+                new { Id = 1, Evnt = "evnt2", adventurerId = 1 }, 
+                new { Id = 2, Evnt = "evnt3", adventurerId = 2 },
+                new { Id = 3, Evnt = "evnt4", adventurerId = 0 },
+                new { Id = 4, Evnt = "evnt5", adventurerId = 0 }
+            };
+
+            var eventsPerAdventurer = 
+            (
+               
+                from s in adventures
+                join c in events on s.Id equals c.adventurerId into jn
+                from sn in jn.DefaultIfEmpty()
+                group new {sn} by new { name = s?.Name } into t
+                select new
+                {
+                    Name = t?.Key,
+                    Ev = t?.Count(o=>!string.IsNullOrEmpty(o?.sn?.Evnt))
+                } 
+            ).ToList();
+
+
+
+            Person magnus = new Person { Name = "Hedlund, Magnus" };
+            Person terry = new Person { Name = "Adams, Terry" };
+            Person charlotte = new Person { Name = "Weiss, Charlotte" };
+
+            Pet barley = new Pet { Name = "Barley", Owner = terry };
+            Pet boots = new Pet { Name = "Boots", Owner = terry };
+            Pet whiskers = new Pet { Name = "Whiskers", Owner = charlotte };
+            Pet daisy = new Pet { Name = "Daisy", Owner = magnus };
+
+            List<Person> people = new List<Person> { magnus, terry, charlotte };
+            List<Pet> pets = new List<Pet> { barley, boots, whiskers, daisy };
+
+            // Create a list of Person-Pet pairs where
+            // each element is an anonymous type that contains a
+            // Pet's name and the name of the Person that owns the Pet.
+            var query =
+                people.Join(pets,
+                            p => p,
+                            pt => pt.Owner,
+                            (p, pt) =>
+                                new { OwnerName = p.Name, Pet = pt.Name })
+                .GroupBy(q=>q.OwnerName,w=>w.Pet.Count())
+                .ToList();
 
             List<PetOwners> petownersWithPets = new List<PetOwners>() {
                 new PetOwners {OwnerName=@"Owner1",OwnerInt=0,PetsStr= new List<string>() { @"Pet1",@"Pet2"}
-                , Pets = new List<Pet>(){ new Pet(){Name=@"Pet1"}, new Pet() { Name = @"Pet2" }}},
+                , Pets = new List<PetForOwner>(){ new PetForOwner(){Name=@"Pet1"}, new PetForOwner() { Name = @"Pet2" }}},
                 new PetOwners {OwnerName=@"Owner2",OwnerInt=1,PetsStr= new List<string>() { @"Pet3",@"Pet4", @"Pet5" }
-                 , Pets = new List<Pet>(){ new Pet(){Name=@"Pet3"}, new Pet() { Name = @"Pet4" }, new Pet() { Name = @"Pet5" }}},
+                 , Pets = new List<PetForOwner>(){ new PetForOwner(){Name=@"Pet3"}, new PetForOwner() { Name = @"Pet4" }, new PetForOwner() { Name = @"Pet5" }}},
                 new PetOwners {OwnerName=@"Owner3",OwnerInt=2,PetsStr= new List<string>() { @"Pet6" }
-                , Pets = new List<Pet>() { new Pet() { Name = @"Pet6" }}},
+                , Pets = new List<PetForOwner>() { new PetForOwner() { Name = @"Pet6" }}},
                 new PetOwners {OwnerName=@"Owner4",OwnerInt=3,PetsStr= new List<string>() { @"Pet7",@"Pet8", @"Pet9", @"Pet10" }
-                 , Pets = new List<Pet>() { new Pet() { Name = @"Pet7" }, new Pet() { Name = @"Pet8" } ,new Pet() { Name = @"Pet9" },new Pet() { Name = @"Pet10" }}}
+                 , Pets = new List<PetForOwner>() { new PetForOwner() { Name = @"Pet7" }, new PetForOwner() { Name = @"Pet8" } ,new PetForOwner() { Name = @"Pet9" },new PetForOwner() { Name = @"Pet10" }}}
             };
 
-            List<Pet> petsWithoutOwners = new List<Pet>(){
-                new Pet(){Name=@"Pet3"}
-                ,new Pet() { Name = @"Pet7" }
-                ,new Pet() { Name = @"Pet11" }
+            List<PetForOwner> petsWithoutOwners = new List<PetForOwner>(){
+                new PetForOwner(){Name=@"Pet3"}
+                ,new PetForOwner() { Name = @"Pet7" }
+                ,new PetForOwner() { Name = @"Pet11" }
             };
 
-            List<Pet> petsWithOwners = new List<Pet>(){
-                new Pet(){Name = "Pet20", Owner = petownersWithPets[0]}
-                ,new Pet(){Name = "Pet21", Owner = petownersWithPets[0]}
+            List<PetForOwner> petsWithOwners = new List<PetForOwner>(){
+                new PetForOwner(){Name = "Pet20", Owner = petownersWithPets[0]}
+                ,new PetForOwner(){Name = "Pet21", Owner = petownersWithPets[0]}
 
-                ,new Pet(){Name = "Pet22", Owner = petownersWithPets[1]}
+                ,new PetForOwner(){Name = "Pet22", Owner = petownersWithPets[1]}
 
-                ,new Pet(){Name = "Pet23", Owner = petownersWithPets[2]}
-                ,new Pet(){Name = "Pet24", Owner = petownersWithPets[2]}
-                ,new Pet(){Name = "Pet25", Owner = petownersWithPets[2]}
+                ,new PetForOwner(){Name = "Pet23", Owner = petownersWithPets[2]}
+                ,new PetForOwner(){Name = "Pet24", Owner = petownersWithPets[2]}
+                ,new PetForOwner(){Name = "Pet25", Owner = petownersWithPets[2]}
             };
 
             var ownersOfPets =
@@ -2359,7 +2469,6 @@ namespace LINQtoObjectsCheck
                     racer = r.Name,
                     cup = c.Competition
                 });
-
 
             IEnumerable<string> racerNameIntersect = (from s in cups select s.RacerName).Intersect(from r in racers select r.Name);
             IEnumerable<string> racerNameExcept = (from r in racers select r.Name).Except(from s in cups select s.RacerName);
@@ -2505,6 +2614,7 @@ namespace LINQtoObjectsCheck
             UpdateCheck();
             UpdateNestedCheck();
             MaxDateCheck();
+            LinqSumGroupByNew();
         }
 
         public static void bulkCheck()
@@ -2846,6 +2956,15 @@ namespace LINQtoObjectsCheck
             //eq1 , amt=200
             //eq2 , amt=2000
             //amt=sum(quant)*price
+
+            var q0 = from t1 in (from s in prices select s)
+            join t2 in (from c in positions select c) on t1.InstrumentID equals t2.instrument.Underlying.ID
+            select new
+            {
+                Id = t2.instrument.Underlying.ID,
+                Price = t2.Quantity * t1.Value
+            };
+            q0 = q0.ToList();
 
             var qt =
             from s2 in (from s in (from z in new List<Instrument>() { under1, under2 } select z).ToList() select new { ID = s.ID })
@@ -4436,6 +4555,7 @@ namespace KATAS
 
     }
 
+    
     public class HTTPserializeSave
     {
         public class Country
@@ -4457,7 +4577,23 @@ namespace KATAS
             await File.WriteAllTextAsync($"{Directory.GetCurrentDirectory()}\\countries.json", str);
             return filtered;
         }
-
+                
+        public static async Task<IEnumerable<T>> HttpReqSaveSinglelineSyntax<T>()
+        {
+            await File.WriteAllTextAsync($"{Directory.GetCurrentDirectory()}\\slExp.json",
+                JsonSerializer.Serialize(
+                    JsonSerializer.Deserialize<IEnumerable<T>>(
+                        await new HttpClient()
+                        .GetAsync("")?
+                        .Result
+                        .Content
+                        .ReadAsStringAsync()
+                    )
+                )
+            );
+            return JsonSerializer.Deserialize<IEnumerable<T>>(await new HttpClient().GetAsync("")?.Result.Content.ReadAsStringAsync());
+        }
+    
     }
 }
 
