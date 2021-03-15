@@ -2366,6 +2366,21 @@ namespace LINQtoObjectsCheck
                 new { Id = 4, Evnt = "evnt5", adventurerId = 0 }
             };
 
+            var eventsPerAdventurer = 
+            (
+               
+                from s in adventures
+                join c in events on s.Id equals c.adventurerId into jn
+                from sn in jn.DefaultIfEmpty()
+                group new {sn} by new { name = s?.Name } into t
+                select new
+                {
+                    Name = t?.Key,
+                    Ev = t?.Count(o=>!string.IsNullOrEmpty(o?.sn?.Evnt))
+                } 
+            ).ToList();
+
+
             var joinGroupSum =
               (from s1 in adventures
                join s2 in events on s1.Id equals s2.adventurerId into jn
