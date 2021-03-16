@@ -2347,11 +2347,7 @@ namespace LINQtoObjectsCheck
 
             var txt = @"aa b c das asdaa sd aa s aas";
             string src = "aa";
-            var schcnt = txt.Split().Where(s => s.ToLowerInvariant() == src.ToLowerInvariant()).Count();
-
-
-
-
+            var schcnt = txt.Split().Where(s => s.ToLowerInvariant() == src.ToLowerInvariant()).Count();        
 
             /* Group by count on join of Anonymous dynamic 
              left join */
@@ -2366,31 +2362,33 @@ namespace LINQtoObjectsCheck
                 new { Id = 4, Evnt = "evnt5", adventurerId = 0 }
             };
 
-            var eventsPerAdventurer = 
+            /*Query group by*/
+            var joinGroupSum =
             (
-               
-                from s in adventures
-                join c in events on s.Id equals c.adventurerId into jn
-                from sn in jn.DefaultIfEmpty()
-                group new {sn} by new { name = s?.Name } into t
+                from s1 in adventures
+                join s2 in events on s1.Id equals s2.adventurerId into jn
+                from s3 in jn.DefaultIfEmpty()
+                group new { s3 } by new { name = s1.Name } into g
                 select new
                 {
-                    Name = t?.Key,
-                    Ev = t?.Count(o=>!string.IsNullOrEmpty(o?.sn?.Evnt))
-                } 
+                    name = g.Key,
+                    adv = g.Count(o => !string.IsNullOrEmpty(o?.s3?.Evnt))
+                }
             ).ToList();
 
-
-            var joinGroupSum =
-              (from s1 in adventures
-               join s2 in events on s1.Id equals s2.adventurerId into jn
-               from s3 in jn.DefaultIfEmpty()
-               group new { s3 } by new { name = s1.Name } into g
-               select new
-               {
-                   name = g.Key,
-                   adv = g.Count(o => !string.IsNullOrEmpty(o?.s3?.Evnt))
-               }).ToList();
+            /*Method join group count*/
+            var gp = adventures.Join(events, 
+                adv => adv.Id, 
+                evt => evt.adventurerId,
+                (adv, evt) => 
+                    new { Name = adv.Name, Evt = evt.Evnt }
+                )
+                .GroupBy(q=>q.Name)
+                .Select(s => new { 
+                    Name = s.Key,
+                    Count = s.Count(o => !string.IsNullOrEmpty(o?.Evt))
+                })
+                .ToList();
 
             Person magnus = new Person { Name = "Hedlund, Magnus" };
             Person terry = new Person { Name = "Adams, Terry" };
@@ -4603,7 +4601,7 @@ namespace KATAS
             );
             return JsonSerializer.Deserialize<IEnumerable<T>>(await new HttpClient().GetAsync("")?.Result.Content.ReadAsStringAsync());
         }
-
+      
     }
 }
 
