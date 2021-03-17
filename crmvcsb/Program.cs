@@ -11,6 +11,7 @@ namespace crmvcsb
         {
             try
             {
+                KATAS.Miscellaneous.DigitSumm.GO();
                 LINQtoObjectsCheck.LinqCheck.GO();
                 var bld = CreateWebHostBuilder(args).Build();
                 bld.Run();

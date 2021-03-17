@@ -3,6 +3,6 @@
 
     public interface IValidatorCustom
     {
-        void Validate<T>(T instance);
+        bool isValid<T>(T instance);
     }
 }

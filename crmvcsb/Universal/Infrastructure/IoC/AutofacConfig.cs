@@ -9,7 +9,7 @@
     using crmvcsb.Infrastructure.IO.Serialization;
 
     /*Build in logging*/
-    public static class AutofacConfig
+    public static partial class AutofacConfig
     {
         static ContainerBuilder autofacContainer;
         public static void config(IServiceCollection services)

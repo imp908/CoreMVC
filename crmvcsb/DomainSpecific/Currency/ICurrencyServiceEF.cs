@@ -16,6 +16,8 @@ namespace crmvcsb.Universal.DomainSpecific.Currency
         IServiceStatus DeleteCurrency(string currencyIso);
         IServiceStatus DeleteCurrency(ICurrencyUpdateAPI currency);
 
+
+        Task<ICurrencyRateAdd> AddCurrencyRateQuerry(ICurrencyRateAdd query);
         Task<IList<ICrossCurrenciesAPI>> GetCurrencyCrossRatesAsync(IGetCurrencyCommand command);
     }
 }

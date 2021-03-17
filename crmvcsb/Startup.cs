@@ -106,10 +106,10 @@ namespace crmvcsb
             //autofacContainer.RegisterInstance(mapper).As<IMapper>();
             AutofacConfig.GetContainer().RegisterInstance(mapper).As<IMapper>();
 
-            /* Chose registration of test sql lite or sql server*/
-
+          
             AutofacConfig.ConfigureAutofac(services);
 
+            /* Chose registration of test sql lite or sql server*/
             if (Configuration.GetSection("RegistrationSettings").Get<RegistrationSettings>().ContextType == ContextType.SQL)
             {
                 ConfigureAutofacDbContexts(services, AutofacConfig.GetContainer());

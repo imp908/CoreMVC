@@ -2,6 +2,7 @@
 
 namespace crmvcsb.API.Areas
 {
+    using Microsoft.AspNetCore.Diagnostics;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using System;
@@ -20,7 +21,11 @@ namespace crmvcsb.API.Areas
         [Route("errordev")]
         public ActionResult ErrorDev()
         {
-            return BadRequest();
+            var context = HttpContext.Features.Get<IExceptionHandlerFeature>();
+
+            return Problem(
+                detail: context.Error.StackTrace,
+                title: context.Error.Message);
         }
         
         [Route("errorprod")]

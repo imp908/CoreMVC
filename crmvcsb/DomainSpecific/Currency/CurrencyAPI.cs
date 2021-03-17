@@ -3,6 +3,14 @@
 namespace crmvcsb.Universal.DomainSpecific.Currency.API
 {
 
+    public class CurrencyRateAdd : ICurrencyRateAdd
+    {
+        public string FromCurrency { get; set; }
+        public string ToCurrency { get; set; }
+        public DateTime Date { get; set; }
+        public decimal Value { get; set; }
+    }
+
     public class GetCurrencyCommand : IGetCurrencyCommand
     {
         public string FromCurrency { get; set; }

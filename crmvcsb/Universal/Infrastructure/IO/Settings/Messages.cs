@@ -26,6 +26,7 @@ namespace crmvcsb.Infrastructure.IO.Settings
             {
                 public string Success;
                 public string Error;
+                public string ModelValidationError;
                 public string Information;
                 public string EntityNotFound;
                 public string EntityAllreadyExistFound;
@@ -78,6 +79,7 @@ namespace crmvcsb.Infrastructure.IO.Settings
 
             Variables.Messages.InfoMessageTypes.Success = @"Success";
             Variables.Messages.InfoMessageTypes.Error = @"Error";
+            Variables.Messages.InfoMessageTypes.ModelValidationError = @"ModelValidationError";
             Variables.Messages.InfoMessageTypes.Information = @"Information";
             Variables.Messages.InfoMessageTypes.EntityNotFound = @"Entity not found";
             Variables.Messages.InfoMessageTypes.EntityAllreadyExistFound = @"Entity allready exist";
@@ -125,6 +127,14 @@ namespace crmvcsb.Infrastructure.IO.Settings
             return result;
         }
 
+        public static string ModelValidationErrorOnCreate(string type, string database)
+        {
+            return MessagesComposite.messageActionTypeDb(
+            MessagesInitialization.Variables.Messages.InfoMessageTypes.ModelValidationError,
+            MessagesInitialization.Variables.Messages.ActionTypes.onCreation, type,
+            database);
+        }
+
         public static string EntityAllreadyExists(string type, string database)
         {
             return MessagesComposite.messageActionTypeDb(
@@ -136,6 +146,13 @@ namespace crmvcsb.Infrastructure.IO.Settings
         {
             return MessagesComposite.messageActionTypeDb(
                     MessagesInitialization.Variables.Messages.InfoMessageTypes.Success,
+                    MessagesInitialization.Variables.Messages.ActionTypes.onCreation, type,
+                   database);
+        }
+        public static string EntityNotFoundOnCreation(string type, string database)
+        {
+            return MessagesComposite.messageActionTypeDb(
+                    MessagesInitialization.Variables.Messages.InfoMessageTypes.EntityNotFound,
                     MessagesInitialization.Variables.Messages.ActionTypes.onCreation, type,
                    database);
         }

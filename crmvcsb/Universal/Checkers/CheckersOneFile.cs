@@ -3515,6 +3515,33 @@ namespace KATAS
 
         }
 
+        public static class DigitSumm
+        {
+            public static void GO()
+            {
+                List<int> nums = new List<int>();
+                Random rnd = new Random();
+                for(int i = 0; i < 10; i++)
+                {
+                    nums.Add(rnd.Next(1, 100000));
+                }
+                nums.ForEach(s => {
+                    var sum = sumOfDigits(s);
+                    System.Diagnostics.Trace.WriteLine($"digit: {s}; sum = {sum};");
+                });
+            }
+
+            static int sumOfDigits(int number)
+            {
+                int result = 0;
+                while(number != 0)
+                {
+                    result += number % 10;
+                    number /= 10;
+                }
+                return result;
+            }
+        }
 
 
         //Kasper

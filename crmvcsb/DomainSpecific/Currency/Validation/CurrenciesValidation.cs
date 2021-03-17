@@ -2,8 +2,8 @@
 
 namespace crmvcsb.DomainSpecific.Validation
 {
-
     using crmvcsb.Universal.DomainSpecific.Currency.API;
+    using crmvcsb.Universal.DomainSpecific.Currency.DAL;
     using crmvcsb.Universal;
     using FluentValidation;
 
@@ -27,22 +27,58 @@ namespace crmvcsb.DomainSpecific.Validation
         }
     }
 
+    public class AddCurrencyRateValidation
+       : AbstractValidator<ICurrencyRateAdd>
+    {
+        public AddCurrencyRateValidation()
+        {
+            RuleFor(c => c.FromCurrency).NotNull().NotEmpty();
+            RuleFor(c => c.ToCurrency).NotNull().NotEmpty();
+            RuleFor(c => c.Date).NotNull().NotEmpty();
+            RuleFor(c => c.Value).NotNull().NotEmpty();
+        }
+    }
+
+    public class CurrencyRateDALValidation
+        : AbstractValidator<CurrencyRatesDAL>
+    {
+        public CurrencyRateDALValidation()
+        {
+            RuleFor(c => c.CurrencyFromId).NotNull().NotEmpty();
+            RuleFor(c => c.CurrencyToId).NotNull().NotEmpty();
+            RuleFor(c => c.Date).NotNull().NotEmpty();
+            RuleFor(c => c.Rate).NotNull().NotEmpty().NotEqual(0);
+        }
+    }
+
     public class ValidatorCustom : IValidatorCustom
     {
         CurrenciesValidation cv = new CurrenciesValidation();
         CurrencyUpdatevalidation cvUpdate = new CurrencyUpdatevalidation();
-        public void Validate<T>(T item)
+        AddCurrencyRateValidation rateAdd = new AddCurrencyRateValidation();
+
+        CurrencyRateDALValidation rateAddDAL = new CurrencyRateDALValidation();
+
+        public bool isValid<T>(T item)
         {
+            bool isValid = false;
             switch (item)
             {
                 case CurrencyUpdateAPI b:
-                    cvUpdate.Validate(b);
+                    isValid = cvUpdate.Validate(b).IsValid;
                     break;
                 case CurrencyAPI a:
-                    cv.Validate(a);
+                    isValid = cv.Validate(a).IsValid;
+                    break;
+                case CurrencyRateAdd c:
+                    isValid = rateAdd.Validate(c).IsValid;
+                    break;
+                case CurrencyRatesDAL c:
+                    isValid = rateAddDAL.Validate(c).IsValid;
                     break;
             }
 
+            return isValid;
         }
     }
 }

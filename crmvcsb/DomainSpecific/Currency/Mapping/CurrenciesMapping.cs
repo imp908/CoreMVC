@@ -28,6 +28,17 @@
                    .ForMember(d => d.Name, m => m.MapFrom(src => src.Name))
                    .ReverseMap().ForAllOtherMembers(o => o.Ignore());
 
+                cfg.CreateMap<ICurrencyRateAdd, CurrencyRatesDAL>()                    
+                    .ForMember(d => d.Date, m => m.MapFrom(src => src.Date))
+                    .ForMember(d => d.Rate, m => m.MapFrom(src => src.Value))                    
+                    .ReverseMap().ForAllOtherMembers(o => o.Ignore());
+                
+                cfg.CreateMap<CurrencyRatesDAL, ICurrencyRateAdd>()
+                    .ForMember(d => d.Date, m => m.MapFrom(src => src.Date))
+                    .ForMember(d => d.Value, m => m.MapFrom(src => src.Rate))
+                    .ForMember(d => d.FromCurrency, m => m.MapFrom(src => src.CurrencyFrom.IsoCode))
+                    .ForMember(d => d.ToCurrency, m => m.MapFrom(src => src.CurrencyTo.IsoCode))
+                    .ReverseMap().ForAllOtherMembers(o => o.Ignore());
             });
         }
     }

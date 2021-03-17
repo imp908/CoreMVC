@@ -42,9 +42,10 @@ namespace crmvcsb.DomainSpecific.Infrastructure.EF
         }
 
 
+        /*Currencies*/
         public async Task<ICurrencyAPI> AddCurrency(ICurrencyAPI currency)
         {
-            _validator.Validate(currency);
+            var isValid = _validator.isValid(currency);
 
             var currencyExists = _repositoryWrite.QueryByFilter<CurrencyDAL>(s => s.IsoCode == currency.IsoCode).FirstOrDefault();
             if (currencyExists != null)
@@ -72,7 +73,7 @@ namespace crmvcsb.DomainSpecific.Infrastructure.EF
         }
         public ICurrencyUpdateAPI UpdateCurrency(ICurrencyUpdateAPI currency)
         {
-            _validator.Validate(currency);
+            var isValid = _validator.isValid(currency);
             var currencyExists = _repositoryWrite.QueryByFilter<CurrencyDAL>(s => s.IsoCode == currency.IsoCode).FirstOrDefault();
             if (currencyExists == null)
             {
@@ -100,7 +101,7 @@ namespace crmvcsb.DomainSpecific.Infrastructure.EF
         }
         public IServiceStatus DeleteCurrency(ICurrencyUpdateAPI currency)
         {
-            _validator.Validate(currency);
+            var isValid = _validator.isValid(currency);
             var currencyExists = _repositoryWrite.QueryByFilter<CurrencyDAL>(s => s.IsoCode == currency.IsoCode).FirstOrDefault();
             if (currencyExists == null)
             {
@@ -119,6 +120,56 @@ namespace crmvcsb.DomainSpecific.Infrastructure.EF
             return this._status;
         }
 
+
+        public async Task<ICurrencyRateAdd> AddCurrencyRateQuerry(ICurrencyRateAdd query)
+        {
+            ICurrencyRateAdd result = null;
+
+            var isValid = _validator.isValid(query);
+            if (!isValid)
+            {
+                base.statusChangeAndLog(new Failure(), MessagesComposite.ModelValidationErrorOnCreate(query.GetType().Name, this._repositoryWrite.GetDatabaseName()));
+                return null;
+            }
+
+            var currencyFrom = await _repositoryWrite.QueryByFilter<CurrencyDAL>(s => s.IsoCode == query.FromCurrency).FirstOrDefaultAsync();
+            if(currencyFrom == null)
+            {
+                base.statusChangeAndLog(new Failure(), MessagesComposite.EntityNotFoundOnCreation(currencyFrom.GetType().Name, this._repositoryWrite.GetDatabaseName()));
+                return null;
+            }
+            var currencyTo = await _repositoryWrite.QueryByFilter<CurrencyDAL>(s => s.IsoCode == query.ToCurrency).FirstOrDefaultAsync();
+            if (currencyTo == null)
+            {
+                base.statusChangeAndLog(new Failure(), MessagesComposite.EntityNotFoundOnCreation(currencyTo.GetType().Name, this._repositoryWrite.GetDatabaseName()));
+                return null;
+            }
+            var currencyCrossRate = await _repositoryWrite.QueryByFilter<CurrencyRatesDAL>(s => s.CurrencyFromId == currencyFrom.Id && s.CurrencyToId == currencyTo.Id
+                && s.Date.Year == query.Date.Year && s.Date.Month == query.Date.Month && s.Date.Day == query.Date.Day).FirstOrDefaultAsync();
+            if (currencyCrossRate != null)
+            {
+                base.statusChangeAndLog(new Failure(), MessagesComposite.EntityAllreadyExists(currencyCrossRate.GetType().Name, this._repositoryWrite.GetDatabaseName()));
+                return null;
+            }
+            
+            var crossRateToAdd = _mapper.Map<ICurrencyRateAdd, CurrencyRatesDAL>(query);
+            crossRateToAdd.CurrencyFromId = currencyFrom.Id;
+            crossRateToAdd.CurrencyToId = currencyTo.Id;
+
+            isValid = _validator.isValid(crossRateToAdd);
+            if (!isValid)
+            {
+                base.statusChangeAndLog(new Failure(), MessagesComposite.ModelValidationErrorOnCreate(crossRateToAdd.GetType().Name, this._repositoryWrite.GetDatabaseName()));
+                return null;
+            }
+
+            await _repositoryWrite.AddAsync<CurrencyRatesDAL>(crossRateToAdd);
+            await _repositoryWrite.SaveAsync();
+
+            result = _mapper.Map<CurrencyRatesDAL, ICurrencyRateAdd>(crossRateToAdd);
+
+            return result;
+        }
 
         public async Task<IList<ICrossCurrenciesAPI>> GetCurrencyCrossRatesAsync(IGetCurrencyCommand command)
         {
@@ -188,6 +239,7 @@ namespace crmvcsb.DomainSpecific.Infrastructure.EF
 
             return result.Cast<ICrossCurrenciesAPI>().ToList();
         }
+
 
         public void ReInitialize()
         {

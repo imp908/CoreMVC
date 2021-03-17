@@ -68,6 +68,17 @@ namespace crmvcsb.Areas.TestArea.Controllers
             return $"Get: {isoOrName}";
         }
 
+        [HttpPost("CurrencyRateAdd")]
+        public async Task<IActionResult> CurrencyRateAdd(CurrencyRateAdd currency)
+        {
+            var item = await _Currencyservice.AddCurrencyRateQuerry(currency);
+            if (item == null)
+            {
+                return StatusCode(500, "Object not created");
+            }
+            return Created("Object created", item);
+        }
+
         [HttpGet("HealthCheck")]
         public ActionResult<string> HealthCheck()
         {
