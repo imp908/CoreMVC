@@ -33,6 +33,8 @@
                     .ForMember(d => d.Rate, m => m.MapFrom(src => src.Value))                    
                     .ReverseMap().ForAllOtherMembers(o => o.Ignore());
                 
+
+
                 cfg.CreateMap<CurrencyRatesDAL, ICurrencyRateAdd>()
                     .ForMember(d => d.Date, m => m.MapFrom(src => src.Date))
                     .ForMember(d => d.Value, m => m.MapFrom(src => src.Rate))

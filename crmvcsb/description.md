@@ -426,7 +426,8 @@ DONE:[
         <- 12.03.2021 13:00 14:20 2h 20m net core exception handling ->
 
         -> currency dictionary CRUD
-        -> currency cross rates CRUD
+        + 17.03.2021 3h 30m 
+            -> currency cross rates CRUD
         -> currency cross rates recount from curency changes via rabbit mq
         -> sync from write db to read
        

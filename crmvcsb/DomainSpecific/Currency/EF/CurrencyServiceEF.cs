@@ -170,7 +170,7 @@ namespace crmvcsb.DomainSpecific.Infrastructure.EF
 
             return result;
         }
-
+    
         public async Task<IList<ICrossCurrenciesAPI>> GetCurrencyCrossRatesAsync(IGetCurrencyCommand command)
         {
 
