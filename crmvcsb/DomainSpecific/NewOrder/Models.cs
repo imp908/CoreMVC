@@ -7,19 +7,36 @@ namespace crmvcsb.Universal.DomainSpecific.NewOrder.DAL
 
     using crmvcsb.Universal;
 
+
+    //!!!=> replace navigation properties with id lists
+
+    /*Client service*/
+    public class ClientDAL : EntityGuidIdDAL
+    {
+        public string ClientName { get; set; }
+        IList<int> OrdersIds { get; set; }
+        IList<int> AddressesIds { get; set; }
+    }
+
+    /*Financial service*/
+    public class FinancialDAL : EntityGuidIdDAL
+    {
+        public int ClientId { get; set; }
+        public double Amount { get; set; }
+    }
+   
+    /*Products service */
     public class PhysicalUnitConvertions : EntityIntIdDAL
     {
         public PhysicalUnitDAL UnitFrom { get; set; }
         public PhysicalUnitDAL UnitTo { get; set; }
         public double Coefficient { get; set; }
     }
-
     /*Kg,Pnd,sm,meter, m3 etc*/
     public class PhysicalUnitDAL : EntityIntIdDAL
     {
         public string Name { get; set; }
     }
-
     /*Length, Height, Weight or density exmpl*/
     public class PhysicalDimensionDAL : EntityIntIdDAL
     {
@@ -32,7 +49,7 @@ namespace crmvcsb.Universal.DomainSpecific.NewOrder.DAL
         /*And sm, kg, m/sq3 goes here*/
         public PhysicalUnitDAL DimensionUnit { get; set; }
     }
-    public class GoodsDAL : EntityIntIdDAL
+    public class ProductsDAL : EntityIntIdDAL
     {
         public string ProductName { get; set; }
 
@@ -44,6 +61,16 @@ namespace crmvcsb.Universal.DomainSpecific.NewOrder.DAL
     }
 
 
+    /*Order service*/
+    public class OrderDAL : EntityGuidIdDAL
+    {
+        public int ClientId { get; set; }
+        public double Price { get; set; }
+        IList<int> OrderedProducts { get; set; }
+    }
+
+
+    /*Delivery service*/
     public class AddressDAL : EntityIntIdDAL
     {
         public string Country { get; set; }
@@ -68,27 +95,21 @@ namespace crmvcsb.Universal.DomainSpecific.NewOrder.DAL
         public List<RouteVertexDAL> RouteVertexes { get; set; }
     }
 
-
     public class DeliveryItemDAL : EntityGuidIdDAL
     {
         public string DeliveryName { get; set; }
         public int DeliveryNumber { get; set; }
 
-        List<GoodsDAL> GoodsToDeliver { get; set; }
-        List<RouteDAL> Routes { get; set; }
+        IList<int> OrdersIds { get; set; }
+        IList<int> Addresses { get; set; }
+
+        IList<RouteDAL> routes { get; set; }
     }
 
-    public class ClientDAL : EntityGuidIdDAL
-    {
-        public string ClientName { get; set; }
-        List<OrderDAL> Orders { get; set; }
-    }
 
-    public class OrderDAL : EntityGuidIdDAL
-    {
-        public ClientDAL Client { get; set; }
-        List<DeliveryItemDAL> OrderedItems { get; set; }
-    }
+  
+
+   
 
 }
 

@@ -44,7 +44,7 @@ namespace crmvcsb.Infrastructure.EF.NewOrder
         public DbSet<PhysicalDimensionDAL> PhysicalDimensions { get; set; }
 
 
-        public DbSet<GoodsDAL> Goods { get; set; }
+        public DbSet<ProductsDAL> Goods { get; set; }
 
 
         public DbSet<DeliveryItemDAL> DeliveryItems { get; set; }
