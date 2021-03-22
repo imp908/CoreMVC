@@ -130,8 +130,7 @@ namespace NetPlatformCheckers
     }
 
 
-    /* strings check */
-
+    /* strings concatenation check */
     /*--------------------------------------------- */
     public class StringsCheck
     {
@@ -154,7 +153,7 @@ namespace NetPlatformCheckers
         {
 
             var strAndChar = "1" + '2'; // 1 + code of 2
-            
+
             var strAndInt = "1" + 2 + 3; // 123
             var intAndStr = 1 + 2 + "3";  // 33
 
@@ -227,6 +226,200 @@ namespace NetPlatformCheckers
         }
     }
 
+    /*
+     * 
+        !!! obj(str) str - point to one obj, if not new string(
+    ==
+        by ref
+            obj obj(str)
+            obj str 
+            obj(str) str
+        by val    
+            str str 
+
+    equals
+        by val
+            obj obj
+            obj str
+            str str
+    referenceEquals 
+        by ref
+
+     */
+    public static class StringObjectUquality
+    {
+        public static void GO()
+        {
+
+            string a = new string(new char[] { 'a' });
+            string b = new string(new char[] { 'a' });     
+
+            object c = new string(new char[] { 'a' });
+            object d = new string(new char[] { 'a' });
+
+            var result = false;
+            
+            result = a.Equals(b); //true
+            result = a == b; //true
+            result = string.ReferenceEquals(a, b); //false (not from same string)
+            result = string.ReferenceEquals(c, d); //false
+
+            result = c.Equals(d); //true
+            result = c == d; //false
+
+            result = object.ReferenceEquals(a, b); //false
+            result = object.ReferenceEquals(c, d); //false
+
+
+            object objStr = "String";
+            object objRef = objStr;
+
+            string strNew = typeof(string).Name; 
+
+            string str1 = "String";
+            string str2 = "String";
+
+            object objStr2 = "String";
+
+
+
+            object o1 = new string("String");
+            object o2 = o1;
+            object o3 = new string("String");
+            object o4 = "String";
+            object o5 = "String";
+
+            string s1 = new string("String");
+            string s2 = s1;
+            string s3 = new string("String");
+            string s4 = "String";
+            string s5 = "String";
+
+            List<object> objs = new List<object>() { o1, o2, o3, o4, o5 };
+            List<string> strs = new List<string>() { s1,s2,s3,s4,s5 };
+
+            //ReferenceEquals
+                //obj(str)||str""
+                //true
+                result = object.ReferenceEquals(o1, o2);
+                result = object.ReferenceEquals(o4, o5);
+                result = object.ReferenceEquals(s1, s2);
+                result = object.ReferenceEquals(s4, s5);
+
+                //false
+                result = object.ReferenceEquals(o1, o3);
+                result = object.ReferenceEquals(o1, o4);
+                result = object.ReferenceEquals(o1, o5);
+                result = object.ReferenceEquals(o2, o3);
+                result = object.ReferenceEquals(o2, o4);
+                result = object.ReferenceEquals(o2, o5);
+                result = object.ReferenceEquals(o3, o4);
+                result = object.ReferenceEquals(o3, o5);
+            
+            //==
+                //obj(new) obj(ref)
+                //obj(str) obj(str)
+                //true
+                result = o1 == o2;
+                result = o4 == o5;
+
+                //obj(ref) obj(new), obj(str)
+                //obj(new) obj(str) obj(new)
+                //false
+                result = o1 == o3;
+                result = o1 == o4;
+                result = o2 == o3; 
+                result = o2 == o4;
+                result = o2 == o5;            
+                result = o3 == o4;
+                result = o3 == o5;
+
+                //obj(new) str(new),str(ref),str
+                //false
+                result = o1 == s1;
+                result = o1 == s2;
+                result = o1 == s3;
+                result = o1 == s4;
+                result = o1 == s5;
+                result = o2 == s1;
+                result = o2 == s2;
+                result = o2 == s3;
+                result = o2 == s4;
+                result = o2 == s5;
+                result = o3 == s1;
+                result = o3 == s2;
+                result = o3 == s3;
+                result = o3 == s4;
+                result = o3 == s5;
+                result = o4 == s1;
+                result = o4 == s2;
+                result = o4 == s3;
+
+                //obj(str) str
+                //true
+                result = o4 == s4;
+                result = o4 == s5;
+                result = o5 == s4;
+                result = o5 == s5;
+
+                //str str(new)
+                //true
+                result = s1 == s2;
+                result = s1 == s3;
+                result = s1 == s4;
+                result = s1 == s5;
+                result = s2 == s3;
+                result = s2 == s4;
+                result = s2 == s5;
+                result = s3 == s4;
+                result = s3 == s5;
+                result = s4 == s5;
+
+
+            //equals
+                //all objects from string all by val
+                //true
+                result = o1.Equals(o2);
+                result = o4.Equals(o5);
+                result = o1.Equals(o3);
+                result = o1.Equals(o4);
+                result = o1.Equals(o5);
+                result = o2.Equals(o3);
+                result = o2.Equals(o4);
+                result = o2.Equals(o5);
+                result = o3.Equals(o4);
+                result = o3.Equals(o5);
+
+                //obj str - all by val
+                //true
+                result = o1.Equals(s1);
+                result = o1.Equals(s2);
+                result = o1.Equals(s3);
+                result = o1.Equals(s4);
+                result = o1.Equals(s5);
+                result = o2.Equals(s1);
+                result = o2.Equals(s2);
+                result = o2.Equals(s3);
+                result = o2.Equals(s4);
+                result = o2.Equals(s5);
+                result = o3.Equals(s1);
+                result = o3.Equals(s2);
+                result = o3.Equals(s3);
+                result = o3.Equals(s4);
+                result = o3.Equals(s5);
+                result = o4.Equals(s1);
+                result = o4.Equals(s2);
+                result = o4.Equals(s3);
+                result = o4.Equals(s4);
+                result = o4.Equals(s5);
+                result = o5.Equals(s1);
+                result = o5.Equals(s2);
+                result = o5.Equals(s3);
+                result = o5.Equals(s4);
+                result = o5.Equals(s5);
+           
+        }
+    }
 
     /*PatternMatching check */
 
@@ -256,6 +449,8 @@ namespace NetPlatformCheckers
                 default:
                     break;
             }
+
+            
         }
 
         public static void MatchExp()
@@ -1416,7 +1611,7 @@ namespace NetPlatformCheckers
 
 
 
-    /*Indexer */
+    /* Indexer */
     /*--------------------------------------------- */
     interface IIndexer_
     {
@@ -4630,6 +4825,29 @@ namespace KATAS
         }
       
     }
+    
+    public class BraketsChecker
+    {
+        public static void GO() {
+            var item1 = "c * [ (a+b) / d]";
+            var item2 = "(c * [a+b) / d]";
+
+            var parse1 = BraketsChecker.parse(item1);
+            var parse2 = BraketsChecker.parse(item2);
+        }
+
+        public static bool parse(string input)
+        {
+            int round = 0;
+            int square = 0;
+            input.ToList().Select(s => {
+                return false;
+            });
+
+            return round == 0 && square == 0;
+        }
+    }
+
 }
 
 
