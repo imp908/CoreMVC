@@ -12,6 +12,7 @@ namespace crmvcsb
             try
             {
                 LINQtoObjectsCheck.LinqCheck.GO();
+                KATAS.BraketsChecker.GO();                
                 var bld = CreateWebHostBuilder(args).Build();
                 bld.Run();
             }

@@ -163,6 +163,7 @@ namespace NetPlatformCheckers
 
             var cahrsAndStrAndInt1 = "1" + "2" + '3' + 4 + 5; // to str 12345
             var cahrsAndStrAndInt2 = 0 + "1" + "2" + '3' + 4 + 5; // to str 012345
+      
         }
     }
 
@@ -246,7 +247,7 @@ namespace NetPlatformCheckers
         by ref
 
      */
-    public static class StringObjectUquality
+    public static class StringObjectEquality
     {
         public static void GO()
         {
@@ -315,7 +316,16 @@ namespace NetPlatformCheckers
                 result = object.ReferenceEquals(o2, o5);
                 result = object.ReferenceEquals(o3, o4);
                 result = object.ReferenceEquals(o3, o5);
-            
+                result = object.ReferenceEquals(s1, s3);
+                result = object.ReferenceEquals(s1, s4);
+                result = object.ReferenceEquals(s1, s5);
+                result = object.ReferenceEquals(s2, s3);
+                result = object.ReferenceEquals(s2, s4);
+                result = object.ReferenceEquals(s2, s5);
+                result = object.ReferenceEquals(s3, s4);
+                result = object.ReferenceEquals(s3, s5);
+
+
             //==
                 //obj(new) obj(ref)
                 //obj(str) obj(str)
@@ -2542,7 +2552,8 @@ namespace LINQtoObjectsCheck
 
             var txt = @"aa b c das asdaa sd aa s aas";
             string src = "aa";
-            var schcnt = txt.Split().Where(s => s.ToLowerInvariant() == src.ToLowerInvariant()).Count();        
+            var schcnt = txt.Split().Where(s => s.ToLowerInvariant() == src.ToLowerInvariant()).Count();
+ 
 
             /* Group by count on join of Anonymous dynamic 
              left join */
@@ -2557,8 +2568,9 @@ namespace LINQtoObjectsCheck
                 new { Id = 4, Evnt = "evnt5", adventurerId = 0 }
             };
 
+     
             /*Query group by*/
-            var joinGroupSum =
+            var joinGroupCnt =
             (
                 from s1 in adventures
                 join s2 in events on s1.Id equals s2.adventurerId into jn
@@ -2739,16 +2751,21 @@ namespace LINQtoObjectsCheck
                             next.PetsStr.Count() > seed?.PetsStr?.Count() ? next : seed,
                 po => po);
 
-            // var g =
-            //     from t in cups
-            //     group t by new { t.Competition } into t2
-            //     select new {Cup = t2.Key, Count = t2.Key.Count(), 
-            //Racer = from s in t2 select s.RacerName };
+            //left join from different sources
+            var a =( 
+                from h1 in racers
+                    join i1 in cups on new { Name = h1.Name } equals new { Name = i1.RacerName } into jn
+                    from s3 in jn.DefaultIfEmpty()                    
+                    select new { 
+                        Name = h1?.Name ?? "", 
+                        Car = h1?.Car ?? "" ,
+                        Competition = s3?.Competition ?? "" , 
+                        Position = s3?.Position
+                    }).Skip(2*2).Take(2).ToList();
 
-
-            //join from different sources            
+            //join from different sources
             var h = from s in racers select s;
-            var i = from s in cups select s;
+            var i = from s in cups select s;            
             var j =
                 (from t in h
                  join t2 in i on new { Name = t.Name } equals new { Name = t2.RacerName }
@@ -2758,9 +2775,10 @@ namespace LINQtoObjectsCheck
                      t.Car,
                      t2.Competition,
                      t2.Position
-                 }).Skip(2 * 2).Take(2);
+                 }).Skip(2 * 2).Take(2).ToList();
             ;
 
+            
             var leftJoin =
             (from s in cups
              join c in racers on s.RacerName equals c.Name into t
@@ -2843,17 +2861,34 @@ namespace LINQtoObjectsCheck
                             (u, a) =>
                                 new { OwnerName = u.name, Pet = a.name });
 
-            List<Address> usersNUll = null;
-            if (usersNUll?.ToList().Any() == true)
+            List<Address> usersNUll = null;            
+            if (usersNUll?.Any() == true)
+            {
+
+            }
+            if (usersNUll?.Any() == false) { 
+            
+            }
+            if (usersNUll?.Any() != true)
             {
 
             }
             usersNUll = new List<Address>();
-            if (usersNUll?.ToList().Any() == true)
+            if (usersNUll?.Any() == true)
             {
 
             }
-            if (addresses?.ToList().Any() == true)
+
+            if (usersNUll?.Any() == false)
+            {
+
+            }
+            if (usersNUll?.Any() != true)
+            {
+
+            }
+            usersNUll.Add(new Address());
+            if (addresses?.Any() == true)
             {
 
             }
@@ -4814,7 +4849,7 @@ namespace KATAS
                 JsonSerializer.Serialize(
                     JsonSerializer.Deserialize<IEnumerable<T>>(
                         await new HttpClient()
-                        .GetAsync("")?
+                        .GetAsync("https://api.worldremit.com/api/countries")?
                         .Result
                         .Content
                         .ReadAsStringAsync()
@@ -4822,8 +4857,8 @@ namespace KATAS
                 )
             );
             return JsonSerializer.Deserialize<IEnumerable<T>>(await new HttpClient().GetAsync("")?.Result.Content.ReadAsStringAsync());
-        }
-      
+        }     
+
     }
     
     public class BraketsChecker
@@ -4831,20 +4866,76 @@ namespace KATAS
         public static void GO() {
             var item1 = "c * [ (a+b) / d]";
             var item2 = "(c * [a+b) / d]";
-
-            var parse1 = BraketsChecker.parse(item1);
-            var parse2 = BraketsChecker.parse(item2);
+            List<string> strsOK = new List<string>() {
+                "c * [ (a+b) / d]",  "()[][()]","([])[()]", "()","[]"
+            };
+            List<string> strsNotOK = new List<string>() {
+                "(c * [a+b) / d]", ")[]", "]()", "[(())])" , "(([[])"
+            };
+            var isOK = strsOK.Select(s => braketsCount(s)).All(s => s == true);
+            var isNotOK = strsNotOK.Select(s => braketsCount(s)).All(s => s == false);
+            
         }
 
-        public static bool parse(string input)
-        {
-            int round = 0;
-            int square = 0;
-            input.ToList().Select(s => {
-                return false;
-            });
+        static Func<string, bool> braketsCount = (s) => {
 
-            return round == 0 && square == 0;
+            Stack<char> brackets = new Stack<char>();
+
+            foreach (char i in s)
+            {
+                if (brackets.Count == 0)
+                {
+                    if (i == ')' || i == ']') { return false; }
+                    if (i == '(' || i == '[') { brackets.Push(i); };
+                }
+                else
+                {
+                    if (i == ')') { if (brackets.Pop() != '(') { return false; } }
+                    if (i == ']') { if (brackets.Pop() != '[') { return false; } }
+
+                    if (i == '(' || i == '[') { brackets.Push(i); };
+                }
+            }
+
+            return brackets.Count == 0;
+
+        };
+    }
+
+
+    public class RoomNum
+    {
+        public int Section { get; set; }
+        public int RoomNumber { get; set; }
+    }
+    public class TrainRooms {
+
+        public static List<RoomNum> rooms;
+        public static void GO() {
+            init();
+
+            var section1 = rooms.Where(s => s.RoomNumber == 4).FirstOrDefault().Section;
+            var section2 = rooms.Where(s => s.RoomNumber == 52).FirstOrDefault().Section;
+        }
+
+        public static void init() {
+            rooms = new List<RoomNum>();
+
+            int section = 1;
+            
+            //fill rooms
+            for(int i = 1; i<=36; i++)
+            {
+                rooms.Add(new RoomNum() { Section = section, RoomNumber = i });
+                if(i % 4 == 0) { section += 1; }
+            }
+
+            section = 1;
+            for(int i =54; i>=37; i--)
+            {
+                rooms.Add(new RoomNum() { Section = section, RoomNumber = i });
+                if (i % 2 == 0) { section += 1; }
+            }
         }
     }
 
