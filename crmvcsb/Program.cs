@@ -12,6 +12,7 @@ namespace crmvcsb
         {
             try
             {
+                InfrastructureCheckers.Buss.GO();
                 NetPlatformCheckers.StringsCheck.GO();
                 LINQtoObjectsCheck.LinqCheck.GO();
                 KATAS.BraketsChecker.GO();

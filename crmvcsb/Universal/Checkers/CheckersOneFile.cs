@@ -42,6 +42,8 @@ namespace InfrastructureCheckers
     using Microsoft.EntityFrameworkCore;
     using System.Collections.Generic;
     using System.Linq;
+    using crmvcsb.Universal.Infrastructure.Bus;
+    using System.Text;
 
     public static class RepoAndUOWCheck
     {
@@ -87,6 +89,33 @@ namespace InfrastructureCheckers
 
     }
 
+    public class Buss
+    {
+        public delegate string RabbitBody(byte[] body);
+        static Buss buss = new Buss();
+        BusWrapper bw = new BusWrapper();
+        public static void GO()
+        {
+            buss.check();
+        }
+
+        void check()
+        {
+            bw.Bind("SEC", "TO");         
+            bw.ReceiveBind(ProcessMessage);            
+        }
+
+        public void Send()
+        {
+            bw.Bind("TO", "SEC");
+            bw.SendMessage("tesMessage");
+        }
+        public string ProcessMessage(byte[] body)
+        {
+            var message = Encoding.UTF8.GetString(body);
+            return message;
+        }
+    }
 }
 
 
