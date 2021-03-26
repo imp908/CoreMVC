@@ -3033,11 +3033,11 @@ namespace LINQtoObjectsCheck
                     properties = new List<Property1>(){
                     props1[0]
                 }, Items1Ids = new List<int>(){ 0 } },
-                new Item2(){Id=0,Name="item2",
+                new Item2(){Id=1,Name="item2",
                     properties = new List<Property1>(){
                     new Property1(){ Id = 0, Name = "prop1"}
                 }, Items1Ids = new List<int>(){ 0,1,2 }},
-                new Item2(){Id=0,Name="item3",
+                new Item2(){Id=2,Name="item3",
                     properties = new List<Property1>(){
                     props1[2],new Property1(){ Id = 2, Name = "prop5"}
                 }}
@@ -3122,6 +3122,42 @@ namespace LINQtoObjectsCheck
                     count = g.Count(s => !string.IsNullOrEmpty(s?.s3?.Name))
                 }
             ).ToList();
+
+            var selectMany = items1.SelectMany(i => i.properties, (l, r) => new { item = l.Name, name = r.Name })
+                .ToList();
+            var selectManySelect = items1.SelectMany(i => i.properties, (l, r) => new { item = l, property = r })
+                .Select(s=> new { 
+                    item =s.item.Name,
+                    name = s.property.Name
+                }).ToList();
+
+            var selectManyItems2 = items2.SelectMany(i => i.properties, (l, r) => new { item = l.Name, name = r.Name });
+
+            //multiple join multiple group by
+            var groupByMultipleLeftjoinMultiple =
+                from s1 in selectManySelect
+                join s2 in selectManyItems2 on new {s1.item,s1.name } equals new { s2.item, s2.name} into jn
+                from s3 in jn.DefaultIfEmpty()                
+                //group (s3) by new { name = s1.item, prop = s1.name} into g
+                // || or
+                group new { s3} by new { name = s1.item, prop = s1.name } into g
+                select new
+                {
+                    item = g.Key,
+                    prop = g.Key.name,
+                    items2Cnt = g.Count(c => !string.IsNullOrEmpty(c?.s3?.name))
+                };
+
+            var groupByMultipleInnerJoin =
+                from s1 in selectManySelect
+                join s2 in items2 on s1.item equals s2.Name
+                group s1 by new { s1.name, s1.item } into g
+                select new { 
+                    item = g.Key,
+                    name = g.Key.name,
+                    item2 = g.Count(c=>!string.IsNullOrEmpty(c?.name))
+                };
+          
         }
 
         public static void bulkCheck()
