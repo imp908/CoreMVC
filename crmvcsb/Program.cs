@@ -7,12 +7,15 @@ namespace crmvcsb
 {
     public class Program
     {
+     
         public static void Main(string[] args)
         {
             try
             {
+                NetPlatformCheckers.StringsCheck.GO();
                 LINQtoObjectsCheck.LinqCheck.GO();
-                KATAS.BraketsChecker.GO();                
+                KATAS.BraketsChecker.GO();
+                NetPlatformCheckers.Operators.GO();
                 var bld = CreateWebHostBuilder(args).Build();
                 bld.Run();
             }

@@ -42,8 +42,6 @@ namespace InfrastructureCheckers
     using Microsoft.EntityFrameworkCore;
     using System.Collections.Generic;
     using System.Linq;
-    using crmvcsb.Universal;
-    using crmvcsb.Infrastructure.EF;
 
     public static class RepoAndUOWCheck
     {
@@ -130,6 +128,58 @@ namespace NetPlatformCheckers
     }
 
 
+    public static class Operators
+    {
+        public class NumenatorDenumenator
+        {
+            public NumenatorDenumenator()
+            {
+            }
+            public NumenatorDenumenator(int numenator, int denumenator)
+            {
+                _numenator = numenator;
+                _denumenator = denumenator;
+            }
+
+            public static NumenatorDenumenator operator +(NumenatorDenumenator operandB) => operandB;
+            public static NumenatorDenumenator operator -(NumenatorDenumenator operandB) => new NumenatorDenumenator(-operandB._numenator, operandB._denumenator);
+
+            public static NumenatorDenumenator operator +(NumenatorDenumenator a, NumenatorDenumenator b) =>
+                new NumenatorDenumenator(a._numenator * b._denumenator + b._numenator * a._denumenator, a._denumenator * b._denumenator);
+            public static NumenatorDenumenator operator -(NumenatorDenumenator a, NumenatorDenumenator b) =>
+                a + (-b);
+            public static NumenatorDenumenator operator *(NumenatorDenumenator a, NumenatorDenumenator b) =>
+                new NumenatorDenumenator(a._numenator * b._numenator, a._denumenator * b._denumenator);
+            public static NumenatorDenumenator operator /(NumenatorDenumenator a, NumenatorDenumenator b) =>
+                new NumenatorDenumenator(a._numenator * b._denumenator, b._numenator * a._denumenator);
+
+
+            public override string ToString() => $"{_numenator}/{_denumenator}";
+
+
+            public int _numenator { get; set; }
+            public int _denumenator { get; set; }
+        }
+        public static void GO()
+        {
+
+            int? a = null;
+            a ??= 1;
+
+            NumenatorDenumenator dn1 = new NumenatorDenumenator(3, 4);
+            NumenatorDenumenator dn2 = new NumenatorDenumenator(5, 7);
+
+            var t0 = -dn1;
+            var t1 = +dn1;
+
+            var t2 = (dn2 + dn1).ToString();
+            var t3 = (dn2 - dn1).ToString();
+            var t4 = (dn1 * dn2).ToString();
+            var t5 = (dn1 / dn2).ToString();
+        }
+
+    }
+
     /* strings concatenation check */
     /*--------------------------------------------- */
     public class StringsCheck
@@ -151,7 +201,12 @@ namespace NetPlatformCheckers
 
         public static void GO()
         {
+            StringCharIntConcatCheck();
+            stringRefValCheck();
+        }
 
+        public static void StringCharIntConcatCheck()
+        {
             var strAndChar = "1" + '2'; // 1 + code of 2
 
             var strAndInt = "1" + 2 + 3; // 123
@@ -163,9 +218,228 @@ namespace NetPlatformCheckers
 
             var cahrsAndStrAndInt1 = "1" + "2" + '3' + 4 + 5; // to str 12345
             var cahrsAndStrAndInt2 = 0 + "1" + "2" + '3' + 4 + 5; // to str 012345
-      
+
+        }
+
+        public static void stringRefValCheck()
+        {
+            var stringToCheck = "stringchanges";
+            var stringNotChanged = "string";
+
+            notChangesString(stringNotChanged);
+
+            var changedString1 = newString(stringNotChanged);
+            var changedString2 = newString2(stringNotChanged);
+            stringChanges(ref stringNotChanged);
+
+        }
+        public static void notChangesString(string str)
+        {
+            str = str + "changes";
+        }
+        public static string newString(string str)
+        {
+            return str + "changes";
+        }
+        public static string newString2(string str)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(str);
+            sb.Append("changes");
+
+            return sb.ToString();
+        }
+        public static void stringChanges(ref string str)
+        {
+            str = str + "changes";
         }
     }
+
+    /* String and object ==, equals, referenceequals check */
+    public static class StringObjectEquality
+    {
+        public static void GO()
+        {
+
+            string a = new string(new char[] { 'a' });
+            string b = new string(new char[] { 'a' });
+
+            object c = new string(new char[] { 'a' });
+            object d = new string(new char[] { 'a' });
+
+            var result = false;
+
+            result = a.Equals(b); //true
+            result = a == b; //true
+            result = string.ReferenceEquals(a, b); //false (not from same string)
+            result = string.ReferenceEquals(c, d); //false
+
+            result = c.Equals(d); //true
+            result = c == d; //false
+
+            result = object.ReferenceEquals(a, b); //false
+            result = object.ReferenceEquals(c, d); //false
+
+
+            object objStr = "String";
+            object objRef = objStr;
+
+            string strNew = typeof(string).Name;
+
+            string str1 = "String";
+            string str2 = "String";
+
+            object objStr2 = "String";
+
+
+
+            object o1 = new string("String");
+            object o2 = o1;
+            object o3 = new string("String");
+            object o4 = "String";
+            object o5 = "String";
+
+            string s1 = new string("String");
+            string s2 = s1;
+            string s3 = new string("String");
+            string s4 = "String";
+            string s5 = "String";
+
+            List<object> objs = new List<object>() { o1, o2, o3, o4, o5 };
+            List<string> strs = new List<string>() { s1, s2, s3, s4, s5 };
+
+            //ReferenceEquals
+            //obj(str)||str""
+            //true
+            result = object.ReferenceEquals(o1, o2);
+            result = object.ReferenceEquals(o4, o5);
+            result = object.ReferenceEquals(s1, s2);
+            result = object.ReferenceEquals(s4, s5);
+
+            //false
+            result = object.ReferenceEquals(o1, o3);
+            result = object.ReferenceEquals(o1, o4);
+            result = object.ReferenceEquals(o1, o5);
+            result = object.ReferenceEquals(o2, o3);
+            result = object.ReferenceEquals(o2, o4);
+            result = object.ReferenceEquals(o2, o5);
+            result = object.ReferenceEquals(o3, o4);
+            result = object.ReferenceEquals(o3, o5);
+            result = object.ReferenceEquals(s1, s3);
+            result = object.ReferenceEquals(s1, s4);
+            result = object.ReferenceEquals(s1, s5);
+            result = object.ReferenceEquals(s2, s3);
+            result = object.ReferenceEquals(s2, s4);
+            result = object.ReferenceEquals(s2, s5);
+            result = object.ReferenceEquals(s3, s4);
+            result = object.ReferenceEquals(s3, s5);
+
+
+            //==
+            //obj(new) obj(ref)
+            //obj(str) obj(str)
+            //true
+            result = o1 == o2;
+            result = o4 == o5;
+
+            //obj(ref) obj(new), obj(str)
+            //obj(new) obj(str) obj(new)
+            //false
+            result = o1 == o3;
+            result = o1 == o4;
+            result = o2 == o3;
+            result = o2 == o4;
+            result = o2 == o5;
+            result = o3 == o4;
+            result = o3 == o5;
+
+            //obj(new) str(new),str(ref),str
+            //false
+            result = o1 == s1;
+            result = o1 == s2;
+            result = o1 == s3;
+            result = o1 == s4;
+            result = o1 == s5;
+            result = o2 == s1;
+            result = o2 == s2;
+            result = o2 == s3;
+            result = o2 == s4;
+            result = o2 == s5;
+            result = o3 == s1;
+            result = o3 == s2;
+            result = o3 == s3;
+            result = o3 == s4;
+            result = o3 == s5;
+            result = o4 == s1;
+            result = o4 == s2;
+            result = o4 == s3;
+
+            //obj(str) str
+            //true
+            result = o4 == s4;
+            result = o4 == s5;
+            result = o5 == s4;
+            result = o5 == s5;
+
+            //str str(new)
+            //true
+            result = s1 == s2;
+            result = s1 == s3;
+            result = s1 == s4;
+            result = s1 == s5;
+            result = s2 == s3;
+            result = s2 == s4;
+            result = s2 == s5;
+            result = s3 == s4;
+            result = s3 == s5;
+            result = s4 == s5;
+
+
+            //equals
+            //all objects from string all by val
+            //true
+            result = o1.Equals(o2);
+            result = o4.Equals(o5);
+            result = o1.Equals(o3);
+            result = o1.Equals(o4);
+            result = o1.Equals(o5);
+            result = o2.Equals(o3);
+            result = o2.Equals(o4);
+            result = o2.Equals(o5);
+            result = o3.Equals(o4);
+            result = o3.Equals(o5);
+
+            //obj str - all by val
+            //true
+            result = o1.Equals(s1);
+            result = o1.Equals(s2);
+            result = o1.Equals(s3);
+            result = o1.Equals(s4);
+            result = o1.Equals(s5);
+            result = o2.Equals(s1);
+            result = o2.Equals(s2);
+            result = o2.Equals(s3);
+            result = o2.Equals(s4);
+            result = o2.Equals(s5);
+            result = o3.Equals(s1);
+            result = o3.Equals(s2);
+            result = o3.Equals(s3);
+            result = o3.Equals(s4);
+            result = o3.Equals(s5);
+            result = o4.Equals(s1);
+            result = o4.Equals(s2);
+            result = o4.Equals(s3);
+            result = o4.Equals(s4);
+            result = o4.Equals(s5);
+            result = o5.Equals(s1);
+            result = o5.Equals(s2);
+            result = o5.Equals(s3);
+            result = o5.Equals(s4);
+            result = o5.Equals(s5);
+
+        }
+    }
+
 
     //Ienumerable Ienumerator 
     public class Person
@@ -227,209 +501,6 @@ namespace NetPlatformCheckers
         }
     }
 
-    /*
-     * 
-        !!! obj(str) str - point to one obj, if not new string(
-    ==
-        by ref
-            obj obj(str)
-            obj str 
-            obj(str) str
-        by val    
-            str str 
-
-    equals
-        by val
-            obj obj
-            obj str
-            str str
-    referenceEquals 
-        by ref
-
-     */
-    public static class StringObjectEquality
-    {
-        public static void GO()
-        {
-
-            string a = new string(new char[] { 'a' });
-            string b = new string(new char[] { 'a' });     
-
-            object c = new string(new char[] { 'a' });
-            object d = new string(new char[] { 'a' });
-
-            var result = false;
-            
-            result = a.Equals(b); //true
-            result = a == b; //true
-            result = string.ReferenceEquals(a, b); //false (not from same string)
-            result = string.ReferenceEquals(c, d); //false
-
-            result = c.Equals(d); //true
-            result = c == d; //false
-
-            result = object.ReferenceEquals(a, b); //false
-            result = object.ReferenceEquals(c, d); //false
-
-
-            object objStr = "String";
-            object objRef = objStr;
-
-            string strNew = typeof(string).Name; 
-
-            string str1 = "String";
-            string str2 = "String";
-
-            object objStr2 = "String";
-
-
-
-            object o1 = new string("String");
-            object o2 = o1;
-            object o3 = new string("String");
-            object o4 = "String";
-            object o5 = "String";
-
-            string s1 = new string("String");
-            string s2 = s1;
-            string s3 = new string("String");
-            string s4 = "String";
-            string s5 = "String";
-
-            List<object> objs = new List<object>() { o1, o2, o3, o4, o5 };
-            List<string> strs = new List<string>() { s1,s2,s3,s4,s5 };
-
-            //ReferenceEquals
-                //obj(str)||str""
-                //true
-                result = object.ReferenceEquals(o1, o2);
-                result = object.ReferenceEquals(o4, o5);
-                result = object.ReferenceEquals(s1, s2);
-                result = object.ReferenceEquals(s4, s5);
-
-                //false
-                result = object.ReferenceEquals(o1, o3);
-                result = object.ReferenceEquals(o1, o4);
-                result = object.ReferenceEquals(o1, o5);
-                result = object.ReferenceEquals(o2, o3);
-                result = object.ReferenceEquals(o2, o4);
-                result = object.ReferenceEquals(o2, o5);
-                result = object.ReferenceEquals(o3, o4);
-                result = object.ReferenceEquals(o3, o5);
-                result = object.ReferenceEquals(s1, s3);
-                result = object.ReferenceEquals(s1, s4);
-                result = object.ReferenceEquals(s1, s5);
-                result = object.ReferenceEquals(s2, s3);
-                result = object.ReferenceEquals(s2, s4);
-                result = object.ReferenceEquals(s2, s5);
-                result = object.ReferenceEquals(s3, s4);
-                result = object.ReferenceEquals(s3, s5);
-
-
-            //==
-                //obj(new) obj(ref)
-                //obj(str) obj(str)
-                //true
-                result = o1 == o2;
-                result = o4 == o5;
-
-                //obj(ref) obj(new), obj(str)
-                //obj(new) obj(str) obj(new)
-                //false
-                result = o1 == o3;
-                result = o1 == o4;
-                result = o2 == o3; 
-                result = o2 == o4;
-                result = o2 == o5;            
-                result = o3 == o4;
-                result = o3 == o5;
-
-                //obj(new) str(new),str(ref),str
-                //false
-                result = o1 == s1;
-                result = o1 == s2;
-                result = o1 == s3;
-                result = o1 == s4;
-                result = o1 == s5;
-                result = o2 == s1;
-                result = o2 == s2;
-                result = o2 == s3;
-                result = o2 == s4;
-                result = o2 == s5;
-                result = o3 == s1;
-                result = o3 == s2;
-                result = o3 == s3;
-                result = o3 == s4;
-                result = o3 == s5;
-                result = o4 == s1;
-                result = o4 == s2;
-                result = o4 == s3;
-
-                //obj(str) str
-                //true
-                result = o4 == s4;
-                result = o4 == s5;
-                result = o5 == s4;
-                result = o5 == s5;
-
-                //str str(new)
-                //true
-                result = s1 == s2;
-                result = s1 == s3;
-                result = s1 == s4;
-                result = s1 == s5;
-                result = s2 == s3;
-                result = s2 == s4;
-                result = s2 == s5;
-                result = s3 == s4;
-                result = s3 == s5;
-                result = s4 == s5;
-
-
-            //equals
-                //all objects from string all by val
-                //true
-                result = o1.Equals(o2);
-                result = o4.Equals(o5);
-                result = o1.Equals(o3);
-                result = o1.Equals(o4);
-                result = o1.Equals(o5);
-                result = o2.Equals(o3);
-                result = o2.Equals(o4);
-                result = o2.Equals(o5);
-                result = o3.Equals(o4);
-                result = o3.Equals(o5);
-
-                //obj str - all by val
-                //true
-                result = o1.Equals(s1);
-                result = o1.Equals(s2);
-                result = o1.Equals(s3);
-                result = o1.Equals(s4);
-                result = o1.Equals(s5);
-                result = o2.Equals(s1);
-                result = o2.Equals(s2);
-                result = o2.Equals(s3);
-                result = o2.Equals(s4);
-                result = o2.Equals(s5);
-                result = o3.Equals(s1);
-                result = o3.Equals(s2);
-                result = o3.Equals(s3);
-                result = o3.Equals(s4);
-                result = o3.Equals(s5);
-                result = o4.Equals(s1);
-                result = o4.Equals(s2);
-                result = o4.Equals(s3);
-                result = o4.Equals(s4);
-                result = o4.Equals(s5);
-                result = o5.Equals(s1);
-                result = o5.Equals(s2);
-                result = o5.Equals(s3);
-                result = o5.Equals(s4);
-                result = o5.Equals(s5);
-           
-        }
-    }
 
     /*PatternMatching check */
 
@@ -460,7 +531,7 @@ namespace NetPlatformCheckers
                     break;
             }
 
-            
+
         }
 
         public static void MatchExp()
@@ -2438,7 +2509,6 @@ namespace LINQtoObjectsCheck
     }
 
 
-
     public interface Iid
     {
         int ID { get; set; }
@@ -2455,11 +2525,64 @@ namespace LINQtoObjectsCheck
         }
     }
 
+
+    public class Facility
+    {
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public IEnumerable<ServiceTypes> Services { get; set; }
+
+    }
+
+
+    public class ServiceTypes : Iid
+    {
+        public int ID { get; set; }
+        public string Name { get; set; }
+    }
+
+    public class Item
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public DateTime SomeDate { get; set; }
+    };
+
+    class Person
+    {
+        public string Name { get; set; }
+    }
+
+    class Pet
+    {
+        public string Name { get; set; }
+        public Person Owner { get; set; }
+    }
+
+
+    public class Customer
+    {
+        public string Name { get; set; }
+        public List<Order> Orders { get; set; }
+    }
+
+    public class Order
+    {
+        public Product Product { get; set; }
+        public int Quantity { get; set; }
+    }
+
+    public class Product
+    {
+        public string Name { get; set; }
+    }
+
+
     public class User
     {
         public int ID { get; set; }
         public string name { get; set; }
-        public Address Address { get; set; }
+        public IList<Address> Address { get; set; }
 
         private Address addresPriv;
         public readonly Address addrRdn;
@@ -2477,53 +2600,62 @@ namespace LINQtoObjectsCheck
 
     }
 
-    public class Facility
-    {
-        public int ID { get; set; }
-        public string Name { get; set; }
-        public IEnumerable<ServiceTypes> Services { get; set; }
-
-    }
 
 
+    /*
+        Item1 1-8 prop1
+        8-8 prop2
 
-
-    public class ServiceTypes : Iid
-    {
-        public int ID { get; set; }
-        public string Name { get; set; }
-    }
-
-    public class Item
+        Item2 1-8 prop1
+            1-8 item1
+    */
+    public class Item1
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public DateTime SomeDate { get; set; }
-    };
 
-
-    class Person
+        public List<Property1> properties { get; set; }
+    }
+    public class Property1
     {
+        public int Id { get; set; }
         public string Name { get; set; }
     }
-
-    class Pet
+    public class Property2
     {
+        public int Id { get; set; }
         public string Name { get; set; }
-        public Person Owner { get; set; }
     }
+    public class Item1ToP2
+    {
+        public class itemToP { public Item1 item { get; set; } public Property2 prop { get; set; } }
+        public List<itemToP> itemsToProp { get; set; }
+    }
+
+    public class Item2
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+
+        public List<Property1> properties { get; set; }
+
+        public List<int> Items1Ids { get; set; }
+    }
+
     public class LinqCheck
     {
+
         public static List<Racer> racers = new List<Racer>();
         public static List<Cup> cups = new List<Cup>();
 
         static LinqCheck lc = new LinqCheck();
 
-
-     
         public static void GO()
         {
+
             System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
+            
+            itemPropertiesgenerate();
 
             racers.Add(new Racer { Name = @"Racer1", Sername = @"sername1", Year = 1990, Car = @"car1" });
             racers.Add(new Racer { Name = @"Racer2", Sername = @"sername2", Year = 1991, Car = @"car1" });
@@ -2553,22 +2685,37 @@ namespace LINQtoObjectsCheck
             var txt = @"aa b c das asdaa sd aa s aas";
             string src = "aa";
             var schcnt = txt.Split().Where(s => s.ToLowerInvariant() == src.ToLowerInvariant()).Count();
- 
 
-            /* Group by count on join of Anonymous dynamic 
-             left join */
-            var adventures = new List<dynamic>() { 
-                new { Id = 1, Name = "nm1" }, new { Id = 2, Name = "nm2" }, new { Id = 3, Name = "nm3" }
-            };
+            //where any
+            var racersWhereAny = racers
+                .Where(s => cups.Any(c => s.Name == c.RacerName))
+                .ToList();
+
+            //where exist
+            var cupsWhereExist = cups?
+                .Where(s => racers.Exists(c => s.RacerName == c.Name))
+                .ToList();
+
+            //Aggregate
+            var list = new List<int>() { 1, 2, 3, 4, 5, 6 };
+            var aggregate = list.Aggregate(
+                seed: 0,
+                func: (result, item) => result + item,
+                resultSelector: res => res / list.Count()
+            );
+
+            /* Group by count on join of Anonymous dynamic left join */
+            var adventures = new List<dynamic>() {
+                    new { Id = 1, Name = "nm1" }, new { Id = 2, Name = "nm2" }, new { Id = 3, Name = "nm3" }
+                };
             var events = new List<dynamic>() {
-                new { Id = 0, Evnt = "evnt1", adventurerId = 1 }, 
-                new { Id = 1, Evnt = "evnt2", adventurerId = 1 }, 
-                new { Id = 2, Evnt = "evnt3", adventurerId = 2 },
-                new { Id = 3, Evnt = "evnt4", adventurerId = 0 },
-                new { Id = 4, Evnt = "evnt5", adventurerId = 0 }
-            };
+                    new { Id = 0, Evnt = "evnt1", adventurerId = 1 },
+                    new { Id = 1, Evnt = "evnt2", adventurerId = 1 },
+                    new { Id = 2, Evnt = "evnt3", adventurerId = 2 },
+                    new { Id = 3, Evnt = "evnt4", adventurerId = 0 },
+                    new { Id = 4, Evnt = "evnt5", adventurerId = 0 }
+                };
 
-     
             /*Query group by*/
             var joinGroupCnt =
             (
@@ -2584,14 +2731,15 @@ namespace LINQtoObjectsCheck
             ).ToList();
 
             /*Method join group count*/
-            var gp = adventures.Join(events, 
-                adv => adv.Id, 
+            var gp = adventures.Join(events,
+                adv => adv.Id,
                 evt => evt.adventurerId,
-                (adv, evt) => 
+                (adv, evt) =>
                     new { Name = adv.Name, Evt = evt.Evnt }
                 )
-                .GroupBy(q=>q.Name)
-                .Select(s => new { 
+                .GroupBy(q => q.Name)
+                .Select(s => new
+                {
                     Name = s.Key,
                     Count = s.Count(o => !string.IsNullOrEmpty(o?.Evt))
                 })
@@ -2618,36 +2766,36 @@ namespace LINQtoObjectsCheck
                             pt => pt.Owner,
                             (p, pt) =>
                                 new { OwnerName = p.Name, Pet = pt.Name })
-                .GroupBy(q=>q.OwnerName,w=>w.Pet.Count())
+                .GroupBy(q => q.OwnerName, w => w.Pet.Count())
                 .ToList();
 
             List<PetOwners> petownersWithPets = new List<PetOwners>() {
-                new PetOwners {OwnerName=@"Owner1",OwnerInt=0,PetsStr= new List<string>() { @"Pet1",@"Pet2"}
-                , Pets = new List<PetForOwner>(){ new PetForOwner(){Name=@"Pet1"}, new PetForOwner() { Name = @"Pet2" }}},
-                new PetOwners {OwnerName=@"Owner2",OwnerInt=1,PetsStr= new List<string>() { @"Pet3",@"Pet4", @"Pet5" }
-                 , Pets = new List<PetForOwner>(){ new PetForOwner(){Name=@"Pet3"}, new PetForOwner() { Name = @"Pet4" }, new PetForOwner() { Name = @"Pet5" }}},
-                new PetOwners {OwnerName=@"Owner3",OwnerInt=2,PetsStr= new List<string>() { @"Pet6" }
-                , Pets = new List<PetForOwner>() { new PetForOwner() { Name = @"Pet6" }}},
-                new PetOwners {OwnerName=@"Owner4",OwnerInt=3,PetsStr= new List<string>() { @"Pet7",@"Pet8", @"Pet9", @"Pet10" }
-                 , Pets = new List<PetForOwner>() { new PetForOwner() { Name = @"Pet7" }, new PetForOwner() { Name = @"Pet8" } ,new PetForOwner() { Name = @"Pet9" },new PetForOwner() { Name = @"Pet10" }}}
-            };
+                    new PetOwners {OwnerName=@"Owner1",OwnerInt=0,PetsStr= new List<string>() { @"Pet1",@"Pet2"}
+                    , Pets = new List<PetForOwner>(){ new PetForOwner(){Name=@"Pet1"}, new PetForOwner() { Name = @"Pet2" }}},
+                    new PetOwners {OwnerName=@"Owner2",OwnerInt=1,PetsStr= new List<string>() { @"Pet3",@"Pet4", @"Pet5" }
+                     , Pets = new List<PetForOwner>(){ new PetForOwner(){Name=@"Pet3"}, new PetForOwner() { Name = @"Pet4" }, new PetForOwner() { Name = @"Pet5" }}},
+                    new PetOwners {OwnerName=@"Owner3",OwnerInt=2,PetsStr= new List<string>() { @"Pet6" }
+                    , Pets = new List<PetForOwner>() { new PetForOwner() { Name = @"Pet6" }}},
+                    new PetOwners {OwnerName=@"Owner4",OwnerInt=3,PetsStr= new List<string>() { @"Pet7",@"Pet8", @"Pet9", @"Pet10" }
+                     , Pets = new List<PetForOwner>() { new PetForOwner() { Name = @"Pet7" }, new PetForOwner() { Name = @"Pet8" } ,new PetForOwner() { Name = @"Pet9" },new PetForOwner() { Name = @"Pet10" }}}
+                };
 
             List<PetForOwner> petsWithoutOwners = new List<PetForOwner>(){
-                new PetForOwner(){Name=@"Pet3"}
-                ,new PetForOwner() { Name = @"Pet7" }
-                ,new PetForOwner() { Name = @"Pet11" }
-            };
+                    new PetForOwner(){Name=@"Pet3"}
+                    ,new PetForOwner() { Name = @"Pet7" }
+                    ,new PetForOwner() { Name = @"Pet11" }
+                };
 
             List<PetForOwner> petsWithOwners = new List<PetForOwner>(){
-                new PetForOwner(){Name = "Pet20", Owner = petownersWithPets[0]}
-                ,new PetForOwner(){Name = "Pet21", Owner = petownersWithPets[0]}
+                    new PetForOwner(){Name = "Pet20", Owner = petownersWithPets[0]}
+                    ,new PetForOwner(){Name = "Pet21", Owner = petownersWithPets[0]}
 
-                ,new PetForOwner(){Name = "Pet22", Owner = petownersWithPets[1]}
+                    ,new PetForOwner(){Name = "Pet22", Owner = petownersWithPets[1]}
 
-                ,new PetForOwner(){Name = "Pet23", Owner = petownersWithPets[2]}
-                ,new PetForOwner(){Name = "Pet24", Owner = petownersWithPets[2]}
-                ,new PetForOwner(){Name = "Pet25", Owner = petownersWithPets[2]}
-            };
+                    ,new PetForOwner(){Name = "Pet23", Owner = petownersWithPets[2]}
+                    ,new PetForOwner(){Name = "Pet24", Owner = petownersWithPets[2]}
+                    ,new PetForOwner(){Name = "Pet25", Owner = petownersWithPets[2]}
+                };
 
             var ownersOfPets =
                 from s in petownersWithPets
@@ -2752,20 +2900,21 @@ namespace LINQtoObjectsCheck
                 po => po);
 
             //left join from different sources
-            var a =( 
+            var a = (
                 from h1 in racers
-                    join i1 in cups on new { Name = h1.Name } equals new { Name = i1.RacerName } into jn
-                    from s3 in jn.DefaultIfEmpty()                    
-                    select new { 
-                        Name = h1?.Name ?? "", 
-                        Car = h1?.Car ?? "" ,
-                        Competition = s3?.Competition ?? "" , 
-                        Position = s3?.Position
-                    }).Skip(2*2).Take(2).ToList();
+                join i1 in cups on new { Name = h1.Name } equals new { Name = i1.RacerName } into jn
+                from s3 in jn.DefaultIfEmpty()
+                select new
+                {
+                    Name = h1?.Name ?? "",
+                    Car = h1?.Car ?? "",
+                    Competition = s3?.Competition ?? "",
+                    Position = s3?.Position
+                }).Skip(2 * 2).Take(2).ToList();
 
             //join from different sources
             var h = from s in racers select s;
-            var i = from s in cups select s;            
+            var i = from s in cups select s;
             var j =
                 (from t in h
                  join t2 in i on new { Name = t.Name } equals new { Name = t2.RacerName }
@@ -2778,7 +2927,7 @@ namespace LINQtoObjectsCheck
                  }).Skip(2 * 2).Take(2).ToList();
             ;
 
-            
+
             var leftJoin =
             (from s in cups
              join c in racers on s.RacerName equals c.Name into t
@@ -2836,6 +2985,143 @@ namespace LINQtoObjectsCheck
             UpdateNestedCheck();
             MaxDateCheck();
             LinqSumGroupByNew();
+            SequenceCheck();
+            DeferredCheck();
+        }
+
+
+        static void itemPropertiesgenerate()
+        {
+            var props2 = new List<Property2>() {
+                new Property2(){ Id = 0, Name = "prop1"}
+                ,new Property2(){ Id = 1, Name = "prop3"}
+                ,new Property2(){ Id = 2, Name = "prop5"}
+                ,new Property2(){ Id = 3, Name = "prop6"}
+                ,new Property2(){ Id = 4, Name = "prop7"}
+            };
+            var props1 = new List<Property1>() {
+                new Property1(){ Id = 0, Name = "prop1"}
+                ,new Property1(){ Id = 1, Name = "prop3"}
+                ,new Property1(){ Id = 2, Name = "prop8"}
+                ,new Property1(){ Id = 3, Name = "prop9"}
+                ,new Property1(){ Id = 4, Name = "prop10"}
+            };
+            var items1 = new List<Item1>() {
+                new Item1(){Id = 0 , Name = "item1",
+                    properties = new List<Property1>(){
+                    props1[0]
+                }},
+                new Item1(){Id = 1 , Name = "item2",
+                    properties = new List<Property1>(){
+                    new Property1(){ Id = 0, Name = "prop1"}
+                }},
+                new Item1(){Id = 2 , Name = "item3",
+                    properties = new List<Property1>(){
+                    props1[0],props1[1],props1[2]
+                }},
+                new Item1(){Id = 3 , Name = "item4",
+                    properties = new List<Property1>(){
+                    props1[0],props1[1],new Property1(){ Id = 2, Name = "prop8"}
+                }},                
+                new Item1(){Id = 4 , Name = "item5",
+                    properties = new List<Property1>(){
+                    props1[0],props1[1],props1[2]
+                }}
+            };
+            var items2 = new List<Item2>() { 
+                new Item2(){Id=0,Name="item1", 
+                    properties = new List<Property1>(){
+                    props1[0]
+                }, Items1Ids = new List<int>(){ 0 } },
+                new Item2(){Id=0,Name="item2",
+                    properties = new List<Property1>(){
+                    new Property1(){ Id = 0, Name = "prop1"}
+                }, Items1Ids = new List<int>(){ 0,1,2 }},
+                new Item2(){Id=0,Name="item3",
+                    properties = new List<Property1>(){
+                    props1[2],new Property1(){ Id = 2, Name = "prop5"}
+                }}
+            };
+            var itemsToProp1 = new Item1ToP2()
+            {
+                itemsToProp = new List<Item1ToP2.itemToP>()
+                {
+                   new Item1ToP2.itemToP(){item = items1[0], prop=props2[0]},
+                   new Item1ToP2.itemToP(){item = items1[0], prop=props2[1]},
+                   new Item1ToP2.itemToP(){item = items1[0], prop=props2[2]},
+                   new Item1ToP2.itemToP(){item = items1[1], prop=props2[2]},
+                   new Item1ToP2.itemToP(){item = items1[3], prop=props2[3]}
+                }
+            };
+
+
+
+            var propsToSearch = new List<Property1>() {
+                props1[0],new Property1(){ Id = 1, Name = "prop3"},props1[2]
+            };
+            var newProp = new Property1() { Id = 2, Name = "prop8" };
+            var refProp = props1[2];
+
+            var propsCol1 = new List<Property1>() { props1[0], props1[1], props1[4] };
+            var propsCol2 = new List<Property1>() { props1[0], props1[3], props1[4] };
+            var propsToUpdate = new List<Property1>() { props1[2], props1[3] };
+            
+
+            //0 4
+            var intersect = propsCol2.Intersect(propsCol1).ToList();
+            //3 
+            var except = propsCol2.Except(propsCol1).ToList();
+            //0 3 4 1
+            var union = propsCol2.Union(propsCol1).ToList();
+
+            //0 3 4
+            var fullUpdate  = propsToUpdate.Except(propsToUpdate.Except(propsCol2)).Union(propsCol2).ToList();
+            //2 3 0 4
+            var addUnique = propsToUpdate.Union(propsCol2).ToList();
+
+            //3
+            var toRemove = propsToUpdate.Intersect(propsCol2).ToList();
+            //0 4 
+            var toAdd = propsCol2.Except(propsToUpdate).ToList();
+            //2 0 4
+            var updateUnique = propsToUpdate.Except(toRemove).Union(toAdd).ToList();
+
+            //intersect - 2 items as by ref            
+            var propsIntersec = props1.Intersect(propsToSearch).ToList();
+
+            // where any by val compar
+            var propsWhereAny = props1.Where(s=> propsToSearch.Any(c=>c.Name == s.Name)).ToList();
+            // where exists
+            var propsWhereExists = props1.Where(s => propsToSearch.Exists(c => c.Name == s.Name)).ToList();
+            //true 
+            var colsEq = propsWhereExists.SequenceEqual(propsWhereAny);
+
+            // exist any to bool
+            var propsExist = props1.Exists(s => propsToSearch.Any(c => c.Name == s.Name));
+            
+
+            //where contains nested prop
+            var whereContains = items1
+                .Where(s => propsToSearch.Any(c=> s.properties.Contains(c))).ToList();           
+
+            //no items - > val equals
+            var newPropItems = items1
+                .Where(s => s.properties.Contains(newProp)).ToList();
+            //2 items val equals
+            var refPropItems = items1
+                .Where(s => s.properties.Contains(refProp)).ToList();
+
+            var groupBy =(
+                from s1 in items1
+                join s2 in items2 on s1.Name equals s2.Name into jn
+                from s3 in jn.DefaultIfEmpty()
+                group new { s3 } by new { name1 = s1.Name } into g
+                select new
+                {
+                    name = g.Key.name1,
+                    count = g.Count(s => !string.IsNullOrEmpty(s?.s3?.Name))
+                }
+            ).ToList();
         }
 
         public static void bulkCheck()
@@ -2845,13 +3131,15 @@ namespace LINQtoObjectsCheck
             new Address(){ID=0,name="Name_0"},
             new Address(){ID=1,name="Name_1"},
             new Address(){ID=4,name="Name_4"},
-            new Address(){ID=5,name="Name_4"},
+            new Address(){ID=5,name="Name_5"},
             };
 
             List<User> users = new List<User>(){
-            new User(){ID=0,name="User_0",Address=addresses[0]},
-            new User(){ID=1,name="User_1",Address=addresses[1]},
-            new User(){ID=2,name="User_2",Address=null}
+            new User(){ID=0,name="User_0",Address=new List<Address>(){ addresses[0] } },
+            new User(){ID=1,name="User_1",Address=new List<Address>(){ addresses[1], addresses[2] }},
+            new User(){ID=2,name="User_2",Address=null},
+            new User(){ID=3,name="User_3",Address=new List<Address>(){ addresses[3], addresses[2] }},
+            new User(){ID=4,name="User_4",Address=new List<Address>(){ addresses[3], addresses[1] }}
             };
 
             var query =
@@ -2861,13 +3149,14 @@ namespace LINQtoObjectsCheck
                             (u, a) =>
                                 new { OwnerName = u.name, Pet = a.name });
 
-            List<Address> usersNUll = null;            
+            List<Address> usersNUll = null;
             if (usersNUll?.Any() == true)
             {
 
             }
-            if (usersNUll?.Any() == false) { 
-            
+            if (usersNUll?.Any() == false)
+            {
+
             }
             if (usersNUll?.Any() != true)
             {
@@ -2898,6 +3187,9 @@ namespace LINQtoObjectsCheck
             List<Address> intersect = addresses.Where(a => users.Any(b => b.ID == a.ID)).ToList();
             List<Address> all = addresses.Where(a => users.Any(b => b.ID == a.ID)).ToList();
             List<Address> except = addresses.Where(a => !users.Any(b => b.ID == a.ID)).ToList();
+
+            var u = users.Where(s => s?.Address != null && s.Address.Count() > 1 && s.Address.Any(c => c.name == "Name_1"))
+                .ToList();
 
             Log.ToLog(query);
         }
@@ -2957,7 +3249,7 @@ namespace LINQtoObjectsCheck
         }
 
         public IEnumerable<T> UpdateExceptAdd<T>(IEnumerable<T> from, IEnumerable<T> into)
-         where T : class, Iid
+            where T : class, Iid
         {
             var ret = new List<T>();
             var toDelete = into.Where(c => !from.Any(s => c.ID == s.ID)).ToList();
@@ -3055,7 +3347,7 @@ namespace LINQtoObjectsCheck
 
             List<Item> checkList = new List<Item>()
             {
-               i0,i1,i2
+                i0,i1,i2
             };
 
             List<Item> listNotEqual = new List<Item>()
@@ -3065,13 +3357,14 @@ namespace LINQtoObjectsCheck
 
             List<Item> listEqual = new List<Item>()
             {
-               i0,i1,i2
+                i0,i1,i2
             };
 
             if (!checkList?.SequenceEqual(listEqual) == true)
             {
 
             }
+            //OK
             if (checkList?.SequenceEqual(listEqual) == true)
             {
 
@@ -3089,6 +3382,7 @@ namespace LINQtoObjectsCheck
             {
 
             }
+            //OK
             if (checkList?.SequenceEqual(listNotEqual) != true)
             {
 
@@ -3141,7 +3435,7 @@ namespace LINQtoObjectsCheck
             };
 
             List<Item> servicesIds = new List<Item>(){
-                  new Item(){Id=1, Name = "Nm1"}
+                    new Item(){Id=1, Name = "Nm1"}
                 ,new Item(){Id=2, Name = "Nm2"}
             };
 
@@ -3196,12 +3490,12 @@ namespace LINQtoObjectsCheck
             //amt=sum(quant)*price
 
             var q0 = from t1 in (from s in prices select s)
-            join t2 in (from c in positions select c) on t1.InstrumentID equals t2.instrument.Underlying.ID
-            select new
-            {
-                Id = t2.instrument.Underlying.ID,
-                Price = t2.Quantity * t1.Value
-            };
+                     join t2 in (from c in positions select c) on t1.InstrumentID equals t2.instrument.Underlying.ID
+                     select new
+                     {
+                         Id = t2.instrument.Underlying.ID,
+                         Price = t2.Quantity * t1.Value
+                     };
             q0 = q0.ToList();
 
             var qt =
@@ -3361,12 +3655,9 @@ namespace KATAS
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Text;
-
-
     using System.Net.Http;
+    using System.Text;
     using System.Text.Json;
-    
     using System.Threading.Tasks;
 
     //custom linq
@@ -3751,11 +4042,12 @@ namespace KATAS
             {
                 List<int> nums = new List<int>();
                 Random rnd = new Random();
-                for(int i = 0; i < 10; i++)
+                for (int i = 0; i < 10; i++)
                 {
                     nums.Add(rnd.Next(1, 100000));
                 }
-                nums.ForEach(s => {
+                nums.ForEach(s =>
+                {
                     var sum = sumOfDigits(s);
                     System.Diagnostics.Trace.WriteLine($"digit: {s}; sum = {sum};");
                 });
@@ -3764,7 +4056,7 @@ namespace KATAS
             static int sumOfDigits(int number)
             {
                 int result = 0;
-                while(number != 0)
+                while (number != 0)
                 {
                     result += number % 10;
                     number /= 10;
@@ -4820,7 +5112,7 @@ namespace KATAS
 
     }
 
-    
+
     public class HTTPserializeSave
     {
         public class Country
@@ -4842,7 +5134,7 @@ namespace KATAS
             await File.WriteAllTextAsync($"{Directory.GetCurrentDirectory()}\\countries.json", str);
             return filtered;
         }
-                
+
         public static async Task<IEnumerable<T>> HttpReqSaveSinglelineSyntax<T>()
         {
             await File.WriteAllTextAsync($"{Directory.GetCurrentDirectory()}\\slExp.json",
@@ -4857,13 +5149,14 @@ namespace KATAS
                 )
             );
             return JsonSerializer.Deserialize<IEnumerable<T>>(await new HttpClient().GetAsync("")?.Result.Content.ReadAsStringAsync());
-        }     
+        }
 
     }
-    
+
     public class BraketsChecker
     {
-        public static void GO() {
+        public static void GO()
+        {
             var item1 = "c * [ (a+b) / d]";
             var item2 = "(c * [a+b) / d]";
             List<string> strsOK = new List<string>() {
@@ -4874,10 +5167,13 @@ namespace KATAS
             };
             var isOK = strsOK.Select(s => braketsCount(s)).All(s => s == true);
             var isNotOK = strsNotOK.Select(s => braketsCount(s)).All(s => s == false);
-            
+
+            var ok3 = strsOK.Select(s => bracketsCheck(s)).All(s => s == true);
+            var notok3 = strsNotOK.Select(s => bracketsCheck(s)).All(s => s == false);
         }
 
-        static Func<string, bool> braketsCount = (s) => {
+        static Func<string, bool> braketsCount = (s) =>
+        {
 
             Stack<char> brackets = new Stack<char>();
 
@@ -4900,38 +5196,74 @@ namespace KATAS
             return brackets.Count == 0;
 
         };
-    }
 
+        static bool bracketsCheck(string input)
+        {
+
+            List<char> openBr = new List<char>() { '(', '[', '{' };
+            List<char> closeBr = new List<char>() { ')', ']', '}' };
+            Stack<char> cnter = new Stack<char>();
+
+            if (string.IsNullOrEmpty(input)) { return false; }
+
+            foreach (var ch in input)
+            {
+                //start with closed
+                if (cnter.Count() == 0)
+                {
+                    if (closeBr.Contains(ch)) { return false; }
+                }
+
+                //new open
+                if (openBr.Contains(ch)) { cnter.Push(ch); }
+
+                //meet closed
+                if (closeBr.Contains(ch))
+                {
+                    //closed different
+                    var last = cnter.Pop();
+                    if (closeBr.IndexOf(ch) != openBr.IndexOf(last)) { return false; }
+
+
+                }
+
+            }
+            return cnter.Count() == 0;
+        }
+    }
 
     public class RoomNum
     {
         public int Section { get; set; }
         public int RoomNumber { get; set; }
     }
-    public class TrainRooms {
+    public class TrainRooms
+    {
 
         public static List<RoomNum> rooms;
-        public static void GO() {
+        public static void GO()
+        {
             init();
 
             var section1 = rooms.Where(s => s.RoomNumber == 4).FirstOrDefault().Section;
             var section2 = rooms.Where(s => s.RoomNumber == 52).FirstOrDefault().Section;
         }
 
-        public static void init() {
+        public static void init()
+        {
             rooms = new List<RoomNum>();
 
             int section = 1;
-            
+
             //fill rooms
-            for(int i = 1; i<=36; i++)
+            for (int i = 1; i <= 36; i++)
             {
                 rooms.Add(new RoomNum() { Section = section, RoomNumber = i });
-                if(i % 4 == 0) { section += 1; }
+                if (i % 4 == 0) { section += 1; }
             }
 
             section = 1;
-            for(int i =54; i>=37; i--)
+            for (int i = 54; i >= 37; i--)
             {
                 rooms.Add(new RoomNum() { Section = section, RoomNumber = i });
                 if (i % 2 == 0) { section += 1; }
