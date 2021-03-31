@@ -12,6 +12,7 @@ namespace crmvcsb
         {
             try
             {
+                KATAS.Miscellaneous.SortingTests.GO();
                 InfrastructureCheckers.Buss.GO();
                 NetPlatformCheckers.StringsCheck.GO();
                 LINQtoObjectsCheck.LinqCheck.GO();
