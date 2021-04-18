@@ -3083,8 +3083,6 @@ namespace LINQtoObjectsCheck
                 }
             };
 
-
-
             var propsToSearch = new List<Property1>() {
                 props1[0],new Property1(){ Id = 1, Name = "prop3"},props1[2]
             };
@@ -3095,7 +3093,12 @@ namespace LINQtoObjectsCheck
             var propsCol2 = new List<Property1>() { props1[0], props1[3], props1[4] };
             var propsToUpdate = new List<Property1>() { props1[2], props1[3] };
             
-
+            var sm0 = items1.SelectMany(s=>s.properties, (l, r) =>
+            {
+                li = l.Id, ln = l.Name, ri = r.Id, rn = r.Name, 
+                
+            })
+                
             //0 4
             var intersect = propsCol2.Intersect(propsCol1).ToList();
             //3 
@@ -3186,7 +3189,8 @@ namespace LINQtoObjectsCheck
                     name = g.Key.name,
                     item2 = g.Count(c=>!string.IsNullOrEmpty(c?.name))
                 };
-          
+            
+            
         }
 
         public static void bulkCheck()
@@ -4190,7 +4194,7 @@ namespace KATAS
 
                 //foreach
                 foreach (var str in input)
-                {
+                {                                        
 
                     string newStr = new string(str.OrderBy(c => c).ToArray());
                     var alg = System.Security.Cryptography.SHA256.Create();
@@ -4475,6 +4479,7 @@ namespace KATAS
             {
 
                 SortingTests st = new SortingTests();
+                st.sampleIntCHeck();
                 st.insertionSortTest();
             }
 
@@ -4559,10 +4564,42 @@ namespace KATAS
 
                 }
             }
+
+            void sampleIntCHeck()
+            {
+
+                var arr = new int[] { 5, 1, 7, 3, 5, 9, 3, 5, 8 };
+                var expArr = arr.OrderBy(s => s).ToArray();
+                ShellSort.Sort(arr);
+                //InsertionSortInt.Sort(arr);
+                var res = arr.SequenceEqual(expArr);
+            }
         }
 
 
+        
+        public class InsertionSortInt
+        {
+            private protected InsertionSortInt() { }
+            public static void Sort(int[] arr)
+            {
+                var i = 1;
+                if(i > arr.Length) { return; }
+                
 
+                for (i = 1; i<arr.Length; i++)
+                {
+                    var x = arr[i];
+                    var j = i - 1;
+                    while (j >= 0 && arr[j] > x) {
+                        arr[j + 1] = arr[j];
+                        j -= 1;
+                    }
+                    arr[j + 1] = x;
+               
+                }
+            }
+        }
         public class InsertionSort<T> where T : struct, IComparable
         {
             public IList<T> Sort(IList<T> arr)
@@ -4598,6 +4635,28 @@ namespace KATAS
 
                 return arr;
             }
+        }
+
+        public class ShellSort
+        {
+            public static void Sort(int[] arr)
+            {
+                var n = arr.Length;
+                for (var gap = n / 2; gap > 0; gap /= 2)
+                {
+                    for(var i = gap; i < arr.Length; i++)
+                    {
+                        var x = arr[i];
+                        int j;
+                        for(j=i; j>=gap && arr[j-gap]>x; j -= gap)
+                        {
+                            arr[j] = arr[j-gap];
+                        }
+                        arr[j] = x;
+                    }
+                }
+            }
+
         }
 
 
@@ -4732,7 +4791,7 @@ namespace KATAS
                 }
 
             }
-
+         
         }
         public class HeapSortInt
         {
@@ -4857,6 +4916,59 @@ namespace KATAS
                 arr[idxHg] = item;
             }
 
+        }
+
+        public class HeapSortArr
+        {
+            public static void GO()
+            {
+                var arr = new int[] { 6, 4, 7, 9, 1 };
+                var avtHeap = new int[] { 9, 6, 7, 4, 1 };
+                var avtSort = new int[] { 9, 7, 6, 4, 1 };
+
+                HeapSortArr.Sort(arr);
+
+                var bol = arr.SequenceEqual(avtSort);
+
+            }
+            static void Sort(int[] arr)
+            {
+                HeapSortArr.BuildHeap(ref arr, arr.Length);
+                for (int i = arr.Length - 1; i >= 2; i -= 1)
+                {
+                    HeapSortArr.Swap(ref arr, i, 1);
+                    HeapSortArr.MaxHeap(ref arr, i);
+                }
+            }
+            static void BuildHeap(ref int[] arr, int len)
+            {
+                for (int i = len / 2; i >= 1; i -= 1)
+                {
+                    HeapSortArr.MaxHeap(ref arr, i);
+                }
+            }
+            static void MaxHeap(ref int[] arr, int i)
+            {
+                var l = (2 * i) - 1;
+                var r = (2 * i + 1) - 1;
+                var lg = i - 1;
+
+                if (l < arr.Length && arr[l] > arr[lg]) { lg = l; }
+
+                if (r < arr.Length && arr[r] > arr[lg]) { lg = r; }
+
+                if (lg != (i - 1))
+                {
+                    Swap(ref arr, lg, (i - 1));
+                    MaxHeap(ref arr, lg);
+                }
+            }
+            static void Swap(ref int[] arr, int a, int b)
+            {
+                var s = arr[a];
+                arr[a] = arr[b];
+                arr[b] = s;
+            }
         }
 
 
@@ -5216,6 +5328,7 @@ namespace KATAS
             return JsonSerializer.Deserialize<IEnumerable<T>>(await new HttpClient().GetAsync("")?.Result.Content.ReadAsStringAsync());
         }
 
+    
     }
 
     public class BraketsChecker
