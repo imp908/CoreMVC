@@ -96,13 +96,16 @@ namespace InfrastructureCheckers
         BusWrapper bw = new BusWrapper();
         public static void GO()
         {
-            buss.check();
+            //listen in debug
+            //buss.receive();
+            //deply
+            buss.Send();
         }
 
-        void check()
+        public void receive()
         {
-            bw.Bind("SEC", "TO");         
-            bw.ReceiveBind(ProcessMessage);            
+            bw.Bind("SEC", "TO");
+            bw.ReceiveBind(ProcessMessage);
         }
 
         public void Send()
@@ -236,7 +239,8 @@ namespace NetPlatformCheckers
 
         public static void StringCharIntConcatCheck()
         {
-            var strAndChar = "1" + '2'; // 1 + code of 2
+            var strAndChar = "1" + '2'; // str 12
+            var charAndStr = '1' + "2"; // str 12
 
             var strAndInt = "1" + 2 + 3; // 123
             var intAndStr = 1 + 2 + "3";  // 33
@@ -296,6 +300,9 @@ namespace NetPlatformCheckers
             object c = new string(new char[] { 'a' });
             object d = new string(new char[] { 'a' });
 
+            object e = "str";
+            string r = "str";
+
             var result = false;
 
             result = a.Equals(b); //true
@@ -305,6 +312,10 @@ namespace NetPlatformCheckers
 
             result = c.Equals(d); //true
             result = c == d; //false
+
+            result = a.Equals(c); //true
+            result = a == c;//false
+            result = e == r; //true by ref
 
             result = object.ReferenceEquals(a, b); //false
             result = object.ReferenceEquals(c, d); //false
@@ -635,6 +646,73 @@ namespace NetPlatformCheckers
     // interface of base as child
 
     /*--------------------------------------------- */
+
+    public interface IMethodA
+    {
+        string MethodA();
+    }
+    public interface IMethodB
+    {
+        string MethodB();
+    }
+    public class newParent
+    {
+        public int ID { get; set; }
+        public string MethodA() => $"A in parent";
+        public virtual string MethodB() => $"B in parent";
+    }
+    public class newParentI : IMethodA, IMethodB
+    {
+        public string MethodA() => $"A in parentI";
+        public virtual string MethodB() => $"B in parentI";
+    }
+    //classic override
+    public class newChild1 : newParent
+    {
+        public new string MethodA() => $"A in child1";
+        public override string MethodB() => $"B in child1";
+    }
+
+    //classic new new
+    public class newChild2 : newParent
+    {
+        public new string MethodA { get; set; }
+        public new string MethodB { get; set; }
+    }
+
+    //new new bu imtplements A
+    public class newChild3 : newParent, IMethodA
+    {
+        public new string MethodA { get; set; }
+        public new string MethodB { get; set; }
+    }
+    //new new but implements B
+    public class newChild4 : newParent, IMethodB
+    {
+        public new string MethodA { get; set; }
+        public new string MethodB { get; set; }
+    }
+    //classic override new but implements both
+    public class newChild5 : newParent, IMethodA, IMethodB
+    {
+        public new string MethodA { get; set; }
+        public override string MethodB() => $"B in child5";
+    }
+
+    public class InheritanceAndInterfacesCheck
+    {
+
+        public static void GO()
+        {
+            check();
+        }
+
+        static void check()
+        {
+            
+        }
+    }
+
 
 
     public class parent
@@ -2642,6 +2720,7 @@ namespace LINQtoObjectsCheck
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public int Amount { get; set; }
 
         public List<Property1> properties { get; set; }
     }
@@ -2665,6 +2744,7 @@ namespace LINQtoObjectsCheck
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public int Amount { get; set; }
 
         public List<Property1> properties { get; set; }
 
@@ -2683,8 +2763,8 @@ namespace LINQtoObjectsCheck
         {
 
             System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
-            
-            itemPropertiesgenerate();
+
+            NewOverallCasesCheck();
 
             racers.Add(new Racer { Name = @"Racer1", Sername = @"sername1", Year = 1990, Car = @"car1" });
             racers.Add(new Racer { Name = @"Racer2", Sername = @"sername2", Year = 1991, Car = @"car1" });
@@ -3019,7 +3099,7 @@ namespace LINQtoObjectsCheck
         }
 
 
-        static void itemPropertiesgenerate()
+        static void NewOverallCasesCheck()
         {
             var props2 = new List<Property2>() {
                 new Property2(){ Id = 0, Name = "prop1"}
@@ -3036,37 +3116,42 @@ namespace LINQtoObjectsCheck
                 ,new Property1(){ Id = 4, Name = "prop10"}
             };
             var items1 = new List<Item1>() {
-                new Item1(){Id = 0 , Name = "item1",
+                new Item1(){Id = 0 , Name = "item1", Amount = 2,
                     properties = new List<Property1>(){
                     props1[0]
                 }},
-                new Item1(){Id = 1 , Name = "item2",
+                new Item1(){Id = 1 , Name = "item2", Amount = 1,
                     properties = new List<Property1>(){
                     new Property1(){ Id = 0, Name = "prop1"}
                 }},
-                new Item1(){Id = 2 , Name = "item3",
+                new Item1(){Id = 2 , Name = "item3", Amount = 3,
                     properties = new List<Property1>(){
                     props1[0],props1[1],props1[2]
                 }},
-                new Item1(){Id = 3 , Name = "item4",
+                new Item1(){Id = 3 , Name = "item4", Amount = 2,
                     properties = new List<Property1>(){
                     props1[0],props1[1],new Property1(){ Id = 2, Name = "prop8"}
-                }},                
-                new Item1(){Id = 4 , Name = "item5",
+                }},
+                new Item1(){Id = 4 , Name = "item5", Amount = 0,
                     properties = new List<Property1>(){
                     props1[0],props1[1],props1[2]
                 }}
+                ,
+                new Item1(){Id = 5 , Name = "item6",
+                    properties = new List<Property1>(){
+                    new Property1(){ Id = 5, Name = "prop11"}
+                }}
             };
-            var items2 = new List<Item2>() { 
-                new Item2(){Id=0,Name="item1", 
+            var items2 = new List<Item2>() {
+                new Item2(){Id=0,Name="item1", Amount = 0,
                     properties = new List<Property1>(){
                     props1[0]
                 }, Items1Ids = new List<int>(){ 0 } },
-                new Item2(){Id=1,Name="item2",
+                new Item2(){Id=1,Name="item2", Amount = 2,
                     properties = new List<Property1>(){
                     new Property1(){ Id = 0, Name = "prop1"}
                 }, Items1Ids = new List<int>(){ 0,1,2 }},
-                new Item2(){Id=2,Name="item3",
+                new Item2(){Id=2,Name="item3", Amount = 1,
                     properties = new List<Property1>(){
                     props1[2],new Property1(){ Id = 2, Name = "prop5"}
                 }}
@@ -3088,13 +3173,18 @@ namespace LINQtoObjectsCheck
             var propsToSearch = new List<Property1>() {
                 props1[0],new Property1(){ Id = 1, Name = "prop3"},props1[2]
             };
+            var propsToSearch2 = new List<Property1>() {
+                new Property1(){ Id = 1, Name = "prop8"},props1[2]
+            };
             var newProp = new Property1() { Id = 2, Name = "prop8" };
             var refProp = props1[2];
 
             var propsCol1 = new List<Property1>() { props1[0], props1[1], props1[4] };
             var propsCol2 = new List<Property1>() { props1[0], props1[3], props1[4] };
             var propsToUpdate = new List<Property1>() { props1[2], props1[3] };
-            
+
+            var sm0 = items1.SelectMany(s => s.properties, (l, r) => new { item = l.Name, prop = r.Name, amtl = l.Amount }).ToList();
+            var sm1 = items2.SelectMany(s => s.properties, (l, r) => new { item = l.Name, prop = r.Name, amtr = l.Amount }).ToList();
 
             //0 4
             var intersect = propsCol2.Intersect(propsCol1).ToList();
@@ -3104,7 +3194,7 @@ namespace LINQtoObjectsCheck
             var union = propsCol2.Union(propsCol1).ToList();
 
             //0 3 4
-            var fullUpdate  = propsToUpdate.Except(propsToUpdate.Except(propsCol2)).Union(propsCol2).ToList();
+            var fullUpdate = propsToUpdate.Except(propsToUpdate.Except(propsCol2)).Union(propsCol2).ToList();
             //2 3 0 4
             var addUnique = propsToUpdate.Union(propsCol2).ToList();
 
@@ -3118,20 +3208,28 @@ namespace LINQtoObjectsCheck
             //intersect - 2 items as by ref            
             var propsIntersec = props1.Intersect(propsToSearch).ToList();
 
+
+            //0 2 3 4 
+            var whereIntersectAny = items1.Where(s => propsToSearch.Intersect(s.properties).Any());
+            // 0 1 2 3 4 
+            var whereExistsAny = items1.Where(s => propsToSearch.Exists(c => s.properties.Any(x => x.Name == c.Name))).ToList();
+
             // where any by val compar
-            var propsWhereAny = props1.Where(s=> propsToSearch.Any(c=>c.Name == s.Name)).ToList();
+            var propsWhereAny = props1.Where(s => propsToSearch.Any(c => c.Name == s.Name)).ToList();
             // where exists
             var propsWhereExists = props1.Where(s => propsToSearch.Exists(c => c.Name == s.Name)).ToList();
+
+
             //true 
             var colsEq = propsWhereExists.SequenceEqual(propsWhereAny);
 
             // exist any to bool
             var propsExist = props1.Exists(s => propsToSearch.Any(c => c.Name == s.Name));
-            
+
 
             //where contains nested prop
-            var whereContains = items1
-                .Where(s => propsToSearch.Any(c=> s.properties.Contains(c))).ToList();           
+            var whereAnyContains = items1
+                .Where(s => propsToSearch.Any(c => s.properties.Contains(c))).ToList();
 
             //no items - > val equals
             var newPropItems = items1
@@ -3140,7 +3238,7 @@ namespace LINQtoObjectsCheck
             var refPropItems = items1
                 .Where(s => s.properties.Contains(refProp)).ToList();
 
-            var groupBy =(
+            var groupBy = (
                 from s1 in items1
                 join s2 in items2 on s1.Name equals s2.Name into jn
                 from s3 in jn.DefaultIfEmpty()
@@ -3152,41 +3250,52 @@ namespace LINQtoObjectsCheck
                 }
             ).ToList();
 
-            var selectMany = items1.SelectMany(i => i.properties, (l, r) => new { item = l.Name, name = r.Name })
+            var selectMany = items1.SelectMany(i => i.properties, (l, r) => new { item = l.Name, name = r.Name, amtl = l.Amount })
                 .ToList();
-            var selectManySelect = items1.SelectMany(i => i.properties, (l, r) => new { item = l, property = r })
-                .Select(s=> new { 
-                    item =s.item.Name,
+            var selectManySelect = items1.SelectMany(i => i.properties, (l, r) => new { item = l, property = r , amtr = l.Amount})
+                .Select(s => new
+                {
+                    item = s.item.Name,
                     name = s.property.Name
                 }).ToList();
 
-            var selectManyItems2 = items2.SelectMany(i => i.properties, (l, r) => new { item = l.Name, name = r.Name });
+            var selectManyItems2 = items2.SelectMany(i => i.properties, (l, r) => new { item = l.Name, name = r.Name, amtr=l.Amount });
 
             //multiple join multiple group by
             var groupByMultipleLeftjoinMultiple =
+                (
                 from s1 in selectManySelect
-                join s2 in selectManyItems2 on new {s1.item,s1.name } equals new { s2.item, s2.name} into jn
-                from s3 in jn.DefaultIfEmpty()                
-                //group (s3) by new { name = s1.item, prop = s1.name} into g
-                // || or
-                group new { s3} by new { name = s1.item, prop = s1.name } into g
+                join s2 in selectManyItems2 on new { s1.item, s1.name } equals new { s2.item, s2.name } into jn
+                from s3 in jn.DefaultIfEmpty()
+                    //group (s3) by new { name = s1.item, prop = s1.name} into g
+                    // || or
+                group new { s3 } by new { iteml = s1.item, propl = s1.name, itemr = s3?.item, propr = s3?.item } into g
                 select new
                 {
-                    item = g.Key,
-                    prop = g.Key.name,
-                    items2Cnt = g.Count(c => !string.IsNullOrEmpty(c?.s3?.name))
-                };
+                    iteml = g.Key.iteml,
+                    propl = g.Key.propl,
+                    itemr = g.Key.itemr,
+                    propr = g.Key.propr,
+
+                    items2Cnt = g.Count(c => !string.IsNullOrEmpty(c?.s3?.name)),
+                    items2Sum = g.Sum(c => c?.s3?.amtr)
+                }).ToList();
 
             var groupByMultipleInnerJoin =
+                (
                 from s1 in selectManySelect
                 join s2 in items2 on s1.item equals s2.Name
-                group s1 by new { s1.name, s1.item } into g
-                select new { 
-                    item = g.Key,
-                    name = g.Key.name,
-                    item2 = g.Count(c=>!string.IsNullOrEmpty(c?.name))
-                };
-          
+                group new { s2 } by new { iteml = s1.item, propl = s1.name, itemr = s2?.Name } into g
+                select new
+                {
+                    iteml = g.Key.iteml,
+                    propl = g.Key.propl,
+                    itemr = g.Key.itemr,
+
+                    item2 = g.Count(c => !string.IsNullOrEmpty(c?.s2?.Name))
+                }).ToList();
+
+
         }
 
         public static void bulkCheck()
@@ -3529,7 +3638,6 @@ namespace LINQtoObjectsCheck
             };
         }
 
-
         public static void LinqSumGroupByNew()
         {
             var under1 = new Instrument() { ID = 5, Name = "Eq1" };
@@ -3853,7 +3961,6 @@ namespace KATAS
 
     public class Miscellaneous
     {
-
 
         public static class ReqwindKATA
         {
@@ -4191,7 +4298,6 @@ namespace KATAS
                 //foreach
                 foreach (var str in input)
                 {
-
                     string newStr = new string(str.OrderBy(c => c).ToArray());
                     var alg = System.Security.Cryptography.SHA256.Create();
                     byte[] hashBytes = alg.ComputeHash(Encoding.UTF8.GetBytes(newStr));
@@ -4218,14 +4324,40 @@ namespace KATAS
         }
 
         //chars
-        public class Chars
+        public class Convertions
         {
+            //System.Security.Cryptography.SHA256.Create().ComputeHash
+            //byte[] => hash
+
+            //BitConverter.GetBytes
+            //Type !str => byte[]
+            //BitConverter.GetBytes
+            //byte[] => types|str
+
+            //Encoding.UTF8.GetBytes
+            //type => byte[]
+
+            //Convert.ToString()
+            //var -> totype
+
+            //System.Environment.CurrentDirectory
+            //Directory.GetCurrentDirectory()  
 
             public static void GO()
             {
+
+                var str = "abcdefg";
+
+                var hash = System.Security.Cryptography.SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(str));
+
                 try
                 {
                     string input = "abcd123";
+
+                    //computeHash
+                    byte[] bytes = System.Security.Cryptography.SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(input));
+
+
                     List<byte> bytesFromString = new List<byte>();
                     foreach (char ch in input)
                     {
@@ -4317,7 +4449,7 @@ namespace KATAS
             public static void GO()
             {
                 System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
-
+                Bites.BitEncoding();
                 Bites.BitesTest();
             }
 
@@ -4390,7 +4522,36 @@ namespace KATAS
 
             }
 
+            public static void BitEncoding() {
 
+                string str = "string123";
+
+                List<byte> getBytes = str.Select(s => BitConverter.GetBytes(s))
+                    .Aggregate(new List<byte>(), (acc, i) =>
+                    {
+
+                        foreach (byte bt in i)
+                        {
+                            acc.Add(bt);
+                        }
+
+                        return acc;
+                    });
+                getBytes = getBytes.Except(getBytes.Where(s => s == 0)).ToList();
+                byte[] encBytes = Encoding.UTF8.GetBytes(str);
+
+                var hashFromStr = System.Security.Cryptography.SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(str));
+                var hashBytesBitconv = System.Security.Cryptography.SHA256.Create().ComputeHash(getBytes.ToArray());
+
+              
+                var hashesAreEqual = hashFromStr.SequenceEqual(hashBytesBitconv);
+
+                var strFromBitBytes = Encoding.UTF8.GetString(getBytes.ToArray());
+                var strFromEncBytes = Encoding.UTF8.GetString(encBytes);
+
+                var strnigsAreEqual = (str == strFromBitBytes) && (str == strFromEncBytes);
+
+            }
         }
 
         public static int FactorialCount(int upperGap)
@@ -4466,15 +4627,18 @@ namespace KATAS
 
         }
 
+        /// <summary>
+        /// Good for generic Sort(Array<T>) methods
+        /// not very clear and addaptive
+        /// </summary>
         public class SortingTests
         {
             List<AlgorithmTest<int>> test;
             Random rnd = new Random();
 
             public static void GO()
-            {
-
-                SortingTests st = new SortingTests();
+            {                
+                SortingTests st = new SortingTests();                
                 st.insertionSortTest();
             }
 
@@ -4561,8 +4725,35 @@ namespace KATAS
             }
         }
 
+       
+        public class InsertionSortInt
+        {
+            public static void GO()
+            {
+                var arrToSort = new int[] {1,9,15,8,7,10};
 
-
+                var arrExpect = (int[])arrToSort.Clone();
+                Array.Sort(arrExpect);
+                sort(arrToSort);
+                var sorted = arrToSort.SequenceEqual(arrExpect);
+            }
+            public static void sort(int[] arr)
+            {
+                var i = 1;
+                while (i < arr.Length)
+                {
+                    var x = arr[i];
+                    var j = i - 1;
+                    while (j >= 0 && arr[j] > x)
+                    {
+                        arr[j + 1] = arr[j];
+                        j -= 1;
+                    }
+                    arr[j + 1] = x;
+                    i += 1;
+                }
+            }          
+        }
         public class InsertionSort<T> where T : struct, IComparable
         {
             public IList<T> Sort(IList<T> arr)
@@ -4600,6 +4791,34 @@ namespace KATAS
             }
         }
 
+
+        public class ShellSortInt
+        {
+            public static void GO() {
+                var arr = new int[] { 8,2, 14,6,3,13,15, 4, 11,7,1,12, 5,9,10 };
+                var arrExpected = ((int[])arr.Clone()).OrderBy(s=>s).ToArray<int>();
+                Sort(arr, arr.Length*2);
+                bool equ = arr.SequenceEqual(arrExpected);
+            }
+            public static void Sort(int[] arr, int n)
+            {
+                for(int gap = n/2; gap > 0; gap /= 2)
+                {
+                    for(int i = gap; i < arr.Length; i += 1)
+                    {
+                        var s = arr[i];
+
+                        int j;
+                        for(j = i; j >= gap && arr[j - gap] > s; j -= gap)
+                        {                            
+                            arr[j] = arr[j - gap];
+                        }
+                        arr[j] = s;
+                    }
+                }
+            }
+        }
+        
 
 
         public class QuickSortTest
@@ -4744,16 +4963,16 @@ namespace KATAS
                 for (int i = lastNotLeafNode; i >= 0; i--)
                 {
 
-                    ChechChildsAndSwap(arr, i);
+                    CheckChildsAndSwap(arr, i);
                 }
             }
-            void ChechChildsAndSwap(List<int> arr, int i)
+            void CheckChildsAndSwap(List<int> arr, int i)
             {
                 var maxChildIdx = GetMaxNodeIndex(arr, i * 2 + 1, i * 2 + 2);
                 if (maxChildIdx >= 0 && arr[maxChildIdx] > arr[i])
                 {
                     Swap(arr, maxChildIdx, i);
-                    ChechChildsAndSwap(arr, maxChildIdx);
+                    CheckChildsAndSwap(arr, maxChildIdx);
                 }
             }
             int GetMaxNodeIndex(List<int> arr, int idxSt, int idxFn)
@@ -5215,10 +5434,10 @@ namespace KATAS
             );
             return JsonSerializer.Deserialize<IEnumerable<T>>(await new HttpClient().GetAsync("")?.Result.Content.ReadAsStringAsync());
         }
-
+     
     }
 
-    public class BraketsChecker
+    public class BracketsChecker
     {
         public static void GO()
         {
@@ -5233,8 +5452,9 @@ namespace KATAS
             var isOK = strsOK.Select(s => braketsCount(s)).All(s => s == true);
             var isNotOK = strsNotOK.Select(s => braketsCount(s)).All(s => s == false);
 
-            var ok3 = strsOK.Select(s => bracketsCheck(s)).All(s => s == true);
-            var notok3 = strsNotOK.Select(s => bracketsCheck(s)).All(s => s == false);
+            var ok2 = strsOK.Select(s => bracketsCheck(s)).All(c => c == true);
+            var notOk = strsNotOK.Select(s => bracketsCheck(s)).All(c => c == false);
+           
         }
 
         static Func<string, bool> braketsCount = (s) =>
@@ -5262,40 +5482,31 @@ namespace KATAS
 
         };
 
-        static bool bracketsCheck(string input)
+        public static bool bracketsCheck(string input)
         {
+            List<char> opened = new List<char>() { '(', '[', '{' };
+            List<char> closed = new List<char>() { ')', ']', '}' };
+            Stack<char> cntr = new Stack<char>();
 
-            List<char> openBr = new List<char>() { '(', '[', '{' };
-            List<char> closeBr = new List<char>() { ')', ']', '}' };
-            Stack<char> cnter = new Stack<char>();
-
-            if (string.IsNullOrEmpty(input)) { return false; }
+            if (string.IsNullOrEmpty(input) || input?.Any() != true) { return false; }
+            if (closed.Contains(input[0])) { return false; }
 
             foreach (var ch in input)
             {
-                //start with closed
-                if (cnter.Count() == 0)
+                if (opened.Contains(ch)) { cntr.Push(ch); }
+                if (closed.Contains(ch))
                 {
-                    if (closeBr.Contains(ch)) { return false; }
+                    if (cntr.Count() <= 0) { return false; }
+                    var previous = cntr.Pop();
+                    if (opened.IndexOf(previous) != closed.IndexOf(ch)) { return false; }
                 }
-
-                //new open
-                if (openBr.Contains(ch)) { cnter.Push(ch); }
-
-                //meet closed
-                if (closeBr.Contains(ch))
-                {
-                    //closed different
-                    var last = cnter.Pop();
-                    if (closeBr.IndexOf(ch) != openBr.IndexOf(last)) { return false; }
-
-
-                }
-
             }
-            return cnter.Count() == 0;
+
+            return cntr.Count() == 0;
         }
+
     }
+
 
     public class RoomNum
     {

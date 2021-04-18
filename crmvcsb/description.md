@@ -425,15 +425,24 @@ DONE:[
         <- 12.03.2021 30m folder namespaces rearrange ->
         <- 12.03.2021 13:00 14:20 2h 20m net core exception handling ->
 
-        -> currency dictionary CRUD
-        + 17.03.2021 3h 30m 
+        < 20.03.2021 3h rabbit send recieve provider >	
+        
+		< 21.03.2021 1h 30m bidirectional >
+		< 21.03.2021 40m bidirectional by class >
+		< 21.03.2021 1h pass model to lambda event handler >
+				
+		< 26.03.2021 1h10m rabit parse response delegate >
+		< 26.03.2021 1h 22:00 23:00 p 3h f 1h 
+            Rabbit wraper with delegate ref >
+
+        17.03.2021 3h 30m currency dictionary CRUD >        
             -> currency cross rates CRUD
         -> currency cross rates recount from curency changes via rabbit mq
         -> sync from write db to read
        
 	]
-	~59h 40m in 22days
+	~67h 00m in 25days
 
-]~154h 30m in 47d
+]~162h 50m in 50d
 
 
