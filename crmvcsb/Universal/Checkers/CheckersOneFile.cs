@@ -4723,6 +4723,16 @@ namespace KATAS
 
                 }
             }
+
+            void sampleIntCHeck()
+            {
+
+                var arr = new int[] { 5, 1, 7, 3, 5, 9, 3, 5, 8 };
+                var expArr = arr.OrderBy(s => s).ToArray();
+                ShellSort.Sort(arr);
+                //InsertionSortInt.Sort(arr);
+                var res = arr.SequenceEqual(expArr);
+            }
         }
 
        
@@ -4788,6 +4798,27 @@ namespace KATAS
                 }
 
                 return arr;
+            }
+        }
+
+        public class ShellSort
+        {
+            public static void Sort(int[] arr)
+            {
+                var n = arr.Length;
+                for (var gap = n / 2; gap > 0; gap /= 2)
+                {
+                    for(var i = gap; i < arr.Length; i++)
+                    {
+                        var x = arr[i];
+                        int j;
+                        for(j=i; j>=gap && arr[j-gap]>x; j -= gap)
+                        {
+                            arr[j] = arr[j-gap];
+                        }
+                        arr[j] = x;
+                    }
+                }
             }
         }
 
