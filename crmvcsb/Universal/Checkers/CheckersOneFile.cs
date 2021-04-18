@@ -4820,8 +4820,6 @@ namespace KATAS
             }
         }
 
-        }
-
         public class ShellSortInt
         {
             public static void GO() {
