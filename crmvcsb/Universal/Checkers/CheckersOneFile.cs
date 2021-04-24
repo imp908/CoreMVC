@@ -1,3 +1,6 @@
+
+using Microsoft.VisualBasic;
+
 namespace crmvcsb
 {
     using System.Threading.Tasks;
@@ -218,7 +221,7 @@ namespace NetPlatformCheckers
     {
 
         /*
-         * str + char - str
+         * str + char - str code
          * 
          * sum only +
          * str + int -> str
@@ -310,11 +313,11 @@ namespace NetPlatformCheckers
             result = string.ReferenceEquals(a, b); //false (not from same string)
             result = string.ReferenceEquals(c, d); //false
 
-            result = c.Equals(d); //true
-            result = c == d; //false
+            result = c.Equals(d); //true str equals by val
+            result = c == d; //false obj equals by ref
 
-            result = a.Equals(c); //true
-            result = a == c;//false
+            result = a.Equals(c); //true str equals by val
+            result = a == c;//false by ref
             result = e == r; //true by ref
 
             result = object.ReferenceEquals(a, b); //false
@@ -2762,6 +2765,27 @@ namespace LINQtoObjectsCheck
         public static void GO()
         {
 
+            Racer left = new Racer();
+            Racer right = new Racer();
+
+            if (left != null && right != null)
+            {
+                //both not
+            }
+            if (left != null || right != null)
+            {
+                //one null
+                //both not
+            }
+            if (left == null || right == null)
+            {
+                //both null
+                //one null
+            }
+            if ((left != null || right != null) && !(left != null && right != null))
+            {
+                //one null
+            }
             System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
 
             NewOverallCasesCheck();
@@ -2932,7 +2956,6 @@ namespace LINQtoObjectsCheck
             var petOwnersWithPetsInListExist =
                 petownersWithPets.Where(s => s.Pets.Exists(x => petsWithoutOwners.Exists(c => c.Name == x.Name)))
                 .ToList();
-
 
             //Join 
             var joinRacerCups =
@@ -3181,8 +3204,21 @@ namespace LINQtoObjectsCheck
             var propsCol2 = new List<Property1>() { props1[0], props1[3], props1[4] };
             var propsToUpdate = new List<Property1>() { props1[2], props1[3] };
 
-            var sm0 = items1.SelectMany(s => s.properties, (l, r) => new { item = l.Name, prop = r.Name, amtl = l.Amount }).ToList();
-            var sm1 = items2.SelectMany(s => s.properties, (l, r) => new { item = l.Name, prop = r.Name, amtr = l.Amount }).ToList();
+            var sm0 = items1.SelectMany(s 
+                => s.properties, (l, r) => new { item = l.Name, prop = r.Name, amtl = l.Amount }).ToList();
+            var sm1 = items2.SelectMany(s 
+                => s.properties, (l, r) => new { item = l.Name, prop = r.Name, amtr = l.Amount }).ToList();
+
+            var joinSm = sm0.GroupJoin(sm1,
+                l => new {l.item, l.prop},
+                r => new {r.item, r.prop},
+                (l, r) => new
+                {
+                    li = l.item, lp = l.prop, r = r.DefaultIfEmpty()
+                }).SelectMany(s=> s.r,(l,r) => new
+                {
+                    li = l.li, lp = l.lp, amt = r?.amtr
+                }).ToList();
 
             //0 4
             var intersect = propsCol2.Intersect(propsCol1).ToList();
@@ -4760,7 +4796,21 @@ namespace KATAS
                     arr[j + 1] = x;
                     i += 1;
                 }
-            }          
+            }
+
+            public static void s(int[] arr)
+            {
+                for (int i = 1;i< arr.Length;i+=1)
+                {
+                    var x = arr[i];
+                    int j = i - 1;
+                    while (j>=0 && arr[j]>x)
+                    {
+                        
+                        j -= 1;
+                    }
+                }
+            }
         }
         public class InsertionSort<T> where T : struct, IComparable
         {
