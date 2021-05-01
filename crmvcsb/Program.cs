@@ -12,19 +12,21 @@ namespace crmvcsb
         {
             try
             {
-                LINQtoObjectsCheck.LinqCheck.GO();
+                KATAS.Miscellaneous.HeapSortArr.GO();
                 
-                KATAS.Miscellaneous.Bites.GO();
-
-                NetPlatformCheckers.StringsCheck.GO();
-                
-                NetPlatformCheckers.EqualIsCheck.GO();
-                
-                KATAS.Miscellaneous.ShellSortInt.GO();
-                KATAS.Miscellaneous.InsertionSortInt.GO();
-                
-                InfrastructureCheckers.Buss.GO();
-                NetPlatformCheckers.Operators.GO();
+                // LINQtoObjectsCheck.LinqCheck.GO();
+                //
+                // KATAS.Miscellaneous.Bites.GO();
+                //
+                // NetPlatformCheckers.StringsCheck.GO();
+                //
+                // NetPlatformCheckers.EqualIsCheck.GO();
+                //
+                // KATAS.Miscellaneous.ShellSortInt.GO();
+                // KATAS.Miscellaneous.InsertionSortInt.GO();
+                //
+                // InfrastructureCheckers.Buss.GO();
+                // NetPlatformCheckers.Operators.GO();
                 var bld = CreateWebHostBuilder(args).Build();
                 bld.Run();
             }

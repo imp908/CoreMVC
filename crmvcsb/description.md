@@ -66,9 +66,9 @@ http:localhost:5002/TestArea/SignalR/hub
 DomainSpecific Currencies API urls and fiddler payload:
 -------------------------------------------------------
 
-http:localhost:5002/api/currency/Get?iso=usd
+http:localhost:5002/api/currency/usd
 
-http:localhost:5002/api/currency/
+http://localhost:5002/api/currency/query/usd
 
 Accept: application/json; charset=UTF-8
 Content-Type: application/json

@@ -57,10 +57,10 @@ namespace crmvcsb.Areas.TestArea.Controllers
         }
 
 
-        [HttpGet("{isoOrName}")]
+        [HttpGet("query/{isoOrName}")]
         public ActionResult<string> Query(string isoOrName)
         {
-            return $"Get: {isoOrName}";
+            return $"Query get: {isoOrName}";
         }
         [HttpPost("{isoOrName}")]
         public ActionResult<string> Command(string isoOrName)

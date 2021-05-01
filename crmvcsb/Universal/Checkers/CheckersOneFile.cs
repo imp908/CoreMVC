@@ -147,7 +147,7 @@ namespace NetPlatformCheckers
 
         public static void GO()
         {
-
+            StringObjectEquality.GO();
             StringsCheck.GO();
 
             AbstractClassCheck.GO();
@@ -212,7 +212,7 @@ namespace NetPlatformCheckers
             var t4 = (dn1 * dn2).ToString();
             var t5 = (dn1 / dn2).ToString();
         }
-
+        
     }
 
     /* strings concatenation check */
@@ -308,7 +308,33 @@ namespace NetPlatformCheckers
 
             var result = false;
 
-            result = a.Equals(b); //true
+            string st0 = "String";
+            string st1 = nameof(String);
+            string st2 = new string(new char[] {'S', 't', 'r', 'i', 'n', 'g'});
+            string st3 = new string(new char[] {'S', 't', 'r', 'i', 'n', 'g'});
+
+            object obr = st0;
+
+            object ob0 = "String";
+            object ob1 = nameof(String);
+            object ob2 = new string(new char[] {'S', 't', 'r', 'i', 'n', 'g'});
+
+            dynamic dr = st0;
+
+            dynamic d0 = "String";
+            dynamic d1 = nameof(String);
+            dynamic d2 = new string(new char[] {'S', 't', 'r', 'i', 'n', 'g'});
+
+            var isTrue = (st0==st2) && (st2 == st3)  && (st0 == ob0) && (st0 == st1) && (st1 == obr) && (obr == ob0) && (ob0 == ob1)
+                         && (ob1 == dr) && (dr == d0) && (d0 == d1);
+            var isFalse = (st2 == obr) && (ob0 == ob2) && (ob2 == dr) && (dr == d2);
+
+            var eqB = st0.Equals(st3);
+            var eqObb = obr.Equals(ob2);
+            
+            var obDb =  ob2.Equals(d2);
+            
+            result = a.Equals(b); //true && ()
             result = a == b; //true
             result = string.ReferenceEquals(a, b); //false (not from same string)
             result = string.ReferenceEquals(c, d); //false
@@ -2765,27 +2791,6 @@ namespace LINQtoObjectsCheck
         public static void GO()
         {
 
-            Racer left = new Racer();
-            Racer right = new Racer();
-
-            if (left != null && right != null)
-            {
-                //both not
-            }
-            if (left != null || right != null)
-            {
-                //one null
-                //both not
-            }
-            if (left == null || right == null)
-            {
-                //both null
-                //one null
-            }
-            if ((left != null || right != null) && !(left != null && right != null))
-            {
-                //one null
-            }
             System.Diagnostics.Trace.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().DeclaringType}.{System.Reflection.MethodBase.GetCurrentMethod().Name}----------");
 
             NewOverallCasesCheck();
@@ -2818,7 +2823,8 @@ namespace LINQtoObjectsCheck
             var txt = @"aa b c das asdaa sd aa s aas";
             string src = "aa";
             var schcnt = txt.Split().Where(s => s.ToLowerInvariant() == src.ToLowerInvariant()).Count();
-
+           
+            
             //where any
             var racersWhereAny = racers
                 .Where(s => cups.Any(c => s.Name == c.RacerName))
@@ -3204,6 +3210,11 @@ namespace LINQtoObjectsCheck
             var propsCol2 = new List<Property1>() { props1[0], props1[3], props1[4] };
             var propsToUpdate = new List<Property1>() { props1[2], props1[3] };
 
+            var sm20 = items1.SelectMany(s=>s.properties, (l, r) =>
+            new {
+                nl = l.Name, na = l.Amount, rp = r.Name
+            });
+
             var sm0 = items1.SelectMany(s 
                 => s.properties, (l, r) => new { item = l.Name, prop = r.Name, amtl = l.Amount }).ToList();
             var sm1 = items2.SelectMany(s 
@@ -3220,6 +3231,14 @@ namespace LINQtoObjectsCheck
                     li = l.li, lp = l.lp, amt = r?.amtr
                 }).ToList();
 
+            var jnGp = sm0.Join(sm1,
+                l => new {l.item, l.prop},
+                r => new {r.item, r.prop},
+                (l, r) => new
+                {
+                    li = l.item, lp = l.prop, r = r?.amtr
+                });
+            
             //0 4
             var intersect = propsCol2.Intersect(propsCol1).ToList();
             //3 
@@ -4559,11 +4578,9 @@ namespace KATAS
             public static void BitEncoding() {
 
                 string str = "string123";
-
                 List<byte> getBytes = str.Select(s => BitConverter.GetBytes(s))
                     .Aggregate(new List<byte>(), (acc, i) =>
                     {
-
                         foreach (byte bt in i)
                         {
                             acc.Add(bt);
@@ -4797,20 +4814,7 @@ namespace KATAS
                     i += 1;
                 }
             }
-
-            public static void s(int[] arr)
-            {
-                for (int i = 1;i< arr.Length;i+=1)
-                {
-                    var x = arr[i];
-                    int j = i - 1;
-                    while (j>=0 && arr[j]>x)
-                    {
-                        
-                        j -= 1;
-                    }
-                }
-            }
+            
         }
         public class InsertionSort<T> where T : struct, IComparable
         {
@@ -5040,7 +5044,6 @@ namespace KATAS
 
                 for (int i = lastNotLeafNode; i >= 0; i--)
                 {
-
                     CheckChildsAndSwap(arr, i);
                 }
             }
@@ -5158,11 +5161,38 @@ namespace KATAS
 
         public class HeapSortArr
         {
+            //https://www.tutorialspoint.com/heap-sort-in-chash#:~:text=Heap%20Sort%20is%20a%20sorting,then%20the%20heap%20is%20reestablished.
+            static void heapSort(int[] arr, int n) {
+                for (int i = n / 2 - 1; i >= 0; i--)
+                    heapify(arr, n, i);
+                for (int i = n-1; i>=0; i--) {
+                    int temp = arr[0];
+                    arr[0] = arr[i];
+                    arr[i] = temp;
+                    heapify(arr, i, 0);
+                }
+            }
+            static void heapify(int[] arr, int n, int i) {
+                int largest = i;
+                int left = 2*i + 1;
+                int right = 2*i + 2;
+                if (left < n && arr[left] > arr[largest])
+                    largest = left;
+                if (right < n && arr[right] > arr[largest])
+                    largest = right;
+                if (largest != i) {
+                    int swap = arr[i];
+                    arr[i] = arr[largest];
+                    arr[largest] = swap;
+                    heapify(arr, n, largest);
+                }
+            }
+            
             public static void GO()
             {
-                var arr = new int[] { 6, 4, 7, 9, 1 };
+                var arr = new int[] { 3,5,6, 4, 7, 9, 1 };
                 var avtHeap = new int[] { 9, 6, 7, 4, 1 };
-                var avtSort = new int[] { 9, 7, 6, 4, 1 };
+                var avtSort = new int[] { 1,3,4,5,6,7,9};
 
                 HeapSortArr.Sort(arr);
 
@@ -5171,42 +5201,58 @@ namespace KATAS
             }
             static void Sort(int[] arr)
             {
-                HeapSortArr.BuildHeap(ref arr, arr.Length);
-                for (int i = arr.Length - 1; i >= 2; i -= 1)
-                {
-                    HeapSortArr.Swap(ref arr, i, 1);
-                    HeapSortArr.MaxHeap(ref arr, i);
-                }
+                HeapSortArr.BuildHeap(arr, arr.Length);
             }
-            static void BuildHeap(ref int[] arr, int len)
+            
+            /// <summary>
+            /// From middle to border build heap bu comparing node parents with node
+            /// </summary>
+            /// <param name="arr"></param>
+            /// <param name="len"></param>
+            static void BuildHeap(int[] arr, int len)
             {
-                for (int i = len / 2; i >= 1; i -= 1)
+                for (int i = len / 2 - 1; i >= 0; i--)
                 {
-                    HeapSortArr.MaxHeap(ref arr, i);
+                    MaxHeap( arr, i,len);
+                }
+                for (int i = len-1; i >= 0; i--)
+                {
+                    Swap( arr,0,i);
+                    HeapSortArr.MaxHeap(arr, 0,i);
                 }
             }
-            static void MaxHeap(ref int[] arr, int i)
+            
+            /// <summary>
+            /// Compare parents with node
+            /// and swap if node larger
+            /// recursive
+            /// </summary>
+            /// <param name="arr"></param>
+            /// <param name="i">int is 1 so decrease 1 for index</param>
+            static void MaxHeap(int[] arr, int i, int len)
             {
-                var l = (2 * i) - 1;
-                var r = (2 * i + 1) - 1;
-                var lg = i - 1;
+                var l = 2 * i + 1;
+                var r = 2 * i + 2;
+                var lg = i;
 
-                if (l < arr.Length && arr[l] > arr[lg]) { lg = l; }
+                if (l < len && arr[l] > arr[lg]) { lg = l; }
 
-                if (r < arr.Length && arr[r] > arr[lg]) { lg = r; }
+                if (r < len && arr[r] > arr[lg]) { lg = r; }
 
-                if (lg != (i - 1))
+                if (lg != i )
                 {
-                    Swap(ref arr, lg, (i - 1));
-                    MaxHeap(ref arr, lg);
+                    Swap(arr, lg, i);
+                    MaxHeap(arr, lg,len);
                 }
             }
-            static void Swap(ref int[] arr, int a, int b)
+            static void Swap(int[] arr, int a, int b)
             {
                 var s = arr[a];
                 arr[a] = arr[b];
                 arr[b] = s;
             }
+            
+        
         }
 
 
@@ -5565,7 +5611,7 @@ namespace KATAS
             );
             return JsonSerializer.Deserialize<IEnumerable<T>>(await new HttpClient().GetAsync("")?.Result.Content.ReadAsStringAsync());
         }
-     
+
     }
 
     public class BracketsChecker
@@ -5677,7 +5723,7 @@ namespace KATAS
             }
         }
     }
-
+    
 }
 
 
