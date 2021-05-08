@@ -5724,6 +5724,163 @@ namespace KATAS
         }
     }
     
+    
+    public class Overall
+    {
+        public class Prop
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
+        }
+        public class Item1
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
+        }
+        public class Item2
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
+            public int Amt { get; set; }
+            public IList<Prop> properties { get; set; }
+        }
+        public static void GO()
+        {
+            var items1 = new List<Item1>()
+            {
+                new Item1(){Id = 1, Name ="name1"}
+                ,new Item1(){Id = 3, Name ="name3"}
+                ,new Item1(){Id = 5, Name ="name5"}
+            };
+            var items2 = new List<Item2>()
+            {
+                new Item2(){ Id = 1, Name = "name1", Amt = 1, properties = new List<Prop>() {
+                    new Prop(){Id=1, Name = "p1"}, new Prop(){Id=2, Name = "p2"}
+                }},
+                new Item2(){ Id = 2, Name = "name2", Amt = 2, properties = new List<Prop>() {
+                    new Prop(){Id=1, Name = "p1"}
+                }},
+                new Item2(){ Id = 3, Name = "name3", Amt = 3, properties = new List<Prop>() {
+                    new Prop(){Id=1, Name = "p1"},new Prop(){Id=3, Name = "p3"}
+                }},
+                 new Item2(){ Id = 3, Name = "name4", Amt = 4, properties = new List<Prop>() {
+                    new Prop(){Id=3, Name = "p4"}
+                }}
+            };
+
+            var names = new List<string>() { "p1" };
+
+            var itm0 = items1.Join(items2,
+                l => new { l.Id, l.Name },
+                r => new { r.Id, r.Name },
+                (l, r) => new { lName = l.Name, rName = r.Name, amt = r.Amt}
+            ).ToList();
+            var itm1 = items1.GroupJoin(items1,
+                l => new { l.Id, l.Name },
+                r => new { r.Id, r.Name },
+                (l, r) => new { lName = l.Name, r = r.DefaultIfEmpty() }
+            ).ToList();
+            var itm2 = items2.SelectMany(s => s.properties, (l, r) => new { l.Name, l.Amt, prop = r.Name });
+            var itm3 = items2.Where(s => s.properties.Any(c => names.Exists(z => z == c.Name)))
+            .ToList();
+
+            var unsorted = new int[] { 9, 2, 4, 1, 6, 8, 7, 5 };
+            var arrTosort = new int[unsorted.Length];
+            var sorted = new int[arrTosort.Length];
+            Array.Copy(unsorted, sorted, unsorted.Length);
+            Array.Sort(sorted);
+
+            Array.Copy(unsorted, arrTosort, unsorted.Length);
+            InsertionSort(arrTosort);
+            var b0 = arrTosort.SequenceEqual(sorted);
+
+            Array.Copy(unsorted, arrTosort, unsorted.Length);
+            ShellSort(arrTosort);
+            var b1 = arrTosort.SequenceEqual(sorted);
+
+            Array.Copy(unsorted, arrTosort, unsorted.Length);
+            HeapSort(arrTosort);
+            var b2 = arrTosort.SequenceEqual(sorted);
+
+            var hs = System.Security.Cryptography.SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes("string"));
+            var bts0 = Encoding.UTF8.GetBytes("string");
+            var st = "string";
+            var bts1 = st.Select(s => BitConverter.GetBytes(s)).SelectMany(c => c).Where(s=>s!=0).ToList();
+
+            var b3 = bts0.SequenceEqual(bts1);
+        }
+
+
+
+        public static void InsertionSort(int[] arr)
+        {
+            for(int i = 1; i < arr.Length; i++)
+            {
+                var x = arr[i];
+                var j = i - 1;
+                while (j >= 0 && arr[j] > x)
+                {
+                    arr[j + 1] = arr[j];
+                    j--;
+                }
+                arr[j+1] = x;
+            }
+        }
+
+        public static void ShellSort(int[] arr)
+        {
+            for(var n = arr.Length/2; n >0; n /= 2)
+            {
+                for(var i = n; i< arr.Length; i++)
+                {
+                    var x = arr[i];
+                    int j;
+                    for(j = i; j>=n && arr[j - n] > x; j -= n)
+                    {
+                        arr[j] = arr[j - n];
+                    }
+                    arr[j] = x;
+                }
+            }
+        }
+
+        public static void HeapSort(int[] arr)
+        {
+            for (int i = arr.Length/2-1; i>=0;i--)
+            {
+                heapify(arr, i, arr.Length);
+            }
+
+            for (int i = arr.Length-1; i>=0; i--)
+            {
+                swap(arr, 0, i);
+                heapify(arr, 0, i);
+            }
+        }
+        public static void heapify(int[] arr, int n, int len)
+        {
+            var l = n * 2 + 1;
+            var r = n * 2 + 2;
+            var lg = n;
+
+            if (l < len && arr[l] > arr[lg]) { lg = l; }
+            if (r < len && arr[r] > arr[lg]) { lg = r; }
+            if (lg != n)
+            {
+                swap(arr, lg, n);
+                heapify(arr, lg, len);
+            }
+        }
+        public static void swap(int[] arr, int l, int r)
+        {
+            var x = arr[l];
+            arr[l] = arr[r];
+            arr[r] = x;
+        }
+
+                
+    }
+
 }
 
 

@@ -12,8 +12,9 @@ namespace crmvcsb
         {
             try
             {
-                KATAS.Miscellaneous.HeapSortArr.GO();
-                
+                KATAS.Overall.GO();
+
+                // KATAS.Miscellaneous.HeapSortArr.GO();                
                 // LINQtoObjectsCheck.LinqCheck.GO();
                 //
                 // KATAS.Miscellaneous.Bites.GO();
